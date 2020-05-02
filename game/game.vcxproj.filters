@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="App.xaml.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="UI\FailurePage.xaml.cpp" />
+    <ClCompile Include="States\TitleState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="States\AppState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Components.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Globals.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Options.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="App.xaml.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="UI\FailurePage.xaml.h" />
+    <ClInclude Include="States\TitleState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="States\AppState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Components.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Globals.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Options.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Enum.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Types.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\AppService.h">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\GameService.h">
+      <Filter>Services</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Xaml\ApplicationResources.xaml">
+      <Filter>Assets\Xaml</Filter>
+    </None>
+    <None Include="Assets\Xaml\TitlePage.xaml">
+      <Filter>Assets\Xaml</Filter>
+    </None>
+    <None Include="..\ffcore\core\noesis\Bin\$(XPlatform)\Noesis.dll">
+      <Filter>Assets</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{0cb69a9d-38af-4bb9-967b-a76ffd80cc95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States">
+      <UniqueIdentifier>{fb570434-3026-456e-b8fd-c6839ee97eb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{0b87309d-2565-401e-8dc2-0ad22725d3db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Logo">
+      <UniqueIdentifier>{3016ad5e-42ae-4283-81fe-f1bb58324d4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Xaml">
+      <UniqueIdentifier>{d95a7f98-4dea-44f9-9aea-f5af79740d55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{9a3d8d6c-f9de-4199-95cb-4293e4627a69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Services">
+      <UniqueIdentifier>{1d2da2c0-1fb5-4928-8785-b76fc6f05cb4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="UI\FailurePage.xaml">
+      <Filter>UI</Filter>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Logo\SquareLogo.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\WideLogo.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square71x71Logo.scale-100.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square71x71Logo.scale-125.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square71x71Logo.scale-150.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square71x71Logo.scale-200.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square71x71Logo.scale-400.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square150x150Logo.scale-100.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square150x150Logo.scale-125.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square150x150Logo.scale-150.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square150x150Logo.scale-200.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square150x150Logo.scale-400.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Wide310x150Logo.scale-100.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Wide310x150Logo.scale-125.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Wide310x150Logo.scale-150.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Wide310x150Logo.scale-200.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Wide310x150Logo.scale-400.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square310x310Logo.scale-100.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square310x310Logo.scale-125.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square310x310Logo.scale-150.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square310x310Logo.scale-200.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square310x310Logo.scale-400.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.scale-100.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.scale-125.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.scale-150.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.scale-200.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.scale-400.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.targetsize-16.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.targetsize-24.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.targetsize-32.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.targetsize-48.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.targetsize-256.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.altform-unplated_targetsize-16.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.altform-unplated_targetsize-24.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.altform-unplated_targetsize-32.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.altform-unplated_targetsize-48.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.altform-unplated_targetsize-256.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.altform-lightunplated_targetsize-16.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.altform-lightunplated_targetsize-24.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.altform-lightunplated_targetsize-32.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.altform-lightunplated_targetsize-48.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\Square44x44Logo.altform-lightunplated_targetsize-256.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\SplashScreen.scale-100.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\SplashScreen.scale-125.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\SplashScreen.scale-150.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\SplashScreen.scale-200.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\SplashScreen.scale-400.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\StoreLogo.scale-100.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\StoreLogo.scale-125.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\StoreLogo.scale-150.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\StoreLogo.scale-200.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+    <Image Include="Assets\Logo\StoreLogo.scale-400.png">
+      <Filter>Assets\Logo</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResJson Include="Assets\Assets.res.json">
+      <Filter>Assets</Filter>
+    </ResJson>
+    <ResJson Include="Assets\Values.res.json">
+      <Filter>Assets</Filter>
+    </ResJson>
+    <ResJson Include="Assets\Xaml\Assets.Xaml.res.json">
+      <Filter>Assets\Xaml</Filter>
+    </ResJson>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest" />
+  </ItemGroup>
+</Project>

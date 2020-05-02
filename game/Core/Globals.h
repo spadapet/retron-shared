@@ -1,0 +1,34 @@
+#pragma once
+
+namespace Strings
+{
+	extern const ff::StaticString ID_APP_STATE;
+	extern const ff::StaticString ID_GAME_OPTIONS;
+	extern const ff::StaticString ID_SYSTEM_OPTIONS;
+}
+
+namespace InputEvents
+{
+	extern const ff::hash_t ID_UP;
+	extern const ff::hash_t ID_DOWN;
+	extern const ff::hash_t ID_LEFT;
+	extern const ff::hash_t ID_RIGHT;
+	extern const ff::hash_t ID_ACTION;
+	extern const ff::hash_t ID_CANCEL;
+	extern const ff::hash_t ID_PAUSE;
+	extern const ff::hash_t ID_START;
+
+	extern const ff::hash_t ID_DEBUG_STEP_ONE_FRAME;
+	extern const ff::hash_t ID_DEBUG_CANCEL_STEP_ONE_FRAME;
+	extern const ff::hash_t ID_DEBUG_SPEED_SLOW;
+	extern const ff::hash_t ID_DEBUG_SPEED_FAST;
+	extern const ff::hash_t ID_DEBUG_SHOW_UI;
+}
+
+namespace Constants
+{
+	const ff::FixedInt RENDER_WIDTH = 480_f; // 1920 / 4
+	const ff::FixedInt RENDER_HEIGHT = 270_f; // 1080 / 4
+	const ff::PointFixedInt RENDER_SIZE(RENDER_WIDTH, RENDER_HEIGHT);
+	const ff::FixedInt RENDER_SCALE = 4_f; // scale to a 1080p buffer, which then gets scaled to the screen
+}

@@ -1,0 +1,13 @@
+{
+  "ApplicationResources.xaml":
+  {
+    "res:type": "file",
+    "file": "file:ApplicationResources.xaml"
+  },
+
+  "TitlePage.xaml":
+  {
+    "res:type": "file",
+    "file": "file:TitlePage.xaml"
+  }
+}

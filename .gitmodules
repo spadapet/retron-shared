@@ -1,0 +1,4 @@
+[submodule "ffcore"]
+	path = ffcore
+	url = https://github.com/spadapet/ffcore.git
+	branch = master

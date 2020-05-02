@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{857BF46A-94E0-4C02-A857-DF0AD4A75870}</ProjectGuid>
+    <AppType>Metro</AppType>
+    <ConfigurationType>Application</ConfigurationType>
+    <ProjectName>Game</ProjectName>
+    <RootNamespace>Game</RootNamespace>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+  </PropertyGroup>
+  <Import Project="..\ffcore\msbuild\cpp.props" />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\ffcore\core\util</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\ffcore\core\ui</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\ffcore\core\noesis\Include</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>..\ffcore\core\noesis\Lib\$(XPlatform)\Noesis.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs>Noesis.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Core\Globals.cpp" />
+    <ClCompile Include="Core\Options.cpp" />
+    <ClCompile Include="States\AppState.cpp" />
+    <ClCompile Include="States\TitleState.cpp" />
+    <ClCompile Include="UI\Components.cpp" />
+    <ClCompile Include="UI\FailurePage.xaml.cpp">
+      <DependentUpon>UI\FailurePage.xaml</DependentUpon>
+    </ClCompile>
+    <ClInclude Include="App.xaml.h">
+      <DependentUpon>App.xaml</DependentUpon>
+    </ClInclude>
+    <ClInclude Include="Core\Enum.h" />
+    <ClInclude Include="Core\Globals.h" />
+    <ClInclude Include="Core\Options.h" />
+    <ClInclude Include="Core\Types.h" />
+    <ClInclude Include="pch.h" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="App.xaml.cpp">
+      <DependentUpon>App.xaml</DependentUpon>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <ClInclude Include="Services\AppService.h" />
+    <ClInclude Include="Services\GameService.h" />
+    <ClInclude Include="States\AppState.h" />
+    <ClInclude Include="States\TitleState.h" />
+    <ClInclude Include="UI\Components.h" />
+    <ClInclude Include="UI\FailurePage.xaml.h">
+      <DependentUpon>UI\FailurePage.xaml</DependentUpon>
+    </ClInclude>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ffcore\core\util\util-metro.vcxproj">
+      <Project>{eff8144d-f91e-4bbd-b09b-d6db6b3a5512}</Project>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
+      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResJson Include="Assets\Assets.res.json" />
+    <ResJson Include="Assets\Values.res.json" />
+    <ResJson Include="Assets\Xaml\Assets.Xaml.res.json">
+      <FileType>Document</FileType>
+    </ResJson>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\ffcore\core\noesis\Bin\$(XPlatform)\Noesis.dll">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+    <None Include="Assets\Xaml\ApplicationResources.xaml">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Assets\Xaml\TitlePage.xaml">
+      <FileType>Document</FileType>
+    </None>
+    <Page Include="UI\FailurePage.xaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\Logo\SplashScreen.scale-100.png" />
+    <Image Include="Assets\Logo\SplashScreen.scale-125.png" />
+    <Image Include="Assets\Logo\SplashScreen.scale-150.png" />
+    <Image Include="Assets\Logo\SplashScreen.scale-200.png" />
+    <Image Include="Assets\Logo\SplashScreen.scale-400.png" />
+    <Image Include="Assets\Logo\Square150x150Logo.scale-100.png" />
+    <Image Include="Assets\Logo\Square150x150Logo.scale-125.png" />
+    <Image Include="Assets\Logo\Square150x150Logo.scale-150.png" />
+    <Image Include="Assets\Logo\Square150x150Logo.scale-200.png" />
+    <Image Include="Assets\Logo\Square150x150Logo.scale-400.png" />
+    <Image Include="Assets\Logo\Square310x310Logo.scale-100.png" />
+    <Image Include="Assets\Logo\Square310x310Logo.scale-125.png" />
+    <Image Include="Assets\Logo\Square310x310Logo.scale-150.png" />
+    <Image Include="Assets\Logo\Square310x310Logo.scale-200.png" />
+    <Image Include="Assets\Logo\Square310x310Logo.scale-400.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.altform-lightunplated_targetsize-16.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.altform-lightunplated_targetsize-24.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.altform-lightunplated_targetsize-256.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.altform-lightunplated_targetsize-32.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.altform-lightunplated_targetsize-48.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.altform-unplated_targetsize-16.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.altform-unplated_targetsize-24.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.altform-unplated_targetsize-256.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.altform-unplated_targetsize-32.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.altform-unplated_targetsize-48.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.scale-100.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.scale-125.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.scale-150.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.scale-200.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.scale-400.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.targetsize-16.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.targetsize-24.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.targetsize-256.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.targetsize-32.png" />
+    <Image Include="Assets\Logo\Square44x44Logo.targetsize-48.png" />
+    <Image Include="Assets\Logo\Square71x71Logo.scale-100.png" />
+    <Image Include="Assets\Logo\Square71x71Logo.scale-125.png" />
+    <Image Include="Assets\Logo\Square71x71Logo.scale-150.png" />
+    <Image Include="Assets\Logo\Square71x71Logo.scale-200.png" />
+    <Image Include="Assets\Logo\Square71x71Logo.scale-400.png" />
+    <Image Include="Assets\Logo\SquareLogo.png">
+      <DeploymentContent>false</DeploymentContent>
+    </Image>
+    <Image Include="Assets\Logo\StoreLogo.scale-100.png" />
+    <Image Include="Assets\Logo\StoreLogo.scale-125.png" />
+    <Image Include="Assets\Logo\StoreLogo.scale-150.png" />
+    <Image Include="Assets\Logo\StoreLogo.scale-200.png" />
+    <Image Include="Assets\Logo\StoreLogo.scale-400.png" />
+    <Image Include="Assets\Logo\Wide310x150Logo.scale-100.png" />
+    <Image Include="Assets\Logo\Wide310x150Logo.scale-125.png" />
+    <Image Include="Assets\Logo\Wide310x150Logo.scale-150.png" />
+    <Image Include="Assets\Logo\Wide310x150Logo.scale-200.png" />
+    <Image Include="Assets\Logo\Wide310x150Logo.scale-400.png" />
+    <Image Include="Assets\Logo\WideLogo.png">
+      <DeploymentContent>false</DeploymentContent>
+    </Image>
+  </ItemGroup>
+  <Import Project="..\ffcore\msbuild\cpp.targets" />
+</Project>
