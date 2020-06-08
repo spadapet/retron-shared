@@ -10,6 +10,12 @@
 #include "Services/AppService.h"
 #include "State/State.h"
 
+namespace ff
+{
+	class IPalette;
+	class IPaletteData;
+}
+
 namespace Game
 {
 	class AppState
@@ -36,6 +42,7 @@ namespace Game
 		virtual const GameOptions& GetDefaultGameOptions() const override;
 		virtual void SetSystemOptions(const SystemOptions& options) override;
 		virtual void SetDefaultGameOptions(const GameOptions& options) override;
+		virtual ff::IPalette* GetPalette() override;
 		virtual ff::IRenderer* GetRenderer() const override;
 		virtual ff::ITexture* GetXamlTexture() const override;
 		virtual ff::IRenderTarget* GetXamlTarget() const override;
@@ -65,13 +72,12 @@ namespace Game
 		void InitInputDevices();
 		void InitGraphics();
 
+		// Globals
 		ff::ProcessGlobals* _processGlobals;
 		ff::AppGlobals* _globals;
 		std::shared_ptr<ff::XamlGlobalState> _xamlGlobals;
 		SystemOptions _systemOptions;
 		GameOptions _gameOptions;
-		ff::ComPtr<ff::IResources> _levelResources;
-		ff::Event<ff::hash_t> _appEvents;
 
 		// Rendering
 		std::unique_ptr<ff::IRenderer> _render;
@@ -83,7 +89,8 @@ namespace Game
 		ff::ComPtr<ff::IRenderDepth> _lowDepth;
 		ff::ComPtr<ff::ITexture> _highTexture;
 		ff::ComPtr<ff::IRenderTarget> _highTarget;
-		ff::ComPtr<ff::IRenderDepth> _highDepth;
+		ff::ComPtr<ff::IPalette> _palette;
+		ff::TypedResource<ff::IPaletteData> _paletteData;
 		ff::Viewport _viewport;
 
 		// Debugging

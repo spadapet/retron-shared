@@ -6,9 +6,9 @@
 namespace ff
 {
 	class AppGlobals;
+	class IPalette;
 	class IRenderer;
 	class IRenderTarget;
-	class IResources;
 	class ITexture;
 	class ProcessGlobals;
 	class XamlGlobalState;
@@ -35,6 +35,7 @@ namespace Game
 		virtual void SetDefaultGameOptions(const GameOptions& options) = 0;
 
 		// Rendering
+		virtual ff::IPalette* GetPalette() = 0;
 		virtual ff::IRenderer* GetRenderer() const = 0;
 		virtual ff::ITexture* GetXamlTexture() const = 0;
 		virtual ff::IRenderTarget* GetXamlTarget() const = 0;

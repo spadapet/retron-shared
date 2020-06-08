@@ -10,6 +10,8 @@
 #include "Graph/Render/RendererActive.h"
 #include "Graph/RenderTarget/RenderDepth.h"
 #include "Graph/RenderTarget/RenderTargetWindow.h"
+#include "Graph/Texture/Palette.h"
+#include "Graph/Texture/PaletteData.h"
 #include "Graph/Texture/Texture.h"
 #include "Module/Module.h"
 #include "Resource/Resources.h"
@@ -30,6 +32,7 @@ Game::AppState::AppState(ff::ProcessGlobals* processGlobals, ff::AppGlobals* glo
 	, _debugStepOneFrame(false)
 	, _debugTimeScale(1.0)
 	, _customDebugCookie(nullptr)
+	, _paletteData(L"palette")
 {
 }
 
@@ -77,7 +80,6 @@ void Game::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
 
 void Game::AppState::OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType type)
 {
-	_highTarget->Clear();
 	_xamlTarget->Clear();
 	_lowTarget->Clear();
 }
@@ -92,13 +94,14 @@ void Game::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType ty
 	ff::PointFloat targetScale = targetRect.Size() / lowRect.Size();
 	ff::PointFloat targetPos = targetRect.TopLeft();
 
-	for (ff::XamlView* view : _xamlGlobals->GetInputViews())
+	for (ff::XamlView* view : _xamlGlobals->GetRenderedViews())
 	{
 		view->SetViewToScreenTransform(targetPos, targetScale);
 	}
 
-	ff::RendererActive render = _render->BeginRender(_highTarget, _highDepth, highRect, lowRect);
-	//render->DrawSprite(_lowTexture->AsSprite());
+	ff::RendererActive render = _render->BeginRender(_highTarget, nullptr, highRect, lowRect);
+	render->PushPalette(GetPalette());
+	render->DrawSprite(_lowTexture->AsSprite());
 	render->DrawSprite(_xamlTexture->AsSprite());
 
 	render = _render->BeginRender(target, nullptr, targetRect, highRect);
@@ -148,6 +151,16 @@ void Game::AppState::SetSystemOptions(const SystemOptions& options)
 void Game::AppState::SetDefaultGameOptions(const GameOptions& options)
 {
 	_gameOptions = options;
+}
+
+ff::IPalette* Game::AppState::GetPalette()
+{
+	if (!_palette)
+	{
+		verify(ff::CreatePalette(_globals->GetGraph(), _paletteData.Flush(), &_palette));
+	}
+
+	return _palette;
 }
 
 ff::IRenderer* Game::AppState::GetRenderer() const
@@ -319,5 +332,5 @@ void Game::AppState::InitGraphics()
 
 	_highTexture = graph->CreateTexture(highSize, ff::TextureFormat::RGBA32);
 	_highTarget = graph->CreateRenderTargetTexture(_highTexture);
-	_highDepth = graph->CreateRenderDepth(highSize);
+	_highTarget->Clear();
 }

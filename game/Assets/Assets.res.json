@@ -115,5 +115,11 @@
         { "action": "3" }
       ]
     }
+  },
+
+  "palette":
+  {
+    "res:type": "palette",
+    "file": "file:palette.pal"
   }
 }

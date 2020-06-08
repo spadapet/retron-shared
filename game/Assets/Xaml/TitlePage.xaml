@@ -1,16 +1,14 @@
 <Grid xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Border BorderThickness="4" BorderBrush="Green" />
-
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
         <Button
             x:Name="playGameButton"
             Background="DarkSlateGray"
             Foreground="White"
-            FontSize="24"
-            FontFamily="#Segoe UI"
-            Width="250"
-            Height="100"
+            FontSize="16"
+            FontFamily="Fonts/#Robotron 2084"
+            Width="128"
+            Height="64"
             Content="Play Game" />
     </StackPanel>
 

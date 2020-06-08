@@ -51,5 +51,17 @@
   {
     "res:type": "file",
     "file": "../../../ffcore/core/noesis/Theme/Fonts/PT Root UI_Bold.otf"
+  },
+
+  "#Fonts/robotron-2084.ttf":
+  {
+    "res:type": "file",
+    "file": "file:../Fonts/robotron-2084.ttf"
+  },
+
+  "#Fonts/robotron-2084-small.ttf":
+  {
+    "res:type": "file",
+    "file": "file:../Fonts/robotron-2084-small.ttf"
   }
 }
