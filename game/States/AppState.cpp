@@ -77,6 +77,7 @@ void Game::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
 
 void Game::AppState::OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType type)
 {
+	_highTarget->Clear();
 	_xamlTarget->Clear();
 	_lowTarget->Clear();
 }
@@ -97,12 +98,12 @@ void Game::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType ty
 	}
 
 	ff::RendererActive render = _render->BeginRender(_highTarget, _highDepth, highRect, lowRect);
-	//render->DrawSprite(_lowTexture->AsSprite(), ff::PointFloat::Zeros(), ff::PointFloat::Ones(), 0, ff::GetColorWhite());
-	render->DrawSprite(_xamlTexture->AsSprite(), ff::PointFloat::Zeros(), ff::PointFloat::Ones(), 0, ff::GetColorWhite());
+	//render->DrawSprite(_lowTexture->AsSprite());
+	render->DrawSprite(_xamlTexture->AsSprite());
 
 	render = _render->BeginRender(target, nullptr, targetRect, highRect);
 	render->AsRendererActive11()->PushTextureSampler(D3D11_FILTER_MIN_MAG_MIP_LINEAR);
-	render->DrawSprite(_highTexture->AsSprite(), ff::PointFloat::Zeros(), ff::PointFloat::Ones(), 0, ff::GetColorWhite());
+	render->DrawSprite(_highTexture->AsSprite());
 }
 
 void Game::AppState::SaveState(ff::AppGlobals* globals)
