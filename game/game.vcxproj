@@ -8,7 +8,13 @@
     <RootNamespace>Game</RootNamespace>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
-    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <AppxBundlePlatforms>x64</AppxBundlePlatforms>
+    <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+    <GenerateTestArtifacts>True</GenerateTestArtifacts>
+    <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
+    <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
+    <PackageCertificateKeyFile>Game_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
   </PropertyGroup>
   <Import Project="..\ffcore\msbuild\cpp.props" />
   <ItemDefinitionGroup>
@@ -18,7 +24,7 @@
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);..\ffcore\core\noesis\Include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>..\ffcore\core\noesis\Lib\$(XPlatform)\Noesis.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\ffcore\core\noesis\Lib\uwp-$(XPlatform)\Noesis.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>Noesis.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
@@ -26,6 +32,8 @@
     <ClCompile Include="Core\Globals.cpp" />
     <ClCompile Include="Core\Options.cpp" />
     <ClCompile Include="States\AppState.cpp" />
+    <ClCompile Include="States\GameState.cpp" />
+    <ClCompile Include="States\LevelState.cpp" />
     <ClCompile Include="States\TitleState.cpp" />
     <ClCompile Include="UI\Components.cpp" />
     <ClCompile Include="UI\FailurePage.xaml.cpp">
@@ -34,10 +42,8 @@
     <ClInclude Include="App.xaml.h">
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
-    <ClInclude Include="Core\Enum.h" />
     <ClInclude Include="Core\Globals.h" />
     <ClInclude Include="Core\Options.h" />
-    <ClInclude Include="Core\Types.h" />
     <ClInclude Include="pch.h" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="App.xaml.cpp">
@@ -51,7 +57,10 @@
     </ApplicationDefinition>
     <ClInclude Include="Services\AppService.h" />
     <ClInclude Include="Services\GameService.h" />
+    <ClInclude Include="Services\LevelService.h" />
     <ClInclude Include="States\AppState.h" />
+    <ClInclude Include="States\GameState.h" />
+    <ClInclude Include="States\LevelState.h" />
     <ClInclude Include="States\TitleState.h" />
     <ClInclude Include="UI\Components.h" />
     <ClInclude Include="UI\FailurePage.xaml.h">
@@ -76,7 +85,7 @@
     </ResJson>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\ffcore\core\noesis\Bin\$(XPlatform)\Noesis.dll">
+    <None Include="..\ffcore\core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll">
       <DeploymentContent>true</DeploymentContent>
     </None>
     <None Include="Assets\Xaml\ApplicationResources.xaml">
@@ -85,6 +94,7 @@
     <None Include="Assets\Xaml\TitlePage.xaml">
       <FileType>Document</FileType>
     </None>
+    <None Include="Game_TemporaryKey.pfx" />
     <Page Include="UI\FailurePage.xaml" />
   </ItemGroup>
   <ItemGroup>

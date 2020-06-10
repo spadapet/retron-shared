@@ -1,8 +1,5 @@
 #pragma once
 
-#include "Dict/Dict.h"
-#include "Types/Event.h"
-
 namespace ff
 {
 	class AppGlobals;
@@ -16,7 +13,6 @@ namespace ff
 
 namespace Game
 {
-	class IGameService;
 	struct GameOptions;
 	struct SystemOptions;
 
@@ -43,6 +39,5 @@ namespace Game
 		virtual ff::ITexture* GetLowTexture() const = 0;
 		virtual ff::IRenderTarget* GetLowTarget() const = 0;
 		virtual ff::IRenderDepth* GetLowDepth() const = 0;
-
 	};
 }

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Publisher="CN=Peter Spada" Version="1.0.0.0"  Name="PeterSpada.ReTron"/>
+  <Identity Publisher="CN=Peter Spada" Version="1.0.3.0"  Name="PeterSpada.ReTron"/>
   <mp:PhoneIdentity PhoneProductId="5a1ae531-991c-435f-ae47-287dbf14991e" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Re-Tron</DisplayName>

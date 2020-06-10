@@ -23,6 +23,12 @@
     <ClCompile Include="Core\Options.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="States\GameState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="States\LevelState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -43,16 +49,19 @@
     <ClInclude Include="Core\Options.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Enum.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\Types.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Services\AppService.h">
       <Filter>Services</Filter>
     </ClInclude>
     <ClInclude Include="Services\GameService.h">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="States\GameState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="States\LevelState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\LevelService.h">
       <Filter>Services</Filter>
     </ClInclude>
   </ItemGroup>
@@ -63,8 +72,11 @@
     <None Include="Assets\Xaml\TitlePage.xaml">
       <Filter>Assets\Xaml</Filter>
     </None>
-    <None Include="..\ffcore\core\noesis\Bin\$(XPlatform)\Noesis.dll">
-      <Filter>Assets</Filter>
+    <None Include="Game_TemporaryKey.pfx">
+      <Filter>Assets\Build</Filter>
+    </None>
+    <None Include="..\ffcore\core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll">
+      <Filter>Assets\Build</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -88,6 +100,9 @@
     </Filter>
     <Filter Include="Services">
       <UniqueIdentifier>{1d2da2c0-1fb5-4928-8785-b76fc6f05cb4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Build">
+      <UniqueIdentifier>{8eac9c70-24e3-4db2-9969-b34bf446c498}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -265,6 +280,8 @@
     </ResJson>
   </ItemGroup>
   <ItemGroup>
-    <AppxManifest Include="Package.appxmanifest" />
+    <AppxManifest Include="Package.appxmanifest">
+      <Filter>Assets\Build</Filter>
+    </AppxManifest>
   </ItemGroup>
 </Project>

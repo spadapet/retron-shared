@@ -47,28 +47,28 @@ void Game::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
 		return;
 	}
 
-	noAssertRet(_debugInputResource.HasObject());
+	noAssertRet(_debugInput.HasObject());
 
-	if (_debugInputResource->Advance(_debugInputDevices, GetAppGlobals().GetGlobalTime()._secondsPerAdvance))
+	if (_debugInput->Advance(_debugInputDevices, GetAppGlobals().GetGlobalTime()._secondsPerAdvance))
 	{
-		if (_debugInputResource->HasStartEvent(InputEvents::ID_DEBUG_CANCEL_STEP_ONE_FRAME))
+		if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_CANCEL_STEP_ONE_FRAME))
 		{
 			_debugStepOneFrame = false;
 			_debugSteppingFrames = false;
 		}
 
-		if (_debugInputResource->HasStartEvent(InputEvents::ID_DEBUG_STEP_ONE_FRAME))
+		if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_STEP_ONE_FRAME))
 		{
 			_debugStepOneFrame = _debugSteppingFrames;
 			_debugSteppingFrames = true;
 		}
 	}
 
-	if (_debugInputResource->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_FAST))
+	if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_FAST))
 	{
 		_debugTimeScale = 4.0;
 	}
-	else if (_debugInputResource->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_SLOW))
+	else if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_SLOW))
 	{
 		_debugTimeScale = 0.25;
 	}
@@ -201,7 +201,7 @@ ff::IRenderDepth* Game::AppState::GetLowDepth() const
 bool Game::AppState::OnInitialized(ff::AppGlobals* globals)
 {
 	InitOptions();
-	InitInputDevices();
+	InitInput();
 	InitGraphics();
 
 	return true;
@@ -223,7 +223,7 @@ void Game::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 		this, // value access
 		ff::String::from_static(L"ApplicationResources.xaml"));
 
-	::RegisterNoesisComponents();
+	Game::RegisterNoesisComponents();
 
 	_globals->SetFullScreen(_systemOptions._fullScreen);
 }
@@ -306,12 +306,10 @@ void Game::AppState::InitOptions()
 	}
 }
 
-void Game::AppState::InitInputDevices()
+void Game::AppState::InitInput()
 {
-	_debugInputResource.Init(L"gameDebugControls");
-
+	_debugInput.Init(L"gameDebugControls");
 	_debugInputDevices._keys.Push(_globals->GetKeysDebug());
-	_debugInputDevices._mice.Push(_globals->GetPointerDebug());
 }
 
 void Game::AppState::InitGraphics()

@@ -13,6 +13,10 @@ namespace InputEvents
 	extern const ff::hash_t ID_DOWN;
 	extern const ff::hash_t ID_LEFT;
 	extern const ff::hash_t ID_RIGHT;
+	extern const ff::hash_t ID_SHOOT_UP;
+	extern const ff::hash_t ID_SHOOT_DOWN;
+	extern const ff::hash_t ID_SHOOT_LEFT;
+	extern const ff::hash_t ID_SHOOT_RIGHT;
 	extern const ff::hash_t ID_ACTION;
 	extern const ff::hash_t ID_CANCEL;
 	extern const ff::hash_t ID_PAUSE;
@@ -27,6 +31,8 @@ namespace InputEvents
 
 namespace Constants
 {
+	const size_t MAX_PLAYERS = 2;
+
 	const ff::FixedInt RENDER_WIDTH = 480_f; // 1920 / 4
 	const ff::FixedInt RENDER_HEIGHT = 270_f; // 1080 / 4
 	const ff::PointFixedInt RENDER_SIZE(RENDER_WIDTH, RENDER_HEIGHT);

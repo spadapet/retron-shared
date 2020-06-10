@@ -1,5 +1,5 @@
 {
-  "controls":
+  "gameControls":
   {
     "res:type": "input",
     "events":
@@ -7,28 +7,24 @@
       "up":
       [
         { "action": [ "up" ] },
-        { "action": [ "w" ] },
         { "action": [ "joy-lup" ] },
         { "action": [ "joy-dup" ] }
       ],
       "down":
       [
         { "action": [ "down" ] },
-        { "action": [ "s" ] },
         { "action": [ "joy-ldown" ] },
         { "action": [ "joy-ddown" ] }
       ],
       "left":
       [
         { "action": [ "left" ] },
-        { "action": [ "a" ] },
         { "action": [ "joy-lleft" ] },
         { "action": [ "joy-dleft" ] }
       ],
       "right":
       [
         { "action": [ "right" ] },
-        { "action": [ "d" ] },
         { "action": [ "joy-lright" ] },
         { "action": [ "joy-dright" ] }
       ],
@@ -56,28 +52,24 @@
       "up":
       [
         { "action": "up" },
-        { "action": "w" },
         { "action": "joy-lup" },
         { "action": "joy-dup" }
       ],
       "down":
       [
         { "action": "down" },
-        { "action": "s" },
         { "action": "joy-ldown" },
         { "action": "joy-ddown" }
       ],
       "left":
       [
         { "action": "left" },
-        { "action": "a" },
         { "action": "joy-lleft" },
         { "action": "joy-dleft" }
       ],
       "right":
       [
         { "action": "right" },
-        { "action": "d" },
         { "action": "joy-lright" },
         { "action": "joy-dright" }
       ],
@@ -86,6 +78,188 @@
         { "action": "return" },
         { "action": "space" },
         { "action": "joy-a" }
+      ]
+    }
+  },
+
+  "playerControls":
+  {
+    "res:type": "input",
+    "events":
+    {
+      "up":
+      [
+        { "action": [ "w" ] },
+        { "action": [ "joy-lup" ] },
+        { "action": [ "joy-dup" ] }
+      ],
+      "down":
+      [
+        { "action": [ "s" ] },
+        { "action": [ "joy-ldown" ] },
+        { "action": [ "joy-ddown" ] }
+      ],
+      "left":
+      [
+        { "action": [ "a" ] },
+        { "action": [ "joy-lleft" ] },
+        { "action": [ "joy-dleft" ] }
+      ],
+      "right":
+      [
+        { "action": [ "d" ] },
+        { "action": [ "joy-lright" ] },
+        { "action": [ "joy-dright" ] }
+      ],
+      "shoot-up":
+      [
+        { "action": [ "up" ] },
+        { "action": [ "joy-rup" ] }
+      ],
+      "shoot-down":
+      [
+        { "action": [ "down" ] },
+        { "action": [ "joy-rdown" ] }
+      ],
+      "shoot-left":
+      [
+        { "action": [ "left" ] },
+        { "action": [ "joy-rleft" ] }
+      ],
+      "shoot-right":
+      [
+        { "action": [ "right" ] },
+        { "action": [ "joy-rright" ] }
+      ]
+    },
+    "values":
+    {
+      "up":
+      [
+        { "action": "w" },
+        { "action": "joy-lup" },
+        { "action": "joy-dup" }
+      ],
+      "down":
+      [
+        { "action": "s" },
+        { "action": "joy-ldown" },
+        { "action": "joy-ddown" }
+      ],
+      "left":
+      [
+        { "action": "a" },
+        { "action": "joy-lleft" },
+        { "action": "joy-dleft" }
+      ],
+      "right":
+      [
+        { "action": "d" },
+        { "action": "joy-lright" },
+        { "action": "joy-dright" }
+      ],
+      "shoot-up":
+      [
+        { "action": "up" },
+        { "action": "joy-rup" }
+      ],
+      "shoot-down":
+      [
+        { "action": "down" },
+        { "action": "joy-rdown" }
+      ],
+      "shoot-left":
+      [
+        { "action": "left" },
+        { "action": "joy-rleft" }
+      ],
+      "shoot-right":
+      [
+        { "action": "right" },
+        { "action": "joy-rright" }
+      ]
+    }
+  },
+
+  "secondaryPlayerControls":
+  {
+    "res:type": "input",
+    "events":
+    {
+      "up":
+      [
+        { "action": [ "joy-lup" ] },
+        { "action": [ "joy-dup" ] }
+      ],
+      "down":
+      [
+        { "action": [ "joy-ldown" ] },
+        { "action": [ "joy-ddown" ] }
+      ],
+      "left":
+      [
+        { "action": [ "joy-lleft" ] },
+        { "action": [ "joy-dleft" ] }
+      ],
+      "right":
+      [
+        { "action": [ "joy-lright" ] },
+        { "action": [ "joy-dright" ] }
+      ],
+      "shoot-up":
+      [
+        { "action": [ "joy-rup" ] }
+      ],
+      "shoot-down":
+      [
+        { "action": [ "joy-rdown" ] }
+      ],
+      "shoot-left":
+      [
+        { "action": [ "joy-rleft" ] }
+      ],
+      "shoot-right":
+      [
+        { "action": [ "joy-rright" ] }
+      ]
+    },
+    "values":
+    {
+      "up":
+      [
+        { "action": "joy-lup" },
+        { "action": "joy-dup" }
+      ],
+      "down":
+      [
+        { "action": "joy-ldown" },
+        { "action": "joy-ddown" }
+      ],
+      "left":
+      [
+        { "action": "joy-lleft" },
+        { "action": "joy-dleft" }
+      ],
+      "right":
+      [
+        { "action": "joy-lright" },
+        { "action": "joy-dright" }
+      ],
+      "shoot-up":
+      [
+        { "action": "joy-rup" }
+      ],
+      "shoot-down":
+      [
+        { "action": "joy-rdown" }
+      ],
+      "shoot-left":
+      [
+        { "action": "joy-rleft" }
+      ],
+      "shoot-right":
+      [
+        { "action": "joy-rright" }
       ]
     }
   },

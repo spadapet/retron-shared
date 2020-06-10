@@ -69,7 +69,7 @@ namespace Game
 
 	private:
 		void InitOptions();
-		void InitInputDevices();
+		void InitInput();
 		void InitGraphics();
 
 		// Globals
@@ -94,7 +94,7 @@ namespace Game
 		ff::Viewport _viewport;
 
 		// Debugging
-		ff::TypedResource<ff::IInputMapping> _debugInputResource;
+		ff::TypedResource<ff::IInputMapping> _debugInput;
 		ff::InputDevices _debugInputDevices;
 		ff::EventCookie _customDebugCookie;
 		double _debugTimeScale;
