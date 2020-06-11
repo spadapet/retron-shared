@@ -157,7 +157,7 @@ ff::IPalette* Game::AppState::GetPalette()
 {
 	if (!_palette)
 	{
-		verify(ff::CreatePalette(_globals->GetGraph(), _paletteData.Flush(), &_palette));
+		_palette = _paletteData.Flush()->CreatePalette(_globals->GetGraph());
 	}
 
 	return _palette;
