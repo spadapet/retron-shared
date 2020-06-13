@@ -21,8 +21,6 @@ namespace Game
 	class AppState
 		: public ff::State
 		, public ff::IAppGlobalsHelper
-		, public ff::IResourceAccess
-		, public ff::IValueAccess
 		, public Game::IAppService
 	{
 	public:
@@ -58,14 +56,6 @@ namespace Game
 		virtual std::shared_ptr<State> CreateInitialState(ff::AppGlobals* globals) override;
 		virtual double GetTimeScale(ff::AppGlobals* globals) override;
 		virtual ff::AdvanceType GetAdvanceType(ff::AppGlobals* globals) override;
-
-		// IResourceAccess
-		virtual ff::AutoResourceValue GetResource(ff::StringRef name) override;
-		virtual ff::Vector<ff::String> GetResourceNames() const override;
-
-		// IValueAccess
-		virtual ff::ValuePtr GetValue(ff::StringRef name) const override;
-		virtual ff::String GetString(ff::StringRef name) const override;
 
 	private:
 		void InitOptions();

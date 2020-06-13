@@ -219,8 +219,8 @@ void Game::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 	_xamlGlobals->Startup(
 		ff::String::from_static(L"9e6fb182-647d-454a-8f95-fcdf88e3c3c2"),
 		ff::String::from_static(L"g8nV9oGB1fZ5EP22GHDZv3T6uCQdsGyA3YlNsw6AFmDSr4IV"),
-		this, // resource access
-		this, // value access
+		ff::GetThisModule().GetResources(),
+		ff::GetThisModule().GetValueTable(),
 		ff::String::from_static(L"ApplicationResources.xaml"));
 
 	Game::RegisterNoesisComponents();
@@ -267,26 +267,6 @@ ff::AdvanceType Game::AppState::GetAdvanceType(ff::AppGlobals* globals)
 	}
 
 	return ff::AdvanceType::Running;
-}
-
-ff::AutoResourceValue Game::AppState::GetResource(ff::StringRef name)
-{
-	return ff::AutoResourceValue(ff::GetThisModule().GetResources(), name);
-}
-
-ff::Vector<ff::String> Game::AppState::GetResourceNames() const
-{
-	return ff::GetThisModule().GetResources()->GetResourceNames();
-}
-
-ff::ValuePtr Game::AppState::GetValue(ff::StringRef name) const
-{
-	return ff::GetThisModule().GetValue(name);
-}
-
-ff::String Game::AppState::GetString(ff::StringRef name) const
-{
-	return ff::GetThisModule().GetString(name);
 }
 
 void Game::AppState::InitOptions()
