@@ -5,6 +5,7 @@
 #include "Dict/Dict.h"
 #include "Globals/AppGlobals.h"
 #include "Globals/ProcessGlobals.h"
+#include "Graph/Anim/Transform.h"
 #include "Graph/GraphDevice.h"
 #include "Graph/Render/Renderer.h"
 #include "Graph/Render/RendererActive.h"
@@ -101,12 +102,12 @@ void Game::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType ty
 
 	ff::RendererActive render = _render->BeginRender(_highTarget, nullptr, highRect, lowRect);
 	render->PushPalette(GetPalette());
-	render->DrawSprite(_lowTexture->AsSprite());
-	render->DrawSprite(_xamlTexture->AsSprite());
+	render->DrawSprite(_lowTexture->AsSprite(), ff::Transform::Identity());
+	render->DrawSprite(_xamlTexture->AsSprite(), ff::Transform::Identity());
 
 	render = _render->BeginRender(target, nullptr, targetRect, highRect);
 	render->AsRendererActive11()->PushTextureSampler(D3D11_FILTER_MIN_MAG_MIP_LINEAR);
-	render->DrawSprite(_highTexture->AsSprite());
+	render->DrawSprite(_highTexture->AsSprite(), ff::Transform::Identity());
 }
 
 void Game::AppState::SaveState(ff::AppGlobals* globals)
