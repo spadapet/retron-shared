@@ -1,6 +1,0 @@
-MainPackage=C:\git\rtron-shared\out\Release.x64.Metro\Game\bin\Game\Game_1.0.3.0_x64.msix
-SymbolPackage=C:\git\rtron-shared\out\Release.x64.Metro\Game\obj\Symbols\Game_1.0.3.0_x64.appxsym
-ResourcePack=C:\git\rtron-shared\out\Release.x64.Metro\Game\bin\Game\Game_1.0.3.0_scale-100.msix
-ResourcePack=C:\git\rtron-shared\out\Release.x64.Metro\Game\bin\Game\Game_1.0.3.0_scale-125.msix
-ResourcePack=C:\git\rtron-shared\out\Release.x64.Metro\Game\bin\Game\Game_1.0.3.0_scale-150.msix
-ResourcePack=C:\git\rtron-shared\out\Release.x64.Metro\Game\bin\Game\Game_1.0.3.0_scale-400.msix

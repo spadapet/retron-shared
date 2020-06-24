@@ -3,10 +3,10 @@
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
         <Button
             x:Name="playGameButton"
-            Background="DarkSlateGray"
-            Foreground="White"
-            FontSize="16"
-            FontFamily="Fonts/#Robotron 2084"
+            Background="{StaticResource Pal-240}"
+            Foreground="{StaticResource Pal-245}"
+            FontSize="{StaticResource GameFontSize}"
+            FontFamily="{StaticResource GameFont}"
             Width="128"
             Height="64"
             Content="Play Game" />

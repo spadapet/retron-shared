@@ -218,8 +218,8 @@ void Game::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 
 	_xamlGlobals = std::make_shared<ff::XamlGlobalState>(_globals);
 	_xamlGlobals->Startup(
-		ff::String::from_static(L"9e6fb182-647d-454a-8f95-fcdf88e3c3c2"),
-		ff::String::from_static(L"g8nV9oGB1fZ5EP22GHDZv3T6uCQdsGyA3YlNsw6AFmDSr4IV"),
+		ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseName")),
+		ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseKey")),
 		ff::GetThisModule().GetResources(),
 		ff::GetThisModule().GetValueTable(),
 		ff::String::from_static(L"ApplicationResources.xaml"));

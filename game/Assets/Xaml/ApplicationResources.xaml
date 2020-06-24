@@ -1,7 +1,8 @@
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:ff="clr-namespace:ff">
+    xmlns:ff="clr-namespace:ff"
+    xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="NoesisTheme.LightBlue.xaml"/>
@@ -9,5 +10,43 @@
 
     <ff:BoolToVisibleConverter x:Key="BoolToVisibleConverter" />
     <ff:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+
+    <FontFamily x:Key="GameFont">Fonts/#Robotron 2084</FontFamily>
+    <FontFamily x:Key="GameFontSmall">Fonts/#Robotron 2084 Small</FontFamily>
+    <sys:Double x:Key="GameFontSize">8</sys:Double>
+    <sys:Double x:Key="GameFontSmallSize">6</sys:Double>
+
+    <SolidColorBrush x:Key="Pal-224">#000000</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-225">#222034</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-226">#45283C</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-227">#663931</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-228">#8F563B</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-229">#DF7126</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-230">#D9A066</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-231">#EEC39A</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-232">#FBF236</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-233">#99E550</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-234">#6ABE30</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-235">#37946E</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-236">#4B692F</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-237">#524B24</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-238">#323C39</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-239">#3F3F74</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-240">#306082</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-241">#5B6EE1</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-242">#639BFF</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-243">#5FCDE4</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-244">#CBDBFC</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-245">#FFFFFF</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-246">#9BADB7</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-247">#847E87</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-248">#696A6A</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-249">#595652</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-250">#76428A</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-251">#AC3232</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-252">#D95763</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-253">#D77BBA</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-254">#8F974A</SolidColorBrush>
+    <SolidColorBrush x:Key="Pal-255">#8A6F30</SolidColorBrush>
 
 </ResourceDictionary>
