@@ -295,5 +295,33 @@
   {
     "res:type": "palette",
     "file": "file:palette.pal"
+  },
+
+  "GameFontData":
+  {
+    "res:type": "fontData",
+    "file": "file:Fonts/robotron-2084.ttf"
+  },
+
+  "GameFontSmallData":
+  {
+    "res:type": "fontData",
+    "file": "file:Fonts/robotron-2084-small.ttf"
+  },
+
+  "GameFont":
+  {
+    "res:type": "font",
+    "data": "ref:GameFontData",
+    "size": 8,
+    "outline": 1
+  },
+
+  "GameFontSmall":
+  {
+    "res:type": "font",
+    "data": "ref:GameFontSmallData",
+    "size": 6,
+    "outline": 1
   }
 }

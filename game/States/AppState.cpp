@@ -7,6 +7,7 @@
 #include "Globals/ProcessGlobals.h"
 #include "Graph/Anim/Transform.h"
 #include "Graph/GraphDevice.h"
+#include "Graph/Render/PixelRenderer.h"
 #include "Graph/Render/Renderer.h"
 #include "Graph/Render/RendererActive.h"
 #include "Graph/RenderTarget/RenderDepth.h"
@@ -81,7 +82,7 @@ void Game::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
 
 void Game::AppState::OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType type)
 {
-	_xamlTarget->Clear();
+	_xamlTarget->Clear(&ff::GetColorNone());
 	_lowTarget->Clear();
 }
 
@@ -89,23 +90,21 @@ void Game::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType ty
 {
 	_debugStepOneFrame = false;
 
-	ff::RectFloat lowRect(0, 0, Constants::RENDER_WIDTH, Constants::RENDER_HEIGHT);
-	ff::RectFloat highRect(0, 0, Constants::RENDER_WIDTH * Constants::RENDER_SCALE, Constants::RENDER_HEIGHT * Constants::RENDER_SCALE);
-	ff::RectFloat targetRect = _viewport.GetView(target);
-	ff::PointFloat targetScale = targetRect.Size() / lowRect.Size();
-	ff::PointFloat targetPos = targetRect.TopLeft();
+	ff::RectFixedInt targetRect = _viewport.GetView(target).ToType<ff::FixedInt>();
+	ff::PointFixedInt targetScale = targetRect.Size() / Constants::RENDER_SIZE;
+	ff::PointFixedInt targetPos = targetRect.TopLeft();
 
 	for (ff::XamlView* view : _xamlGlobals->GetRenderedViews())
 	{
-		view->SetViewToScreenTransform(targetPos, targetScale);
+		view->SetViewToScreenTransform(targetPos.ToType<float>(), targetScale.ToType<float>());
 	}
 
-	ff::RendererActive render = _render->BeginRender(_highTarget, nullptr, highRect, lowRect);
+	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_render.get(), _highTarget, nullptr, Constants::RENDER_RECT_HIGH, Constants::RENDER_RECT);
 	render->PushPalette(GetPalette());
 	render->DrawSprite(_lowTexture->AsSprite(), ff::Transform::Identity());
 	render->DrawSprite(_xamlTexture->AsSprite(), ff::Transform::Identity());
 
-	render = _render->BeginRender(target, nullptr, targetRect, highRect);
+	render = ff::PixelRendererActive::BeginRender(_render.get(), target, nullptr, targetRect, Constants::RENDER_RECT_HIGH);
 	render->AsRendererActive11()->PushTextureSampler(D3D11_FILTER_MIN_MAG_MIP_LINEAR);
 	render->DrawSprite(_highTexture->AsSprite(), ff::Transform::Identity());
 }

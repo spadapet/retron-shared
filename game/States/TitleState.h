@@ -1,10 +1,13 @@
 #pragma once
 
+#include "Resource/ResourceValue.h"
 #include "State/State.h"
 
 namespace ff
 {
 	class XamlView;
+	class IRenderer;
+	class ISpriteFont;
 }
 
 namespace Game
@@ -27,5 +30,7 @@ namespace Game
 		IAppService* _appService;
 		std::shared_ptr<ff::XamlView> _view;
 		std::shared_ptr<ff::State> _pendingState;
+		std::unique_ptr<ff::IRenderer> _render;
+		ff::TypedResource<ff::ISpriteFont> _font;
 	};
 }

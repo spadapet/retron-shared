@@ -1,5 +1,9 @@
 #include "pch.h"
 #include "Globals/AppGlobals.h"
+#include "Graph/Anim/Transform.h"
+#include "Graph/Font/SpriteFont.h"
+#include "Graph/GraphDevice.h"
+#include "Graph/Render/PixelRenderer.h"
 #include "Graph/Render/Renderer.h"
 #include "Graph/Render/RendererActive.h"
 #include "Graph/RenderTarget/RenderTarget.h"
@@ -12,6 +16,8 @@
 
 Game::TitleState::TitleState(IAppService* appService)
 	: _appService(appService)
+	, _render(appService->GetAppGlobals().GetGraph()->CreateRenderer())
+	, _font(L"GameFont")
 {
 	_view = _appService->GetXamlGlobals().CreateView(ff::String::from_static(L"TitlePage.xaml"), appService->GetXamlTarget());
 
@@ -35,6 +41,17 @@ void Game::TitleState::OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType
 void Game::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth)
 {
 	_view->Render(_appService->GetXamlTarget(), _appService->GetXamlDepth());
+
+	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_render.get(), _appService->GetLowTarget(), _appService->GetLowDepth(), Constants::RENDER_RECT, Constants::RENDER_RECT);
+
+	if (_font.HasObject())
+	{
+		ff::String text = ff::GetThisModule().GetString(ff::String::from_static(L"titleIntro"));
+		ff::FontPaletteChange color{ 0, 252 };
+		ff::Transform transform = ff::Transform::Identity();
+		transform._position.SetPoint(8, 8);
+		_font->DrawPaletteText(render, text, text.size(), transform, &color, 1);
+	}
 }
 
 void Game::TitleState::OnClickPlayGame(Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args)
