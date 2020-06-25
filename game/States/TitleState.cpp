@@ -47,10 +47,10 @@ void Game::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target
 	if (_font.HasObject())
 	{
 		ff::String text = ff::GetThisModule().GetString(ff::String::from_static(L"titleIntro"));
-		ff::FontPaletteChange color{ 0, 252 };
 		ff::Transform transform = ff::Transform::Identity();
 		transform._position.SetPoint(8, 8);
-		_font->DrawPaletteText(render, text, text.size(), transform, &color, 1);
+		ff::PaletteIndexToColor(252, transform._color);
+		_font->DrawText(render, text, transform, ((globals->GetGlobalTime()._advanceCount % 60) < 30) ? ff::GetColorWhite() : ff::GetColorNone());
 	}
 }
 

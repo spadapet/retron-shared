@@ -34,8 +34,14 @@ Game::AppState::AppState(ff::ProcessGlobals* processGlobals, ff::AppGlobals* glo
 	, _debugStepOneFrame(false)
 	, _debugTimeScale(1.0)
 	, _customDebugCookie(nullptr)
-	, _paletteData(L"palette")
 {
+}
+
+std::shared_ptr<ff::State> Game::AppState::Advance(ff::AppGlobals* globals)
+{
+	GetPalette()->Advance();
+
+	return nullptr;
 }
 
 void Game::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
@@ -157,7 +163,7 @@ ff::IPalette* Game::AppState::GetPalette()
 {
 	if (!_palette)
 	{
-		_palette = _paletteData.Flush()->CreatePalette(_globals->GetGraph());
+		_palette = _paletteData->CreatePalette(4.0f);
 	}
 
 	return _palette;
@@ -201,7 +207,7 @@ ff::IRenderDepth* Game::AppState::GetLowDepth() const
 bool Game::AppState::OnInitialized(ff::AppGlobals* globals)
 {
 	InitOptions();
-	InitInput();
+	InitResources();
 	InitGraphics();
 
 	return true;
@@ -286,8 +292,10 @@ void Game::AppState::InitOptions()
 	}
 }
 
-void Game::AppState::InitInput()
+void Game::AppState::InitResources()
 {
+	_paletteData.Init(L"palette");
+
 	_debugInput.Init(L"gameDebugControls");
 	_debugInputDevices._keys.Push(_globals->GetKeysDebug());
 }

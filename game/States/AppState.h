@@ -27,6 +27,7 @@ namespace Game
 		AppState(ff::ProcessGlobals* processGlobals, ff::AppGlobals* globals);
 
 		// State
+		virtual std::shared_ptr<State> Advance(ff::AppGlobals* globals) override;
 		virtual void AdvanceDebugInput(ff::AppGlobals* globals) override;
 		virtual void OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType type) override;
 		virtual void OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType type, ff::IRenderTarget* target, ff::IRenderDepth* depth) override;
@@ -59,7 +60,7 @@ namespace Game
 
 	private:
 		void InitOptions();
-		void InitInput();
+		void InitResources();
 		void InitGraphics();
 
 		// Globals
