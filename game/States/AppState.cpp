@@ -89,7 +89,8 @@ void Game::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
 void Game::AppState::OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType type)
 {
 	_xamlTarget->Clear(&ff::GetColorNone());
-	_lowTarget->Clear();
+	_lowTarget->Clear(&ff::GetColorNone());
+	_highTarget->Clear(&ff::GetColorBlack());
 }
 
 void Game::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType type, ff::IRenderTarget* target, ff::IRenderDepth* depth)
@@ -163,7 +164,7 @@ ff::IPalette* Game::AppState::GetPalette()
 {
 	if (!_palette)
 	{
-		_palette = _paletteData->CreatePalette(4.0f);
+		_palette = _paletteData->CreatePalette(0.25f);
 	}
 
 	return _palette;
@@ -318,5 +319,4 @@ void Game::AppState::InitGraphics()
 
 	_highTexture = graph->CreateTexture(highSize, ff::TextureFormat::RGBA32);
 	_highTarget = graph->CreateRenderTargetTexture(_highTexture);
-	_highTarget->Clear();
 }

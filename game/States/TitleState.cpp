@@ -50,7 +50,7 @@ void Game::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target
 		ff::Transform transform = ff::Transform::Identity();
 		transform._position.SetPoint(8, 8);
 		ff::PaletteIndexToColor(252, transform._color);
-		_font->DrawText(render, text, transform, ((globals->GetGlobalTime()._advanceCount % 60) < 30) ? ff::GetColorWhite() : ff::GetColorNone());
+		_font->DrawText(render, text, transform, ff::GetColorNone(), ((globals->GetGlobalTime()._advanceCount % 60) < 30) ? ff::SpriteFontOptions::NoOutline : ff::SpriteFontOptions::None);
 	}
 }
 

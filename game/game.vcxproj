@@ -88,12 +88,9 @@
     <None Include="..\ffcore\core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll">
       <DeploymentContent>true</DeploymentContent>
     </None>
-    <None Include="Assets\Xaml\ApplicationResources.xaml">
-      <FileType>Document</FileType>
-    </None>
-    <None Include="Assets\Xaml\TitlePage.xaml">
-      <FileType>Document</FileType>
-    </None>
+    <None Include="Assets\Xaml\ApplicationResources.xaml" />
+    <None Include="Assets\Xaml\ApplicationTheme.xaml" />
+    <None Include="Assets\Xaml\TitlePage.xaml" />
     <None Include="Game_TemporaryKey.pfx" />
     <Page Include="UI\FailurePage.xaml" />
   </ItemGroup>

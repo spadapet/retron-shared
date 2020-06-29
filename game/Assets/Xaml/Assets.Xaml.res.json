@@ -5,52 +5,16 @@
     "file": "file:ApplicationResources.xaml"
   },
 
+  "ApplicationTheme.xaml":
+  {
+    "res:type": "file",
+    "file": "file:ApplicationTheme.xaml"
+  },
+
   "TitlePage.xaml":
   {
     "res:type": "file",
     "file": "file:TitlePage.xaml"
-  },
-
-  "NoesisTheme.Brushes.LightBlue.xaml":
-  {
-    "res:type": "file",
-    "file": "file:../../../ffcore/core/noesis/Theme/NoesisTheme.Brushes.LightBlue.xaml"
-  },
-
-  "NoesisTheme.Colors.Light.xaml":
-  {
-    "res:type": "file",
-    "file": "../../../ffcore/core/noesis/Theme/NoesisTheme.Colors.Light.xaml"
-  },
-
-  "NoesisTheme.Fonts.xaml":
-  {
-    "res:type": "file",
-    "file": "../../../ffcore/core/noesis/Theme/NoesisTheme.Fonts.xaml"
-  },
-
-  "NoesisTheme.LightBlue.xaml":
-  {
-    "res:type": "file",
-    "file": "../../../ffcore/core/noesis/Theme/NoesisTheme.LightBlue.xaml"
-  },
-
-  "NoesisTheme.Styles.xaml":
-  {
-    "res:type": "file",
-    "file": "../../../ffcore/core/noesis/Theme/NoesisTheme.Styles.xaml"
-  },
-
-  "#Fonts/PT Root UI_Regular.otf":
-  {
-    "res:type": "file",
-    "file": "../../../ffcore/core/noesis/Theme/Fonts/PT Root UI_Regular.otf"
-  },
-
-  "#Fonts/PT Root UI_Bold.otf":
-  {
-    "res:type": "file",
-    "file": "../../../ffcore/core/noesis/Theme/Fonts/PT Root UI_Bold.otf"
   },
 
   "#Fonts/robotron-2084.ttf":

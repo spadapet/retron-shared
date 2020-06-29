@@ -78,6 +78,9 @@
     <None Include="..\ffcore\core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll">
       <Filter>Assets\Build</Filter>
     </None>
+    <None Include="Assets\Xaml\ApplicationTheme.xaml">
+      <Filter>Assets\Xaml</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
