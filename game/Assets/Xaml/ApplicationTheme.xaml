@@ -13,37 +13,37 @@
 
     <!-- Palette in RGB -->
     <Color x:Key="Color.224">#000000</Color>
-    <Color x:Key="Color.225">#222034</Color>
-    <Color x:Key="Color.226">#45283C</Color>
-    <Color x:Key="Color.227">#663931</Color>
-    <Color x:Key="Color.228">#8F563B</Color>
-    <Color x:Key="Color.229">#DF7126</Color>
-    <Color x:Key="Color.230">#D9A066</Color>
-    <Color x:Key="Color.231">#EEC39A</Color>
-    <Color x:Key="Color.232">#FBF236</Color>
-    <Color x:Key="Color.233">#99E550</Color>
-    <Color x:Key="Color.234">#6ABE30</Color>
-    <Color x:Key="Color.235">#37946E</Color>
-    <Color x:Key="Color.236">#4B692F</Color>
-    <Color x:Key="Color.237">#524B24</Color>
-    <Color x:Key="Color.238">#323C39</Color>
-    <Color x:Key="Color.239">#3F3F74</Color>
-    <Color x:Key="Color.240">#306082</Color>
-    <Color x:Key="Color.241">#5B6EE1</Color>
-    <Color x:Key="Color.242">#639BFF</Color>
-    <Color x:Key="Color.243">#5FCDE4</Color>
-    <Color x:Key="Color.244">#CBDBFC</Color>
-    <Color x:Key="Color.245">#FFFFFF</Color>
-    <Color x:Key="Color.246">#9BADB7</Color>
-    <Color x:Key="Color.247">#847E87</Color>
-    <Color x:Key="Color.248">#696A6A</Color>
-    <Color x:Key="Color.249">#595652</Color>
-    <Color x:Key="Color.250">#76428A</Color>
-    <Color x:Key="Color.251">#AC3232</Color>
-    <Color x:Key="Color.252">#D95763</Color>
-    <Color x:Key="Color.253">#D77BBA</Color>
-    <Color x:Key="Color.254">#8F974A</Color>
-    <Color x:Key="Color.255">#8A6F30</Color>
+    <Color x:Key="Color.225">#1D2B53</Color>
+    <Color x:Key="Color.226">#7E2553</Color>
+    <Color x:Key="Color.227">#008751</Color>
+    <Color x:Key="Color.228">#AB5236</Color>
+    <Color x:Key="Color.229">#5F574F</Color>
+    <Color x:Key="Color.230">#C2C3C7</Color>
+    <Color x:Key="Color.231">#FFF1E8</Color>
+    <Color x:Key="Color.232">#FF004D</Color>
+    <Color x:Key="Color.233">#FFA300</Color>
+    <Color x:Key="Color.234">#FFEC27</Color>
+    <Color x:Key="Color.235">#00E436</Color>
+    <Color x:Key="Color.236">#29ADFF</Color>
+    <Color x:Key="Color.237">#83769C</Color>
+    <Color x:Key="Color.238">#FF77A8</Color>
+    <Color x:Key="Color.239">#FFCCAA</Color>
+    <Color x:Key="Color.240">#291814</Color>
+    <Color x:Key="Color.241">#111D35</Color>
+    <Color x:Key="Color.242">#422136</Color>
+    <Color x:Key="Color.243">#125359</Color>
+    <Color x:Key="Color.244">#742F29</Color>
+    <Color x:Key="Color.245">#49333B</Color>
+    <Color x:Key="Color.246">#A28879</Color>
+    <Color x:Key="Color.247">#F3EF7D</Color>
+    <Color x:Key="Color.248">#BE1250</Color>
+    <Color x:Key="Color.249">#FF6C24</Color>
+    <Color x:Key="Color.250">#A8E72E</Color>
+    <Color x:Key="Color.251">#00B543</Color>
+    <Color x:Key="Color.252">#065AB5</Color>
+    <Color x:Key="Color.253">#754665</Color>
+    <Color x:Key="Color.254">#FF6E59</Color>
+    <Color x:Key="Color.255">#FF9D81</Color>
 
     <SolidColorBrush x:Key="Brush.224" Color="{StaticResource Color.224}" />
     <SolidColorBrush x:Key="Brush.225" Color="{StaticResource Color.225}" />
@@ -80,22 +80,24 @@
 
     <!-- Theme colors -->
     <Color x:Key="Color.Black">#000000</Color> <!-- Color.224 -->
-    <Color x:Key="Color.White">#FFFFFF</Color> <!-- Color.245 -->
-    <Color x:Key="Color.Gray0">#41484e</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Gray1">#5d6469</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Gray2">#7b8085</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Gray3">#93979b</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Gray4">#abaeb2</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Gray5">#bbbec1</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Gray6">#cbced0</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Gray7">#dcdee0</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Gray8">#e5e6e8</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Gray9">#edeff0</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Accent">#FF1098DF</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Accent0">#FF0864A1</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Accent1">#FF0B80C1</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Accent2">#FF2EAEEB</Color> <!-- Color.2 -->
-    <Color x:Key="Color.Accent3">#FF56BDEC</Color> <!-- Color.2 -->
+    <Color x:Key="Color.White">#FFF1E8</Color> <!-- Color.231 -->
+    
+    <Color x:Key="Color.Gray0">#422136</Color> <!-- Color.242 -->
+    <Color x:Key="Color.Gray1">#422136</Color> <!-- Color.242 -->
+    <Color x:Key="Color.Gray2">#49333B</Color> <!-- Color.245 -->
+    <Color x:Key="Color.Gray3">#49333B</Color> <!-- Color.245 -->
+    <Color x:Key="Color.Gray4">#A28879</Color> <!-- Color.246 -->
+    <Color x:Key="Color.Gray5">#A28879</Color> <!-- Color.246 -->
+    <Color x:Key="Color.Gray6">#C2C3C7</Color> <!-- Color.230 -->
+    <Color x:Key="Color.Gray7">#C2C3C7</Color> <!-- Color.230 -->
+    <Color x:Key="Color.Gray9">#FFF1E8</Color> <!-- Color.231 -->
+    <Color x:Key="Color.Gray8">#FFF1E8</Color> <!-- Color.231 -->
+    
+    <Color x:Key="Color.Accent">#29ADFF</Color> <!-- Color.236 -->
+    <Color x:Key="Color.Accent0">#111D35</Color> <!-- Color.241 -->
+    <Color x:Key="Color.Accent1">#1D2B53</Color> <!-- Color.225 -->
+    <Color x:Key="Color.Accent2">#065AB5</Color> <!-- Color.252 -->
+    <Color x:Key="Color.Accent3">#29ADFF</Color> <!-- Color.236 -->
 
     <!-- Theme brushes -->
     <SolidColorBrush x:Key="Brush.Window.Background" Color="{StaticResource Color.White}" />
@@ -107,7 +109,7 @@
     <SolidColorBrush x:Key="Brush.Glyph.Disabled" Color="{StaticResource Color.Gray2}" />
     <SolidColorBrush x:Key="Brush.Glyph.DisabledChecked" Color="{StaticResource Color.Gray8}" />
 
-    <SolidColorBrush x:Key="Brush.Foreground.Normal" Color="{StaticResource Color.Black}" />
+    <SolidColorBrush x:Key="Brush.Foreground.Normal" Color="{StaticResource Color.White}" />
     <SolidColorBrush x:Key="Brush.Foreground.Placeholder" Color="{StaticResource Color.Gray2}" />
     <SolidColorBrush x:Key="Brush.Foreground.Disabled" Color="{StaticResource Color.Gray2}" />
     <SolidColorBrush x:Key="Brush.Foreground.DisabledChecked" Color="{StaticResource Color.Accent0}" />
@@ -178,8 +180,8 @@
     <Thickness x:Key="Border.Over">1</Thickness>
     <Thickness x:Key="Border.Focus">1</Thickness>
 
-    <Thickness x:Key="Margin.Focus.Uniform">-1</Thickness>
-    <Thickness x:Key="Margin.Focus.Padded">-2,-2</Thickness>
+    <Thickness x:Key="Margin.Focus.Uniform">-2</Thickness>
+    <Thickness x:Key="Margin.Focus.Padded">-2</Thickness>
 
     <CornerRadius x:Key="Corner.Border0">0</CornerRadius>
     <CornerRadius x:Key="Corner.Border0.Top">0</CornerRadius>

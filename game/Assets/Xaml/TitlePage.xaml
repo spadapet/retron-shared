@@ -3,8 +3,8 @@
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
         <Button
             x:Name="playGameButton"
-            Background="{StaticResource Brush.240}"
-            Foreground="{StaticResource Brush.245}"
+            Background="{StaticResource Brush.244}"
+            Foreground="{StaticResource Brush.231}"
             Width="128"
             Height="64"
             Content="Play Game" />
