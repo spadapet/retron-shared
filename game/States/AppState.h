@@ -24,7 +24,7 @@ namespace Game
 		, public Game::IAppService
 	{
 	public:
-		AppState(ff::ProcessGlobals* processGlobals, ff::AppGlobals* globals);
+		AppState();
 
 		// State
 		virtual std::shared_ptr<State> Advance(ff::AppGlobals* globals) override;

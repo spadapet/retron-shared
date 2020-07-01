@@ -38,7 +38,7 @@ void Game::App::InitializeGlobals()
 	auto window = Windows::UI::Xaml::Window::Current;
 	window->Content = page;
 
-	_appState = std::make_shared<AppState>(&_processGlobals, &_globals);
+	_appState = std::make_shared<AppState>();
 
 	if (!_globals.Startup(ff::AppGlobalsFlags::All, panel, _appState.get()))
 	{

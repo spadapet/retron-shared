@@ -1,4 +1,5 @@
 ﻿#pragma once
+#if METRO_APP
 
 #include "App.g.h"
 #include "Globals/MetroGlobals.h"
@@ -27,3 +28,5 @@ namespace Game
 		std::shared_ptr<Game::AppState> _appState;
 	};
 }
+
+#endif

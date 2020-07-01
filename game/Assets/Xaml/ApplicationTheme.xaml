@@ -328,8 +328,6 @@
         <Setter Property="UseLayoutRounding" Value="True"/>
         <Setter Property="Template" Value="{StaticResource Template.ButtonBase}"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource Style.Focus.Outer.Uniform}"/>
-        <Setter Property="FontFamily" Value="{StaticResource Font.Family.Default}"/>
-        <Setter Property="FontSize" Value="{StaticResource Font.Size.Normal}"/>
     </Style>
     <Style TargetType="Button" BasedOn="{StaticResource Style.ButtonBase}"/>
     <Style TargetType="RepeatButton" BasedOn="{StaticResource Style.ButtonBase}"/>

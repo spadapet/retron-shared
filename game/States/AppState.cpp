@@ -26,9 +26,9 @@
 #include "UI/XamlGlobalState.h"
 #include "UI/XamlView.h"
 
-Game::AppState::AppState(ff::ProcessGlobals* processGlobals, ff::AppGlobals* globals)
-	: _processGlobals(processGlobals)
-	, _globals(globals)
+Game::AppState::AppState()
+	: _processGlobals(nullptr)
+	, _globals(nullptr)
 	, _viewport(ff::PointFloat(Constants::RENDER_WIDTH, Constants::RENDER_HEIGHT))
 	, _debugSteppingFrames(false)
 	, _debugStepOneFrame(false)
@@ -207,6 +207,9 @@ ff::IRenderDepth* Game::AppState::GetLowDepth() const
 
 bool Game::AppState::OnInitialized(ff::AppGlobals* globals)
 {
+	_processGlobals = ff::ProcessGlobals::Get();
+	_globals = globals;
+
 	InitOptions();
 	InitResources();
 	InitGraphics();
@@ -224,11 +227,12 @@ void Game::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 
 	_xamlGlobals = std::make_shared<ff::XamlGlobalState>(_globals);
 	_xamlGlobals->Startup(
+		ff::GetThisModule().GetResources(),
+		ff::String::from_static(L"ApplicationResources.xaml"),
 		ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseName")),
 		ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseKey")),
-		ff::GetThisModule().GetResources(),
-		ff::GetThisModule().GetValueTable(),
-		ff::String::from_static(L"ApplicationResources.xaml"));
+		ff::String::from_static(L"Fonts/#Robotron 2084"),
+		8.0f);
 
 	Game::RegisterNoesisComponents();
 

@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="App.xaml.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="States\TitleState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="States\AppState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\Components.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Globals.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Options.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="States\GameState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="States\LevelState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="States\TitleState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="States\AppState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\Components.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Globals.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Options.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\AppService.h">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\GameService.h">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="States\GameState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="States\LevelState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\LevelService.h">
+      <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="Assets\resource.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Assets">
+      <UniqueIdentifier>{0cb69a9d-38af-4bb9-967b-a76ffd80cc95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States">
+      <UniqueIdentifier>{fb570434-3026-456e-b8fd-c6839ee97eb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{0b87309d-2565-401e-8dc2-0ad22725d3db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Assets\Xaml">
+      <UniqueIdentifier>{d95a7f98-4dea-44f9-9aea-f5af79740d55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{9a3d8d6c-f9de-4199-95cb-4293e4627a69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Services">
+      <UniqueIdentifier>{1d2da2c0-1fb5-4928-8785-b76fc6f05cb4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResJson Include="Assets\Assets.res.json">
+      <Filter>Assets</Filter>
+    </ResJson>
+    <ResJson Include="Assets\Values.res.json">
+      <Filter>Assets</Filter>
+    </ResJson>
+    <ResJson Include="Assets\Xaml\Assets.Xaml.res.json">
+      <Filter>Assets\Xaml</Filter>
+    </ResJson>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Xaml\ApplicationResources.xaml">
+      <Filter>Assets\Xaml</Filter>
+    </None>
+    <None Include="Assets\Xaml\ApplicationTheme.xaml">
+      <Filter>Assets\Xaml</Filter>
+    </None>
+    <None Include="Assets\Xaml\TitlePage.xaml">
+      <Filter>Assets\Xaml</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Assets\resource.rc">
+      <Filter>Assets</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="app.manifest" />
+  </ItemGroup>
+</Project>
