@@ -4,18 +4,18 @@
 #include "Thread/ThreadDispatch.h"
 #include "UI/FailurePage.xaml.h"
 
-Game::App::App()
+ReTron::App::App()
 {
 	InitializeComponent();
 }
 
-Game::App::~App()
+ReTron::App::~App()
 {
 	_globals.Shutdown();
 	_processGlobals.Shutdown();
 }
 
-void Game::App::OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEventArgs^ args)
+void ReTron::App::OnLaunched(Windows::ApplicationModel::Activation::LaunchActivatedEventArgs^ args)
 {
 	if (!_processGlobals.IsValid())
 	{
@@ -29,7 +29,7 @@ void Game::App::OnLaunched(Windows::ApplicationModel::Activation::LaunchActivate
 	}
 }
 
-void Game::App::InitializeGlobals()
+void ReTron::App::InitializeGlobals()
 {
 	auto panel = ref new Windows::UI::Xaml::Controls::SwapChainPanel();
 	auto page = ref new Windows::UI::Xaml::Controls::Page();
@@ -38,11 +38,11 @@ void Game::App::InitializeGlobals()
 	auto window = Windows::UI::Xaml::Window::Current;
 	window->Content = page;
 
-	_appState = std::make_shared<AppState>();
+	_appState = std::make_shared<Game::AppState>();
 
 	if (!_globals.Startup(ff::AppGlobalsFlags::All, panel, _appState.get()))
 	{
-		window->Content = ref new FailurePage(&_globals);
+		window->Content = ref new Game::FailurePage(&_globals);
 	}
 
 	window->Activate();

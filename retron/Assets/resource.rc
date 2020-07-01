@@ -27,12 +27,12 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "CompanyName", "Peter Spada"
-            VALUE "FileDescription", "Game"
+            VALUE "FileDescription", "ReTron"
             VALUE "FileVersion", "1.0.0.0"
             VALUE "GUID", "{de2224e5-a22d-4a2b-8e45-0eba508c2e89}"
-            VALUE "InternalName", "retron"
+            VALUE "InternalName", "ReTron"
             VALUE "LegalCopyright", "Copyright (C) 2020"
-            VALUE "OriginalFilename", "retron.exe"
+            VALUE "OriginalFilename", "ReTron.exe"
             VALUE "ProductName", "ReTron"
             VALUE "ProductVersion", "1.0.0.0"
         END

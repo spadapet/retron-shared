@@ -19,7 +19,7 @@ int main(Platform::Array<Platform::String^>^ args)
 
 	auto callbackFunc = [](Windows::UI::Xaml::ApplicationInitializationCallbackParams^ args)
 	{
-		auto app = ref new ::Game::App();
+		auto app = ref new ::ReTron::App();
 	};
 
 	auto callback = ref new Windows::UI::Xaml::ApplicationInitializationCallback(callbackFunc);

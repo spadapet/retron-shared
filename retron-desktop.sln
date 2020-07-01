@@ -5,12 +5,13 @@ VisualStudioVersion = 16.0.29804.240
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{E1ABBA80-AB79-45AC-B565-C7E91FCA9339}"
 	ProjectSection(SolutionItems) = preProject
+		build.props = build.props
 		ffcore\msbuild\cpp.props = ffcore\msbuild\cpp.props
 		ffcore\msbuild\cpp.targets = ffcore\msbuild\cpp.targets
 		ffcore\msbuild\cpp.xml = ffcore\msbuild\cpp.xml
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReTron", "game\game-desktop.vcxproj", "{9CD231EF-367F-47D8-8F5E-7CF37C648E39}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReTron", "retron\retron-desktop.vcxproj", "{9CD231EF-367F-47D8-8F5E-7CF37C648E39}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.dxtex", "ffcore\core\dxtex\dxtex.vcxproj", "{FB3FBBCF-8CF9-4C53-8BAA-D451F3F79B42}"
 EndProject

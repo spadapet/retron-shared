@@ -10,7 +10,7 @@ namespace Game
 	class AppState;
 }
 
-namespace Game
+namespace ReTron
 {
 	ref class App sealed
 	{

@@ -72,7 +72,7 @@
     <None Include="Assets\Xaml\TitlePage.xaml">
       <Filter>Assets\Xaml</Filter>
     </None>
-    <None Include="Game_TemporaryKey.pfx">
+    <None Include="ReTron_TemporaryKey.pfx">
       <Filter>Assets\Build</Filter>
     </None>
     <None Include="..\ffcore\core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll">
