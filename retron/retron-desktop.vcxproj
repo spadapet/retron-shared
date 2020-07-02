@@ -51,10 +51,7 @@
     <ResourceCompile Include="Assets\resource.rc" />
     <ResJson Include="Assets\Assets.res.json" />
     <ResJson Include="Assets\Values.res.json" />
-    <ResJson Include="Assets\Xaml\Assets.Xaml.res.json" />
-    <None Include="Assets\Xaml\ApplicationResources.xaml" />
-    <None Include="Assets\Xaml\ApplicationTheme.xaml" />
-    <None Include="Assets\Xaml\TitlePage.xaml" />
+    <ResJson Include="Assets\Assets.Xaml.res.json" />
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="app.manifest" />

@@ -13,6 +13,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.zlib", "ffcore\core\zl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{E1ABBA80-AB79-45AC-B565-C7E91FCA9339}"
 	ProjectSection(SolutionItems) = preProject
+		build.props = build.props
 		ffcore\msbuild\cpp.props = ffcore\msbuild\cpp.props
 		ffcore\msbuild\cpp.targets = ffcore\msbuild\cpp.targets
 		ffcore\msbuild\cpp.xml = ffcore\msbuild\cpp.xml

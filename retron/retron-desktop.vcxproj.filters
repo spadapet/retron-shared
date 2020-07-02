@@ -71,9 +71,6 @@
     <Filter Include="UI">
       <UniqueIdentifier>{0b87309d-2565-401e-8dc2-0ad22725d3db}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Assets\Xaml">
-      <UniqueIdentifier>{d95a7f98-4dea-44f9-9aea-f5af79740d55}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{9a3d8d6c-f9de-4199-95cb-4293e4627a69}</UniqueIdentifier>
     </Filter>
@@ -88,20 +85,6 @@
     <ResJson Include="Assets\Values.res.json">
       <Filter>Assets</Filter>
     </ResJson>
-    <ResJson Include="Assets\Xaml\Assets.Xaml.res.json">
-      <Filter>Assets\Xaml</Filter>
-    </ResJson>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\Xaml\ApplicationResources.xaml">
-      <Filter>Assets\Xaml</Filter>
-    </None>
-    <None Include="Assets\Xaml\ApplicationTheme.xaml">
-      <Filter>Assets\Xaml</Filter>
-    </None>
-    <None Include="Assets\Xaml\TitlePage.xaml">
-      <Filter>Assets\Xaml</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Assets\resource.rc">
@@ -110,5 +93,10 @@
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Assets.Xaml.res.json">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
 </Project>

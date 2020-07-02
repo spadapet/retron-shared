@@ -66,20 +66,12 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Assets\Xaml\ApplicationResources.xaml">
-      <Filter>Assets\Xaml</Filter>
-    </None>
-    <None Include="Assets\Xaml\TitlePage.xaml">
-      <Filter>Assets\Xaml</Filter>
-    </None>
     <None Include="ReTron_TemporaryKey.pfx">
       <Filter>Assets\Build</Filter>
     </None>
-    <None Include="..\ffcore\core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll">
-      <Filter>Assets\Build</Filter>
-    </None>
-    <None Include="Assets\Xaml\ApplicationTheme.xaml">
-      <Filter>Assets\Xaml</Filter>
+    <None Include="$(FFCoreRoot)core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll" />
+    <None Include="Assets\Assets.Xaml.res.json">
+      <Filter>Assets</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -94,9 +86,6 @@
     </Filter>
     <Filter Include="Assets\Logo">
       <UniqueIdentifier>{3016ad5e-42ae-4283-81fe-f1bb58324d4c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Assets\Xaml">
-      <UniqueIdentifier>{d95a7f98-4dea-44f9-9aea-f5af79740d55}</UniqueIdentifier>
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{9a3d8d6c-f9de-4199-95cb-4293e4627a69}</UniqueIdentifier>
@@ -277,9 +266,6 @@
     </ResJson>
     <ResJson Include="Assets\Values.res.json">
       <Filter>Assets</Filter>
-    </ResJson>
-    <ResJson Include="Assets\Xaml\Assets.Xaml.res.json">
-      <Filter>Assets\Xaml</Filter>
     </ResJson>
   </ItemGroup>
   <ItemGroup>

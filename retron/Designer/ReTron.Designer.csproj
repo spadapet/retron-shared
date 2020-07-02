@@ -61,24 +61,19 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Properties\GlobalSuppressions.cs" />
-    <Compile Include="Placeholders.cs" />
-    <Compile Include="TitlePage.xaml.cs" />
-    <Page Include="..\Assets\Xaml\ApplicationResources.xaml">
-      <Link>ApplicationResources.xaml</Link>
+    <Compile Include="Designer\Placeholders.cs" />
+    <Compile Include="TitlePage.xaml.cs">
+      <DependentUpon>TitlePage.xaml</DependentUpon>
+    </Compile>
+    <Page Include="ApplicationResources.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="..\Assets\Xaml\ApplicationTheme.xaml">
-      <Link>ApplicationTheme.xaml</Link>
+    <Page Include="ApplicationTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="..\Assets\Xaml\TitlePage.xaml">
-      <Link>TitlePage.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Designer\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -86,10 +81,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
+    <Compile Include="Designer\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="TitlePage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

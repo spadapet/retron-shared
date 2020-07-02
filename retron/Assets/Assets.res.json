@@ -300,13 +300,13 @@
   "GameFontData":
   {
     "res:type": "fontData",
-    "file": "file:Fonts/robotron-2084.ttf"
+    "file": "file:../Designer/Fonts/robotron-2084.ttf"
   },
 
   "GameFontSmallData":
   {
     "res:type": "fontData",
-    "file": "file:Fonts/robotron-2084-small.ttf"
+    "file": "file:../Designer/Fonts/robotron-2084-small.ttf"
   },
 
   "GameFont":
