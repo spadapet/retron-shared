@@ -9,6 +9,7 @@
 #include "Resource/ResourceValue.h"
 #include "Services/AppService.h"
 #include "State/State.h"
+#include "UI/XamlGlobalHelper.h"
 
 namespace ff
 {
@@ -21,6 +22,7 @@ namespace Game
 	class AppState
 		: public ff::State
 		, public ff::IAppGlobalsHelper
+		, public ff::IXamlGlobalHelper
 		, public Game::IAppService
 	{
 	public:
@@ -49,6 +51,17 @@ namespace Game
 		virtual ff::ITexture* GetLowTexture() const override;
 		virtual ff::IRenderTarget* GetLowTarget() const override;
 		virtual ff::IRenderDepth* GetLowDepth() const override;
+
+		// IXamlGlobalHelper
+		virtual ff::IResourceAccess* GetXamlResources() override;
+		virtual ff::String GetNoesisLicenseName() override;
+		virtual ff::String GetNoesisLicenseKey() override;
+		virtual ff::String GetApplicationResourcesName() override;
+		virtual ff::String GetDefaultFont() override;
+		virtual float GetDefaultFontSize() override;
+		virtual bool IsSRGB() override;
+		virtual void RegisterNoesisComponents() override;
+		virtual void OnApplicationResourcesLoaded(Noesis::ResourceDictionary* resources) override;
 
 		// IAppGlobalsHelper
 		virtual bool OnInitialized(ff::AppGlobals* globals) override;

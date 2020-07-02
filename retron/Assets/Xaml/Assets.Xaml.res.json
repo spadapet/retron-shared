@@ -20,12 +20,12 @@
   "#Fonts/robotron-2084.ttf":
   {
     "res:type": "file",
-    "file": "file:../Fonts/robotron-2084.ttf"
+    "file": "file:../../Designer/Fonts/robotron-2084.ttf"
   },
 
   "#Fonts/robotron-2084-small.ttf":
   {
     "res:type": "file",
-    "file": "file:../Fonts/robotron-2084-small.ttf"
+    "file": "file:../../Designer/Fonts/robotron-2084-small.ttf"
   }
 }

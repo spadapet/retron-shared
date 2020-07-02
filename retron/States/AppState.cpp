@@ -205,6 +205,50 @@ ff::IRenderDepth* Game::AppState::GetLowDepth() const
 	return _lowDepth;
 }
 
+ff::IResourceAccess* Game::AppState::GetXamlResources()
+{
+	return ff::GetThisModule().GetResources();
+}
+
+ff::String Game::AppState::GetNoesisLicenseName()
+{
+	return ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseName"));
+}
+
+ff::String Game::AppState::GetNoesisLicenseKey()
+{
+	return ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseKey"));
+}
+
+ff::String Game::AppState::GetApplicationResourcesName()
+{
+	return ff::String::from_static(L"ApplicationResources.xaml");
+}
+
+ff::String Game::AppState::GetDefaultFont()
+{
+	return ff::String::from_static(L"Fonts/#Robotron 2084");
+}
+
+float Game::AppState::GetDefaultFontSize()
+{
+	return 8.0f;
+}
+
+bool Game::AppState::IsSRGB()
+{
+	return false;
+}
+
+void Game::AppState::RegisterNoesisComponents()
+{
+	Game::RegisterNoesisComponents();
+}
+
+void Game::AppState::OnApplicationResourcesLoaded(Noesis::ResourceDictionary* resources)
+{
+}
+
 bool Game::AppState::OnInitialized(ff::AppGlobals* globals)
 {
 	_processGlobals = ff::ProcessGlobals::Get();
@@ -226,15 +270,7 @@ void Game::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 		});
 
 	_xamlGlobals = std::make_shared<ff::XamlGlobalState>(_globals);
-	_xamlGlobals->Startup(
-		ff::GetThisModule().GetResources(),
-		ff::String::from_static(L"ApplicationResources.xaml"),
-		ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseName")),
-		ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseKey")),
-		ff::String::from_static(L"Fonts/#Robotron 2084"),
-		8.0f);
-
-	Game::RegisterNoesisComponents();
+	_xamlGlobals->Startup(this);
 
 	_globals->SetFullScreen(_systemOptions._fullScreen);
 }
