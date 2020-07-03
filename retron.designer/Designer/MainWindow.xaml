@@ -1,17 +1,19 @@
-﻿<Window x:Class="ReTron.Designer.MainWindow"
+﻿<Window x:Class="ReTron.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:designer="clr-namespace:ReTron.Designer"
+        xmlns:local="clr-namespace:ReTron"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="ReTron Designer"
         Width="960"
         Height="540"
-        Background="Black">
+        Background="Black"
+        FontFamily="{StaticResource Font.Family.Default}"
+        FontSize="{StaticResource Font.Size.Normal}">
     <Viewbox Stretch="Uniform" StretchDirection="Both">
         <Grid Width="480" Height="270">
-            <designer:TitlePage />
+            <local:TitlePage />
         </Grid>
     </Viewbox>
 </Window>

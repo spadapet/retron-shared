@@ -1,8 +1,8 @@
 ﻿using System.Windows.Controls;
 
-namespace ReTron.Designer
+namespace ReTron
 {
-    internal partial class TitlePage : UserControl
+    partial class TitlePage : UserControl
     {
         public TitlePage()
         {

@@ -19,9 +19,10 @@ Game::TitleState::TitleState(IAppService* appService)
 	, _render(appService->GetAppGlobals().GetGraph()->CreateRenderer())
 	, _font(L"GameFont")
 {
-	_view = _appService->GetXamlGlobals().CreateView(ff::String::from_static(L"TitlePage.xaml"), appService->GetXamlTarget());
+	std::shared_ptr<ff::XamlView> view = _appService->GetXamlGlobals().CreateView(ff::String::from_static(L"TitlePage.xaml"));
+	_viewState = std::make_shared<ff::XamlViewState>(view, appService->GetXamlTarget(), appService->GetXamlDepth());
 
-	Noesis::FrameworkElement* root = _view->GetContent();
+	Noesis::FrameworkElement* root = view->GetContent();
 	Noesis::Button* playGameButton = root->FindName<Noesis::Button>("playGameButton");
 
 	playGameButton->Click() += Noesis::MakeDelegate(this, &TitleState::OnClickPlayGame);
@@ -29,18 +30,13 @@ Game::TitleState::TitleState(IAppService* appService)
 
 std::shared_ptr<ff::State> Game::TitleState::Advance(ff::AppGlobals* globals)
 {
-	_view->Advance();
+	ff::State::Advance(globals);
 	return _pendingState;
-}
-
-void Game::TitleState::OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType type)
-{
-	_view->PreRender();
 }
 
 void Game::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth)
 {
-	_view->Render(_appService->GetXamlTarget(), _appService->GetXamlDepth());
+	ff::State::Render(globals, target, depth);
 
 	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_render.get(), _appService->GetLowTarget(), _appService->GetLowDepth(), Constants::RENDER_RECT, Constants::RENDER_RECT);
 
@@ -52,6 +48,16 @@ void Game::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target
 		ff::PaletteIndexToColor(252, transform._color);
 		_font->DrawText(render, text, transform, ff::GetColorNone(), ((globals->GetGlobalTime()._advanceCount % 60) < 30) ? ff::SpriteFontOptions::NoOutline : ff::SpriteFontOptions::None);
 	}
+}
+
+size_t Game::TitleState::GetChildStateCount()
+{
+	return 1;
+}
+
+ff::State* Game::TitleState::GetChildState(size_t index)
+{
+	return _viewState.get();
 }
 
 void Game::TitleState::OnClickPlayGame(Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args)

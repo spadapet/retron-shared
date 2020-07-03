@@ -6,6 +6,7 @@
 namespace ff
 {
 	class XamlView;
+	class XamlViewState;
 	class IRenderer;
 	class ISpriteFont;
 }
@@ -21,14 +22,15 @@ namespace Game
 		TitleState(IAppService* appService);
 
 		virtual std::shared_ptr<ff::State> Advance(ff::AppGlobals* globals) override;
-		virtual void OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType type) override;
 		virtual void Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth) override;
+		virtual size_t GetChildStateCount() override;
+		virtual State* GetChildState(size_t index) override;
 
 	private:
 		void OnClickPlayGame(Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args);
 
 		IAppService* _appService;
-		std::shared_ptr<ff::XamlView> _view;
+		std::shared_ptr<ff::XamlViewState> _viewState;
 		std::shared_ptr<ff::State> _pendingState;
 		std::unique_ptr<ff::IRenderer> _render;
 		ff::TypedResource<ff::ISpriteFont> _font;

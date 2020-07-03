@@ -2,30 +2,30 @@
   "ApplicationResources.xaml":
   {
     "res:type": "file",
-    "file": "file:../Designer/ApplicationResources.xaml"
+    "file": "file:../../retron.designer/ApplicationResources.xaml"
   },
 
   "ApplicationTheme.xaml":
   {
     "res:type": "file",
-    "file": "file:../Designer/ApplicationTheme.xaml"
+    "file": "file:../../retron.designer/ApplicationTheme.xaml"
   },
 
   "TitlePage.xaml":
   {
     "res:type": "file",
-    "file": "file:../Designer/TitlePage.xaml"
+    "file": "file:../../retron.designer/TitlePage.xaml"
   },
 
   "#Fonts/robotron-2084.ttf":
   {
     "res:type": "file",
-    "file": "file:../Designer/Fonts/robotron-2084.ttf"
+    "file": "file:../../retron.designer/Fonts/robotron-2084.ttf"
   },
 
   "#Fonts/robotron-2084-small.ttf":
   {
     "res:type": "file",
-    "file": "file:../Designer/Fonts/robotron-2084-small.ttf"
+    "file": "file:../../retron.designer/Fonts/robotron-2084-small.ttf"
   }
 }

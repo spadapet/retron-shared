@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace ReTron.Designer
+namespace ReTron
 {
     public partial class MainWindow : Window
     {
