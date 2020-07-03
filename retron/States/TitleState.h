@@ -11,10 +11,11 @@ namespace ff
 	class ISpriteFont;
 }
 
-namespace Game
+namespace ReTron
 {
 	class IAppService;
 	class IGameService;
+	class TitlePage;
 
 	class TitleState : public ff::State
 	{
@@ -27,11 +28,9 @@ namespace Game
 		virtual State* GetChildState(size_t index) override;
 
 	private:
-		void OnClickPlayGame(Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args);
-
 		IAppService* _appService;
+		Noesis::Ptr<TitlePage> _titlePage;
 		std::shared_ptr<ff::XamlViewState> _viewState;
-		std::shared_ptr<ff::State> _pendingState;
 		std::unique_ptr<ff::IRenderer> _render;
 		ff::TypedResource<ff::ISpriteFont> _font;
 	};

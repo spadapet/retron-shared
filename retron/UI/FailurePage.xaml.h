@@ -7,7 +7,7 @@ namespace ff
 	class AppGlobals;
 }
 
-namespace Game
+namespace ReTron
 {
 	[Windows::UI::Xaml::Data::Bindable]
 	public ref class FailurePage sealed

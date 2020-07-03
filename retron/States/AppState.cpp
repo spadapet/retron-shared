@@ -26,7 +26,7 @@
 #include "UI/XamlGlobalState.h"
 #include "UI/XamlView.h"
 
-Game::AppState::AppState()
+ReTron::AppState::AppState()
 	: _processGlobals(nullptr)
 	, _globals(nullptr)
 	, _viewport(ff::PointFloat(Constants::RENDER_WIDTH, Constants::RENDER_HEIGHT))
@@ -37,14 +37,14 @@ Game::AppState::AppState()
 {
 }
 
-std::shared_ptr<ff::State> Game::AppState::Advance(ff::AppGlobals* globals)
+std::shared_ptr<ff::State> ReTron::AppState::Advance(ff::AppGlobals* globals)
 {
 	GetPalette()->Advance();
 
 	return nullptr;
 }
 
-void Game::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
+void ReTron::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
 {
 	bool debugEnabled = DEBUG;
 	if (!debugEnabled)
@@ -86,14 +86,14 @@ void Game::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
 	}
 }
 
-void Game::AppState::OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType type)
+void ReTron::AppState::OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType type)
 {
 	_xamlTarget->Clear(&ff::GetColorNone());
 	_lowTarget->Clear(&ff::GetColorNone());
 	_highTarget->Clear(&ff::GetColorBlack());
 }
 
-void Game::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType type, ff::IRenderTarget* target, ff::IRenderDepth* depth)
+void ReTron::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType type, ff::IRenderTarget* target, ff::IRenderDepth* depth)
 {
 	_debugStepOneFrame = false;
 
@@ -116,7 +116,7 @@ void Game::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType ty
 	render->DrawSprite(_highTexture->AsSprite(), ff::Transform::Identity());
 }
 
-void Game::AppState::SaveState(ff::AppGlobals* globals)
+void ReTron::AppState::SaveState(ff::AppGlobals* globals)
 {
 	ff::Dict dict = globals->GetState(Strings::ID_APP_STATE);
 	dict.Set<ff::DataValue>(Strings::ID_SYSTEM_OPTIONS, &_systemOptions, sizeof(SystemOptions));
@@ -125,42 +125,42 @@ void Game::AppState::SaveState(ff::AppGlobals* globals)
 	globals->SetState(Strings::ID_APP_STATE, dict);
 }
 
-ff::ProcessGlobals& Game::AppState::GetProcessGlobals()
+ff::ProcessGlobals& ReTron::AppState::GetProcessGlobals()
 {
 	return *_processGlobals;
 }
 
-ff::AppGlobals& Game::AppState::GetAppGlobals()
+ff::AppGlobals& ReTron::AppState::GetAppGlobals()
 {
 	return *_globals;
 }
 
-ff::XamlGlobalState& Game::AppState::GetXamlGlobals()
+ff::XamlGlobalState& ReTron::AppState::GetXamlGlobals()
 {
 	return *_xamlGlobals.get();
 }
 
-const Game::SystemOptions& Game::AppState::GetSystemOptions() const
+const ReTron::SystemOptions& ReTron::AppState::GetSystemOptions() const
 {
 	return _systemOptions;
 }
 
-const Game::GameOptions& Game::AppState::GetDefaultGameOptions() const
+const ReTron::GameOptions& ReTron::AppState::GetDefaultGameOptions() const
 {
 	return _gameOptions;
 }
 
-void Game::AppState::SetSystemOptions(const SystemOptions& options)
+void ReTron::AppState::SetSystemOptions(const SystemOptions& options)
 {
 	_systemOptions = options;
 }
 
-void Game::AppState::SetDefaultGameOptions(const GameOptions& options)
+void ReTron::AppState::SetDefaultGameOptions(const GameOptions& options)
 {
 	_gameOptions = options;
 }
 
-ff::IPalette* Game::AppState::GetPalette()
+ff::IPalette* ReTron::AppState::GetPalette()
 {
 	if (!_palette)
 	{
@@ -170,86 +170,86 @@ ff::IPalette* Game::AppState::GetPalette()
 	return _palette;
 }
 
-ff::IRenderer* Game::AppState::GetRenderer() const
+ff::IRenderer* ReTron::AppState::GetRenderer() const
 {
 	return _render.get();
 }
 
-ff::ITexture* Game::AppState::GetXamlTexture() const
+ff::ITexture* ReTron::AppState::GetXamlTexture() const
 {
 	return _xamlTexture;
 }
 
-ff::IRenderTarget* Game::AppState::GetXamlTarget() const
+ff::IRenderTarget* ReTron::AppState::GetXamlTarget() const
 {
 	return _xamlTarget;
 }
 
-ff::IRenderDepth* Game::AppState::GetXamlDepth() const
+ff::IRenderDepth* ReTron::AppState::GetXamlDepth() const
 {
 	return _xamlDepth;
 }
 
-ff::ITexture* Game::AppState::GetLowTexture() const
+ff::ITexture* ReTron::AppState::GetLowTexture() const
 {
 	return _lowTexture;
 }
 
-ff::IRenderTarget* Game::AppState::GetLowTarget() const
+ff::IRenderTarget* ReTron::AppState::GetLowTarget() const
 {
 	return _lowTarget;
 }
 
-ff::IRenderDepth* Game::AppState::GetLowDepth() const
+ff::IRenderDepth* ReTron::AppState::GetLowDepth() const
 {
 	return _lowDepth;
 }
 
-ff::IResourceAccess* Game::AppState::GetXamlResources()
+ff::IResourceAccess* ReTron::AppState::GetXamlResources()
 {
 	return ff::GetThisModule().GetResources();
 }
 
-ff::String Game::AppState::GetNoesisLicenseName()
+ff::String ReTron::AppState::GetNoesisLicenseName()
 {
 	return ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseName"));
 }
 
-ff::String Game::AppState::GetNoesisLicenseKey()
+ff::String ReTron::AppState::GetNoesisLicenseKey()
 {
 	return ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseKey"));
 }
 
-ff::String Game::AppState::GetApplicationResourcesName()
+ff::String ReTron::AppState::GetApplicationResourcesName()
 {
 	return ff::String::from_static(L"ApplicationResources.xaml");
 }
 
-ff::String Game::AppState::GetDefaultFont()
+ff::String ReTron::AppState::GetDefaultFont()
 {
 	return ff::String::from_static(L"Fonts/#Robotron 2084");
 }
 
-float Game::AppState::GetDefaultFontSize()
+float ReTron::AppState::GetDefaultFontSize()
 {
 	return 8.0f;
 }
 
-bool Game::AppState::IsSRGB()
+bool ReTron::AppState::IsSRGB()
 {
 	return false;
 }
 
-void Game::AppState::RegisterNoesisComponents()
+void ReTron::AppState::RegisterNoesisComponents()
 {
-	Game::RegisterNoesisComponents();
+	ReTron::RegisterNoesisComponents();
 }
 
-void Game::AppState::OnApplicationResourcesLoaded(Noesis::ResourceDictionary* resources)
+void ReTron::AppState::OnApplicationResourcesLoaded(Noesis::ResourceDictionary* resources)
 {
 }
 
-bool Game::AppState::OnInitialized(ff::AppGlobals* globals)
+bool ReTron::AppState::OnInitialized(ff::AppGlobals* globals)
 {
 	_processGlobals = ff::ProcessGlobals::Get();
 	_globals = globals;
@@ -261,7 +261,7 @@ bool Game::AppState::OnInitialized(ff::AppGlobals* globals)
 	return true;
 }
 
-void Game::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
+void ReTron::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 {
 	std::weak_ptr<ff::State> weakThis = weak_from_this();
 	_customDebugCookie = globals->GetDebugPageState()->CustomDebugEvent().Add([weakThis]()
@@ -275,7 +275,7 @@ void Game::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 	_globals->SetFullScreen(_systemOptions._fullScreen);
 }
 
-void Game::AppState::OnGameThreadShutdown(ff::AppGlobals* globals)
+void ReTron::AppState::OnGameThreadShutdown(ff::AppGlobals* globals)
 {
 	if (_xamlGlobals)
 	{
@@ -286,7 +286,7 @@ void Game::AppState::OnGameThreadShutdown(ff::AppGlobals* globals)
 	globals->GetDebugPageState()->CustomDebugEvent().Remove(_customDebugCookie);
 }
 
-std::shared_ptr<ff::State> Game::AppState::CreateInitialState(ff::AppGlobals* globals)
+std::shared_ptr<ff::State> ReTron::AppState::CreateInitialState(ff::AppGlobals* globals)
 {
 	std::shared_ptr<ff::States> states = std::make_shared<ff::States>();
 	states->AddTop(shared_from_this());
@@ -296,12 +296,12 @@ std::shared_ptr<ff::State> Game::AppState::CreateInitialState(ff::AppGlobals* gl
 	return states;
 }
 
-double Game::AppState::GetTimeScale(ff::AppGlobals* globals)
+double ReTron::AppState::GetTimeScale(ff::AppGlobals* globals)
 {
 	return _debugTimeScale;
 }
 
-ff::AdvanceType Game::AppState::GetAdvanceType(ff::AppGlobals* globals)
+ff::AdvanceType ReTron::AppState::GetAdvanceType(ff::AppGlobals* globals)
 {
 	if (_debugStepOneFrame)
 	{
@@ -316,7 +316,7 @@ ff::AdvanceType Game::AppState::GetAdvanceType(ff::AppGlobals* globals)
 	return ff::AdvanceType::Running;
 }
 
-void Game::AppState::InitOptions()
+void ReTron::AppState::InitOptions()
 {
 	ff::Dict dict = GetAppGlobals().GetState(Strings::ID_APP_STATE);
 
@@ -333,7 +333,7 @@ void Game::AppState::InitOptions()
 	}
 }
 
-void Game::AppState::InitResources()
+void ReTron::AppState::InitResources()
 {
 	_paletteData.Init(L"palette");
 
@@ -341,7 +341,7 @@ void Game::AppState::InitResources()
 	_debugInputDevices._keys.Push(_globals->GetKeysDebug());
 }
 
-void Game::AppState::InitGraphics()
+void ReTron::AppState::InitGraphics()
 {
 	ff::IGraphDevice* graph = _globals->GetGraph();
 	ff::PointInt lowSize(Constants::RENDER_WIDTH, Constants::RENDER_HEIGHT);

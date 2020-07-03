@@ -17,13 +17,13 @@ namespace ff
 	class IPaletteData;
 }
 
-namespace Game
+namespace ReTron
 {
 	class AppState
 		: public ff::State
 		, public ff::IAppGlobalsHelper
 		, public ff::IXamlGlobalHelper
-		, public Game::IAppService
+		, public ReTron::IAppService
 	{
 	public:
 		AppState();

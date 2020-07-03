@@ -24,6 +24,9 @@
     <ClCompile Include="States\LevelState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="UI\TitlePage.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -60,6 +63,9 @@
     <ClInclude Include="Assets\resource.h">
       <Filter>Assets</Filter>
     </ClInclude>
+    <ClInclude Include="UI\TitlePage.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -85,6 +91,7 @@
     <ResJson Include="Assets\Values.res.json">
       <Filter>Assets</Filter>
     </ResJson>
+    <ResJson Include="Assets\Assets.Xaml.res.json" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Assets\resource.rc">
@@ -93,10 +100,5 @@
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="app.manifest" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\Assets.Xaml.res.json">
-      <Filter>Assets</Filter>
-    </None>
   </ItemGroup>
 </Project>

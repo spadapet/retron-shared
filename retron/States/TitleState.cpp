@@ -10,31 +10,30 @@
 #include "Graph/Texture/Texture.h"
 #include "Services/AppService.h"
 #include "States/TitleState.h"
+#include "UI/TitlePage.h"
 #include "UI/XamlGlobalState.h"
 #include "UI/XamlView.h"
 #include "UI/XamlViewState.h"
 
-Game::TitleState::TitleState(IAppService* appService)
+ReTron::TitleState::TitleState(IAppService* appService)
 	: _appService(appService)
 	, _render(appService->GetAppGlobals().GetGraph()->CreateRenderer())
 	, _font(L"GameFont")
 {
-	std::shared_ptr<ff::XamlView> view = _appService->GetXamlGlobals().CreateView(ff::String::from_static(L"TitlePage.xaml"));
-	_viewState = std::make_shared<ff::XamlViewState>(view, appService->GetXamlTarget(), appService->GetXamlDepth());
+	_titlePage = *new TitlePage();
 
-	Noesis::FrameworkElement* root = view->GetContent();
-	Noesis::Button* playGameButton = root->FindName<Noesis::Button>("playGameButton");
-
-	playGameButton->Click() += Noesis::MakeDelegate(this, &TitleState::OnClickPlayGame);
+	std::shared_ptr<ff::XamlView> view = _appService->GetXamlGlobals().CreateView(_titlePage);
+	_viewState = std::make_shared<ff::XamlViewState>(view, _appService->GetXamlTarget(), _appService->GetXamlDepth());
 }
 
-std::shared_ptr<ff::State> Game::TitleState::Advance(ff::AppGlobals* globals)
+std::shared_ptr<ff::State> ReTron::TitleState::Advance(ff::AppGlobals* globals)
 {
 	ff::State::Advance(globals);
-	return _pendingState;
+
+	return _titlePage->GetPendingState();
 }
 
-void Game::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth)
+void ReTron::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth)
 {
 	ff::State::Render(globals, target, depth);
 
@@ -50,17 +49,12 @@ void Game::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target
 	}
 }
 
-size_t Game::TitleState::GetChildStateCount()
+size_t ReTron::TitleState::GetChildStateCount()
 {
 	return 1;
 }
 
-ff::State* Game::TitleState::GetChildState(size_t index)
+ff::State* ReTron::TitleState::GetChildState(size_t index)
 {
 	return _viewState.get();
-}
-
-void Game::TitleState::OnClickPlayGame(Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args)
-{
-	// _pendingState = std::make_shared<PlayGameState>(_appService, _appService->GetGameOptions());
 }

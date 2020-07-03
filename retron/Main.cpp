@@ -37,7 +37,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR commandLine, int showC
 {
 	ff::SetMainModule(MODULE_NAME, MODULE_ID, instance);
 
-	std::shared_ptr<ff::IAppGlobalsHelper> state = std::make_shared<Game::AppState>();
+	std::shared_ptr<ff::IAppGlobalsHelper> state = std::make_shared<ReTron::AppState>();
 	return ff::DesktopGlobals::RunWithWindow(ff::AppGlobalsFlags::All, state) ? 0 : 1;
 }
 

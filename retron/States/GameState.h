@@ -11,7 +11,7 @@ namespace ff
 	class StateWrapper;
 }
 
-namespace Game
+namespace ReTron
 {
 	class IAppService;
 

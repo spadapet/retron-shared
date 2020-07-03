@@ -5,7 +5,7 @@ namespace ff
 	class IInputEvents;
 }
 
-namespace Game
+namespace ReTron
 {
 	class IAppService;
 	struct GameOptions;

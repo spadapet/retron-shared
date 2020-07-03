@@ -9,7 +9,7 @@
 #include "States/GameState.h"
 #include "States/LevelState.h"
 
-Game::GameState::GameState(IAppService* appService, GameOptions gameOptions)
+ReTron::GameState::GameState(IAppService* appService, GameOptions gameOptions)
 	: _appService(appService)
 	, _gameOptions(gameOptions)
 {
@@ -17,54 +17,54 @@ Game::GameState::GameState(IAppService* appService, GameOptions gameOptions)
 	InitLevel();
 }
 
-Game::GameState::~GameState()
+ReTron::GameState::~GameState()
 {
 }
 
-std::shared_ptr<ff::State> Game::GameState::Advance(ff::AppGlobals* globals)
+std::shared_ptr<ff::State> ReTron::GameState::Advance(ff::AppGlobals* globals)
 {
 	AdvanceInput();
 
 	return ff::State::Advance(globals);
 }
 
-void Game::GameState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth)
+void ReTron::GameState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth)
 {
 	return ff::State::Render(globals, target, depth);
 }
 
-size_t Game::GameState::GetChildStateCount()
+size_t ReTron::GameState::GetChildStateCount()
 {
 	return (_levelState != nullptr) ? 1 : 0;
 }
 
-ff::State* Game::GameState::GetChildState(size_t index)
+ff::State* ReTron::GameState::GetChildState(size_t index)
 {
 	return _levelState.get();
 }
 
-Game::IAppService* Game::GameState::GetAppService() const
+ReTron::IAppService* ReTron::GameState::GetAppService() const
 {
 	return _appService;
 }
 
-const Game::GameOptions& Game::GameState::GetGameOptions() const
+const ReTron::GameOptions& ReTron::GameState::GetGameOptions() const
 {
 	return _gameOptions;
 }
 
-const ff::IInputEvents* Game::GameState::GetGameInputEvents()
+const ff::IInputEvents* ReTron::GameState::GetGameInputEvents()
 {
 	return _gameInput.Flush();
 }
 
-const ff::IInputEvents* Game::GameState::GetPlayerInputEvents(size_t player)
+const ff::IInputEvents* ReTron::GameState::GetPlayerInputEvents(size_t player)
 {
 	assertRetVal(player < _playerInput.size(), nullptr);
 	return _playerInput[player].Flush();
 }
 
-void Game::GameState::InitInput()
+void ReTron::GameState::InitInput()
 {
 	ff::AppGlobals& globals = _appService->GetAppGlobals();
 
@@ -93,12 +93,12 @@ void Game::GameState::InitInput()
 	}
 }
 
-void Game::GameState::InitLevel()
+void ReTron::GameState::InitLevel()
 {
 	*_levelState = std::make_shared<LevelState>(this);
 }
 
-void Game::GameState::AdvanceInput()
+void ReTron::GameState::AdvanceInput()
 {
 	const double deltaTime = _appService->GetAppGlobals().GetGlobalTime()._secondsPerAdvance;
 

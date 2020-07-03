@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
 
 namespace ReTron
 {
@@ -7,6 +8,10 @@ namespace ReTron
         public TitlePage()
         {
             this.InitializeComponent();
+        }
+
+        private void OnClickPlayGame(object sender, RoutedEventArgs args)
+        {
         }
     }
 }

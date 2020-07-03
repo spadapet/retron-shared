@@ -4,7 +4,7 @@
 #include "UI/FailurePage.xaml.h"
 #include "Windows/FileUtil.h"
 
-Game::FailurePage::FailurePage(ff::AppGlobals* globals)
+ReTron::FailurePage::FailurePage(ff::AppGlobals* globals)
 {
 	ff::String errorText;
 	if (ff::ReadWholeFile(globals->GetLogFile(), errorText))
@@ -17,7 +17,7 @@ Game::FailurePage::FailurePage(ff::AppGlobals* globals)
 	InitializeComponent();
 }
 
-Platform::String^ Game::FailurePage::ErrorText::get()
+Platform::String^ ReTron::FailurePage::ErrorText::get()
 {
 	return _error ? _error : "";
 }

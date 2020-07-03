@@ -11,7 +11,7 @@ namespace ff
 	class XamlGlobalState;
 }
 
-namespace Game
+namespace ReTron
 {
 	struct GameOptions;
 	struct SystemOptions;

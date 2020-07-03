@@ -38,11 +38,11 @@ void ReTron::App::InitializeGlobals()
 	auto window = Windows::UI::Xaml::Window::Current;
 	window->Content = page;
 
-	_appState = std::make_shared<Game::AppState>();
+	_appState = std::make_shared<ReTron::AppState>();
 
 	if (!_globals.Startup(ff::AppGlobalsFlags::All, panel, _appState.get()))
 	{
-		window->Content = ref new Game::FailurePage(&_globals);
+		window->Content = ref new ReTron::FailurePage(&_globals);
 	}
 
 	window->Activate();

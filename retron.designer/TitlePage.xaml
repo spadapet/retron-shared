@@ -25,11 +25,11 @@
 
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Vertical">
         <Button
-            x:Name="playGameButton"
             Background="{StaticResource Brush.244}"
             Width="128"
             Height="64"
-            Content="Play Game">
+            Content="Play Game"
+            Click="OnClickPlayGame">
             <Button.Foreground>
                 <SolidColorBrush Color="{StaticResource Color.231}" />
             </Button.Foreground>

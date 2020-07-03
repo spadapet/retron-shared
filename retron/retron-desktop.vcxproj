@@ -23,6 +23,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="UI\TitlePage.cpp" />
     <ClInclude Include="Assets\resource.h" />
     <ClCompile Include="Core\Globals.cpp" />
     <ClCompile Include="Core\Options.cpp" />
@@ -46,6 +47,7 @@
     <ClInclude Include="States\LevelState.h" />
     <ClInclude Include="States\TitleState.h" />
     <ClInclude Include="UI\Components.h" />
+    <ClInclude Include="UI\TitlePage.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Assets\resource.rc" />

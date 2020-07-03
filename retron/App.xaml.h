@@ -5,13 +5,10 @@
 #include "Globals/MetroGlobals.h"
 #include "Globals/ProcessGlobals.h"
 
-namespace Game
-{
-	class AppState;
-}
-
 namespace ReTron
 {
+	class AppState;
+
 	ref class App sealed
 	{
 	public:
@@ -25,7 +22,7 @@ namespace ReTron
 
 		ff::ProcessGlobals _processGlobals;
 		ff::MetroGlobals _globals;
-		std::shared_ptr<Game::AppState> _appState;
+		std::shared_ptr<AppState> _appState;
 	};
 }
 

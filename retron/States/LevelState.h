@@ -3,11 +3,11 @@
 #include "Services/LevelService.h"
 #include "State/State.h"
 
-namespace Game
+namespace ReTron
 {
 	class LevelState
 		: public ff::State
-		, public Game::ILevelService
+		, public ReTron::ILevelService
 	{
 	public:
 		LevelState(IGameService* gameService);

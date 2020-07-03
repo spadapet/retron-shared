@@ -29,6 +29,9 @@
     <ClCompile Include="States\LevelState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="UI\TitlePage.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -64,15 +67,15 @@
     <ClInclude Include="Services\LevelService.h">
       <Filter>Services</Filter>
     </ClInclude>
+    <ClInclude Include="UI\TitlePage.h">
+      <Filter>UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReTron_TemporaryKey.pfx">
       <Filter>Assets\Build</Filter>
     </None>
     <None Include="$(FFCoreRoot)core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll" />
-    <None Include="Assets\Assets.Xaml.res.json">
-      <Filter>Assets</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -267,6 +270,7 @@
     <ResJson Include="Assets\Values.res.json">
       <Filter>Assets</Filter>
     </ResJson>
+    <ResJson Include="Assets\Assets.Xaml.res.json" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
