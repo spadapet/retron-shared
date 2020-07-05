@@ -324,12 +324,22 @@ void ReTron::AppState::InitOptions()
 	if (systemData && systemData->GetSize() == sizeof(SystemOptions))
 	{
 		_systemOptions = *(SystemOptions*)systemData->GetMem();
+
+		if (_systemOptions._version != SystemOptions::CurrentVersion)
+		{
+			_systemOptions = SystemOptions();
+		}
 	}
 
 	ff::ComPtr<ff::IData> gameData = dict.Get<ff::DataValue>(Strings::ID_GAME_OPTIONS);
 	if (gameData && gameData->GetSize() == sizeof(GameOptions))
 	{
 		_gameOptions = *(GameOptions*)gameData->GetMem();
+
+		if (_gameOptions._version != GameOptions::CurrentVersion)
+		{
+			_gameOptions = GameOptions();
+		}
 	}
 }
 

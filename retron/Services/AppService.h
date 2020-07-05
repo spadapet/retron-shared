@@ -4,6 +4,7 @@ namespace ff
 {
 	class AppGlobals;
 	class IPalette;
+	class IRenderDepth;
 	class IRenderer;
 	class IRenderTarget;
 	class ITexture;

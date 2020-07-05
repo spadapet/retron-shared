@@ -10,7 +10,7 @@
 #include "Graph/Texture/Texture.h"
 #include "Services/AppService.h"
 #include "States/TitleState.h"
-#include "UI/TitlePage.h"
+#include "UI/TitlePage.xaml.h"
 #include "UI/XamlGlobalState.h"
 #include "UI/XamlView.h"
 #include "UI/XamlViewState.h"
@@ -20,7 +20,7 @@ ReTron::TitleState::TitleState(IAppService* appService)
 	, _render(appService->GetAppGlobals().GetGraph()->CreateRenderer())
 	, _font(L"GameFont")
 {
-	_titlePage = *new TitlePage();
+	_titlePage = *new ReTron::TitlePage(_appService);
 
 	std::shared_ptr<ff::XamlView> view = _appService->GetXamlGlobals().CreateView(_titlePage);
 	_viewState = std::make_shared<ff::XamlViewState>(view, _appService->GetXamlTarget(), _appService->GetXamlDepth());

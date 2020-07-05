@@ -9,9 +9,10 @@
 #include "States/GameState.h"
 #include "States/LevelState.h"
 
-ReTron::GameState::GameState(IAppService* appService, GameOptions gameOptions)
+ReTron::GameState::GameState(IAppService* appService, const GameOptions& gameOptions)
 	: _appService(appService)
 	, _gameOptions(gameOptions)
+	, _levelState(std::make_shared<ff::StateWrapper>())
 {
 	InitInput();
 	InitLevel();
@@ -35,7 +36,7 @@ void ReTron::GameState::Render(ff::AppGlobals* globals, ff::IRenderTarget* targe
 
 size_t ReTron::GameState::GetChildStateCount()
 {
-	return (_levelState != nullptr) ? 1 : 0;
+	return 1;
 }
 
 ff::State* ReTron::GameState::GetChildState(size_t index)

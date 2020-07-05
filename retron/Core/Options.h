@@ -4,17 +4,30 @@ namespace ReTron
 {
 	enum class GameType
 	{
-		Arcade,
+		Normal = 0x00,
+		InfiniteLives = 0x01,
+		NoBosses = 0x02,
+
+		Default = Normal
 	};
 
 	enum class GamePlayers
 	{
-		Single,
+		One = 0,
+		TwoTogether = 1,
+		TwoTakeTurns = 2,
+
+		Default = One
 	};
 
 	enum class GameDifficulty
 	{
-		Normal,
+		Baby = 0,
+		Easy = 1,
+		Normal = 2,
+		Hard = 3,
+
+		Default = Normal
 	};
 
 	struct GameOptions
@@ -23,6 +36,9 @@ namespace ReTron
 		GameOptions(const GameOptions& rhs);
 		GameOptions& operator=(const GameOptions& rhs);
 
+		static const int CurrentVersion = 1;
+
+		int _version;
 		GameType _type;
 		GamePlayers _players;
 		GameDifficulty _difficulty;
@@ -34,6 +50,9 @@ namespace ReTron
 		SystemOptions(const SystemOptions& rhs);
 		SystemOptions& operator=(const SystemOptions& rhs);
 
+		static const int CurrentVersion = 1;
+
+		int _version;
 		bool _fullScreen;
 		bool _soundOn;
 		bool _musicOn;
@@ -41,3 +60,7 @@ namespace ReTron
 		ff::FixedInt _musicVolume;
 	};
 }
+
+NS_DECLARE_REFLECTION_ENUM(ReTron::GameType)
+NS_DECLARE_REFLECTION_ENUM(ReTron::GamePlayers)
+NS_DECLARE_REFLECTION_ENUM(ReTron::GameDifficulty)

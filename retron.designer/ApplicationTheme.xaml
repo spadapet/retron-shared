@@ -9,7 +9,7 @@
     <FontFamily x:Key="Font.Family.Small">Fonts/#Robotron 2084 Small</FontFamily>
     <sys:Double x:Key="Font.Size.Header">8</sys:Double>
     <sys:Double x:Key="Font.Size.Normal">8</sys:Double>
-    <sys:Double x:Key="Font.Size.Small">6</sys:Double>
+    <sys:Double x:Key="Font.Size.Small">8</sys:Double>
 
     <!-- Palette in RGB -->
     <Color x:Key="Color.224">#000000</Color>

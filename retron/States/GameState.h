@@ -20,7 +20,7 @@ namespace ReTron
 		, public IGameService
 	{
 	public:
-		GameState(IAppService* appService, GameOptions gameOptions);
+		GameState(IAppService* appService, const GameOptions& gameOptions);
 		~GameState();
 
 		// State

@@ -1,10 +1,33 @@
 #include "pch.h"
 #include "Core/Options.h"
 
+NS_IMPLEMENT_REFLECTION_ENUM(ReTron::GameType, "ReTron.GameType")
+{
+	NsVal("Normal", ReTron::GameType::Normal);
+	NsVal("InfiniteLives", ReTron::GameType::InfiniteLives);
+	NsVal("NoBosses", ReTron::GameType::NoBosses);
+}
+
+NS_IMPLEMENT_REFLECTION_ENUM(ReTron::GamePlayers, "ReTron.GamePlayers")
+{
+	NsVal("One", ReTron::GamePlayers::One);
+	NsVal("TwoTogether", ReTron::GamePlayers::TwoTogether);
+	NsVal("TwoTakeTurns", ReTron::GamePlayers::TwoTakeTurns);
+}
+
+NS_IMPLEMENT_REFLECTION_ENUM(ReTron::GameDifficulty, "ReTron.GameDifficulty")
+{
+	NsVal("Baby", ReTron::GameDifficulty::Baby);
+	NsVal("Easy", ReTron::GameDifficulty::Easy);
+	NsVal("Normal", ReTron::GameDifficulty::Normal);
+	NsVal("Hard", ReTron::GameDifficulty::Hard);
+}
+
 ReTron::GameOptions::GameOptions()
-	: _type(GameType::Arcade)
-	, _players(GamePlayers::Single)
-	, _difficulty(GameDifficulty::Normal)
+	: _version(GameOptions::CurrentVersion)
+	, _type(GameType::Default)
+	, _players(GamePlayers::Default)
+	, _difficulty(GameDifficulty::Default)
 {
 }
 
@@ -21,7 +44,8 @@ ReTron::GameOptions& ReTron::GameOptions::operator=(const GameOptions& rhs)
 }
 
 ReTron::SystemOptions::SystemOptions()
-	: _fullScreen(false)
+	: _version(SystemOptions::CurrentVersion)
+	, _fullScreen(false)
 	, _soundOn(true)
 	, _musicOn(true)
 	, _soundVolume(1)

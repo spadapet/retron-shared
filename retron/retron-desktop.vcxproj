@@ -6,6 +6,9 @@
     <ProjectGuid>{9CD231EF-367F-47D8-8F5E-7CF37C648E39}</ProjectGuid>
   </PropertyGroup>
   <Import Project="..\ffcore\msbuild\cpp.props" />
+  <PropertyGroup>
+    <AdditionalResJsonInputs>$(DevRoot)retron.designer\**\*.*</AdditionalResJsonInputs>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\util</AdditionalIncludeDirectories>
@@ -23,7 +26,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="UI\TitlePage.cpp" />
+    <ClCompile Include="UI\TitlePage.xaml.cpp" />
     <ClInclude Include="Assets\resource.h" />
     <ClCompile Include="Core\Globals.cpp" />
     <ClCompile Include="Core\Options.cpp" />
@@ -47,7 +50,7 @@
     <ClInclude Include="States\LevelState.h" />
     <ClInclude Include="States\TitleState.h" />
     <ClInclude Include="UI\Components.h" />
-    <ClInclude Include="UI\TitlePage.h" />
+    <ClInclude Include="UI\TitlePage.xaml.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Assets\resource.rc" />

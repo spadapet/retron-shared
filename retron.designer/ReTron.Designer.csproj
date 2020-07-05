@@ -61,6 +61,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Designer\DelegateCommand.cs" />
+    <Compile Include="Designer\PropertyNotifier.cs" />
     <Compile Include="Properties\GlobalSuppressions.cs" />
     <Compile Include="Designer\Placeholders.cs" />
     <Compile Include="TitlePage.xaml.cs">
