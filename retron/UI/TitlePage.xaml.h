@@ -15,7 +15,7 @@ namespace ReTron
 	class TitlePageViewModel : public ff::NotifyPropertyChangedBase
 	{
 	public:
-		TitlePageViewModel(const GameOptions& options);
+		TitlePageViewModel(const SystemOptions& systemOptions, const GameOptions& options);
 
 		const char* GetPlayersText() const;
 		void ChangePlayers(bool forward = true);
@@ -23,10 +23,19 @@ namespace ReTron
 		const char* GetDifficultyText() const;
 		void ChangeDifficulty(bool forward = true);
 
+		const char* GetSoundText() const;
+		void ChangeSound();
+
+		const char* GetFullScreenText() const;
+		void ChangeFullScreen();
+
 	private:
-		GameOptions _options;
+		SystemOptions _systemOptions;
+		GameOptions _gameOptions;
 		Noesis::Ptr<Noesis::ICommand> _playersCommand;
 		Noesis::Ptr<Noesis::ICommand> _difficultyCommand;
+		Noesis::Ptr<Noesis::ICommand> _soundCommand;
+		Noesis::Ptr<Noesis::ICommand> _fullScreenCommand;
 
 		NS_DECLARE_REFLECTION(TitlePageViewModel, ff::NotifyPropertyChangedBase);
 	};
@@ -46,6 +55,8 @@ namespace ReTron
 		void OnLoaded(Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args);
 		void OnPlayersKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args);
 		void OnDifficultyKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args);
+		void OnSoundKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args);
+		void OnFullScreenKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args);
 		void OnOptionMouseEnter(Noesis::BaseComponent* sender, const Noesis::MouseEventArgs& args);
 
 		IAppService* _appService;

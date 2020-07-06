@@ -99,6 +99,22 @@
             MouseEnter="OnOptionMouseEnter"
             Command="{Binding DifficultyCommand}" />
 
+        <Button
+            Style="{StaticResource OptionButtonStyle}"
+            Content="{Binding SoundText}"
+            ContentTemplate="{StaticResource SoundTemplate}"
+            KeyDown="OnSoundKeyDown"
+            MouseEnter="OnOptionMouseEnter"
+            Command="{Binding SoundCommand}" />
+
+        <Button
+            Style="{StaticResource OptionButtonStyle}"
+            Content="{Binding FullScreenText}"
+            ContentTemplate="{StaticResource FullScreenTemplate}"
+            KeyDown="OnFullScreenKeyDown"
+            MouseEnter="OnOptionMouseEnter"
+            Command="{Binding FullScreenCommand}" />
+
     </StackPanel>
 
 </UserControl>

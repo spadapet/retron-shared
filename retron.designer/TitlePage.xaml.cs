@@ -21,63 +21,46 @@ namespace ReTron
 
         public ICommand PlayersCommand => new DelegateCommand(() => this.ChangePlayers());
         public ICommand DifficultyCommand => new DelegateCommand(() => this.ChangeDifficulty());
-        public ICommand SoundCommand => new DelegateCommand(() => this.ChangeDifficulty());
-        public ICommand FullScreenCommand => new DelegateCommand(() => this.ChangeDifficulty());
-
-        private GameDifficulty difficulty = GameDifficulty.Normal;
-        public string DifficultyText => this.difficulty.ToString();
-        public GameDifficulty Difficulty
-        {
-            get => this.difficulty;
-            set
-            {
-                if (this.SetPropertyValue(ref this.difficulty, value))
-                {
-                    this.OnPropertyChanged(nameof(this.DifficultyText));
-                }
-            }
-        }
-
-        public void ChangeDifficulty(bool forward = true)
-        {
-            if (forward)
-            {
-                this.Difficulty = (this.Difficulty == GameDifficulty.Hard)
-                    ? GameDifficulty.Easy
-                    : this.Difficulty + 1;
-            }
-            else
-            {
-                this.Difficulty = (this.Difficulty == GameDifficulty.Easy)
-                    ? GameDifficulty.Hard
-                    : this.Difficulty - 1;
-            }
-        }
+        public ICommand SoundCommand => new DelegateCommand(() => this.ChangeSound());
+        public ICommand FullScreenCommand => new DelegateCommand(() => this.ChangeFullScreen());
 
         private int players = 0;
         public string PlayersText => (this.players + 1).ToString();
-        public int Players
-        {
-            get => this.players;
-            set
-            {
-                if (this.SetPropertyValue(ref this.players, value))
-                {
-                    this.OnPropertyChanged(nameof(this.PlayersText));
-                }
-            }
-        }
-
         public void ChangePlayers(bool forward = true)
         {
-            if (forward)
-            {
-                this.Players = (this.Players + 1) % 4;
-            }
-            else
-            {
-                this.Players = (this.Players + 3) % 4;
-            }
+            this.players = forward ? (this.players + 1) % 4 : (this.players + 3) % 4;
+            this.OnPropertyChanged(nameof(this.PlayersText));
+        }
+
+        private GameDifficulty difficulty = GameDifficulty.Normal;
+        public string DifficultyText => this.difficulty.ToString();
+        public void ChangeDifficulty(bool forward = true)
+        {
+            this.difficulty = forward
+                ? (this.difficulty == GameDifficulty.Hard)
+                    ? GameDifficulty.Easy
+                    : this.difficulty + 1
+                : (this.difficulty == GameDifficulty.Easy)
+                    ? GameDifficulty.Hard
+                    : this.difficulty - 1;
+
+            this.OnPropertyChanged(nameof(this.DifficultyText));
+        }
+
+        private bool sound = true;
+        public string SoundText => this.sound ? "On" : "Off";
+        public void ChangeSound()
+        {
+            this.sound = !this.sound;
+            this.OnPropertyChanged(nameof(this.SoundText));
+        }
+
+        private bool fullScreen = true;
+        public string FullScreenText => this.fullScreen ? "On" : "Off";
+        public void ChangeFullScreen()
+        {
+            this.fullScreen = !this.fullScreen;
+            this.OnPropertyChanged(nameof(this.FullScreenText));
         }
     }
 
@@ -103,6 +86,22 @@ namespace ReTron
             if (args.Key == Key.Left || args.Key == Key.Right)
             {
                 this.ViewModel.ChangeDifficulty(args.Key == Key.Right);
+            }
+        }
+
+        private void OnSoundKeyDown(object sender, KeyEventArgs args)
+        {
+            if (args.Key == Key.Left || args.Key == Key.Right)
+            {
+                this.ViewModel.ChangeSound();
+            }
+        }
+
+        private void OnFullScreenKeyDown(object sender, KeyEventArgs args)
+        {
+            if (args.Key == Key.Left || args.Key == Key.Right)
+            {
+                this.ViewModel.ChangeFullScreen();
             }
         }
 
