@@ -17,14 +17,15 @@ namespace ReTron
 	public:
 		TitlePageViewModel(const GameOptions& options);
 
-		GameDifficulty GetDifficulty() const;
-		void SetDifficulty(GameDifficulty value);
+		const char* GetPlayersText() const;
+		void ChangePlayers(bool forward = true);
+
 		const char* GetDifficultyText() const;
-		Noesis::ICommand* GetDifficultyCommand() const;
 		void ChangeDifficulty(bool forward = true);
 
 	private:
 		GameOptions _options;
+		Noesis::Ptr<Noesis::ICommand> _playersCommand;
 		Noesis::Ptr<Noesis::ICommand> _difficultyCommand;
 
 		NS_DECLARE_REFLECTION(TitlePageViewModel, ff::NotifyPropertyChangedBase);
@@ -43,9 +44,9 @@ namespace ReTron
 
 	private:
 		void OnLoaded(Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args);
-		void OnClickPlayGame(Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args);
+		void OnPlayersKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args);
 		void OnDifficultyKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args);
-		void OnDifficultyMouseEnter(Noesis::BaseComponent* sender, const Noesis::MouseEventArgs& args);
+		void OnOptionMouseEnter(Noesis::BaseComponent* sender, const Noesis::MouseEventArgs& args);
 
 		IAppService* _appService;
 		Noesis::Ptr<TitlePageViewModel> _viewModel;

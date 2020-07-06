@@ -14,8 +14,8 @@ namespace ReTron
 	enum class GamePlayers
 	{
 		One = 0,
-		TwoTogether = 1,
-		TwoTakeTurns = 2,
+		TwoTakeTurns = 1,
+		TwoTogether = 2,
 
 		Default = One
 	};

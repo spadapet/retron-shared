@@ -17,6 +17,9 @@
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
   </PropertyGroup>
   <Import Project="..\ffcore\msbuild\cpp.props" />
+  <PropertyGroup>
+    <AdditionalResJsonInputs>$(DevRoot)retron.designer\**\*.xaml;$(DevRoot)retron.designer\**\*.ttf</AdditionalResJsonInputs>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\util</AdditionalIncludeDirectories>

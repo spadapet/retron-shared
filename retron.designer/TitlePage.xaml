@@ -14,91 +14,91 @@
     d:FontSize="{StaticResource Font.Size.Normal}"
     d:DataContext="{d:DesignInstance local:TitlePageViewModel, IsDesignTimeCreatable=True}"
     DataContext="{Binding ViewModel, RelativeSource={RelativeSource Mode=Self}}"
+    UseLayoutRounding="True"
     Foreground="{StaticResource Brush.Foreground.Normal}"
     Loaded="OnLoaded">
 
     <UserControl.Resources>
-        <DataTemplate x:Key="DifficultyTemplate" DataType="sys:String">
-            <TextBlock>
-                <Run Text="Difficulty: " /><Run Text="{Binding Mode=OneWay}" />
-            </TextBlock>
-        </DataTemplate>
-        <Style x:Key="OptionButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-            <Setter Property="Foreground" Value="{StaticResource Brush.230}" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="HorizontalContentAlignment" Value="Left" />
-            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
-            <Setter Property="Command" Value="{Binding DifficultyCommand}" />
-            <Style.Triggers>
+        <ControlTemplate x:Key="OptionButtonTemplate" TargetType="Button">
+            <Grid Background="{TemplateBinding Background}">
+                <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
+            </Grid>
+            <ControlTemplate.Triggers>
                 <Trigger Property="IsFocused" Value="True">
                     <Setter Property="Foreground" Value="{StaticResource Brush.231}" />
                     <Setter Property="Background" Value="{StaticResource Brush.Background.Checked}" />
                 </Trigger>
-            </Style.Triggers>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <Style x:Key="OptionButtonStyle" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Foreground" Value="{StaticResource Brush.230}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template" Value="{StaticResource OptionButtonTemplate}"/>
         </Style>
+
+        <DataTemplate x:Key="PlayersTemplate" DataType="sys:String">
+            <TextBlock><Run Text="Players: " /><Run Text="{Binding Mode=OneWay}" /></TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="DifficultyTemplate" DataType="sys:String">
+            <TextBlock><Run Text="Difficulty: " /><Run Text="{Binding Mode=OneWay}" /></TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="SoundTemplate" DataType="sys:String">
+            <TextBlock><Run Text="Sound: " /><Run Text="{Binding Mode=OneWay}" /></TextBlock>
+        </DataTemplate>
+
+        <DataTemplate x:Key="FullScreenTemplate" DataType="sys:String">
+            <TextBlock><Run Text="Full Screen: " /><Run Text="{Binding Mode=OneWay}" /></TextBlock>
+        </DataTemplate>
+
     </UserControl.Resources>
 
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="0,135,0,0" Width="150">
         <Button
-            Name="difficultyButton"
+            Name="startGameButton"
             Style="{StaticResource OptionButtonStyle}"
-            Content="{Binding DifficultyText}"
-            ContentTemplate="{StaticResource DifficultyTemplate}"
-            KeyDown="OnDifficultyKeyDown"
-            MouseEnter="OnDifficultyMouseEnter" />
+            Content="Start Game"
+            MouseEnter="OnOptionMouseEnter"
+            Command="{Binding StartGameCommand}" />
 
         <Button
-            Name="difficultyButton1"
             Style="{StaticResource OptionButtonStyle}"
-            Content="{Binding DifficultyText}"
-            ContentTemplate="{StaticResource DifficultyTemplate}"
-            KeyDown="OnDifficultyKeyDown"
-            MouseEnter="OnDifficultyMouseEnter" />
+            Content="Options"
+            MouseEnter="OnOptionMouseEnter"
+            Command="{Binding OptionsCommand}" />
 
         <Button
-            Name="difficultyButton2"
+            Style="{StaticResource OptionButtonStyle}"
+            Content="High Scores"
+            MouseEnter="OnOptionMouseEnter"
+            Command="{Binding HighScoresCommand}" />
+
+        <Button
+            Style="{StaticResource OptionButtonStyle}"
+            Content="About"
+            MouseEnter="OnOptionMouseEnter"
+            Command="{Binding AboutCommand}" />
+
+        <Button
+            Style="{StaticResource OptionButtonStyle}"
+            Content="{Binding PlayersText}"
+            ContentTemplate="{StaticResource PlayersTemplate}"
+            KeyDown="OnPlayersKeyDown"
+            MouseEnter="OnOptionMouseEnter"
+            Command="{Binding PlayersCommand}" />
+
+        <Button
             Style="{StaticResource OptionButtonStyle}"
             Content="{Binding DifficultyText}"
             ContentTemplate="{StaticResource DifficultyTemplate}"
             KeyDown="OnDifficultyKeyDown"
-            MouseEnter="OnDifficultyMouseEnter" />
+            MouseEnter="OnOptionMouseEnter"
+            Command="{Binding DifficultyCommand}" />
+
     </StackPanel>
-
-    <!--<Grid HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-
-        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="Difficulty:" />
-
-        <ListBox
-            Grid.Row="0"
-            Grid.Column="1"
-            VerticalAlignment="Center"
-            ItemsSource="{Binding Difficulties}"
-            SelectedItem="{Binding Difficulty, Mode=TwoWay}">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" FontFamily="{StaticResource Font.Family.Small}" FontSize="{StaticResource Font.Size.Small}" Margin="0,0,0,-1" />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
-                    <Setter Property="Padding" Value="8,4" />
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
-    </Grid>-->
 
 </UserControl>
