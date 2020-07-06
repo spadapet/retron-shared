@@ -32,6 +32,10 @@ namespace ReTron
 	private:
 		SystemOptions _systemOptions;
 		GameOptions _gameOptions;
+		Noesis::Ptr<Noesis::ICommand> _startGameCommand;
+		Noesis::Ptr<Noesis::ICommand> _optionsCommand;
+		Noesis::Ptr<Noesis::ICommand> _highScoresCommand;
+		Noesis::Ptr<Noesis::ICommand> _aboutCommand;
 		Noesis::Ptr<Noesis::ICommand> _playersCommand;
 		Noesis::Ptr<Noesis::ICommand> _difficultyCommand;
 		Noesis::Ptr<Noesis::ICommand> _soundCommand;
@@ -52,15 +56,9 @@ namespace ReTron
 		virtual bool ConnectEvent(BaseComponent* source, const char* event, const char* handler) override;
 
 	private:
-		void OnLoaded(Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args);
-		void OnPlayersKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args);
-		void OnDifficultyKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args);
-		void OnSoundKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args);
-		void OnFullScreenKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args);
-		void OnOptionMouseEnter(Noesis::BaseComponent* sender, const Noesis::MouseEventArgs& args);
-
 		IAppService* _appService;
 		Noesis::Ptr<TitlePageViewModel> _viewModel;
+		Noesis::Ptr<Noesis::ICommand> _focusLeftRightCommand;
 		std::shared_ptr<ff::State> _pendingState;
 
 		NS_DECLARE_REFLECTION(TitlePage, Noesis::UserControl);

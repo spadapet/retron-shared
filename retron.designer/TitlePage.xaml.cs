@@ -4,14 +4,6 @@ using System.Windows.Input;
 
 namespace ReTron
 {
-    public enum GameDifficulty
-    {
-        Baby,
-        Easy,
-        Normal,
-        Hard,
-    }
-
     public class TitlePageViewModel : PropertyNotifier
     {
         public ICommand StartGameCommand => null;
@@ -19,8 +11,8 @@ namespace ReTron
         public ICommand HighScoresCommand => null;
         public ICommand AboutCommand => null;
 
-        public ICommand PlayersCommand => new DelegateCommand(() => this.ChangePlayers());
-        public ICommand DifficultyCommand => new DelegateCommand(() => this.ChangeDifficulty());
+        public ICommand PlayersCommand => new DelegateCommand((object param) => this.ChangePlayers(param is bool forward && forward));
+        public ICommand DifficultyCommand => new DelegateCommand((object param) => this.ChangeDifficulty(param is bool forward && forward));
         public ICommand SoundCommand => new DelegateCommand(() => this.ChangeSound());
         public ICommand FullScreenCommand => new DelegateCommand(() => this.ChangeFullScreen());
 
@@ -32,18 +24,11 @@ namespace ReTron
             this.OnPropertyChanged(nameof(this.PlayersText));
         }
 
-        private GameDifficulty difficulty = GameDifficulty.Normal;
+        private int difficulty = 1;
         public string DifficultyText => this.difficulty.ToString();
         public void ChangeDifficulty(bool forward = true)
         {
-            this.difficulty = forward
-                ? (this.difficulty == GameDifficulty.Hard)
-                    ? GameDifficulty.Easy
-                    : this.difficulty + 1
-                : (this.difficulty == GameDifficulty.Easy)
-                    ? GameDifficulty.Hard
-                    : this.difficulty - 1;
-
+            this.difficulty = (this.difficulty + (forward ? 1 : 2)) % 3;
             this.OnPropertyChanged(nameof(this.DifficultyText));
         }
 
@@ -73,46 +58,12 @@ namespace ReTron
             this.InitializeComponent();
         }
 
-        private void OnPlayersKeyDown(object sender, KeyEventArgs args)
+        public ICommand FocusLeftRightCommand => new DelegateCommand((object param) =>
         {
-            if (args.Key == Key.Left || args.Key == Key.Right)
+            if (Keyboard.FocusedElement is Button button && button.Command != null)
             {
-                this.ViewModel.ChangePlayers(args.Key == Key.Right);
+                button.Command.Execute(param);
             }
-        }
-
-        private void OnDifficultyKeyDown(object sender, KeyEventArgs args)
-        {
-            if (args.Key == Key.Left || args.Key == Key.Right)
-            {
-                this.ViewModel.ChangeDifficulty(args.Key == Key.Right);
-            }
-        }
-
-        private void OnSoundKeyDown(object sender, KeyEventArgs args)
-        {
-            if (args.Key == Key.Left || args.Key == Key.Right)
-            {
-                this.ViewModel.ChangeSound();
-            }
-        }
-
-        private void OnFullScreenKeyDown(object sender, KeyEventArgs args)
-        {
-            if (args.Key == Key.Left || args.Key == Key.Right)
-            {
-                this.ViewModel.ChangeFullScreen();
-            }
-        }
-
-        private void OnLoaded(object sender, RoutedEventArgs args)
-        {
-            this.startGameButton.Focus();
-        }
-
-        private void OnOptionMouseEnter(object sender, MouseEventArgs args)
-        {
-            ((FrameworkElement)sender).Focus();
-        }
+        });
     }
 }

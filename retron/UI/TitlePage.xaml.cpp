@@ -6,6 +6,11 @@
 
 NS_IMPLEMENT_REFLECTION(ReTron::TitlePageViewModel, "ReTron.TitlePageViewModel")
 {
+	NsProp("StartGameCommand", &ReTron::TitlePageViewModel::_startGameCommand);
+	NsProp("OptionsCommand", &ReTron::TitlePageViewModel::_optionsCommand);
+	NsProp("HighScoresCommand", &ReTron::TitlePageViewModel::_highScoresCommand);
+	NsProp("AboutCommand", &ReTron::TitlePageViewModel::_aboutCommand);
+
 	NsProp("PlayersText", &ReTron::TitlePageViewModel::GetPlayersText);
 	NsProp("PlayersCommand", &ReTron::TitlePageViewModel::_playersCommand);
 	NsProp("DifficultyText", &ReTron::TitlePageViewModel::GetDifficultyText);
@@ -20,16 +25,38 @@ ReTron::TitlePageViewModel::TitlePageViewModel(const SystemOptions& systemOption
 	: _systemOptions(systemOptions)
 	, _gameOptions(options)
 {
-	_playersCommand = Noesis::MakePtr<ff::DelegateCommand>(
+	_startGameCommand = Noesis::MakePtr<ff::DelegateCommand>(
 		[this](Noesis::BaseComponent*)
 		{
-			ChangePlayers();
+		});
+
+	_optionsCommand = Noesis::MakePtr<ff::DelegateCommand>(
+		[this](Noesis::BaseComponent*)
+		{
+		});
+
+	_highScoresCommand = Noesis::MakePtr<ff::DelegateCommand>(
+		[this](Noesis::BaseComponent*)
+		{
+		});
+
+	_aboutCommand = Noesis::MakePtr<ff::DelegateCommand>(
+		[this](Noesis::BaseComponent*)
+		{
+		});
+
+	_playersCommand = Noesis::MakePtr<ff::DelegateCommand>(
+		[this](Noesis::BaseComponent* param)
+		{
+			bool forward = Noesis::Boxing::CanUnbox<bool>(param) && Noesis::Boxing::Unbox<bool>(param);
+			ChangePlayers(forward);
 		});
 
 	_difficultyCommand = Noesis::MakePtr<ff::DelegateCommand>(
-		[this](Noesis::BaseComponent*)
+		[this](Noesis::BaseComponent* param)
 		{
-			ChangeDifficulty();
+			bool forward = Noesis::Boxing::CanUnbox<bool>(param) && Noesis::Boxing::Unbox<bool>(param);
+			ChangeDifficulty(forward);
 		});
 
 	_soundCommand = Noesis::MakePtr<ff::DelegateCommand>(
@@ -129,12 +156,24 @@ void ReTron::TitlePageViewModel::ChangeFullScreen()
 NS_IMPLEMENT_REFLECTION(ReTron::TitlePage, "ReTron.TitlePage")
 {
 	NsProp("ViewModel", &ReTron::TitlePage::GetViewModel);
+	NsProp("FocusLeftRightCommand", &ReTron::TitlePage::_focusLeftRightCommand);
 }
 
 ReTron::TitlePage::TitlePage(IAppService* appService)
 	: _appService(appService)
 	, _viewModel(*new TitlePageViewModel(appService->GetSystemOptions(), appService->GetDefaultGameOptions()))
 {
+	_focusLeftRightCommand = Noesis::MakePtr<ff::DelegateCommand>(
+		[this](Noesis::BaseComponent* param)
+		{
+			Noesis::ICommandSource* source = Noesis::DynamicCast<Noesis::ICommandSource*>(GetKeyboard()->GetFocused());
+			if (source && source->GetCommand() && source->GetCommand()->CanExecute(param))
+			{
+				source->GetCommand()->Execute(param);
+			}
+		});
+
+
 	Noesis::GUI::LoadComponent(this, "TitlePage.xaml");
 }
 
@@ -154,67 +193,5 @@ ReTron::TitlePageViewModel* ReTron::TitlePage::GetViewModel() const
 
 bool ReTron::TitlePage::ConnectEvent(BaseComponent* source, const char* event, const char* handler)
 {
-	NS_CONNECT_EVENT(Noesis::Button, KeyDown, OnPlayersKeyDown);
-	NS_CONNECT_EVENT(Noesis::Button, KeyDown, OnDifficultyKeyDown);
-	NS_CONNECT_EVENT(Noesis::Button, KeyDown, OnSoundKeyDown);
-	NS_CONNECT_EVENT(Noesis::Button, KeyDown, OnFullScreenKeyDown);
-	NS_CONNECT_EVENT(Noesis::Button, MouseEnter, OnOptionMouseEnter);
-
-	NS_CONNECT_EVENT(Noesis::UserControl, Loaded, OnLoaded);
-
 	return false;
-}
-
-void ReTron::TitlePage::OnLoaded(Noesis::BaseComponent* sender, const Noesis::RoutedEventArgs& args)
-{
-	FindName<Noesis::Button>("startGameButton")->Focus();
-}
-
-void ReTron::TitlePage::OnPlayersKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args)
-{
-	bool left = args.key == Noesis::Key::Key_Left || args.key == Noesis::Key::Key_GamepadLeft;
-	bool right = args.key == Noesis::Key::Key_Right || args.key == Noesis::Key::Key_GamepadRight;
-
-	if (left || right)
-	{
-		_viewModel->ChangePlayers(right);
-	}
-}
-
-void ReTron::TitlePage::OnDifficultyKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args)
-{
-	bool left = args.key == Noesis::Key::Key_Left || args.key == Noesis::Key::Key_GamepadLeft;
-	bool right = args.key == Noesis::Key::Key_Right || args.key == Noesis::Key::Key_GamepadRight;
-
-	if (left || right)
-	{
-		_viewModel->ChangeDifficulty(right);
-	}
-}
-
-void ReTron::TitlePage::OnSoundKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args)
-{
-	bool left = args.key == Noesis::Key::Key_Left || args.key == Noesis::Key::Key_GamepadLeft;
-	bool right = args.key == Noesis::Key::Key_Right || args.key == Noesis::Key::Key_GamepadRight;
-
-	if (left || right)
-	{
-		_viewModel->ChangeSound();
-	}
-}
-
-void ReTron::TitlePage::OnFullScreenKeyDown(Noesis::BaseComponent* sender, const Noesis::KeyEventArgs& args)
-{
-	bool left = args.key == Noesis::Key::Key_Left || args.key == Noesis::Key::Key_GamepadLeft;
-	bool right = args.key == Noesis::Key::Key_Right || args.key == Noesis::Key::Key_GamepadRight;
-
-	if (left || right)
-	{
-		_viewModel->ChangeFullScreen();
-	}
-}
-
-void ReTron::TitlePage::OnOptionMouseEnter(Noesis::BaseComponent* sender, const Noesis::MouseEventArgs& args)
-{
-	((Noesis::FrameworkElement*)sender)->Focus();
 }

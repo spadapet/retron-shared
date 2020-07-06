@@ -42,7 +42,7 @@
     <ClCompile Include="UI\FailurePage.xaml.cpp">
       <DependentUpon>UI\FailurePage.xaml</DependentUpon>
     </ClCompile>
-    <ClCompile Include="UI\TitlePage.cpp" />
+    <ClCompile Include="UI\TitlePage.xaml.cpp" />
     <ClInclude Include="App.xaml.h">
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
@@ -73,7 +73,7 @@
     <AppxManifest Include="Package.appxmanifest">
       <SubType>Designer</SubType>
     </AppxManifest>
-    <ClInclude Include="UI\TitlePage.h" />
+    <ClInclude Include="UI\TitlePage.xaml.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="$(FFCoreRoot)core\util\util-metro.vcxproj">
