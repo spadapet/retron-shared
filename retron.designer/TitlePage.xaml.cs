@@ -57,13 +57,5 @@ namespace ReTron
         {
             this.InitializeComponent();
         }
-
-        public ICommand FocusLeftRightCommand => new DelegateCommand((object param) =>
-        {
-            if (Keyboard.FocusedElement is Button button && button.Command != null)
-            {
-                button.Command.Execute(param);
-            }
-        });
     }
 }

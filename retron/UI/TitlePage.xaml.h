@@ -18,18 +18,20 @@ namespace ReTron
 		TitlePageViewModel(const SystemOptions& systemOptions, const GameOptions& options);
 
 		const char* GetPlayersText() const;
-		void ChangePlayers(bool forward = true);
-
 		const char* GetDifficultyText() const;
-		void ChangeDifficulty(bool forward = true);
-
 		const char* GetSoundText() const;
-		void ChangeSound();
-
 		const char* GetFullScreenText() const;
-		void ChangeFullScreen();
 
 	private:
+		void StartGameCommand(Noesis::BaseComponent* param);
+		void OptionsCommand(Noesis::BaseComponent* param);
+		void HighScoresCommand(Noesis::BaseComponent* param);
+		void AboutCommand(Noesis::BaseComponent* param);
+		void PlayersCommand(Noesis::BaseComponent* param);
+		void DifficultyCommand(Noesis::BaseComponent* param);
+		void SoundCommand(Noesis::BaseComponent* param);
+		void FullScreenCommand(Noesis::BaseComponent* param);
+
 		SystemOptions _systemOptions;
 		GameOptions _gameOptions;
 		Noesis::Ptr<Noesis::ICommand> _startGameCommand;
@@ -58,7 +60,6 @@ namespace ReTron
 	private:
 		IAppService* _appService;
 		Noesis::Ptr<TitlePageViewModel> _viewModel;
-		Noesis::Ptr<Noesis::ICommand> _focusLeftRightCommand;
 		std::shared_ptr<ff::State> _pendingState;
 
 		NS_DECLARE_REFLECTION(TitlePage, Noesis::UserControl);
