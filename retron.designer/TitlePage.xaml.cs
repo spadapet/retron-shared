@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ReTron
@@ -7,9 +6,6 @@ namespace ReTron
     public class TitlePageViewModel : PropertyNotifier
     {
         public ICommand StartGameCommand => null;
-        public ICommand OptionsCommand => null;
-        public ICommand HighScoresCommand => null;
-        public ICommand AboutCommand => null;
 
         public ICommand PlayersCommand => new DelegateCommand((object param) => this.ChangePlayers(param is bool forward && forward));
         public ICommand DifficultyCommand => new DelegateCommand((object param) => this.ChangeDifficulty(param is bool forward && forward));

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Core/Options.h"
-#include "UI/NotifyPropertyChangedBase.h"
+#include "UI/Utility/NotifyPropertyChangedBase.h"
 
 namespace ff
 {
@@ -24,9 +24,6 @@ namespace ReTron
 
 	private:
 		void StartGameCommand(Noesis::BaseComponent* param);
-		void OptionsCommand(Noesis::BaseComponent* param);
-		void HighScoresCommand(Noesis::BaseComponent* param);
-		void AboutCommand(Noesis::BaseComponent* param);
 		void PlayersCommand(Noesis::BaseComponent* param);
 		void DifficultyCommand(Noesis::BaseComponent* param);
 		void SoundCommand(Noesis::BaseComponent* param);
@@ -35,9 +32,6 @@ namespace ReTron
 		SystemOptions _systemOptions;
 		GameOptions _gameOptions;
 		Noesis::Ptr<Noesis::ICommand> _startGameCommand;
-		Noesis::Ptr<Noesis::ICommand> _optionsCommand;
-		Noesis::Ptr<Noesis::ICommand> _highScoresCommand;
-		Noesis::Ptr<Noesis::ICommand> _aboutCommand;
 		Noesis::Ptr<Noesis::ICommand> _playersCommand;
 		Noesis::Ptr<Noesis::ICommand> _difficultyCommand;
 		Noesis::Ptr<Noesis::ICommand> _soundCommand;

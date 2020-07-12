@@ -1,8 +1,8 @@
 #include "pch.h"
 #include "Services/AppService.h"
 #include "States/GameState.h"
-#include "UI/DelegateCommand.h"
 #include "UI/TitlePage.xaml.h"
+#include "UI/Utility/DelegateCommand.h"
 
 NS_IMPLEMENT_REFLECTION(ReTron::TitlePageViewModel, "ReTron.TitlePageViewModel")
 {
@@ -12,9 +12,6 @@ NS_IMPLEMENT_REFLECTION(ReTron::TitlePageViewModel, "ReTron.TitlePageViewModel")
 	NsProp("FullScreenText", &ReTron::TitlePageViewModel::GetFullScreenText);
 
 	NsProp("StartGameCommand", &ReTron::TitlePageViewModel::_startGameCommand);
-	NsProp("OptionsCommand", &ReTron::TitlePageViewModel::_optionsCommand);
-	NsProp("HighScoresCommand", &ReTron::TitlePageViewModel::_highScoresCommand);
-	NsProp("AboutCommand", &ReTron::TitlePageViewModel::_aboutCommand);
 	NsProp("PlayersCommand", &ReTron::TitlePageViewModel::_playersCommand);
 	NsProp("DifficultyCommand", &ReTron::TitlePageViewModel::_difficultyCommand);
 	NsProp("SoundCommand", &ReTron::TitlePageViewModel::_soundCommand);
@@ -25,9 +22,6 @@ ReTron::TitlePageViewModel::TitlePageViewModel(const SystemOptions& systemOption
 	: _systemOptions(systemOptions)
 	, _gameOptions(options)
 	, _startGameCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::StartGameCommand)))
-	, _optionsCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::OptionsCommand)))
-	, _highScoresCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::HighScoresCommand)))
-	, _aboutCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::AboutCommand)))
 	, _playersCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::PlayersCommand)))
 	, _difficultyCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::DifficultyCommand)))
 	, _soundCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::SoundCommand)))
@@ -69,18 +63,6 @@ const char* ReTron::TitlePageViewModel::GetFullScreenText() const
 }
 
 void ReTron::TitlePageViewModel::StartGameCommand(Noesis::BaseComponent* param)
-{
-}
-
-void ReTron::TitlePageViewModel::OptionsCommand(Noesis::BaseComponent* param)
-{
-}
-
-void ReTron::TitlePageViewModel::HighScoresCommand(Noesis::BaseComponent* param)
-{
-}
-
-void ReTron::TitlePageViewModel::AboutCommand(Noesis::BaseComponent* param)
 {
 }
 
