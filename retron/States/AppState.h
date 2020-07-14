@@ -75,6 +75,7 @@ namespace ReTron
 		void InitOptions();
 		void InitResources();
 		void InitGraphics();
+		void ApplySystemOptions();
 
 		// Globals
 		ff::ProcessGlobals* _processGlobals;

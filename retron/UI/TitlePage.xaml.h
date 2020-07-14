@@ -15,7 +15,7 @@ namespace ReTron
 	class TitlePageViewModel : public ff::NotifyPropertyChangedBase
 	{
 	public:
-		TitlePageViewModel(const SystemOptions& systemOptions, const GameOptions& options);
+		TitlePageViewModel(IAppService* appService);
 
 		const char* GetPlayersText() const;
 		const char* GetDifficultyText() const;
@@ -29,8 +29,7 @@ namespace ReTron
 		void SoundCommand(Noesis::BaseComponent* param);
 		void FullScreenCommand(Noesis::BaseComponent* param);
 
-		SystemOptions _systemOptions;
-		GameOptions _gameOptions;
+		IAppService* _appService;
 		Noesis::Ptr<Noesis::ICommand> _startGameCommand;
 		Noesis::Ptr<Noesis::ICommand> _playersCommand;
 		Noesis::Ptr<Noesis::ICommand> _difficultyCommand;

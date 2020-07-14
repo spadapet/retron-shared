@@ -18,9 +18,8 @@ NS_IMPLEMENT_REFLECTION(ReTron::TitlePageViewModel, "ReTron.TitlePageViewModel")
 	NsProp("FullScreenCommand", &ReTron::TitlePageViewModel::_fullScreenCommand);
 }
 
-ReTron::TitlePageViewModel::TitlePageViewModel(const SystemOptions& systemOptions, const GameOptions& options)
-	: _systemOptions(systemOptions)
-	, _gameOptions(options)
+ReTron::TitlePageViewModel::TitlePageViewModel(IAppService* appService)
+	: _appService(appService)
 	, _startGameCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::StartGameCommand)))
 	, _playersCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::PlayersCommand)))
 	, _difficultyCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::DifficultyCommand)))
@@ -31,7 +30,7 @@ ReTron::TitlePageViewModel::TitlePageViewModel(const SystemOptions& systemOption
 
 const char* ReTron::TitlePageViewModel::GetPlayersText() const
 {
-	switch (_gameOptions._players)
+	switch (_appService->GetDefaultGameOptions()._players)
 	{
 	default: return "";
 	case GamePlayers::One: return "One";
@@ -42,7 +41,7 @@ const char* ReTron::TitlePageViewModel::GetPlayersText() const
 
 const char* ReTron::TitlePageViewModel::GetDifficultyText() const
 {
-	switch (_gameOptions._difficulty)
+	switch (_appService->GetDefaultGameOptions()._difficulty)
 	{
 	default: return "";
 	case GameDifficulty::Baby: return "Baby";
@@ -54,12 +53,12 @@ const char* ReTron::TitlePageViewModel::GetDifficultyText() const
 
 const char* ReTron::TitlePageViewModel::GetSoundText() const
 {
-	return _systemOptions._soundOn ? "On" : "Off";
+	return _appService->GetSystemOptions()._soundOn ? "On" : "Off";
 }
 
 const char* ReTron::TitlePageViewModel::GetFullScreenText() const
 {
-	return _systemOptions._fullScreen ? "On" : "Off";
+	return _appService->GetSystemOptions()._fullScreen ? "On" : "Off";
 }
 
 void ReTron::TitlePageViewModel::StartGameCommand(Noesis::BaseComponent* param)
@@ -69,50 +68,60 @@ void ReTron::TitlePageViewModel::StartGameCommand(Noesis::BaseComponent* param)
 void ReTron::TitlePageViewModel::PlayersCommand(Noesis::BaseComponent* param)
 {
 	bool forward = !Noesis::Boxing::CanUnbox<bool>(param) || Noesis::Boxing::Unbox<bool>(param);
+	GameOptions options = _appService->GetDefaultGameOptions();
+
 	if (forward)
 	{
-		_gameOptions._players = (_gameOptions._players == GamePlayers::TwoTogether)
+		options._players = (options._players == GamePlayers::TwoTogether)
 			? GamePlayers::One
-			: (GamePlayers)((int)_gameOptions._players + 1);
+			: (GamePlayers)((int)options._players + 1);
 	}
 	else
 	{
-		_gameOptions._players = (_gameOptions._players == GamePlayers::One)
+		options._players = (options._players == GamePlayers::One)
 			? GamePlayers::TwoTogether
-			: (GamePlayers)((int)_gameOptions._players - 1);
+			: (GamePlayers)((int)options._players - 1);
 	}
 
+	_appService->SetDefaultGameOptions(options);
 	OnPropertyChanged("PlayersText");
 }
 
 void ReTron::TitlePageViewModel::DifficultyCommand(Noesis::BaseComponent* param)
 {
 	bool forward = !Noesis::Boxing::CanUnbox<bool>(param) || Noesis::Boxing::Unbox<bool>(param);
+	GameOptions options = _appService->GetDefaultGameOptions();
+
 	if (forward)
 	{
-		_gameOptions._difficulty = (_gameOptions._difficulty == GameDifficulty::Hard)
+		options._difficulty = (options._difficulty == GameDifficulty::Hard)
 			? GameDifficulty::Easy
-			: (GameDifficulty)((int)_gameOptions._difficulty + 1);
+			: (GameDifficulty)((int)options._difficulty + 1);
 	}
 	else
 	{
-		_gameOptions._difficulty = (_gameOptions._difficulty == GameDifficulty::Easy)
+		options._difficulty = (options._difficulty == GameDifficulty::Easy)
 			? GameDifficulty::Hard
-			: (GameDifficulty)((int)_gameOptions._difficulty - 1);
+			: (GameDifficulty)((int)options._difficulty - 1);
 	}
 
+	_appService->SetDefaultGameOptions(options);
 	OnPropertyChanged("DifficultyText");
 }
 
 void ReTron::TitlePageViewModel::SoundCommand(Noesis::BaseComponent* param)
 {
-	_systemOptions._soundOn = !_systemOptions._soundOn;
+	SystemOptions options = _appService->GetSystemOptions();
+	options._soundOn = !options._soundOn;
+	_appService->SetSystemOptions(options);
 	OnPropertyChanged("SoundText");
 }
 
 void ReTron::TitlePageViewModel::FullScreenCommand(Noesis::BaseComponent* param)
 {
-	_systemOptions._fullScreen = !_systemOptions._fullScreen;
+	SystemOptions options = _appService->GetSystemOptions();
+	options._fullScreen = !options._fullScreen;
+	_appService->SetSystemOptions(options);
 	OnPropertyChanged("FullScreenText");
 }
 
@@ -123,7 +132,7 @@ NS_IMPLEMENT_REFLECTION(ReTron::TitlePage, "ReTron.TitlePage")
 
 ReTron::TitlePage::TitlePage(IAppService* appService)
 	: _appService(appService)
-	, _viewModel(*new TitlePageViewModel(appService->GetSystemOptions(), appService->GetDefaultGameOptions()))
+	, _viewModel(*new TitlePageViewModel(appService))
 {
 	Noesis::GUI::LoadComponent(this, "TitlePage.xaml");
 }

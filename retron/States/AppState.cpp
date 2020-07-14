@@ -153,6 +153,7 @@ const ReTron::GameOptions& ReTron::AppState::GetDefaultGameOptions() const
 void ReTron::AppState::SetSystemOptions(const SystemOptions& options)
 {
 	_systemOptions = options;
+	ApplySystemOptions();
 }
 
 void ReTron::AppState::SetDefaultGameOptions(const GameOptions& options)
@@ -272,7 +273,7 @@ void ReTron::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 	_xamlGlobals = std::make_shared<ff::XamlGlobalState>(_globals);
 	_xamlGlobals->Startup(this);
 
-	_globals->SetFullScreen(_systemOptions._fullScreen);
+	ApplySystemOptions();
 }
 
 void ReTron::AppState::OnGameThreadShutdown(ff::AppGlobals* globals)
@@ -369,4 +370,9 @@ void ReTron::AppState::InitGraphics()
 
 	_highTexture = graph->CreateTexture(highSize, ff::TextureFormat::RGBA32);
 	_highTarget = graph->CreateRenderTargetTexture(_highTexture);
+}
+
+void ReTron::AppState::ApplySystemOptions()
+{
+	_globals->SetFullScreen(_systemOptions._fullScreen);
 }

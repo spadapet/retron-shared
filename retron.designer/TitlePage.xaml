@@ -23,6 +23,27 @@
         <i:EventTrigger EventName="Loaded" SourceName="rootPanel">
             <ei:GoToStateAction TargetName="rootPanel" StateName="InitialState"/>
         </i:EventTrigger>
+        <i:EventTrigger EventName="Completed" SourceName="initialStateStoryboard">
+            <noesis:SetFocusAction TargetName="playButton" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Completed" SourceName="playToInitialStateStoryboard">
+            <noesis:SetFocusAction TargetName="playButton" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Completed" SourceName="optionsToInitialStateStoryboard">
+            <noesis:SetFocusAction TargetName="optionsButton" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Completed" SourceName="aboutToInitialStateStoryboard">
+            <noesis:SetFocusAction TargetName="aboutButton" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Completed" SourceName="initialToPlayStateStoryboard">
+            <noesis:SetFocusAction TargetName="startGameButton" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Completed" SourceName="initialToOptionsStateStoryboard">
+            <noesis:SetFocusAction TargetName="soundButton" />
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Completed" SourceName="initialToAboutStateStoryboard">
+            <noesis:SetFocusAction TargetName="aboutBackButton" />
+        </i:EventTrigger>
     </i:Interaction.Triggers>
 
     <UserControl.Resources>
@@ -85,14 +106,14 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>
-            <Button Content="Options" Style="{StaticResource OptionButtonStyle}">
+            <Button x:Name="optionsButton" Content="Options" Style="{StaticResource OptionButtonStyle}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <ei:GoToStateAction StateName="OptionsState"/>
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>
-            <Button Content="About" Style="{StaticResource OptionButtonStyle}">
+            <Button x:Name="aboutButton" Content="About" Style="{StaticResource OptionButtonStyle}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
                         <ei:GoToStateAction StateName="AboutState"/>
@@ -157,7 +178,7 @@
             <VisualStateGroup>
                 <VisualStateGroup.Transitions>
                     <VisualTransition From="InitialState" GeneratedDuration="0" To="PlayState">
-                        <Storyboard>
+                        <Storyboard x:Name="initialToPlayStateStoryboard">
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="initialPanel">
                                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="100"/>
@@ -193,7 +214,7 @@
                         </Storyboard>
                     </VisualTransition>
                     <VisualTransition From="PlayState" GeneratedDuration="0" To="InitialState">
-                        <Storyboard>
+                        <Storyboard x:Name="playToInitialStateStoryboard">
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="initialPanel">
                                 <EasingDoubleKeyFrame KeyTime="0" Value="100">
                                     <EasingDoubleKeyFrame.EasingFunction>
@@ -229,7 +250,7 @@
                         </Storyboard>
                     </VisualTransition>
                     <VisualTransition From="InitialState" GeneratedDuration="0" To="OptionsState">
-                        <Storyboard>
+                        <Storyboard x:Name="initialToOptionsStateStoryboard">
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="initialPanel">
                                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="100"/>
@@ -265,7 +286,7 @@
                         </Storyboard>
                     </VisualTransition>
                     <VisualTransition From="OptionsState" GeneratedDuration="0" To="InitialState">
-                        <Storyboard>
+                        <Storyboard x:Name="optionsToInitialStateStoryboard">
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="initialPanel">
                                 <EasingDoubleKeyFrame KeyTime="0" Value="100">
                                     <EasingDoubleKeyFrame.EasingFunction>
@@ -301,7 +322,7 @@
                         </Storyboard>
                     </VisualTransition>
                     <VisualTransition From="InitialState" GeneratedDuration="0" To="AboutState">
-                        <Storyboard>
+                        <Storyboard x:Name="initialToAboutStateStoryboard">
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="initialPanel">
                                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="100"/>
@@ -337,7 +358,7 @@
                         </Storyboard>
                     </VisualTransition>
                     <VisualTransition From="AboutState" GeneratedDuration="0" To="InitialState">
-                        <Storyboard>
+                        <Storyboard x:Name="aboutToInitialStateStoryboard">
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="initialPanel">
                                 <EasingDoubleKeyFrame KeyTime="0" Value="100">
                                     <EasingDoubleKeyFrame.EasingFunction>
@@ -369,6 +390,18 @@
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="aboutPanel">
                                 <EasingDoubleKeyFrame KeyTime="0" Value="1"/>
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0"/>
+                            </DoubleAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </VisualTransition>
+                    <VisualTransition GeneratedDuration="0" To="InitialState">
+                        <Storyboard x:Name="initialStateStoryboard">
+                            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="initialPanel">
+                                <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
+                                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Visible}"/>
+                            </ObjectAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="initialPanel">
+                                <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
                             </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualTransition>
