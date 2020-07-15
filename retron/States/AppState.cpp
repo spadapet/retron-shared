@@ -118,6 +118,8 @@ void ReTron::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType 
 
 void ReTron::AppState::SaveState(ff::AppGlobals* globals)
 {
+	_systemOptions._fullScreen = globals->GetTarget()->IsFullScreen();
+
 	ff::Dict dict = globals->GetState(Strings::ID_APP_STATE);
 	dict.Set<ff::DataValue>(Strings::ID_SYSTEM_OPTIONS, &_systemOptions, sizeof(SystemOptions));
 	dict.Set<ff::DataValue>(Strings::ID_GAME_OPTIONS, &_gameOptions, sizeof(GameOptions));

@@ -1,4 +1,6 @@
 #include "pch.h"
+#include "Globals/AppGlobals.h"
+#include "Graph/RenderTarget/RenderTargetWindow.h"
 #include "Services/AppService.h"
 #include "States/GameState.h"
 #include "UI/TitlePage.xaml.h"
@@ -20,12 +22,22 @@ NS_IMPLEMENT_REFLECTION(ReTron::TitlePageViewModel, "ReTron.TitlePageViewModel")
 
 ReTron::TitlePageViewModel::TitlePageViewModel(IAppService* appService)
 	: _appService(appService)
+	, _target(appService->GetAppGlobals().GetTarget())
 	, _startGameCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::StartGameCommand)))
 	, _playersCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::PlayersCommand)))
 	, _difficultyCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::DifficultyCommand)))
 	, _soundCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::SoundCommand)))
 	, _fullScreenCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::FullScreenCommand)))
 {
+	_targetSizeChangedCookie = _target->SizeChanged().Add([this](ff::PointInt, double, int)
+		{
+			OnTargetSizeChanged();
+		});
+}
+
+ReTron::TitlePageViewModel::~TitlePageViewModel()
+{
+	_target->SizeChanged().Remove(_targetSizeChangedCookie);
 }
 
 const char* ReTron::TitlePageViewModel::GetPlayersText() const
@@ -58,7 +70,7 @@ const char* ReTron::TitlePageViewModel::GetSoundText() const
 
 const char* ReTron::TitlePageViewModel::GetFullScreenText() const
 {
-	return _appService->GetSystemOptions()._fullScreen ? "On" : "Off";
+	return _target->IsFullScreen() ? "On" : "Off";
 }
 
 void ReTron::TitlePageViewModel::StartGameCommand(Noesis::BaseComponent* param)
@@ -119,9 +131,11 @@ void ReTron::TitlePageViewModel::SoundCommand(Noesis::BaseComponent* param)
 
 void ReTron::TitlePageViewModel::FullScreenCommand(Noesis::BaseComponent* param)
 {
-	SystemOptions options = _appService->GetSystemOptions();
-	options._fullScreen = !options._fullScreen;
-	_appService->SetSystemOptions(options);
+	_target->SetFullScreen(!_target->IsFullScreen());
+}
+
+void ReTron::TitlePageViewModel::OnTargetSizeChanged()
+{
 	OnPropertyChanged("FullScreenText");
 }
 

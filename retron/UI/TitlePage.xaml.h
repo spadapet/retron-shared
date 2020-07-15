@@ -1,10 +1,12 @@
 #pragma once
 
 #include "Core/Options.h"
+#include "Types/Event.h"
 #include "UI/Utility/NotifyPropertyChangedBase.h"
 
 namespace ff
 {
+	class IRenderTargetWindow;
 	class State;
 }
 
@@ -16,6 +18,7 @@ namespace ReTron
 	{
 	public:
 		TitlePageViewModel(IAppService* appService);
+		~TitlePageViewModel() override;
 
 		const char* GetPlayersText() const;
 		const char* GetDifficultyText() const;
@@ -28,8 +31,11 @@ namespace ReTron
 		void DifficultyCommand(Noesis::BaseComponent* param);
 		void SoundCommand(Noesis::BaseComponent* param);
 		void FullScreenCommand(Noesis::BaseComponent* param);
+		void OnTargetSizeChanged();
 
 		IAppService* _appService;
+		ff::ComPtr<ff::IRenderTargetWindow> _target;
+		ff::EventCookie _targetSizeChangedCookie;
 		Noesis::Ptr<Noesis::ICommand> _startGameCommand;
 		Noesis::Ptr<Noesis::ICommand> _playersCommand;
 		Noesis::Ptr<Noesis::ICommand> _difficultyCommand;
