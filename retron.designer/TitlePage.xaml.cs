@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace ReTron
@@ -6,11 +8,17 @@ namespace ReTron
     public class TitlePageViewModel : PropertyNotifier
     {
         public ICommand StartGameCommand => null;
-
         public ICommand PlayersCommand => new DelegateCommand((object param) => this.ChangePlayers(param is bool forward && forward));
         public ICommand DifficultyCommand => new DelegateCommand((object param) => this.ChangeDifficulty(param is bool forward && forward));
-        public ICommand SoundCommand => new DelegateCommand(() => this.ChangeSound());
-        public ICommand FullScreenCommand => new DelegateCommand(() => this.ChangeFullScreen());
+        public ICommand SoundCommand => new DelegateCommand(this.ChangeSound);
+        public ICommand FullScreenCommand => new DelegateCommand(this.ChangeFullScreen);
+        public ICommand StateBackCommand => new DelegateCommand(this.StateBack);
+
+        private FrameworkElement visualStateRoot;
+        public void SetVisualStateRoot(FrameworkElement visualStateRoot)
+        {
+            this.visualStateRoot = visualStateRoot;
+        }
 
         private int players = 0;
         public string PlayersText => (this.players + 1).ToString();
@@ -43,6 +51,24 @@ namespace ReTron
             this.fullScreen = !this.fullScreen;
             this.OnPropertyChanged(nameof(this.FullScreenText));
         }
+
+        public void StateBack()
+        {
+            VisualStateGroup group = VisualStateManager.GetVisualStateGroups(this.visualStateRoot).Cast<VisualStateGroup>().First(i => i.Name == "mainGroup");
+            if (string.Equals(group.CurrentState?.Name, "InitialState"))
+            {
+                this.Quit();
+            }
+            else
+            {
+                _ = VisualStateManager.GoToElementState(this.visualStateRoot, "InitialState", true);
+            }
+        }
+
+        public void Quit()
+        {
+            Window.GetWindow(this.visualStateRoot).Close();
+        }
     }
 
     partial class TitlePage : UserControl
@@ -52,6 +78,7 @@ namespace ReTron
         public TitlePage()
         {
             this.InitializeComponent();
+            this.ViewModel.SetVisualStateRoot(this.rootPanel);
         }
     }
 }

@@ -3,6 +3,7 @@
     xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
+    xmlns:ff="clr-namespace:ff"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
@@ -24,25 +25,25 @@
             <ei:GoToStateAction TargetName="rootPanel" StateName="InitialState"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="initialStateStoryboard">
-            <noesis:SetFocusAction TargetName="playButton" />
+            <ff:SetFocusAction2 TargetName="playButton" UniqueInPanel="True" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="playToInitialStateStoryboard">
-            <noesis:SetFocusAction TargetName="playButton" />
+            <ff:SetFocusAction2 TargetName="playButton" UniqueInPanel="True" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="optionsToInitialStateStoryboard">
-            <noesis:SetFocusAction TargetName="optionsButton" />
+            <ff:SetFocusAction2 TargetName="optionsButton" UniqueInPanel="True" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="aboutToInitialStateStoryboard">
-            <noesis:SetFocusAction TargetName="aboutButton" />
+            <ff:SetFocusAction2 TargetName="aboutButton" UniqueInPanel="True" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="initialToPlayStateStoryboard">
-            <noesis:SetFocusAction TargetName="startGameButton" />
+            <ff:SetFocusAction2 TargetName="startGameButton" UniqueInPanel="True" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="initialToOptionsStateStoryboard">
-            <noesis:SetFocusAction TargetName="soundButton" />
+            <ff:SetFocusAction2 TargetName="soundButton" UniqueInPanel="True" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="initialToAboutStateStoryboard">
-            <noesis:SetFocusAction TargetName="aboutBackButton" />
+            <ff:SetFocusAction2 TargetName="aboutBackButton" UniqueInPanel="True" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
@@ -95,6 +96,11 @@
     </UserControl.Resources>
 
     <Grid x:Name="rootPanel" Margin="0,135,0,0">
+        <i:Interaction.Triggers>
+            <ei:KeyTrigger Key="Esc">
+                <i:InvokeCommandAction Command="{Binding StateBackCommand}" CommandParameter="InitialState" />
+            </ei:KeyTrigger>
+        </i:Interaction.Triggers>
         <StackPanel x:Name="initialPanel" Style="{StaticResource OptionPanelStyle}" Width="80">
             <StackPanel.RenderTransform>
                 <TranslateTransform/>
@@ -165,6 +171,9 @@
             <StackPanel.RenderTransform>
                 <TranslateTransform/>
             </StackPanel.RenderTransform>
+            <StackPanel.InputBindings>
+                <KeyBinding Key="Esc" Command="{Binding SetStateCommand}" CommandParameter="InitialState" />
+            </StackPanel.InputBindings>
             <Button x:Name="aboutBackButton" Content="Back" Style="{StaticResource OptionButtonStyle}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
@@ -175,7 +184,7 @@
         </StackPanel>
 
         <VisualStateManager.VisualStateGroups>
-            <VisualStateGroup>
+            <VisualStateGroup x:Name="mainGroup">
                 <VisualStateGroup.Transitions>
                     <VisualTransition From="InitialState" GeneratedDuration="0" To="PlayState">
                         <Storyboard x:Name="initialToPlayStateStoryboard">

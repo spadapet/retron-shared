@@ -18,16 +18,19 @@ NS_IMPLEMENT_REFLECTION(ReTron::TitlePageViewModel, "ReTron.TitlePageViewModel")
 	NsProp("DifficultyCommand", &ReTron::TitlePageViewModel::_difficultyCommand);
 	NsProp("SoundCommand", &ReTron::TitlePageViewModel::_soundCommand);
 	NsProp("FullScreenCommand", &ReTron::TitlePageViewModel::_fullScreenCommand);
+	NsProp("StateBackCommand", &ReTron::TitlePageViewModel::_stateBackCommand);
 }
 
 ReTron::TitlePageViewModel::TitlePageViewModel(IAppService* appService)
 	: _appService(appService)
 	, _target(appService->GetAppGlobals().GetTarget())
+	, _visualStateRoot(nullptr)
 	, _startGameCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::StartGameCommand)))
 	, _playersCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::PlayersCommand)))
 	, _difficultyCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::DifficultyCommand)))
 	, _soundCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::SoundCommand)))
 	, _fullScreenCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::FullScreenCommand)))
+	, _stateBackCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::StateBackCommand)))
 {
 	_targetSizeChangedCookie = _target->SizeChanged().Add([this](ff::PointInt, double, int)
 		{
@@ -38,6 +41,11 @@ ReTron::TitlePageViewModel::TitlePageViewModel(IAppService* appService)
 ReTron::TitlePageViewModel::~TitlePageViewModel()
 {
 	_target->SizeChanged().Remove(_targetSizeChangedCookie);
+}
+
+void ReTron::TitlePageViewModel::SetVisualStateRoot(Noesis::FrameworkElement* value)
+{
+	_visualStateRoot = value;
 }
 
 const char* ReTron::TitlePageViewModel::GetPlayersText() const
@@ -134,6 +142,31 @@ void ReTron::TitlePageViewModel::FullScreenCommand(Noesis::BaseComponent* param)
 	_target->SetFullScreen(!_target->IsFullScreen());
 }
 
+void ReTron::TitlePageViewModel::StateBackCommand(Noesis::BaseComponent* param)
+{
+	Noesis::VisualStateGroupCollection* groups = Noesis::VisualStateManager::GetVisualStateGroups(_visualStateRoot);
+	assertRet(groups);
+
+	for (unsigned int i = 0; i < (unsigned int)groups->Count(); i++)
+	{
+		Noesis::VisualStateGroup* group = groups->Get(i);
+		if (group->GetName() && !std::strcmp(group->GetName(), "mainGroup"))
+		{
+			Noesis::VisualState* state = group->GetCurrentState(_visualStateRoot);
+			if (state && !std::strcmp(state->GetName().Str(), "InitialState"))
+			{
+				_appService->GetAppGlobals().Quit();
+			}
+			else
+			{
+				Noesis::VisualStateManager::GoToElementState(_visualStateRoot, Noesis::Symbol("InitialState"), true);
+			}
+
+			break;
+		}
+	}
+}
+
 void ReTron::TitlePageViewModel::OnTargetSizeChanged()
 {
 	OnPropertyChanged("FullScreenText");
@@ -149,6 +182,7 @@ ReTron::TitlePage::TitlePage(IAppService* appService)
 	, _viewModel(*new TitlePageViewModel(appService))
 {
 	Noesis::GUI::LoadComponent(this, "TitlePage.xaml");
+	_viewModel->SetVisualStateRoot(FindName<Noesis::FrameworkElement>("rootPanel"));
 }
 
 ReTron::TitlePage::~TitlePage()

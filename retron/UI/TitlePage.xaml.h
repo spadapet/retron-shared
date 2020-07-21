@@ -20,6 +20,8 @@ namespace ReTron
 		TitlePageViewModel(IAppService* appService);
 		~TitlePageViewModel() override;
 
+		void SetVisualStateRoot(Noesis::FrameworkElement* value);
+
 		const char* GetPlayersText() const;
 		const char* GetDifficultyText() const;
 		const char* GetSoundText() const;
@@ -31,16 +33,19 @@ namespace ReTron
 		void DifficultyCommand(Noesis::BaseComponent* param);
 		void SoundCommand(Noesis::BaseComponent* param);
 		void FullScreenCommand(Noesis::BaseComponent* param);
+		void StateBackCommand(Noesis::BaseComponent* param);
 		void OnTargetSizeChanged();
 
 		IAppService* _appService;
 		ff::ComPtr<ff::IRenderTargetWindow> _target;
 		ff::EventCookie _targetSizeChangedCookie;
+		Noesis::FrameworkElement* _visualStateRoot;
 		Noesis::Ptr<Noesis::ICommand> _startGameCommand;
 		Noesis::Ptr<Noesis::ICommand> _playersCommand;
 		Noesis::Ptr<Noesis::ICommand> _difficultyCommand;
 		Noesis::Ptr<Noesis::ICommand> _soundCommand;
 		Noesis::Ptr<Noesis::ICommand> _fullScreenCommand;
+		Noesis::Ptr<Noesis::ICommand> _stateBackCommand;
 
 		NS_DECLARE_REFLECTION(TitlePageViewModel, ff::NotifyPropertyChangedBase);
 	};
