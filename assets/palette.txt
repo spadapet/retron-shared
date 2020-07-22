@@ -1,0 +1,11 @@
+000: Transparent
+001: Fast flashy
+002: Fast dark flashy
+003-010: Slow flashy
+011-018: Slow dark flashy
+019-026: Slow flashy offset
+027-034: Slow dark flashy offset
+035: Red orange flash
+036: Red orange flash dark
+037-040: Rainbow slow-fast
+041-044: Red-white flash slow-fast
