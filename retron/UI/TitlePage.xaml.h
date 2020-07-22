@@ -21,6 +21,7 @@ namespace ReTron
 		~TitlePageViewModel() override;
 
 		void SetVisualStateRoot(Noesis::FrameworkElement* value);
+		std::shared_ptr<ff::State> GetPendingState() const;
 
 		const char* GetPlayersText() const;
 		const char* GetDifficultyText() const;
@@ -39,6 +40,7 @@ namespace ReTron
 		IAppService* _appService;
 		ff::ComPtr<ff::IRenderTargetWindow> _target;
 		ff::EventCookie _targetSizeChangedCookie;
+		std::shared_ptr<ff::State> _pendingState;
 		Noesis::FrameworkElement* _visualStateRoot;
 		Noesis::Ptr<Noesis::ICommand> _startGameCommand;
 		Noesis::Ptr<Noesis::ICommand> _playersCommand;
@@ -56,7 +58,6 @@ namespace ReTron
 		TitlePage(IAppService* appService);
 		virtual ~TitlePage() override;
 
-		std::shared_ptr<ff::State> GetPendingState() const;
 		TitlePageViewModel* GetViewModel() const;
 
 		virtual bool ConnectEvent(BaseComponent* source, const char* event, const char* handler) override;
@@ -64,7 +65,6 @@ namespace ReTron
 	private:
 		IAppService* _appService;
 		Noesis::Ptr<TitlePageViewModel> _viewModel;
-		std::shared_ptr<ff::State> _pendingState;
 
 		NS_DECLARE_REFLECTION(TitlePage, Noesis::UserControl);
 	};

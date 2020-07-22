@@ -48,6 +48,11 @@ void ReTron::TitlePageViewModel::SetVisualStateRoot(Noesis::FrameworkElement* va
 	_visualStateRoot = value;
 }
 
+std::shared_ptr<ff::State> ReTron::TitlePageViewModel::GetPendingState() const
+{
+	return _pendingState;
+}
+
 const char* ReTron::TitlePageViewModel::GetPlayersText() const
 {
 	switch (_appService->GetDefaultGameOptions()._players)
@@ -83,6 +88,7 @@ const char* ReTron::TitlePageViewModel::GetFullScreenText() const
 
 void ReTron::TitlePageViewModel::StartGameCommand(Noesis::BaseComponent* param)
 {
+	_pendingState = std::make_shared<GameState>(_appService, _appService->GetDefaultGameOptions());
 }
 
 void ReTron::TitlePageViewModel::PlayersCommand(Noesis::BaseComponent* param)
@@ -187,11 +193,6 @@ ReTron::TitlePage::TitlePage(IAppService* appService)
 
 ReTron::TitlePage::~TitlePage()
 {
-}
-
-std::shared_ptr<ff::State> ReTron::TitlePage::GetPendingState() const
-{
-	return _pendingState;
 }
 
 ReTron::TitlePageViewModel* ReTron::TitlePage::GetViewModel() const

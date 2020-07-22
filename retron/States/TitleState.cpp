@@ -17,7 +17,6 @@
 
 ReTron::TitleState::TitleState(IAppService* appService)
 	: _appService(appService)
-	, _render(appService->GetAppGlobals().GetGraph()->CreateRenderer())
 	, _font(L"GameFont")
 {
 	_titlePage = *new ReTron::TitlePage(_appService);
@@ -30,14 +29,14 @@ std::shared_ptr<ff::State> ReTron::TitleState::Advance(ff::AppGlobals* globals)
 {
 	ff::State::Advance(globals);
 
-	return _titlePage->GetPendingState();
+	return _titlePage->GetViewModel()->GetPendingState();
 }
 
 void ReTron::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth)
 {
-	ff::State::Render(globals, target, depth);
+	_appService->ClearLowTargets();
 
-	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_render.get(), _appService->GetLowTarget(), _appService->GetLowDepth(), Constants::RENDER_RECT, Constants::RENDER_RECT);
+	ff::State::Render(globals, target, depth);
 
 	if (_font.HasObject())
 	{
@@ -45,8 +44,12 @@ void ReTron::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* targ
 		ff::Transform transform = ff::Transform::Identity();
 		transform._position.SetPoint(8, 8);
 		ff::PaletteIndexToColor(252, transform._color);
+
+		ff::RendererActive render = ff::PixelRendererActive::BeginRender(_appService->GetRenderer(), _appService->GetLowTarget(), _appService->GetLowDepth(), Constants::RENDER_RECT, Constants::RENDER_RECT);
 		_font->DrawText(render, text, transform, ff::GetColorNone(), ((globals->GetGlobalTime()._advanceCount % 60) < 30) ? ff::SpriteFontOptions::NoOutline : ff::SpriteFontOptions::None);
 	}
+
+	_appService->RenderLowTargets(target);
 }
 
 size_t ReTron::TitleState::GetChildStateCount()

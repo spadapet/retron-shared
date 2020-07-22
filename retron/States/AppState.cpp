@@ -86,13 +86,6 @@ void ReTron::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
 	}
 }
 
-void ReTron::AppState::OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType type)
-{
-	_xamlTarget->Clear(&ff::GetColorNone());
-	_lowTarget->Clear(&ff::GetColorNone());
-	_highTarget->Clear(&ff::GetColorBlack());
-}
-
 void ReTron::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType type, ff::IRenderTarget* target, ff::IRenderDepth* depth)
 {
 	_debugStepOneFrame = false;
@@ -105,15 +98,6 @@ void ReTron::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType 
 	{
 		view->SetViewToScreenTransform(targetPos.ToType<float>(), targetScale.ToType<float>());
 	}
-
-	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_render.get(), _highTarget, nullptr, Constants::RENDER_RECT_HIGH, Constants::RENDER_RECT);
-	render->PushPalette(GetPalette());
-	render->DrawSprite(_lowTexture->AsSprite(), ff::Transform::Identity());
-	render->DrawSprite(_xamlTexture->AsSprite(), ff::Transform::Identity());
-
-	render = ff::PixelRendererActive::BeginRender(_render.get(), target, nullptr, targetRect, Constants::RENDER_RECT_HIGH);
-	render->AsRendererActive11()->PushTextureSampler(D3D11_FILTER_MIN_MAG_MIP_LINEAR);
-	render->DrawSprite(_highTexture->AsSprite(), ff::Transform::Identity());
 }
 
 void ReTron::AppState::SaveState(ff::AppGlobals* globals)
@@ -161,6 +145,26 @@ void ReTron::AppState::SetSystemOptions(const SystemOptions& options)
 void ReTron::AppState::SetDefaultGameOptions(const GameOptions& options)
 {
 	_gameOptions = options;
+}
+
+void ReTron::AppState::ClearLowTargets()
+{
+	_xamlTarget->Clear(&ff::GetColorNone());
+	_lowTarget->Clear(&ff::GetColorNone());
+	_highTarget->Clear(&ff::GetColorBlack());
+}
+
+void ReTron::AppState::RenderLowTargets(ff::IRenderTarget* target)
+{
+	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_render.get(), _highTarget, nullptr, Constants::RENDER_RECT_HIGH, Constants::RENDER_RECT);
+	render->PushPalette(GetPalette());
+	render->DrawSprite(_lowTexture->AsSprite(), ff::Transform::Identity());
+	render->DrawSprite(_xamlTexture->AsSprite(), ff::Transform::Identity());
+
+	ff::RectFixedInt targetRect = _viewport.GetView(target).ToType<ff::FixedInt>();
+	render = ff::PixelRendererActive::BeginRender(_render.get(), target, nullptr, targetRect, Constants::RENDER_RECT_HIGH);
+	render->AsRendererActive11()->PushTextureSampler(D3D11_FILTER_MIN_MAG_MIP_LINEAR);
+	render->DrawSprite(_highTexture->AsSprite(), ff::Transform::Identity());
 }
 
 ff::IPalette* ReTron::AppState::GetPalette()

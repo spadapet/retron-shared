@@ -31,7 +31,6 @@ namespace ReTron
 		// State
 		virtual std::shared_ptr<State> Advance(ff::AppGlobals* globals) override;
 		virtual void AdvanceDebugInput(ff::AppGlobals* globals) override;
-		virtual void OnFrameRendering(ff::AppGlobals* globals, ff::AdvanceType type) override;
 		virtual void OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType type, ff::IRenderTarget* target, ff::IRenderDepth* depth) override;
 		virtual void SaveState(ff::AppGlobals* globals) override;
 
@@ -43,6 +42,8 @@ namespace ReTron
 		virtual const GameOptions& GetDefaultGameOptions() const override;
 		virtual void SetSystemOptions(const SystemOptions& options) override;
 		virtual void SetDefaultGameOptions(const GameOptions& options) override;
+		virtual void ClearLowTargets() override;
+		virtual void RenderLowTargets(ff::IRenderTarget* target) override;
 		virtual ff::IPalette* GetPalette() override;
 		virtual ff::IRenderer* GetRenderer() const override;
 		virtual ff::ITexture* GetXamlTexture() const override;

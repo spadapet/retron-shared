@@ -31,7 +31,6 @@ namespace ReTron
 		IAppService* _appService;
 		Noesis::Ptr<TitlePage> _titlePage;
 		std::shared_ptr<ff::XamlViewState> _viewState;
-		std::unique_ptr<ff::IRenderer> _render;
 		ff::TypedResource<ff::ISpriteFont> _font;
 	};
 }

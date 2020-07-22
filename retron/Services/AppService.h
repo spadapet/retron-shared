@@ -32,6 +32,8 @@ namespace ReTron
 		virtual void SetDefaultGameOptions(const GameOptions& options) = 0;
 
 		// Rendering
+		virtual void ClearLowTargets() = 0;
+		virtual void RenderLowTargets(ff::IRenderTarget* target) = 0;
 		virtual ff::IPalette* GetPalette() = 0;
 		virtual ff::IRenderer* GetRenderer() const = 0;
 		virtual ff::ITexture* GetXamlTexture() const = 0;
