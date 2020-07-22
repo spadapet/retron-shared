@@ -25,25 +25,25 @@
             <ei:GoToStateAction TargetName="rootPanel" StateName="InitialState"/>
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="initialStateStoryboard">
-            <ff:SetFocusAction2 TargetName="playButton" UniqueInPanel="True" />
+            <ff:SetPanelChildFocusAction TargetName="playButton" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="playToInitialStateStoryboard">
-            <ff:SetFocusAction2 TargetName="playButton" UniqueInPanel="True" />
+            <ff:SetPanelChildFocusAction TargetName="playButton" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="optionsToInitialStateStoryboard">
-            <ff:SetFocusAction2 TargetName="optionsButton" UniqueInPanel="True" />
+            <ff:SetPanelChildFocusAction TargetName="optionsButton" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="aboutToInitialStateStoryboard">
-            <ff:SetFocusAction2 TargetName="aboutButton" UniqueInPanel="True" />
+            <ff:SetPanelChildFocusAction TargetName="aboutButton" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="initialToPlayStateStoryboard">
-            <ff:SetFocusAction2 TargetName="startGameButton" UniqueInPanel="True" />
+            <ff:SetPanelChildFocusAction TargetName="startGameButton" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="initialToOptionsStateStoryboard">
-            <ff:SetFocusAction2 TargetName="soundButton" UniqueInPanel="True" />
+            <ff:SetPanelChildFocusAction TargetName="soundButton" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="initialToAboutStateStoryboard">
-            <ff:SetFocusAction2 TargetName="aboutBackButton" UniqueInPanel="True" />
+            <ff:SetPanelChildFocusAction TargetName="aboutBackButton" />
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
@@ -98,9 +98,10 @@
     <Grid x:Name="rootPanel" Margin="0,135,0,0">
         <i:Interaction.Triggers>
             <ei:KeyTrigger Key="Esc">
-                <i:InvokeCommandAction Command="{Binding StateBackCommand}" CommandParameter="InitialState" />
+                <i:InvokeCommandAction Command="{Binding StateBackCommand}" />
             </ei:KeyTrigger>
         </i:Interaction.Triggers>
+
         <StackPanel x:Name="initialPanel" Style="{StaticResource OptionPanelStyle}" Width="80">
             <StackPanel.RenderTransform>
                 <TranslateTransform/>
@@ -171,9 +172,6 @@
             <StackPanel.RenderTransform>
                 <TranslateTransform/>
             </StackPanel.RenderTransform>
-            <StackPanel.InputBindings>
-                <KeyBinding Key="Esc" Command="{Binding SetStateCommand}" CommandParameter="InitialState" />
-            </StackPanel.InputBindings>
             <Button x:Name="aboutBackButton" Content="Back" Style="{StaticResource OptionButtonStyle}">
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Click">
