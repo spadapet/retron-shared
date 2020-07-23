@@ -17,7 +17,7 @@
 
 ReTron::TitleState::TitleState(IAppService* appService)
 	: _appService(appService)
-	, _font(L"GameFont")
+	, _bg(L"title-bg")
 {
 	_titlePage = *new ReTron::TitlePage(_appService);
 
@@ -37,17 +37,8 @@ void ReTron::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* targ
 	_appService->ClearLowTargets();
 
 	ff::State::Render(globals, target, depth);
-
-	if (_font.HasObject())
-	{
-		ff::String text = ff::GetThisModule().GetString(ff::String::from_static(L"titleIntro"));
-		ff::Transform transform = ff::Transform::Identity();
-		transform._position.SetPoint(8, 8);
-		ff::PaletteIndexToColor(252, transform._color);
-
-		ff::RendererActive render = ff::PixelRendererActive::BeginRender(_appService->GetRenderer(), _appService->GetLowTarget(), _appService->GetLowDepth(), Constants::RENDER_RECT, Constants::RENDER_RECT);
-		_font->DrawText(render, text, transform, ff::GetColorNone(), ((globals->GetGlobalTime()._advanceCount % 60) < 30) ? ff::SpriteFontOptions::NoOutline : ff::SpriteFontOptions::None);
-	}
+	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_appService->GetRenderer(), _appService->GetLowTarget(), _appService->GetLowDepth(), Constants::RENDER_RECT, Constants::RENDER_RECT);
+	render->DrawSprite(_bg->AsSprite(), ff::Transform::Identity());
 
 	_appService->RenderLowTargets(target);
 }

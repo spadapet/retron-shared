@@ -7,5 +7,7 @@
 027-034: Slow dark flashy offset
 035: Red orange flash
 036: Red orange flash dark
-037-040: Rainbow slow-fast
+037-040: Rainbow smooth slow-fast
 041-044: Red-white flash slow-fast
+045-076: Rainbow abrupt end (red, orange, yellow, green, blue, purple)
+077: Level border

@@ -323,5 +323,12 @@
     "data": "ref:GameFontSmallData",
     "size": 6,
     "outline": 1
+  },
+
+  "title-bg":
+  {
+    "res:type": "texture",
+    "format": "pal",
+    "file": "file:title-bg.png"
   }
 }

@@ -5,10 +5,8 @@
 
 namespace ff
 {
-	class XamlView;
 	class XamlViewState;
-	class IRenderer;
-	class ISpriteFont;
+	class ITexture;
 }
 
 namespace ReTron
@@ -31,6 +29,6 @@ namespace ReTron
 		IAppService* _appService;
 		Noesis::Ptr<TitlePage> _titlePage;
 		std::shared_ptr<ff::XamlViewState> _viewState;
-		ff::TypedResource<ff::ISpriteFont> _font;
+		ff::TypedResource<ff::ITexture> _bg;
 	};
 }
