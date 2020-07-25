@@ -168,17 +168,25 @@
             </Button>
         </StackPanel>
 
-        <StackPanel x:Name="aboutPanel" Style="{StaticResource OptionPanelStyle}" Width="80">
+        <StackPanel x:Name="aboutPanel" Style="{StaticResource OptionPanelStyle}" Width="Auto">
             <StackPanel.RenderTransform>
                 <TranslateTransform/>
             </StackPanel.RenderTransform>
-            <Button x:Name="aboutBackButton" Content="Back" Style="{StaticResource OptionButtonStyle}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <ei:GoToStateAction StateName="InitialState"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                <TextBlock Foreground="{StaticResource Brush.230}">
+                    <Run Text="Made by: " /><Hyperlink NavigateUri="http://peterspada.com"><Run Text="Peter Spada" /></Hyperlink><LineBreak />
+                    <Run Text="Inspired by: " /><Hyperlink NavigateUri="https://en.wikipedia.org/wiki/Robotron:_2084"><Run Text="Robotron: 2084" /></Hyperlink><LineBreak />
+                </TextBlock>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                <Button x:Name="aboutBackButton" Content="Back" Style="{StaticResource OptionButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:GoToStateAction StateName="InitialState"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </StackPanel>
         </StackPanel>
 
         <VisualStateManager.VisualStateGroups>

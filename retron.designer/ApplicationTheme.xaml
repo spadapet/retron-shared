@@ -143,8 +143,8 @@
     <SolidColorBrush x:Key="Brush.Header.CheckedOver" Color="{StaticResource Color.Accent2}" />
     <SolidColorBrush x:Key="Brush.Header.CheckedPressed" Color="{StaticResource Color.Accent}" />
 
-    <SolidColorBrush x:Key="Brush.Hyperlink.Normal" Color="{StaticResource Color.Accent}" />
-    <SolidColorBrush x:Key="Brush.Hyperlink.Over" Color="{StaticResource Color.Black}" />
+    <SolidColorBrush x:Key="Brush.Hyperlink.Normal" Color="{StaticResource Color.Accent2}" />
+    <SolidColorBrush x:Key="Brush.Hyperlink.Over" Color="{StaticResource Color.Accent}" />
 
     <SolidColorBrush x:Key="Brush.TextBox.Normal" Color="{StaticResource Color.Gray9}" />
     <SolidColorBrush x:Key="Brush.TextBox.Focused" Color="{StaticResource Color.White}" />
@@ -1438,7 +1438,7 @@
     <Style TargetType="Hyperlink">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Foreground" Value="{StaticResource Brush.Hyperlink.Normal}"/>
-        <Setter Property="TextDecorations" Value="Underline"/>
+        <Setter Property="TextDecorations" Value="None"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Foreground" Value="{StaticResource Brush.Hyperlink.Over}"/>
