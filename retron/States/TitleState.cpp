@@ -17,7 +17,6 @@
 
 ReTron::TitleState::TitleState(IAppService* appService)
 	: _appService(appService)
-	, _bg(L"title-bg")
 {
 	_titlePage = *new ReTron::TitlePage(_appService);
 
@@ -37,8 +36,6 @@ void ReTron::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* targ
 	_appService->ClearLowTargets();
 
 	ff::State::Render(globals, target, depth);
-	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_appService->GetRenderer(), _appService->GetLowTarget(), _appService->GetLowDepth(), Constants::RENDER_RECT, Constants::RENDER_RECT);
-	render->DrawSprite(_bg->AsSprite(), ff::Transform::Identity());
 
 	_appService->RenderLowTargets(target);
 }

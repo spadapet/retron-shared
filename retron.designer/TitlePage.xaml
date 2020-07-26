@@ -18,11 +18,12 @@
     d:DataContext="{d:DesignInstance local:TitlePageViewModel, IsDesignTimeCreatable=True}"
     DataContext="{Binding ViewModel, RelativeSource={RelativeSource Mode=Self}}"
     Foreground="{StaticResource Brush.Foreground.Normal}"
-    UseLayoutRounding="True">
+    UseLayoutRounding="True"
+    RenderOptions.BitmapScalingMode="NearestNeighbor">
 
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Loaded" SourceName="rootPanel">
-            <ei:GoToStateAction TargetName="rootPanel" StateName="InitialState"/>
+            <ei:GoToStateAction TargetName="rootPanel" StateName="InitialState" />
         </i:EventTrigger>
         <i:EventTrigger EventName="Completed" SourceName="initialStateStoryboard">
             <ff:SetPanelChildFocusAction TargetName="playButton" />
@@ -86,100 +87,66 @@
             </Setter>
         </Style>
 
-        <Style x:Key="OptionPanelStyle" TargetType="{x:Type StackPanel}">
-            <Setter Property="Width" Value="120" />
-            <Setter Property="Orientation" Value="Vertical" />
-            <Setter Property="HorizontalAlignment" Value="Center" />
-            <Setter Property="Visibility" Value="Collapsed" />
-        </Style>
-
     </UserControl.Resources>
 
-    <Grid x:Name="rootPanel" Margin="0,135,0,0">
+    <Grid x:Name="rootPanel">
+        <Grid.Background>
+            <ImageBrush ImageSource="Title/title-bg.png"/>
+        </Grid.Background>
         <i:Interaction.Triggers>
             <ei:KeyTrigger Key="Esc">
                 <i:InvokeCommandAction Command="{Binding StateBackCommand}" />
             </ei:KeyTrigger>
         </i:Interaction.Triggers>
 
-        <StackPanel x:Name="initialPanel" Style="{StaticResource OptionPanelStyle}" Width="80">
-            <StackPanel.RenderTransform>
+        <Grid x:Name="initialPanel" Visibility="Collapsed">
+            <Grid.RenderTransform>
                 <TranslateTransform/>
-            </StackPanel.RenderTransform>
-            <Button x:Name="playButton" Content="Play" Style="{StaticResource OptionButtonStyle}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <ei:GoToStateAction StateName="PlayState"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-            <Button x:Name="optionsButton" Content="Options" Style="{StaticResource OptionButtonStyle}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <ei:GoToStateAction StateName="OptionsState"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-            <Button x:Name="aboutButton" Content="About" Style="{StaticResource OptionButtonStyle}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <ei:GoToStateAction StateName="AboutState"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-        </StackPanel>
-
-        <StackPanel x:Name="playPanel" Style="{StaticResource OptionPanelStyle}">
-            <StackPanel.RenderTransform>
-                <TranslateTransform/>
-            </StackPanel.RenderTransform>
-            <Button x:Name="startGameButton" Content="Start Game" Style="{StaticResource OptionButtonStyle}" Command="{Binding StartGameCommand}" />
-            <Button Style="{StaticResource OptionButtonStyle}" Command="{Binding PlayersCommand}">
-                <TextBlock Text="{Binding PlayersText, StringFormat=Players: \{0\}}" />
-            </Button>
-            <Button Style="{StaticResource OptionButtonStyle}" Command="{Binding DifficultyCommand}">
-                <TextBlock Text="{Binding DifficultyText, StringFormat=Difficulty: \{0\}}" />
-            </Button>
-            <Button Content="Back" Style="{StaticResource OptionButtonStyle}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <ei:GoToStateAction StateName="InitialState"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-        </StackPanel>
-
-        <StackPanel x:Name="optionsPanel" Style="{StaticResource OptionPanelStyle}">
-            <StackPanel.RenderTransform>
-                <TranslateTransform/>
-            </StackPanel.RenderTransform>
-            <Button x:Name="soundButton" Style="{StaticResource OptionButtonStyle}" Command="{Binding SoundCommand}">
-                <TextBlock Text="{Binding SoundText, StringFormat=Sound: \{0\}}" />
-            </Button>
-            <Button Style="{StaticResource OptionButtonStyle}" Command="{Binding FullScreenCommand}">
-                <TextBlock Text="{Binding FullScreenText, StringFormat=Full Screen: \{0\}}" />
-            </Button>
-            <Button Content="Back" Style="{StaticResource OptionButtonStyle}">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <ei:GoToStateAction StateName="InitialState"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
-            </Button>
-        </StackPanel>
-
-        <StackPanel x:Name="aboutPanel" Style="{StaticResource OptionPanelStyle}" Width="Auto">
-            <StackPanel.RenderTransform>
-                <TranslateTransform/>
-            </StackPanel.RenderTransform>
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                <TextBlock Foreground="{StaticResource Brush.230}">
-                    <Run Text="Made by: " /><Hyperlink NavigateUri="http://peterspada.com"><Run Text="Peter Spada" /></Hyperlink><LineBreak />
-                    <Run Text="Inspired by: " /><Hyperlink NavigateUri="https://en.wikipedia.org/wiki/Robotron:_2084"><Run Text="Robotron: 2084" /></Hyperlink><LineBreak />
-                </TextBlock>
+            </Grid.RenderTransform>
+            <Image x:Name="logoImage" Source="Title/title-logo.png" Width="312" Height="32" VerticalAlignment="Top" Margin="0,60,0,0" RenderTransformOrigin="0.5,0.5">
+                <Image.RenderTransform>
+                    <ScaleTransform/>
+                </Image.RenderTransform>
+            </Image>
+            <StackPanel Width="80" Margin="0,135,0,0">
+                <Button x:Name="playButton" Content="Play" Style="{StaticResource OptionButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:GoToStateAction StateName="PlayState"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button x:Name="optionsButton" Content="Options" Style="{StaticResource OptionButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:GoToStateAction StateName="OptionsState"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+                <Button x:Name="aboutButton" Content="About" Style="{StaticResource OptionButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:GoToStateAction StateName="AboutState"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
             </StackPanel>
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
-                <Button x:Name="aboutBackButton" Content="Back" Style="{StaticResource OptionButtonStyle}">
+        </Grid>
+
+        <Grid x:Name="playPanel" Visibility="Collapsed">
+            <Grid.RenderTransform>
+                <TranslateTransform/>
+            </Grid.RenderTransform>
+            <Image x:Name="playImage" Source="Title/title-play.png" Width="242" Height="32" VerticalAlignment="Top" Margin="0,60,0,0" />
+            <StackPanel Width="120" Margin="0,135,0,0">
+                <Button x:Name="startGameButton" Content="Start" Style="{StaticResource OptionButtonStyle}" Command="{Binding StartGameCommand}" />
+                <Button Style="{StaticResource OptionButtonStyle}" Command="{Binding PlayersCommand}">
+                    <TextBlock Text="{Binding PlayersText, StringFormat=Players: \{0\}}" />
+                </Button>
+                <Button Style="{StaticResource OptionButtonStyle}" Command="{Binding DifficultyCommand}">
+                    <TextBlock Text="{Binding DifficultyText, StringFormat=Difficulty: \{0\}}" />
+                </Button>
+                <Button Content="Back" Style="{StaticResource OptionButtonStyle}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
                             <ei:GoToStateAction StateName="InitialState"/>
@@ -187,7 +154,88 @@
                     </i:Interaction.Triggers>
                 </Button>
             </StackPanel>
-        </StackPanel>
+        </Grid>
+
+        <Grid x:Name="optionsPanel" Visibility="Collapsed">
+            <Grid.RenderTransform>
+                <TranslateTransform/>
+            </Grid.RenderTransform>
+            <Image x:Name="optionsImage" Source="Title/title-options.png" Width="190" Height="32" VerticalAlignment="Top" Margin="0,60,0,0" />
+            <StackPanel Width="180" Margin="0,135,0,0">
+                <Button x:Name="soundButton" Style="{StaticResource OptionButtonStyle}" Command="{Binding SoundCommand}">
+                    <TextBlock Text="{Binding SoundText, StringFormat=Sound: \{0\}}" />
+                </Button>
+                <Button Style="{StaticResource OptionButtonStyle}" Command="{Binding FullScreenCommand}">
+                    <TextBlock Text="{Binding FullScreenText, StringFormat=Full Screen: \{0\}}" />
+                </Button>
+                <Button Content="Back" Style="{StaticResource OptionButtonStyle}">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="Click">
+                            <ei:GoToStateAction StateName="InitialState"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <Grid x:Name="aboutPanel" Visibility="Collapsed">
+            <Grid.RenderTransform>
+                <TranslateTransform/>
+            </Grid.RenderTransform>
+            <Image x:Name="aboutImage" Source="Title/title-about.png" Width="139" Height="32" VerticalAlignment="Top" Margin="0,60,0,0" />
+            <StackPanel Margin="0,120,0,0">
+                <StackPanel HorizontalAlignment="Center">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="4" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="12" />
+                            <RowDefinition Height="12" />
+                            <RowDefinition Height="12" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0"><Run Text="Made by:" /></TextBlock>
+                        <TextBlock Grid.Row="0" Grid.Column="2"><Hyperlink NavigateUri="http://peterspada.com"><Run Text="Peter Spada" /></Hyperlink></TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="0"><Run Text="Source Code:" /></TextBlock>
+                        <TextBlock Grid.Row="1" Grid.Column="2"><Hyperlink NavigateUri="https://github.com/spadapet/retron-shared"><Run Text="GitHub Repo" /></Hyperlink></TextBlock>
+                        <TextBlock Grid.Row="2" Grid.Column="0"><Run Text="Inspired by:" /></TextBlock>
+                        <TextBlock Grid.Row="2" Grid.Column="2"><Hyperlink NavigateUri="https://en.wikipedia.org/wiki/Robotron:_2084"><Run Text="Robotron: 2084" /></Hyperlink></TextBlock>
+                    </Grid>
+                    <TextBlock Margin="0,8,0,0" FontFamily="{StaticResource Font.Family.Small}">
+                        <Run Text="Libraries and Fonts:" />
+                    </TextBlock>
+                    <StackPanel Orientation="Horizontal" Margin="8,2,0,0">
+                        <TextBlock FontFamily="{StaticResource Font.Family.Small}" VerticalAlignment="Center">
+                            <Hyperlink Focusable="True" NavigateUri="https://www.noesisengine.com"><Run Text="Noesis Gui" /></Hyperlink>
+                        </TextBlock>
+                        <Image Source="Title/noesis-logo.png" Width="16" Height="16" Margin="4,0,0,0" />
+                    </StackPanel>
+                    <TextBlock Margin="8,-1,0,0" FontFamily="{StaticResource Font.Family.Small}">
+                        <Hyperlink NavigateUri="https://www.zlib.net"><Run Text="zlib" /></Hyperlink>
+                    </TextBlock>
+                    <TextBlock Margin="8,4,0,0" FontFamily="{StaticResource Font.Family.Small}">
+                        <Hyperlink NavigateUri="http://www.libpng.org/pub/png/libpng.html"><Run Text="libpng" /></Hyperlink>
+                    </TextBlock>
+                    <TextBlock Margin="8,4,0,0" FontFamily="{StaticResource Font.Family.Small}">
+                        <Hyperlink NavigateUri="https://github.com/microsoft/DirectXTex"><Run Text="DirectXTex" /></Hyperlink>
+                    </TextBlock>
+                    <TextBlock Margin="8,4,0,0" FontFamily="{StaticResource Font.Family.Small}">
+                        <Hyperlink NavigateUri="https://fontstruct.com/fontstructions/show/474939/robotron_2084"><Run Text="Font by Patrick Lauke" /></Hyperlink>
+                    </TextBlock>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Center" Margin="0,8,0,0">
+                    <Button x:Name="aboutBackButton" Content="Back" Style="{StaticResource OptionButtonStyle}">
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="Click">
+                                <ei:GoToStateAction StateName="InitialState"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
 
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="mainGroup">
@@ -199,11 +247,7 @@
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="100"/>
                             </DoubleAnimationUsingKeyFrames>
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="playPanel">
-                                <EasingDoubleKeyFrame KeyTime="0" Value="-100">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
+                                <EasingDoubleKeyFrame KeyTime="0" Value="-100" />
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
                                     <EasingDoubleKeyFrame.EasingFunction>
                                         <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
@@ -231,11 +275,7 @@
                     <VisualTransition From="PlayState" GeneratedDuration="0" To="InitialState">
                         <Storyboard x:Name="playToInitialStateStoryboard">
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="initialPanel">
-                                <EasingDoubleKeyFrame KeyTime="0" Value="100">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
+                                <EasingDoubleKeyFrame KeyTime="0" Value="100" />
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
                                     <EasingDoubleKeyFrame.EasingFunction>
                                         <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
@@ -271,11 +311,7 @@
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="100"/>
                             </DoubleAnimationUsingKeyFrames>
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="optionsPanel">
-                                <EasingDoubleKeyFrame KeyTime="0" Value="-100">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
+                                <EasingDoubleKeyFrame KeyTime="0" Value="-100" />
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
                                     <EasingDoubleKeyFrame.EasingFunction>
                                         <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
@@ -303,11 +339,7 @@
                     <VisualTransition From="OptionsState" GeneratedDuration="0" To="InitialState">
                         <Storyboard x:Name="optionsToInitialStateStoryboard">
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="initialPanel">
-                                <EasingDoubleKeyFrame KeyTime="0" Value="100">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
+                                <EasingDoubleKeyFrame KeyTime="0" Value="100" />
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
                                     <EasingDoubleKeyFrame.EasingFunction>
                                         <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
@@ -343,11 +375,7 @@
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="100"/>
                             </DoubleAnimationUsingKeyFrames>
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="aboutPanel">
-                                <EasingDoubleKeyFrame KeyTime="0" Value="-100">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
+                                <EasingDoubleKeyFrame KeyTime="0" Value="-100" />
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
                                     <EasingDoubleKeyFrame.EasingFunction>
                                         <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
@@ -375,11 +403,7 @@
                     <VisualTransition From="AboutState" GeneratedDuration="0" To="InitialState">
                         <Storyboard x:Name="aboutToInitialStateStoryboard">
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)" Storyboard.TargetName="initialPanel">
-                                <EasingDoubleKeyFrame KeyTime="0" Value="100">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
+                                <EasingDoubleKeyFrame KeyTime="0" Value="100" />
                                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0">
                                     <EasingDoubleKeyFrame.EasingFunction>
                                         <BackEase EasingMode="EaseOut" Amplitude="0.25"/>
@@ -412,11 +436,27 @@
                         <Storyboard x:Name="initialStateStoryboard">
                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="initialPanel">
                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
-                                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Visibility.Visible}"/>
+                                <DiscreteObjectKeyFrame KeyTime="00:00:01.5" Value="{x:Static Visibility.Visible}"/>
                             </ObjectAnimationUsingKeyFrames>
                             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="initialPanel">
                                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
-                                <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:01.5" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logoImage" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01.5" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logoImage" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01.5" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
                             </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualTransition>

@@ -29,6 +29,5 @@ namespace ReTron
 		IAppService* _appService;
 		Noesis::Ptr<TitlePage> _titlePage;
 		std::shared_ptr<ff::XamlViewState> _viewState;
-		ff::TypedResource<ff::ITexture> _bg;
 	};
 }

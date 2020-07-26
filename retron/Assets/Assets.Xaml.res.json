@@ -27,5 +27,47 @@
   {
     "res:type": "file",
     "file": "file:../../retron.designer/Fonts/robotron-2084-small.ttf"
+  },
+
+  "Title/title-bg.png":
+  {
+    "res:type": "texture",
+    "format": "pal",
+    "file": "file:../../retron.designer/Title/title-bg.png"
+  },
+
+  "Title/title-logo.png":
+  {
+    "res:type": "texture",
+    "format": "pal",
+    "file": "file:../../retron.designer/Title/title-logo.png"
+  },
+
+  "Title/title-play.png":
+  {
+    "res:type": "texture",
+    "format": "pal",
+    "file": "file:../../retron.designer/Title/title-play.png"
+  },
+
+  "Title/title-options.png":
+  {
+    "res:type": "texture",
+    "format": "pal",
+    "file": "file:../../retron.designer/Title/title-options.png"
+  },
+
+  "Title/title-about.png":
+  {
+    "res:type": "texture",
+    "format": "pal",
+    "file": "file:../../retron.designer/Title/title-about.png"
+  },
+
+  "Title/noesis-logo.png":
+  {
+    "res:type": "texture",
+    "format": "pal",
+    "file": "file:../../retron.designer/Title/noesis-logo.png"
   }
 }

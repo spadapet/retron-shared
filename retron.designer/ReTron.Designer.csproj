@@ -109,5 +109,17 @@
       <Version>3.0.0</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Title\title-logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Title\title-bg.png" />
+    <Resource Include="Title\title-about.png" />
+    <Resource Include="Title\title-options.png" />
+    <Resource Include="Title\title-play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Title\noesis-logo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
