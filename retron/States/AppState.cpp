@@ -278,7 +278,6 @@ void ReTron::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 
 	_xamlGlobals = std::make_shared<ff::XamlGlobalState>(_globals);
 	_xamlGlobals->Startup(this);
-	_xamlGlobals->SetPalette(GetPalette());
 
 	ApplySystemOptions();
 }

@@ -103,12 +103,77 @@
             <Grid.RenderTransform>
                 <TranslateTransform/>
             </Grid.RenderTransform>
-            <Image x:Name="logoImage" Source="Title/title-logo.png" Width="312" Height="32" VerticalAlignment="Top" Margin="0,60,0,0" RenderTransformOrigin="0.5,0.5">
-                <Image.RenderTransform>
-                    <ScaleTransform/>
-                </Image.RenderTransform>
-            </Image>
-            <StackPanel Width="80" Margin="0,135,0,0">
+            <StackPanel Orientation="Horizontal" Width="312" Height="32" VerticalAlignment="Top" Margin="0,60,0,0">
+                <StackPanel.Resources>
+                    <ImageBrush x:Key="Logo00" ImageSource="Title/title-logo.png" ViewboxUnits="Absolute" Viewbox="0,0,28,32" />
+                    <ImageBrush x:Key="Logo01" ImageSource="Title/title-logo.png" ViewboxUnits="Absolute" Viewbox="28,0,28,32" />
+                    <ImageBrush x:Key="Logo02" ImageSource="Title/title-logo.png" ViewboxUnits="Absolute" Viewbox="56,0,28,32" />
+                    <ImageBrush x:Key="Logo03" ImageSource="Title/title-logo.png" ViewboxUnits="Absolute" Viewbox="84,0,28,32" />
+                    <ImageBrush x:Key="Logo04" ImageSource="Title/title-logo.png" ViewboxUnits="Absolute" Viewbox="112,0,28,32" />
+                    <ImageBrush x:Key="Logo05" ImageSource="Title/title-logo.png" ViewboxUnits="Absolute" Viewbox="140,0,28,32" />
+                    <ImageBrush x:Key="Logo06" ImageSource="Title/title-logo.png" ViewboxUnits="Absolute" Viewbox="168,0,33,32" />
+                    <ImageBrush x:Key="Logo07" ImageSource="Title/title-logo.png" ViewboxUnits="Absolute" Viewbox="201,0,28,32" />
+                    <ImageBrush x:Key="Logo08" ImageSource="Title/title-logo.png" ViewboxUnits="Absolute" Viewbox="229,0,28,32" />
+                    <ImageBrush x:Key="Logo09" ImageSource="Title/title-logo.png" ViewboxUnits="Absolute" Viewbox="257,0,28,32" />
+                    <ImageBrush x:Key="Logo10" ImageSource="Title/title-logo.png" ViewboxUnits="Absolute" Viewbox="285,0,27,32" />
+                </StackPanel.Resources>
+                <Rectangle x:Name="logo00" Width="28" Height="32" Fill="{StaticResource Logo00}" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="logo01" Width="28" Height="32" Fill="{StaticResource Logo01}" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="logo02" Width="28" Height="32" Fill="{StaticResource Logo02}" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="logo03" Width="28" Height="32" Fill="{StaticResource Logo03}" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="logo04" Width="28" Height="32" Fill="{StaticResource Logo04}" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="logo05" Width="28" Height="32" Fill="{StaticResource Logo05}" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="logo06" Width="33" Height="32" Fill="{StaticResource Logo06}" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="logo07" Width="28" Height="32" Fill="{StaticResource Logo07}" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="logo08" Width="28" Height="32" Fill="{StaticResource Logo08}" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="logo09" Width="28" Height="32" Fill="{StaticResource Logo09}" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <Rectangle x:Name="logo10" Width="27" Height="32" Fill="{StaticResource Logo10}" RenderTransformOrigin="0.5,0.5">
+                    <Rectangle.RenderTransform>
+                        <ScaleTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+            </StackPanel>
+            <StackPanel x:Name="initialButtonPanel" Width="80" Margin="0,135,0,0">
                 <Button x:Name="playButton" Content="Play" Style="{StaticResource OptionButtonStyle}">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="Click">
@@ -433,30 +498,244 @@
                         </Storyboard>
                     </VisualTransition>
                     <VisualTransition GeneratedDuration="0" To="InitialState">
-                        <Storyboard x:Name="initialStateStoryboard">
+                        <Storyboard x:Name="initialStateStoryboard" SpeedRatio="1.75">
                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Visibility)" Storyboard.TargetName="initialPanel">
                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{x:Static Visibility.Visible}"/>
                                 <DiscreteObjectKeyFrame KeyTime="00:00:01.5" Value="{x:Static Visibility.Visible}"/>
                             </ObjectAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="initialPanel">
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="initialButtonPanel">
                                 <EasingDoubleKeyFrame KeyTime="0" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:02" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="logo00" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="logo00" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="logo00" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.125" Storyboard.TargetName="logo01" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.125" Storyboard.TargetName="logo01" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logo01" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:00.125" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:01.125" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.25" Storyboard.TargetName="logo02" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.25" Storyboard.TargetName="logo02" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logo02" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:00.25" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:01.25" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.375" Storyboard.TargetName="logo03" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.375" Storyboard.TargetName="logo03" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logo03" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:00.375" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:01.375" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.5" Storyboard.TargetName="logo04" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.5" Storyboard.TargetName="logo04" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logo04" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:00.5" Value="0"/>
                                 <EasingDoubleKeyFrame KeyTime="00:00:01.5" Value="1"/>
                             </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logoImage" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.625" Storyboard.TargetName="logo05" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
                                 <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
-                                <EasingDoubleKeyFrame KeyTime="00:00:01.5" Value="1">
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
                                     <EasingDoubleKeyFrame.EasingFunction>
                                         <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
                                     </EasingDoubleKeyFrame.EasingFunction>
                                 </EasingDoubleKeyFrame>
                             </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logoImage" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.625" Storyboard.TargetName="logo05" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
                                 <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
-                                <EasingDoubleKeyFrame KeyTime="00:00:01.5" Value="1">
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
                                     <EasingDoubleKeyFrame.EasingFunction>
                                         <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
                                     </EasingDoubleKeyFrame.EasingFunction>
                                 </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logo05" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:00.625" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:01.625" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.75" Storyboard.TargetName="logo06" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.75" Storyboard.TargetName="logo06" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logo06" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:00.75" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:01.75" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.875" Storyboard.TargetName="logo07" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00.875" Storyboard.TargetName="logo07" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logo07" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:00.875" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:01.875" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:01" Storyboard.TargetName="logo08" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:01" Storyboard.TargetName="logo08" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logo08" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:02" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:01.125" Storyboard.TargetName="logo09" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:01.125" Storyboard.TargetName="logo09" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logo09" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:01.125" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:02.125" Value="1"/>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:01.25" Storyboard.TargetName="logo10" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleY)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:01.25" Storyboard.TargetName="logo10" Storyboard.TargetProperty="(UIElement.RenderTransform).(ScaleTransform.ScaleX)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.0625" />
+                                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="1">
+                                    <EasingDoubleKeyFrame.EasingFunction>
+                                        <BackEase EasingMode="EaseOut" Amplitude="0.75"/>
+                                    </EasingDoubleKeyFrame.EasingFunction>
+                                </EasingDoubleKeyFrame>
+                            </DoubleAnimationUsingKeyFrames>
+                            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="logo10" Storyboard.TargetProperty="(UIElement.Opacity)">
+                                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:01.25" Value="0"/>
+                                <EasingDoubleKeyFrame KeyTime="00:00:02.25" Value="1"/>
                             </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
                     </VisualTransition>
