@@ -7,7 +7,7 @@
   </PropertyGroup>
   <Import Project="..\ffcore\msbuild\cpp.props" />
   <PropertyGroup>
-    <AdditionalResJsonInputs>$(DevRoot)retron.designer\**\*.xaml;$(DevRoot)retron.designer\**\*.ttf</AdditionalResJsonInputs>
+    <AdditionalResJsonInputs>$(DevRoot)retron.designer\**\*.xaml;$(DevRoot)retron.designer\**\*.ttf;$(DevRoot)retron.designer\**\*.png</AdditionalResJsonInputs>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>

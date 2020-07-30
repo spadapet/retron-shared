@@ -55,7 +55,7 @@
             </Grid>
             <ControlTemplate.Triggers>
                 <Trigger Property="IsFocused" Value="True">
-                    <Setter Property="Foreground" Value="{StaticResource Brush.231}" />
+                    <Setter Property="Foreground" Value="{StaticResource Brush.Foreground.Normal}" />
                     <Setter Property="Background" Value="{StaticResource Brush.Background.Checked}" />
                 </Trigger>
             </ControlTemplate.Triggers>
