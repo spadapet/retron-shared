@@ -7,6 +7,7 @@ namespace ff
 	class IRenderDepth;
 	class IRenderer;
 	class IRenderTarget;
+	class IResourceAccess;
 	class ITexture;
 	class ProcessGlobals;
 	class XamlGlobalState;
@@ -24,6 +25,7 @@ namespace ReTron
 		virtual ff::ProcessGlobals& GetProcessGlobals() = 0;
 		virtual ff::AppGlobals& GetAppGlobals() = 0;
 		virtual ff::XamlGlobalState& GetXamlGlobals() = 0;
+		virtual ff::IResourceAccess* GetResources() = 0;
 
 		// Options
 		virtual const SystemOptions& GetSystemOptions() const = 0;

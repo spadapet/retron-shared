@@ -60,8 +60,6 @@ namespace ReTron
 
 		TitlePageViewModel* GetViewModel() const;
 
-		virtual bool ConnectEvent(BaseComponent* source, const char* event, const char* handler) override;
-
 	private:
 		IAppService* _appService;
 		Noesis::Ptr<TitlePageViewModel> _viewModel;

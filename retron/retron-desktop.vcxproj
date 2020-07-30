@@ -26,6 +26,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="States\TransitionState.cpp" />
     <ClCompile Include="UI\TitlePage.xaml.cpp" />
     <ClInclude Include="Assets\resource.h" />
     <ClCompile Include="Core\Globals.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="States\GameState.h" />
     <ClInclude Include="States\LevelState.h" />
     <ClInclude Include="States\TitleState.h" />
+    <ClInclude Include="States\TransitionState.h" />
     <ClInclude Include="UI\Components.h" />
     <ClInclude Include="UI\TitlePage.xaml.h" />
   </ItemGroup>

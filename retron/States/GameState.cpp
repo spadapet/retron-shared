@@ -101,7 +101,7 @@ void ReTron::GameState::InitLevel()
 
 void ReTron::GameState::AdvanceInput()
 {
-	const double deltaTime = _appService->GetAppGlobals().GetGlobalTime()._secondsPerAdvance;
+	const double deltaTime = ff::SECONDS_PER_ADVANCE_D;
 
 	ff::IInputMapping* gameInput = _gameInput.GetObject();
 	if (gameInput)

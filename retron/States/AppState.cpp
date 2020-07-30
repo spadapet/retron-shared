@@ -21,6 +21,7 @@
 #include "State/States.h"
 #include "States/AppState.h"
 #include "States/TitleState.h"
+#include "States/TransitionState.h"
 #include "Value/Values.h"
 #include "UI/Components.h"
 #include "UI/XamlGlobalState.h"
@@ -57,7 +58,7 @@ void ReTron::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
 
 	noAssertRet(_debugInput.HasObject());
 
-	if (_debugInput->Advance(_debugInputDevices, GetAppGlobals().GetGlobalTime()._secondsPerAdvance))
+	if (_debugInput->Advance(_debugInputDevices, ff::SECONDS_PER_ADVANCE_D))
 	{
 		if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_CANCEL_STEP_ONE_FRAME))
 		{
@@ -124,6 +125,11 @@ ff::AppGlobals& ReTron::AppState::GetAppGlobals()
 ff::XamlGlobalState& ReTron::AppState::GetXamlGlobals()
 {
 	return *_xamlGlobals.get();
+}
+
+ff::IResourceAccess* ReTron::AppState::GetResources()
+{
+	return ff::GetThisModule().GetResources();
 }
 
 const ReTron::SystemOptions& ReTron::AppState::GetSystemOptions() const
@@ -214,7 +220,7 @@ ff::IRenderDepth* ReTron::AppState::GetLowDepth() const
 
 ff::IResourceAccess* ReTron::AppState::GetXamlResources()
 {
-	return ff::GetThisModule().GetResources();
+	return GetResources();
 }
 
 ff::String ReTron::AppState::GetNoesisLicenseName()
@@ -295,9 +301,12 @@ void ReTron::AppState::OnGameThreadShutdown(ff::AppGlobals* globals)
 
 std::shared_ptr<ff::State> ReTron::AppState::CreateInitialState(ff::AppGlobals* globals)
 {
+	std::shared_ptr<ff::State> titleState = std::make_shared<TitleState>(this);
+	std::shared_ptr<ff::State> transitionToTitleState = std::make_shared<TransitionState>(this, nullptr, titleState, ff::String::from_static(L"transition-bg-1.png"));
+
 	std::shared_ptr<ff::States> states = std::make_shared<ff::States>();
 	states->AddTop(shared_from_this());
-	states->AddTop(std::make_shared<TitleState>(this));
+	states->AddTop(transitionToTitleState);
 	states->AddTop(_xamlGlobals);
 
 	return states;

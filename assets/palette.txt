@@ -13,3 +13,4 @@
 077: Level border
 078: Title text inside
 079: Title text border (red/orange/yellow)
+080-111 Darker rainbow abrupt end (red, orange, yellow, green, blue, purple)

@@ -27,6 +27,9 @@
     <ClCompile Include="UI\TitlePage.xaml.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="States\TransitionState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -65,6 +68,9 @@
     </ClInclude>
     <ClInclude Include="UI\TitlePage.xaml.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="States\TransitionState.h">
+      <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

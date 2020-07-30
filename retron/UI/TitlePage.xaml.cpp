@@ -199,8 +199,3 @@ ReTron::TitlePageViewModel* ReTron::TitlePage::GetViewModel() const
 {
 	return _viewModel;
 }
-
-bool ReTron::TitlePage::ConnectEvent(BaseComponent* source, const char* event, const char* handler)
-{
-	return false;
-}
