@@ -39,11 +39,13 @@ namespace ReTron
 		virtual ff::AppGlobals& GetAppGlobals() override;
 		virtual ff::XamlGlobalState& GetXamlGlobals() override;
 		virtual ff::IResourceAccess* GetResources() override;
+		virtual ff::IValueAccess* GetValues() override;
 		virtual const SystemOptions& GetSystemOptions() const override;
 		virtual const GameOptions& GetDefaultGameOptions() const override;
 		virtual void SetSystemOptions(const SystemOptions& options) override;
 		virtual void SetDefaultGameOptions(const GameOptions& options) override;
 		virtual ff::IPalette* GetPalette() override;
+		virtual ff::IPalette* GetPlayerPalette(size_t player) override;
 		virtual ff::IRenderer* GetRenderer() const override;
 		virtual void ClearTempTargets(TempTargets tempTargets) override;
 		virtual void RenderTempTargets(TempTargets tempTargets, ff::IRenderTarget* target) override;
@@ -94,6 +96,8 @@ namespace ReTron
 		ff::ComPtr<ff::IRenderTarget> _target1080;
 		ff::ComPtr<ff::IPalette> _palette;
 		ff::TypedResource<ff::IPaletteData> _paletteData;
+		std::array<ff::ComPtr<ff::IPalette>, Constants::MAX_PLAYERS> _playerPalettes;
+		std::array<ff::TypedResource<ff::IPaletteData>, Constants::MAX_PLAYERS> _playerPaletteDatas;
 		ff::Viewport _viewport;
 
 		// Debugging

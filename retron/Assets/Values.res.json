@@ -4,7 +4,30 @@
     "global":
     {
       "noesisLicenseName": "46d808ec-d1d4-491e-89a0-ae6210be8637",
-      "noesisLicenseKey": "+vK5E7i6uRPxznIfkyf23yd4VnFDsEE2Q1pYBzQsaUR94reR"
+      "noesisLicenseKey": "+vK5E7i6uRPxznIfkyf23yd4VnFDsEE2Q1pYBzQsaUR94reR",
+
+      "difficulties":
+      {
+        "easy":
+        {
+          "lives": 6
+        },
+        "normal":
+        {
+          "lives": 3
+        },
+        "hard":
+        {
+          "lives": 2
+        }
+      },
+
+      "levels":
+      [
+        {
+          "grunts": 10
+        }
+      ]
     }
   }
 }

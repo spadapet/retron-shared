@@ -30,6 +30,9 @@
     <ClCompile Include="States\TransitionState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Player.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -71,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="States\TransitionState.h">
       <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Player.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

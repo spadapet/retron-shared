@@ -26,6 +26,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="States\TransitionState.cpp" />
     <ClCompile Include="UI\TitlePage.xaml.cpp" />
     <ClInclude Include="Assets\resource.h" />
@@ -38,6 +39,7 @@
     <ClCompile Include="UI\Components.cpp" />
     <ClInclude Include="Core\Globals.h" />
     <ClInclude Include="Core\Options.h" />
+    <ClInclude Include="Core\Player.h" />
     <ClInclude Include="pch.h" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="pch.cpp">

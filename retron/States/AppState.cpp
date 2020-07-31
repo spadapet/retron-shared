@@ -27,6 +27,8 @@
 #include "UI/XamlGlobalState.h"
 #include "UI/XamlView.h"
 
+static const float PALETTE_CYCLES_PER_SECOND = 0.25f;
+
 ReTron::AppState::AppState()
 	: _processGlobals(nullptr)
 	, _globals(nullptr)
@@ -132,6 +134,11 @@ ff::IResourceAccess* ReTron::AppState::GetResources()
 	return ff::GetThisModule().GetResources();
 }
 
+ff::IValueAccess* ReTron::AppState::GetValues()
+{
+	return ff::GetThisModule().GetValueTable();
+}
+
 const ReTron::SystemOptions& ReTron::AppState::GetSystemOptions() const
 {
 	return _systemOptions;
@@ -157,10 +164,23 @@ ff::IPalette* ReTron::AppState::GetPalette()
 {
 	if (!_palette)
 	{
-		_palette = _paletteData->CreatePalette(0.25f);
+		_palette = _paletteData->CreatePalette(::PALETTE_CYCLES_PER_SECOND);
 	}
 
 	return _palette;
+}
+
+ff::IPalette* ReTron::AppState::GetPlayerPalette(size_t player)
+{
+	assertRetVal(player < _playerPalettes.size(), nullptr);
+
+	ff::ComPtr<ff::IPalette>& playerPalette = _playerPalettes[player];
+	if (!playerPalette)
+	{
+		playerPalette = _playerPaletteDatas[player]->CreatePalette(::PALETTE_CYCLES_PER_SECOND);
+	}
+
+	return playerPalette;
 }
 
 ff::IRenderer* ReTron::AppState::GetRenderer() const
@@ -391,6 +411,11 @@ void ReTron::AppState::InitOptions()
 void ReTron::AppState::InitResources()
 {
 	_paletteData.Init(L"palette");
+
+	for (size_t i = 0; i < _playerPaletteDatas.size(); i++)
+	{
+		_playerPaletteDatas[i].Init(L"palette");
+	}
 
 	_debugInput.Init(L"gameDebugControls");
 	_debugInputDevices._keys.Push(_globals->GetKeysDebug());

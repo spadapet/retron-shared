@@ -1,6 +1,11 @@
 #include "pch.h"
 #include "Core/Options.h"
 
+static ff::StaticString DIFF_BABY(L"baby");
+static ff::StaticString DIFF_EASY(L"easy");
+static ff::StaticString DIFF_NORMAL(L"normal");
+static ff::StaticString DIFF_HARD(L"hard");
+
 NS_IMPLEMENT_REFLECTION_ENUM(ReTron::GameType, "ReTron.GameType")
 {
 	NsVal("Normal", ReTron::GameType::Normal);
@@ -31,16 +36,41 @@ ReTron::GameOptions::GameOptions()
 {
 }
 
-ReTron::GameOptions::GameOptions(const GameOptions& rhs)
-	: GameOptions()
+ff::StringRef ReTron::GameOptions::GetDifficultyId() const
 {
-	*this = rhs;
+	switch (_difficulty)
+	{
+	case GameDifficulty::Baby:
+		return ::DIFF_BABY;
+
+	case GameDifficulty::Easy:
+		return ::DIFF_EASY;
+
+	default:
+	case GameDifficulty::Normal:
+		return ::DIFF_NORMAL;
+
+	case GameDifficulty::Hard:
+		return ::DIFF_HARD;
+	}
 }
 
-ReTron::GameOptions& ReTron::GameOptions::operator=(const GameOptions& rhs)
+size_t ReTron::GameOptions::GetPlayerCount() const
 {
-	std::memcpy(this, &rhs, sizeof(rhs));
-	return *this;
+	switch (_players)
+	{
+	default:
+		return 1;
+
+	case GamePlayers::TwoTakeTurns:
+	case GamePlayers::TwoTogether:
+		return 2;
+	}
+}
+
+bool ReTron::GameOptions::ArePlayersTogether() const
+{
+	return _players == GamePlayers::TwoTogether;
 }
 
 ReTron::SystemOptions::SystemOptions()
@@ -51,16 +81,4 @@ ReTron::SystemOptions::SystemOptions()
 	, _soundVolume(1)
 	, _musicVolume(1)
 {
-}
-
-ReTron::SystemOptions::SystemOptions(const SystemOptions& rhs)
-	: SystemOptions()
-{
-	*this = rhs;
-}
-
-ReTron::SystemOptions& ReTron::SystemOptions::operator=(const SystemOptions& rhs)
-{
-	std::memcpy(this, &rhs, sizeof(rhs));
-	return *this;
 }

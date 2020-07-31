@@ -8,6 +8,7 @@ namespace ff
 	class IRenderer;
 	class IRenderTarget;
 	class IResourceAccess;
+	class IValueAccess;
 	class ITexture;
 	class ProcessGlobals;
 	class XamlGlobalState;
@@ -33,6 +34,7 @@ namespace ReTron
 		virtual ff::AppGlobals& GetAppGlobals() = 0;
 		virtual ff::XamlGlobalState& GetXamlGlobals() = 0;
 		virtual ff::IResourceAccess* GetResources() = 0;
+		virtual ff::IValueAccess* GetValues() = 0;
 
 		// Options
 		virtual const SystemOptions& GetSystemOptions() const = 0;
@@ -42,6 +44,7 @@ namespace ReTron
 
 		// Rendering
 		virtual ff::IPalette* GetPalette() = 0;
+		virtual ff::IPalette* GetPlayerPalette(size_t player) = 0;
 		virtual ff::IRenderer* GetRenderer() const = 0;
 		virtual void ClearTempTargets(TempTargets tempTargets) = 0;
 		virtual void RenderTempTargets(TempTargets tempTargets, ff::IRenderTarget* target) = 0;

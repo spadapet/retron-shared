@@ -1,4 +1,6 @@
 #include "pch.h"
+#include "Dict/Dict.h"
+#include "Dict/ValueTable.h"
 #include "Globals/AppGlobals.h"
 #include "Input/Joystick/JoystickDevice.h"
 #include "Input/Joystick/JoystickInput.h"
@@ -8,12 +10,17 @@
 #include "State/StateWrapper.h"
 #include "States/GameState.h"
 #include "States/LevelState.h"
+#include "Value/Values.h"
+
+static ff::StaticString PROP_DIFFICULTIES(L"difficulties");
+static ff::StaticString PROP_LIVES(L"lives");
 
 ReTron::GameState::GameState(IAppService* appService, const GameOptions& gameOptions)
 	: _appService(appService)
 	, _gameOptions(gameOptions)
 	, _levelState(std::make_shared<ff::StateWrapper>())
 {
+	InitPlayers();
 	InitInput();
 	InitLevel();
 }
@@ -65,6 +72,31 @@ const ff::IInputEvents* ReTron::GameState::GetPlayerInputEvents(size_t player)
 	return _playerInput[player].Flush();
 }
 
+ReTron::Player& ReTron::GameState::GetPlayer(size_t player)
+{
+	assertRetVal(player < _playerInput.size(), _players[0]);
+	return _players[player];
+}
+
+size_t ReTron::GameState::GetPlayerCount() const
+{
+	return _gameOptions.GetPlayerCount();
+}
+
+void ReTron::GameState::InitPlayers()
+{
+	const ff::Dict& diffs = _appService->GetValues()->GetValue(::PROP_DIFFICULTIES)->GetValue<ff::DictValue>();
+	const ff::Dict& diff = diffs.GetValue(_gameOptions.GetDifficultyId())->GetValue<ff::DictValue>();
+	int lives = diff.Get<ff::IntValue>(::PROP_LIVES);
+
+	for (size_t i = 0; i < GetPlayerCount(); i++)
+	{
+		Player& player = _players[i];
+		player._active = true;
+		player._lives = lives;
+	}
+}
+
 void ReTron::GameState::InitInput()
 {
 	ff::AppGlobals& globals = _appService->GetAppGlobals();
@@ -103,18 +135,10 @@ void ReTron::GameState::AdvanceInput()
 {
 	const double deltaTime = ff::SECONDS_PER_ADVANCE_D;
 
-	ff::IInputMapping* gameInput = _gameInput.GetObject();
-	if (gameInput)
-	{
-		gameInput->Advance(_gameInputDevices, deltaTime);
-	}
+	_gameInput->Advance(_gameInputDevices, deltaTime);
 
 	for (size_t i = 0; i < _playerInput.size(); i++)
 	{
-		ff::IInputMapping* playerInput = _playerInput[i].GetObject();
-		if (playerInput)
-		{
-			playerInput->Advance(_playerInputDevices[i], deltaTime);
-		}
+		_playerInput[i]->Advance(_playerInputDevices[i], deltaTime);
 	}
 }

@@ -33,8 +33,10 @@ namespace ReTron
 	struct GameOptions
 	{
 		GameOptions();
-		GameOptions(const GameOptions& rhs);
-		GameOptions& operator=(const GameOptions& rhs);
+
+		ff::StringRef GetDifficultyId() const;
+		size_t GetPlayerCount() const;
+		bool ArePlayersTogether() const;
 
 		static const int CurrentVersion = 1;
 
@@ -47,8 +49,6 @@ namespace ReTron
 	struct SystemOptions
 	{
 		SystemOptions();
-		SystemOptions(const SystemOptions& rhs);
-		SystemOptions& operator=(const SystemOptions& rhs);
 
 		static const int CurrentVersion = 1;
 

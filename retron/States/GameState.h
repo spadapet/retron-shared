@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Options.h"
+#include "Core/Player.h"
 #include "Input/InputMapping.h"
 #include "Resource/ResourceValue.h"
 #include "Services/GameService.h"
@@ -34,8 +35,11 @@ namespace ReTron
 		virtual const GameOptions& GetGameOptions() const override;
 		virtual const ff::IInputEvents* GetGameInputEvents();
 		virtual const ff::IInputEvents* GetPlayerInputEvents(size_t player);
+		virtual Player& GetPlayer(size_t player);
+		virtual size_t GetPlayerCount() const;
 
 	private:
+		void InitPlayers();
 		void InitInput();
 		void InitLevel();
 		void AdvanceInput();
@@ -48,6 +52,8 @@ namespace ReTron
 		ff::InputDevices _gameInputDevices;
 		std::array<ff::TypedResource<ff::IInputMapping>, Constants::MAX_PLAYERS> _playerInput;
 		std::array<ff::InputDevices, Constants::MAX_PLAYERS> _playerInputDevices;
+		std::array<Player, Constants::MAX_PLAYERS> _players;
+		size_t _playerCount;
 
 		// Level
 		std::shared_ptr<ff::StateWrapper> _levelState;
