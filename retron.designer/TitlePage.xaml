@@ -226,7 +226,7 @@
                 <TranslateTransform/>
             </Grid.RenderTransform>
             <Image x:Name="optionsImage" Source="Title/title-options.png" Width="190" Height="32" VerticalAlignment="Top" Margin="0,60,0,0" />
-            <StackPanel Width="180" Margin="0,135,0,0">
+            <StackPanel Width="100" Margin="0,135,0,0">
                 <Button x:Name="soundButton" Style="{StaticResource OptionButtonStyle}" Command="{Binding SoundCommand}">
                     <TextBlock Text="{Binding SoundText, StringFormat=Sound: \{0\}}" />
                 </Button>

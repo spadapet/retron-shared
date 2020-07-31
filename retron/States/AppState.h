@@ -43,16 +43,13 @@ namespace ReTron
 		virtual const GameOptions& GetDefaultGameOptions() const override;
 		virtual void SetSystemOptions(const SystemOptions& options) override;
 		virtual void SetDefaultGameOptions(const GameOptions& options) override;
-		virtual void ClearLowTargets() override;
-		virtual void RenderLowTargets(ff::IRenderTarget* target) override;
 		virtual ff::IPalette* GetPalette() override;
 		virtual ff::IRenderer* GetRenderer() const override;
-		virtual ff::ITexture* GetXamlTexture() const override;
-		virtual ff::IRenderTarget* GetXamlTarget() const override;
-		virtual ff::IRenderDepth* GetXamlDepth() const override;
-		virtual ff::ITexture* GetLowTexture() const override;
-		virtual ff::IRenderTarget* GetLowTarget() const override;
-		virtual ff::IRenderDepth* GetLowDepth() const override;
+		virtual void ClearTempTargets(TempTargets tempTargets) override;
+		virtual void RenderTempTargets(TempTargets tempTargets, ff::IRenderTarget* target) override;
+		virtual ff::ITexture* GetTempTexture(TempTargets tempTarget) const override;
+		virtual ff::IRenderTarget* GetTempTarget(TempTargets tempTarget) const override;
+		virtual ff::IRenderDepth* GetTempDepth(TempTargets tempTarget) const override;
 
 		// IXamlGlobalHelper
 		virtual ff::IResourceAccess* GetXamlResources() override;
@@ -88,14 +85,13 @@ namespace ReTron
 
 		// Rendering
 		std::unique_ptr<ff::IRenderer> _render;
-		ff::ComPtr<ff::ITexture> _xamlTexture;
-		ff::ComPtr<ff::IRenderTarget> _xamlTarget;
-		ff::ComPtr<ff::IRenderDepth> _xamlDepth;
-		ff::ComPtr<ff::ITexture> _lowTexture;
-		ff::ComPtr<ff::IRenderTarget> _lowTarget;
-		ff::ComPtr<ff::IRenderDepth> _lowDepth;
-		ff::ComPtr<ff::ITexture> _highTexture;
-		ff::ComPtr<ff::IRenderTarget> _highTarget;
+		ff::ComPtr<ff::IRenderDepth> _depth;
+		ff::ComPtr<ff::ITexture> _textureRgbPma1;
+		ff::ComPtr<ff::IRenderTarget> _targetRgbPma1;
+		ff::ComPtr<ff::ITexture> _texturePalette1;
+		ff::ComPtr<ff::IRenderTarget> _targetPalette1;
+		ff::ComPtr<ff::ITexture> _texture1080;
+		ff::ComPtr<ff::IRenderTarget> _target1080;
 		ff::ComPtr<ff::IPalette> _palette;
 		ff::TypedResource<ff::IPaletteData> _paletteData;
 		ff::Viewport _viewport;

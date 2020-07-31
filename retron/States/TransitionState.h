@@ -17,7 +17,7 @@ namespace ReTron
 	class TransitionState : public ff::State
 	{
 	public:
-		TransitionState(IAppService* appService, std::shared_ptr<ff::State> oldState, std::shared_ptr<ff::State> newState, ff::StringRef imageResource);
+		TransitionState(IAppService* appService, std::shared_ptr<ff::State> oldState, std::shared_ptr<ff::State> newState, ff::StringRef imageResource, size_t speed = 4, size_t verticalPixelStop = 0);
 
 		virtual std::shared_ptr<ff::State> Advance(ff::AppGlobals* globals) override;
 		virtual void Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth) override;
@@ -33,5 +33,7 @@ namespace ReTron
 		ff::ComPtr<ff::IRenderTarget> _target2;
 		ff::ComPtr<ff::IRenderDepth> _depth;
 		ff::FixedInt _counter;
+		ff::FixedInt _speed;
+		ff::FixedInt _offsetStop;
 	};
 }

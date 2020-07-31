@@ -18,6 +18,13 @@ namespace ReTron
 	struct GameOptions;
 	struct SystemOptions;
 
+	enum class TempTargets
+	{
+		None = 0x00,
+		Palette1 = 0x01,
+		RgbPma2 = 0x02,
+	};
+
 	class IAppService
 	{
 	public:
@@ -34,15 +41,12 @@ namespace ReTron
 		virtual void SetDefaultGameOptions(const GameOptions& options) = 0;
 
 		// Rendering
-		virtual void ClearLowTargets() = 0;
-		virtual void RenderLowTargets(ff::IRenderTarget* target) = 0;
 		virtual ff::IPalette* GetPalette() = 0;
 		virtual ff::IRenderer* GetRenderer() const = 0;
-		virtual ff::ITexture* GetXamlTexture() const = 0;
-		virtual ff::IRenderTarget* GetXamlTarget() const = 0;
-		virtual ff::IRenderDepth* GetXamlDepth() const = 0;
-		virtual ff::ITexture* GetLowTexture() const = 0;
-		virtual ff::IRenderTarget* GetLowTarget() const = 0;
-		virtual ff::IRenderDepth* GetLowDepth() const = 0;
+		virtual void ClearTempTargets(TempTargets tempTargets) = 0;
+		virtual void RenderTempTargets(TempTargets tempTargets, ff::IRenderTarget* target) = 0;
+		virtual ff::ITexture* GetTempTexture(TempTargets tempTarget) const = 0;
+		virtual ff::IRenderTarget* GetTempTarget(TempTargets tempTarget) const = 0;
+		virtual ff::IRenderDepth* GetTempDepth(TempTargets tempTarget) const = 0;
 	};
 }

@@ -153,26 +153,6 @@ void ReTron::AppState::SetDefaultGameOptions(const GameOptions& options)
 	_gameOptions = options;
 }
 
-void ReTron::AppState::ClearLowTargets()
-{
-	_xamlTarget->Clear(&ff::GetColorNone());
-	_lowTarget->Clear(&ff::GetColorNone());
-	_highTarget->Clear(&ff::GetColorBlack());
-}
-
-void ReTron::AppState::RenderLowTargets(ff::IRenderTarget* target)
-{
-	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_render.get(), _highTarget, nullptr, Constants::RENDER_RECT_HIGH, Constants::RENDER_RECT);
-	render->PushPalette(GetPalette());
-	render->DrawSprite(_lowTexture->AsSprite(), ff::Transform::Identity());
-	render->DrawSprite(_xamlTexture->AsSprite(), ff::Transform::Identity());
-
-	ff::RectFixedInt targetRect = _viewport.GetView(target).ToType<ff::FixedInt>();
-	render = ff::PixelRendererActive::BeginRender(_render.get(), target, nullptr, targetRect, Constants::RENDER_RECT_HIGH);
-	render->AsRendererActive11()->PushTextureSampler(D3D11_FILTER_MIN_MAG_MIP_LINEAR);
-	render->DrawSprite(_highTexture->AsSprite(), ff::Transform::Identity());
-}
-
 ff::IPalette* ReTron::AppState::GetPalette()
 {
 	if (!_palette)
@@ -188,34 +168,83 @@ ff::IRenderer* ReTron::AppState::GetRenderer() const
 	return _render.get();
 }
 
-ff::ITexture* ReTron::AppState::GetXamlTexture() const
+void ReTron::AppState::ClearTempTargets(TempTargets tempTargets)
 {
-	return _xamlTexture;
+	if (ff::HasAllFlags(tempTargets, TempTargets::Palette1))
+	{
+		GetTempTarget(TempTargets::Palette1)->Clear(&ff::GetColorNone());
+	}
+
+	if (ff::HasAllFlags(tempTargets, TempTargets::RgbPma2))
+	{
+		GetTempTarget(TempTargets::RgbPma2)->Clear(&ff::GetColorNone());
+	}
 }
 
-ff::IRenderTarget* ReTron::AppState::GetXamlTarget() const
+void ReTron::AppState::RenderTempTargets(TempTargets tempTargets, ff::IRenderTarget* target)
 {
-	return _xamlTarget;
+	_target1080->Clear(&ff::GetColorBlack());
+
+	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_render.get(), _target1080, nullptr, Constants::RENDER_RECT_HIGH, Constants::RENDER_RECT);
+	if (ff::HasAllFlags(tempTargets, TempTargets::Palette1))
+	{
+		render->PushPalette(GetPalette());
+		render->DrawSprite(GetTempTexture(TempTargets::Palette1)->AsSprite(), ff::Transform::Identity());
+	}
+
+	if (ff::HasAllFlags(tempTargets, TempTargets::RgbPma2))
+	{
+		render->PushPreMultipliedAlpha();
+		render->DrawSprite(GetTempTexture(TempTargets::RgbPma2)->AsSprite(), ff::Transform::Identity());
+	}
+
+	ff::RectFixedInt targetRect = _viewport.GetView(target).ToType<ff::FixedInt>();
+	render = ff::PixelRendererActive::BeginRender(_render.get(), target, nullptr, targetRect, Constants::RENDER_RECT_HIGH);
+	render->AsRendererActive11()->PushTextureSampler(D3D11_FILTER_MIN_MAG_MIP_LINEAR);
+	render->DrawSprite(_texture1080->AsSprite(), ff::Transform::Identity());
 }
 
-ff::IRenderDepth* ReTron::AppState::GetXamlDepth() const
+ff::ITexture* ReTron::AppState::GetTempTexture(TempTargets tempTarget) const
 {
-	return _xamlDepth;
+	switch (tempTarget)
+	{
+	case TempTargets::Palette1:
+		return _texturePalette1;
+
+	case TempTargets::RgbPma2:
+		return _textureRgbPma1;
+
+	default:
+		return nullptr;
+	}
 }
 
-ff::ITexture* ReTron::AppState::GetLowTexture() const
+ff::IRenderTarget* ReTron::AppState::GetTempTarget(TempTargets tempTarget) const
 {
-	return _lowTexture;
+	switch (tempTarget)
+	{
+	case TempTargets::Palette1:
+		return _targetPalette1;
+
+	case TempTargets::RgbPma2:
+		return _targetRgbPma1;
+
+	default:
+		return nullptr;
+	}
 }
 
-ff::IRenderTarget* ReTron::AppState::GetLowTarget() const
+ff::IRenderDepth* ReTron::AppState::GetTempDepth(TempTargets tempTarget) const
 {
-	return _lowTarget;
-}
+	switch (tempTarget)
+	{
+	case TempTargets::Palette1:
+	case TempTargets::RgbPma2:
+		return _depth;
 
-ff::IRenderDepth* ReTron::AppState::GetLowDepth() const
-{
-	return _lowDepth;
+	default:
+		return nullptr;
+	}
 }
 
 ff::IResourceAccess* ReTron::AppState::GetXamlResources()
@@ -302,7 +331,7 @@ void ReTron::AppState::OnGameThreadShutdown(ff::AppGlobals* globals)
 std::shared_ptr<ff::State> ReTron::AppState::CreateInitialState(ff::AppGlobals* globals)
 {
 	std::shared_ptr<ff::State> titleState = std::make_shared<TitleState>(this);
-	std::shared_ptr<ff::State> transitionToTitleState = std::make_shared<TransitionState>(this, nullptr, titleState, ff::String::from_static(L"transition-bg-1.png"));
+	std::shared_ptr<ff::State> transitionToTitleState = std::make_shared<TransitionState>(this, nullptr, titleState, ff::String::from_static(L"transition-bg-1.png"), 4, 24);
 
 	std::shared_ptr<ff::States> states = std::make_shared<ff::States>();
 	states->AddTop(shared_from_this());
@@ -374,17 +403,16 @@ void ReTron::AppState::InitGraphics()
 	ff::PointInt highSize = lowSize * Constants::RENDER_SCALE;
 
 	_render = graph->CreateRenderer();
+	_depth = graph->CreateRenderDepth(lowSize);
 
-	_xamlTexture = graph->CreateTexture(lowSize, ff::TextureFormat::RGBA32);
-	_xamlTarget = graph->CreateRenderTargetTexture(_xamlTexture);
-	_xamlDepth = graph->CreateRenderDepth(lowSize);
+	_textureRgbPma1 = graph->CreateTexture(lowSize, ff::TextureFormat::RGBA32);
+	_targetRgbPma1 = graph->CreateRenderTargetTexture(_textureRgbPma1);
 
-	_lowTexture = graph->CreateTexture(lowSize, ff::TextureFormat::R8_UINT);
-	_lowTarget = graph->CreateRenderTargetTexture(_lowTexture);
-	_lowDepth = graph->CreateRenderDepth(lowSize);
+	_texturePalette1 = graph->CreateTexture(lowSize, ff::TextureFormat::R8_UINT);
+	_targetPalette1 = graph->CreateRenderTargetTexture(_texturePalette1);
 
-	_highTexture = graph->CreateTexture(highSize, ff::TextureFormat::RGBA32);
-	_highTarget = graph->CreateRenderTargetTexture(_highTexture);
+	_texture1080 = graph->CreateTexture(highSize, ff::TextureFormat::RGBA32);
+	_target1080 = graph->CreateRenderTargetTexture(_texture1080);
 }
 
 void ReTron::AppState::ApplySystemOptions()
