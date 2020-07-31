@@ -1,11 +1,11 @@
 #include "pch.h"
 #include "Dict/Dict.h"
-#include "Dict/ValueTable.h"
 #include "Globals/AppGlobals.h"
 #include "Input/Joystick/JoystickDevice.h"
 #include "Input/Joystick/JoystickInput.h"
 #include "Input/Keyboard/KeyboardDevice.h"
 #include "Input/Pointer/PointerDevice.h"
+#include "Resource/Resources.h"
 #include "Services/AppService.h"
 #include "State/StateWrapper.h"
 #include "States/GameState.h"
@@ -85,7 +85,7 @@ size_t ReTron::GameState::GetPlayerCount() const
 
 void ReTron::GameState::InitPlayers()
 {
-	const ff::Dict& diffs = _appService->GetValues()->GetValue(::PROP_DIFFICULTIES)->GetValue<ff::DictValue>();
+	const ff::Dict& diffs = _appService->GetResources()->GetValue(::PROP_DIFFICULTIES)->GetValue<ff::DictValue>();
 	const ff::Dict& diff = diffs.GetValue(_gameOptions.GetDifficultyId())->GetValue<ff::DictValue>();
 	int lives = diff.Get<ff::IntValue>(::PROP_LIVES);
 

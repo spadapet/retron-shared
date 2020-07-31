@@ -33,6 +33,12 @@
     <ClCompile Include="Core\Player.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Enemies.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Level.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -76,6 +82,12 @@
       <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="Core\Player.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Enemies.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Level.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>

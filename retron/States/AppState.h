@@ -39,7 +39,6 @@ namespace ReTron
 		virtual ff::AppGlobals& GetAppGlobals() override;
 		virtual ff::XamlGlobalState& GetXamlGlobals() override;
 		virtual ff::IResourceAccess* GetResources() override;
-		virtual ff::IValueAccess* GetValues() override;
 		virtual const SystemOptions& GetSystemOptions() const override;
 		virtual const GameOptions& GetDefaultGameOptions() const override;
 		virtual void SetSystemOptions(const SystemOptions& options) override;

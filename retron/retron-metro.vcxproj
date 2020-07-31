@@ -32,12 +32,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Enemies.cpp" />
     <ClCompile Include="Core\Globals.cpp" />
+    <ClCompile Include="Core\Level.cpp" />
     <ClCompile Include="Core\Options.cpp" />
+    <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="States\AppState.cpp" />
     <ClCompile Include="States\GameState.cpp" />
     <ClCompile Include="States\LevelState.cpp" />
     <ClCompile Include="States\TitleState.cpp" />
+    <ClCompile Include="States\TransitionState.cpp" />
     <ClCompile Include="UI\Components.cpp" />
     <ClCompile Include="UI\FailurePage.xaml.cpp">
       <DependentUpon>UI\FailurePage.xaml</DependentUpon>
@@ -46,8 +50,11 @@
     <ClInclude Include="App.xaml.h">
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="Core\Enemies.h" />
     <ClInclude Include="Core\Globals.h" />
+    <ClInclude Include="Core\Level.h" />
     <ClInclude Include="Core\Options.h" />
+    <ClInclude Include="Core\Player.h" />
     <ClInclude Include="pch.h" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="App.xaml.cpp">
@@ -66,6 +73,7 @@
     <ClInclude Include="States\GameState.h" />
     <ClInclude Include="States\LevelState.h" />
     <ClInclude Include="States\TitleState.h" />
+    <ClInclude Include="States\TransitionState.h" />
     <ClInclude Include="UI\Components.h" />
     <ClInclude Include="UI\FailurePage.xaml.h">
       <DependentUpon>UI\FailurePage.xaml</DependentUpon>

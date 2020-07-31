@@ -34,7 +34,6 @@ namespace ReTron
 		virtual ff::AppGlobals& GetAppGlobals() = 0;
 		virtual ff::XamlGlobalState& GetXamlGlobals() = 0;
 		virtual ff::IResourceAccess* GetResources() = 0;
-		virtual ff::IValueAccess* GetValues() = 0;
 
 		// Options
 		virtual const SystemOptions& GetSystemOptions() const = 0;

@@ -26,6 +26,8 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Enemies.cpp" />
+    <ClCompile Include="Core\Level.cpp" />
     <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="States\TransitionState.cpp" />
     <ClCompile Include="UI\TitlePage.xaml.cpp" />
@@ -37,7 +39,9 @@
     <ClCompile Include="States\LevelState.cpp" />
     <ClCompile Include="States\TitleState.cpp" />
     <ClCompile Include="UI\Components.cpp" />
+    <ClInclude Include="Core\Enemies.h" />
     <ClInclude Include="Core\Globals.h" />
+    <ClInclude Include="Core\Level.h" />
     <ClInclude Include="Core\Options.h" />
     <ClInclude Include="Core\Player.h" />
     <ClInclude Include="pch.h" />

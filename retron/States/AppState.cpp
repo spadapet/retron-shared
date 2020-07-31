@@ -134,11 +134,6 @@ ff::IResourceAccess* ReTron::AppState::GetResources()
 	return ff::GetThisModule().GetResources();
 }
 
-ff::IValueAccess* ReTron::AppState::GetValues()
-{
-	return ff::GetThisModule().GetValueTable();
-}
-
 const ReTron::SystemOptions& ReTron::AppState::GetSystemOptions() const
 {
 	return _systemOptions;
@@ -274,12 +269,12 @@ ff::IResourceAccess* ReTron::AppState::GetXamlResources()
 
 ff::String ReTron::AppState::GetNoesisLicenseName()
 {
-	return ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseName"));
+	return GetResources()->GetString(ff::String::from_static(L"noesisLicenseName"));
 }
 
 ff::String ReTron::AppState::GetNoesisLicenseKey()
 {
-	return ff::GetThisModule().GetString(ff::String::from_static(L"noesisLicenseKey"));
+	return GetResources()->GetString(ff::String::from_static(L"noesisLicenseKey"));
 }
 
 ff::String ReTron::AppState::GetApplicationResourcesName()
