@@ -20,17 +20,23 @@ namespace ReTron
 		virtual ~DebugState() override;
 
 		bool GetVisible() const;
-		void SetVisible(bool visible);
+		void SetVisible(const std::shared_ptr<ff::State>& underState);
+		void Hide();
 
+		// State
 		virtual void Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth) override;
 		virtual size_t GetChildStateCount() override;
 		virtual State* GetChildState(size_t index) override;
 
+		// UI events
+		ff::Event<void> RestartLevelEvent;
+		ff::Event<void> RestartGameEvent;
+		ff::Event<void> RebuildResourcesEvent;
+
 	private:
 		IAppService* _appService;
-		ff::EventCookie _customDebugCookie;
 		Noesis::Ptr<DebugPage> _debugPage;
 		std::shared_ptr<ff::XamlViewState> _viewState;
-		bool _visible;
+		std::shared_ptr<ff::State> _underState;
 	};
 }

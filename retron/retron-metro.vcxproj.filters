@@ -44,6 +44,12 @@
     <ClCompile Include="States\TransitionState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="UI\DebugPage.xaml.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="States\DebugState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -92,6 +98,12 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="States\TransitionState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\DebugPage.xaml.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="States\DebugState.h">
       <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>

@@ -21,9 +21,9 @@
 #include "State/States.h"
 #include "States/AppState.h"
 #include "States/DebugState.h"
+#include "States/GameState.h"
 #include "States/TitleState.h"
 #include "States/TransitionState.h"
-#include "Value/Values.h"
 #include "UI/Components.h"
 #include "UI/XamlGlobalState.h"
 #include "UI/XamlView.h"
@@ -37,6 +37,12 @@ ReTron::AppState::AppState()
 	, _debugSteppingFrames(false)
 	, _debugStepOneFrame(false)
 	, _debugTimeScale(1.0)
+	, _customDebugCookie(nullptr)
+	, _restartLevelEventCookie(nullptr)
+	, _restartGameEventCookie(nullptr)
+	, _rebuildResourcesEventCookie(nullptr)
+	, _resourcesRebuiltEventCookie(nullptr)
+	, _rebuildingResources(false)
 {
 }
 
@@ -222,7 +228,7 @@ void ReTron::AppState::ClearTempTargets(TempTargets tempTargets)
 
 void ReTron::AppState::RenderTempTargets(TempTargets tempTargets, ff::IRenderTarget* target)
 {
-	_target1080->Clear(&ff::GetColorBlack());
+	_target1080->Clear(&ff::GetColorNone());
 
 	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_render.get(), _target1080, nullptr, Constants::RENDER_RECT_HIGH, Constants::RENDER_RECT);
 	if (ff::HasAllFlags(tempTargets, TempTargets::Palette1))
@@ -286,6 +292,11 @@ ff::IRenderDepth* ReTron::AppState::GetTempDepth(TempTargets tempTarget) const
 	}
 }
 
+ff::Event<void>& ReTron::AppState::GetReloadResourcesEvent()
+{
+	return _reloadResourcesEvent;
+}
+
 ff::IResourceAccess* ReTron::AppState::GetXamlResources()
 {
 	return GetResources();
@@ -337,6 +348,7 @@ bool ReTron::AppState::OnInitialized(ff::AppGlobals* globals)
 
 	InitOptions();
 	InitResources();
+	InitInputDevices();
 	InitGraphics();
 
 	return true;
@@ -346,19 +358,25 @@ void ReTron::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 {
 	_xamlGlobals = std::make_shared<ff::XamlGlobalState>(_globals);
 	_xamlGlobals->Startup(this);
-#ifdef _DEBUG
-	_debugState = std::make_shared<ReTron::DebugState>(this);
-#endif
 
-	std::shared_ptr<ff::State> titleState = std::make_shared<TitleState>(this);
-	std::shared_ptr<TransitionState> transitionState = std::make_shared<TransitionState>(this, nullptr, titleState, ff::String::from_static(L"transition-bg-1.png"), 4, 24);
-	_gameState = std::make_shared<ff::StateWrapper>(transitionState);
-
+	InitDebugState();
+	InitGameState();
 	ApplySystemOptions();
 }
 
 void ReTron::AppState::OnGameThreadShutdown(ff::AppGlobals* globals)
 {
+	if (_debugState)
+	{
+		_globals->GetDebugPageState()->CustomDebugEvent().Remove(_customDebugCookie);
+
+		_debugState->RestartLevelEvent.Remove(_restartLevelEventCookie);
+		_debugState->RestartGameEvent.Remove(_restartGameEventCookie);
+		_debugState->RebuildResourcesEvent.Remove(_rebuildResourcesEventCookie);
+
+		ff::GetThisModule().GetResourceRebuiltEvent().Remove(_resourcesRebuiltEventCookie);
+	}
+
 	_gameState = nullptr;
 	_debugState = nullptr;
 	_xamlGlobals = nullptr;
@@ -416,16 +434,23 @@ void ReTron::AppState::InitOptions()
 	}
 }
 
+// Must be able to be called multiple times (whenever resources are hot reloaded)
 void ReTron::AppState::InitResources()
 {
 	_paletteData.Init(L"palette");
+	_palette = nullptr;
 
 	for (size_t i = 0; i < _playerPaletteDatas.size(); i++)
 	{
 		_playerPaletteDatas[i].Init(L"palette");
+		_playerPalettes[i] = nullptr;
 	}
 
 	_debugInput.Init(L"gameDebugControls");
+}
+
+void ReTron::AppState::InitInputDevices()
+{
 	_debugInputDevices._keys.Push(_globals->GetKeysDebug());
 }
 
@@ -448,7 +473,91 @@ void ReTron::AppState::InitGraphics()
 	_target1080 = graph->CreateRenderTargetTexture(_texture1080);
 }
 
+void ReTron::AppState::InitDebugState()
+{
+	bool allowDebug = GetResources()->GetValue(ff::String::from_static(L"allowDebug"))->GetValue<ff::BoolValue>();
+	if (allowDebug || ff::GetThisModule().IsDebugBuild())
+	{
+		_debugState = std::make_shared<ReTron::DebugState>(this);
+	}
+
+	if (_debugState)
+	{
+		_customDebugCookie = _globals->GetDebugPageState()->CustomDebugEvent().Add(
+			[this]()
+			{
+				if (_debugState->GetVisible())
+				{
+					_debugState->Hide();
+				}
+				else
+				{
+					_debugState->SetVisible(_gameState);
+				}
+			});
+
+		_restartLevelEventCookie = _debugState->RestartLevelEvent.Add([this]()
+			{
+				_debugState->Hide();
+
+				std::shared_ptr<GameState> gameState = std::dynamic_pointer_cast<GameState>(_gameState->GetWrappedState());
+				if (gameState)
+				{
+					gameState->RestartLevel();
+				}
+				else
+				{
+					InitGameState();
+				}
+			});
+
+		_restartGameEventCookie = _debugState->RestartGameEvent.Add([this]()
+			{
+				_debugState->Hide();
+				InitGameState();
+			});
+
+		_rebuildResourcesEventCookie = _debugState->RebuildResourcesEvent.Add([this]()
+			{
+				_debugState->Hide();
+
+				if (!_rebuildingResources)
+				{
+					_rebuildingResources = true;
+					ff::GetThisModule().RebuildResourcesFromSourceAsync();
+				}
+			});
+
+		_resourcesRebuiltEventCookie = ff::GetThisModule().GetResourceRebuiltEvent().Add([this](ff::Module*)
+			{
+				_rebuildingResources = false;
+				ReloadResources();
+			});
+	}
+}
+
+void ReTron::AppState::InitGameState()
+{
+	std::shared_ptr<ff::State> titleState = std::make_shared<TitleState>(this);
+	std::shared_ptr<TransitionState> transitionState = std::make_shared<TransitionState>(
+		this, nullptr, titleState, ff::String::from_static(L"transition-bg-1.png"), 4, 24);
+
+	_gameState = std::make_shared<ff::StateWrapper>(transitionState);
+}
+
 void ReTron::AppState::ApplySystemOptions()
 {
 	_globals->SetFullScreen(_systemOptions._fullScreen);
+}
+
+void ReTron::AppState::ReloadResources()
+{
+	InitResources();
+
+	if (_xamlGlobals)
+	{
+		_xamlGlobals->SetPalette(GetPalette());
+	}
+
+	_reloadResourcesEvent.Notify();
 }

@@ -50,5 +50,8 @@ namespace ReTron
 		virtual ff::ITexture* GetTempTexture(TempTargets tempTarget) const = 0;
 		virtual ff::IRenderTarget* GetTempTarget(TempTargets tempTarget) const = 0;
 		virtual ff::IRenderDepth* GetTempDepth(TempTargets tempTarget) const = 0;
+
+		// Debug
+		virtual ff::Event<void>& GetReloadResourcesEvent() = 0;
 	};
 }

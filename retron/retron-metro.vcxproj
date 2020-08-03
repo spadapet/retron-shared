@@ -38,11 +38,13 @@
     <ClCompile Include="Core\Options.cpp" />
     <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="States\AppState.cpp" />
+    <ClCompile Include="States\DebugState.cpp" />
     <ClCompile Include="States\GameState.cpp" />
     <ClCompile Include="States\LevelState.cpp" />
     <ClCompile Include="States\TitleState.cpp" />
     <ClCompile Include="States\TransitionState.cpp" />
     <ClCompile Include="UI\Components.cpp" />
+    <ClCompile Include="UI\DebugPage.xaml.cpp" />
     <ClCompile Include="UI\FailurePage.xaml.cpp">
       <DependentUpon>UI\FailurePage.xaml</DependentUpon>
     </ClCompile>
@@ -70,11 +72,13 @@
     <ClInclude Include="Services\GameService.h" />
     <ClInclude Include="Services\LevelService.h" />
     <ClInclude Include="States\AppState.h" />
+    <ClInclude Include="States\DebugState.h" />
     <ClInclude Include="States\GameState.h" />
     <ClInclude Include="States\LevelState.h" />
     <ClInclude Include="States\TitleState.h" />
     <ClInclude Include="States\TransitionState.h" />
     <ClInclude Include="UI\Components.h" />
+    <ClInclude Include="UI\DebugPage.xaml.h" />
     <ClInclude Include="UI\FailurePage.xaml.h">
       <DependentUpon>UI\FailurePage.xaml</DependentUpon>
     </ClInclude>

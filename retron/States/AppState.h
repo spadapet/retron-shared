@@ -55,6 +55,7 @@ namespace ReTron
 		virtual ff::ITexture* GetTempTexture(TempTargets tempTarget) const override;
 		virtual ff::IRenderTarget* GetTempTarget(TempTargets tempTarget) const override;
 		virtual ff::IRenderDepth* GetTempDepth(TempTargets tempTarget) const override;
+		virtual ff::Event<void>& GetReloadResourcesEvent() override;
 
 		// IXamlGlobalHelper
 		virtual ff::IResourceAccess* GetXamlResources() override;
@@ -78,8 +79,12 @@ namespace ReTron
 	private:
 		void InitOptions();
 		void InitResources();
+		void InitInputDevices();
 		void InitGraphics();
+		void InitDebugState();
+		void InitGameState();
 		void ApplySystemOptions();
+		void ReloadResources();
 
 		// Globals
 		ff::ProcessGlobals* _processGlobals;
@@ -108,8 +113,15 @@ namespace ReTron
 		std::shared_ptr<ReTron::DebugState> _debugState;
 		ff::TypedResource<ff::IInputMapping> _debugInput;
 		ff::InputDevices _debugInputDevices;
+		ff::EventCookie _customDebugCookie;
+		ff::EventCookie _restartLevelEventCookie;
+		ff::EventCookie _restartGameEventCookie;
+		ff::EventCookie _rebuildResourcesEventCookie;
+		ff::EventCookie _resourcesRebuiltEventCookie;
+		ff::Event<void> _reloadResourcesEvent;
 		double _debugTimeScale;
 		bool _debugSteppingFrames;
 		bool _debugStepOneFrame;
+		bool _rebuildingResources;
 	};
 }

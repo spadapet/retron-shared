@@ -38,6 +38,9 @@ namespace ReTron
 		virtual Player& GetPlayer(size_t player);
 		virtual size_t GetPlayerCount() const;
 
+		// Debug
+		void RestartLevel();
+
 	private:
 		void InitPlayers();
 		void InitInput();

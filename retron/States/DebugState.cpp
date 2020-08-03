@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "Globals/AppGlobals.h"
 #include "Services/AppService.h"
-#include "State/DebugPageState.h"
 #include "States/DebugState.h"
 #include "UI/DebugPage.xaml.h"
 #include "UI/XamlGlobalState.h"
@@ -10,15 +9,8 @@
 
 ReTron::DebugState::DebugState(IAppService* appService)
 	: _appService(appService)
-	, _visible(false)
 {
-	_customDebugCookie = _appService->GetAppGlobals().GetDebugPageState()->CustomDebugEvent().Add(
-		[this]()
-		{
-			SetVisible(!GetVisible());
-		});
-
-	_debugPage = *new ReTron::DebugPage(_appService);
+	_debugPage = *new ReTron::DebugPage(_appService, this);
 
 	std::shared_ptr<ff::XamlView> view = _appService->GetXamlGlobals().CreateView(_debugPage);
 	_viewState = std::make_shared<ff::XamlViewState>(view, _appService->GetTempTarget(TempTargets::RgbPma2), _appService->GetTempDepth(TempTargets::RgbPma2));
@@ -26,26 +18,28 @@ ReTron::DebugState::DebugState(IAppService* appService)
 
 ReTron::DebugState::~DebugState()
 {
-	_appService->GetAppGlobals().GetDebugPageState()->CustomDebugEvent().Remove(_customDebugCookie);
 }
 
 bool ReTron::DebugState::GetVisible() const
 {
-	return _visible;
+	return _underState != nullptr;
 }
 
-void ReTron::DebugState::SetVisible(bool visible)
+void ReTron::DebugState::SetVisible(const std::shared_ptr<ff::State>& underState)
 {
-	if (_viewState)
-	{
-		_visible = visible;
-	}
+	_underState = underState;
+}
+
+void ReTron::DebugState::Hide()
+{
+	_underState = nullptr;
 }
 
 void ReTron::DebugState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth)
 {
-	if (_visible)
+	if (GetVisible())
 	{
+		_underState->Render(globals, target, depth);
 		_appService->ClearTempTargets(TempTargets::RgbPma2);
 
 		ff::State::Render(globals, target, depth);
@@ -56,7 +50,7 @@ void ReTron::DebugState::Render(ff::AppGlobals* globals, ff::IRenderTarget* targ
 
 size_t ReTron::DebugState::GetChildStateCount()
 {
-	return _visible ? 1 : 0;
+	return GetVisible() ? 1 : 0;
 }
 
 ff::State* ReTron::DebugState::GetChildState(size_t index)

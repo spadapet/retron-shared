@@ -10,7 +10,6 @@
 #include "State/StateWrapper.h"
 #include "States/GameState.h"
 #include "States/LevelState.h"
-#include "Value/Values.h"
 
 static ff::StaticString PROP_DIFFICULTIES(L"difficulties");
 static ff::StaticString PROP_LIVES(L"lives");
@@ -81,6 +80,11 @@ ReTron::Player& ReTron::GameState::GetPlayer(size_t player)
 size_t ReTron::GameState::GetPlayerCount() const
 {
 	return _gameOptions.GetPlayerCount();
+}
+
+void ReTron::GameState::RestartLevel()
+{
+	InitLevel();
 }
 
 void ReTron::GameState::InitPlayers()

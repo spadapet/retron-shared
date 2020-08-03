@@ -1,39 +1,29 @@
 #pragma once
 
-#include "Types/Event.h"
 #include "UI/Utility/NotifyPropertyChangedBase.h"
-
-namespace ff
-{
-	class IRenderTargetWindow;
-	class State;
-}
 
 namespace ReTron
 {
+	class DebugState;
 	class IAppService;
 
 	class DebugPageViewModel : public ff::NotifyPropertyChangedBase
 	{
 	public:
-		DebugPageViewModel(IAppService* appService);
-
-		ff::Event<void> RestartLevelEvent;
-		ff::Event<void> RestartGameEvent;
-		ff::Event<void> RestartAppEvent;
-		ff::Event<void> RebuildResourcesEvent;
+		DebugPageViewModel(IAppService* appService, DebugState* debugState);
 
 	private:
 		void RestartLevel(Noesis::BaseComponent* param);
 		void RestartGame(Noesis::BaseComponent* param);
-		void RestartApp(Noesis::BaseComponent* param);
 		void RebuildResources(Noesis::BaseComponent* param);
+		void CloseDebug(Noesis::BaseComponent* param);
 
 		IAppService* _appService;
+		DebugState* _debugState;
 		Noesis::Ptr<Noesis::ICommand> _restartLevelCommand;
 		Noesis::Ptr<Noesis::ICommand> _restartGameCommand;
-		Noesis::Ptr<Noesis::ICommand> _restartAppCommand;
 		Noesis::Ptr<Noesis::ICommand> _rebuildResourcesCommand;
+		Noesis::Ptr<Noesis::ICommand> _closeDebugCommand;
 
 		NS_DECLARE_REFLECTION(DebugPageViewModel, ff::NotifyPropertyChangedBase);
 	};
@@ -41,7 +31,7 @@ namespace ReTron
 	class DebugPage : public Noesis::UserControl
 	{
 	public:
-		DebugPage(IAppService* appService);
+		DebugPage(IAppService* appService, DebugState* debugState);
 
 		DebugPageViewModel* GetViewModel() const;
 

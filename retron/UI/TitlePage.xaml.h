@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Core/Options.h"
-#include "Types/Event.h"
 #include "UI/Utility/NotifyPropertyChangedBase.h"
 
 namespace ff
