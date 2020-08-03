@@ -17,6 +17,12 @@
     "file": "file:../../retron.designer/TitlePage.xaml"
   },
 
+  "DebugPage.xaml":
+  {
+    "res:type": "file",
+    "file": "file:../../retron.designer/DebugPage.xaml"
+  },
+
   "#Fonts/robotron-2084.ttf":
   {
     "res:type": "file",

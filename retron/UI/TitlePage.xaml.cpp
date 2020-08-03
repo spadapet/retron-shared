@@ -191,10 +191,6 @@ ReTron::TitlePage::TitlePage(IAppService* appService)
 	_viewModel->SetVisualStateRoot(FindName<Noesis::FrameworkElement>("rootPanel"));
 }
 
-ReTron::TitlePage::~TitlePage()
-{
-}
-
 ReTron::TitlePageViewModel* ReTron::TitlePage::GetViewModel() const
 {
 	return _viewModel;

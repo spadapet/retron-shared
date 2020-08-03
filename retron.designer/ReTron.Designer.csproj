@@ -61,6 +61,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DebugPage.xaml.cs">
+      <DependentUpon>DebugPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DesignerApp\DelegateCommand.cs" />
     <Compile Include="DesignerApp\PropertyNotifier.cs" />
     <Compile Include="Properties\GlobalSuppressions.cs" />
@@ -79,6 +82,10 @@
     <Page Include="ApplicationTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="DebugPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="DesignerApp\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

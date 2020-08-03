@@ -20,6 +20,7 @@
 #include "State/DebugPageState.h"
 #include "State/States.h"
 #include "States/AppState.h"
+#include "States/DebugState.h"
 #include "States/TitleState.h"
 #include "States/TransitionState.h"
 #include "Value/Values.h"
@@ -36,7 +37,6 @@ ReTron::AppState::AppState()
 	, _debugSteppingFrames(false)
 	, _debugStepOneFrame(false)
 	, _debugTimeScale(1.0)
-	, _customDebugCookie(nullptr)
 {
 }
 
@@ -44,7 +44,7 @@ std::shared_ptr<ff::State> ReTron::AppState::Advance(ff::AppGlobals* globals)
 {
 	GetPalette()->Advance();
 
-	return nullptr;
+	return ff::State::Advance(globals);
 }
 
 void ReTron::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
@@ -87,6 +87,8 @@ void ReTron::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
 	{
 		_debugTimeScale = 1.0;
 	}
+
+	ff::State::AdvanceDebugInput(globals);
 }
 
 void ReTron::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType type, ff::IRenderTarget* target, ff::IRenderDepth* depth)
@@ -101,6 +103,8 @@ void ReTron::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType 
 	{
 		view->SetViewToScreenTransform(targetPos.ToType<float>(), targetScale.ToType<float>());
 	}
+
+	ff::State::OnFrameRendered(globals, type, target, depth);
 }
 
 void ReTron::AppState::SaveState(ff::AppGlobals* globals)
@@ -112,6 +116,26 @@ void ReTron::AppState::SaveState(ff::AppGlobals* globals)
 	dict.Set<ff::DataValue>(Strings::ID_GAME_OPTIONS, &_gameOptions, sizeof(GameOptions));
 
 	globals->SetState(Strings::ID_APP_STATE, dict);
+
+	ff::State::SaveState(globals);
+}
+
+size_t ReTron::AppState::GetChildStateCount()
+{
+	return 2;
+}
+
+ff::State* ReTron::AppState::GetChildState(size_t index)
+{
+	if (index == 0)
+	{
+		return _debugState && _debugState->GetVisible()
+			? static_cast<ff::State*>(_debugState.get())
+			: static_cast<ff::State*>(_gameState.get());
+	}
+
+	return _xamlGlobals.get();
+
 }
 
 ff::ProcessGlobals& ReTron::AppState::GetProcessGlobals()
@@ -320,40 +344,29 @@ bool ReTron::AppState::OnInitialized(ff::AppGlobals* globals)
 
 void ReTron::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 {
-	std::weak_ptr<ff::State> weakThis = weak_from_this();
-	_customDebugCookie = globals->GetDebugPageState()->CustomDebugEvent().Add([weakThis]()
-		{
-			// Can show debug UI
-		});
-
 	_xamlGlobals = std::make_shared<ff::XamlGlobalState>(_globals);
 	_xamlGlobals->Startup(this);
+#ifdef _DEBUG
+	_debugState = std::make_shared<ReTron::DebugState>(this);
+#endif
+
+	std::shared_ptr<ff::State> titleState = std::make_shared<TitleState>(this);
+	std::shared_ptr<TransitionState> transitionState = std::make_shared<TransitionState>(this, nullptr, titleState, ff::String::from_static(L"transition-bg-1.png"), 4, 24);
+	_gameState = std::make_shared<ff::StateWrapper>(transitionState);
 
 	ApplySystemOptions();
 }
 
 void ReTron::AppState::OnGameThreadShutdown(ff::AppGlobals* globals)
 {
-	if (_xamlGlobals)
-	{
-		_xamlGlobals->Shutdown();
-		_xamlGlobals = nullptr;
-	}
-
-	globals->GetDebugPageState()->CustomDebugEvent().Remove(_customDebugCookie);
+	_gameState = nullptr;
+	_debugState = nullptr;
+	_xamlGlobals = nullptr;
 }
 
 std::shared_ptr<ff::State> ReTron::AppState::CreateInitialState(ff::AppGlobals* globals)
 {
-	std::shared_ptr<ff::State> titleState = std::make_shared<TitleState>(this);
-	std::shared_ptr<ff::State> transitionToTitleState = std::make_shared<TransitionState>(this, nullptr, titleState, ff::String::from_static(L"transition-bg-1.png"), 4, 24);
-
-	std::shared_ptr<ff::States> states = std::make_shared<ff::States>();
-	states->AddTop(shared_from_this());
-	states->AddTop(transitionToTitleState);
-	states->AddTop(_xamlGlobals);
-
-	return states;
+	return shared_from_this();
 }
 
 double ReTron::AppState::GetTimeScale(ff::AppGlobals* globals)

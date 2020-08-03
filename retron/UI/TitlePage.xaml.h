@@ -56,7 +56,6 @@ namespace ReTron
 	{
 	public:
 		TitlePage(IAppService* appService);
-		virtual ~TitlePage() override;
 
 		TitlePageViewModel* GetViewModel() const;
 

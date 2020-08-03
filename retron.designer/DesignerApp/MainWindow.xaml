@@ -13,7 +13,8 @@
         FontSize="{StaticResource Font.Size.Normal}">
     <Viewbox Stretch="Uniform" StretchDirection="Both">
         <Grid Width="480" Height="270">
-            <local:TitlePage />
+            <!--<local:TitlePage />-->
+            <local:DebugPage />
         </Grid>
     </Viewbox>
 </Window>

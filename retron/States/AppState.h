@@ -8,7 +8,7 @@
 #include "Resource/Resources.h"
 #include "Resource/ResourceValue.h"
 #include "Services/AppService.h"
-#include "State/State.h"
+#include "State/StateWrapper.h"
 #include "UI/XamlGlobalHelper.h"
 
 namespace ff
@@ -19,6 +19,8 @@ namespace ff
 
 namespace ReTron
 {
+	class DebugState;
+
 	class AppState
 		: public ff::State
 		, public ff::IAppGlobalsHelper
@@ -33,6 +35,8 @@ namespace ReTron
 		virtual void AdvanceDebugInput(ff::AppGlobals* globals) override;
 		virtual void OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType type, ff::IRenderTarget* target, ff::IRenderDepth* depth) override;
 		virtual void SaveState(ff::AppGlobals* globals) override;
+		virtual size_t GetChildStateCount() override;
+		virtual ff::State* GetChildState(size_t index) override;
 
 		// IAppService
 		virtual ff::ProcessGlobals& GetProcessGlobals() override;
@@ -80,6 +84,7 @@ namespace ReTron
 		// Globals
 		ff::ProcessGlobals* _processGlobals;
 		ff::AppGlobals* _globals;
+		std::shared_ptr<ff::StateWrapper> _gameState;
 		std::shared_ptr<ff::XamlGlobalState> _xamlGlobals;
 		SystemOptions _systemOptions;
 		GameOptions _gameOptions;
@@ -100,9 +105,9 @@ namespace ReTron
 		ff::Viewport _viewport;
 
 		// Debugging
+		std::shared_ptr<ReTron::DebugState> _debugState;
 		ff::TypedResource<ff::IInputMapping> _debugInput;
 		ff::InputDevices _debugInputDevices;
-		ff::EventCookie _customDebugCookie;
 		double _debugTimeScale;
 		bool _debugSteppingFrames;
 		bool _debugStepOneFrame;

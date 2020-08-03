@@ -29,7 +29,9 @@
     <ClCompile Include="Core\Enemies.cpp" />
     <ClCompile Include="Core\Level.cpp" />
     <ClCompile Include="Core\Player.cpp" />
+    <ClCompile Include="States\DebugState.cpp" />
     <ClCompile Include="States\TransitionState.cpp" />
+    <ClCompile Include="UI\DebugPage.xaml.cpp" />
     <ClCompile Include="UI\TitlePage.xaml.cpp" />
     <ClInclude Include="Assets\resource.h" />
     <ClCompile Include="Core\Globals.cpp" />
@@ -53,11 +55,13 @@
     <ClInclude Include="Services\GameService.h" />
     <ClInclude Include="Services\LevelService.h" />
     <ClInclude Include="States\AppState.h" />
+    <ClInclude Include="States\DebugState.h" />
     <ClInclude Include="States\GameState.h" />
     <ClInclude Include="States\LevelState.h" />
     <ClInclude Include="States\TitleState.h" />
     <ClInclude Include="States\TransitionState.h" />
     <ClInclude Include="UI\Components.h" />
+    <ClInclude Include="UI\DebugPage.xaml.h" />
     <ClInclude Include="UI\TitlePage.xaml.h" />
   </ItemGroup>
   <ItemGroup>
