@@ -28,6 +28,11 @@ bool ReTron::DebugState::GetVisible() const
 void ReTron::DebugState::SetVisible(const std::shared_ptr<ff::State>& underState)
 {
 	_underState = underState;
+
+	if (_underState)
+	{
+		_viewState->GetView()->SetFocus(true);
+	}
 }
 
 void ReTron::DebugState::Hide()

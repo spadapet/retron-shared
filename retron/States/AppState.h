@@ -33,7 +33,7 @@ namespace ReTron
 
 		// State
 		virtual std::shared_ptr<State> Advance(ff::AppGlobals* globals) override;
-		virtual void AdvanceDebugInput(ff::AppGlobals* globals) override;
+		virtual void AdvanceInput(ff::AppGlobals* globals) override;
 		virtual void OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType type, ff::IRenderTarget* target, ff::IRenderDepth* depth) override;
 		virtual void SaveState(ff::AppGlobals* globals) override;
 		virtual size_t GetChildStateCount() override;
@@ -86,7 +86,6 @@ namespace ReTron
 		void InitDebugState();
 		void InitGameState();
 		void ApplySystemOptions();
-		void ReloadResources();
 
 		// Globals
 		ff::ProcessGlobals* _processGlobals;

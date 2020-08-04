@@ -53,48 +53,47 @@ std::shared_ptr<ff::State> ReTron::AppState::Advance(ff::AppGlobals* globals)
 	return ff::State::Advance(globals);
 }
 
-void ReTron::AppState::AdvanceDebugInput(ff::AppGlobals* globals)
+void ReTron::AppState::AdvanceInput(ff::AppGlobals* globals)
 {
-	bool debugEnabled = DEBUG;
+	const bool debugEnabled = DEBUG;
 	if (!debugEnabled)
 	{
 		_debugStepOneFrame = false;
 		_debugSteppingFrames = false;
 		_debugTimeScale = 1.0;
-		return;
-	}
-
-	noAssertRet(_debugInput.HasObject());
-
-	if (_debugInput->Advance(_debugInputDevices, ff::SECONDS_PER_ADVANCE_D))
-	{
-		if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_CANCEL_STEP_ONE_FRAME))
-		{
-			_debugStepOneFrame = false;
-			_debugSteppingFrames = false;
-		}
-
-		if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_STEP_ONE_FRAME))
-		{
-			_debugStepOneFrame = _debugSteppingFrames;
-			_debugSteppingFrames = true;
-		}
-	}
-
-	if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_FAST))
-	{
-		_debugTimeScale = 4.0;
-	}
-	else if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_SLOW))
-	{
-		_debugTimeScale = 0.25;
 	}
 	else
 	{
-		_debugTimeScale = 1.0;
+		if (_debugInput->Advance(_debugInputDevices, ff::SECONDS_PER_ADVANCE_D))
+		{
+			if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_CANCEL_STEP_ONE_FRAME))
+			{
+				_debugStepOneFrame = false;
+				_debugSteppingFrames = false;
+			}
+
+			if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_STEP_ONE_FRAME))
+			{
+				_debugStepOneFrame = _debugSteppingFrames;
+				_debugSteppingFrames = true;
+			}
+		}
+
+		if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_FAST))
+		{
+			_debugTimeScale = 4.0;
+		}
+		else if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_SLOW))
+		{
+			_debugTimeScale = 0.25;
+		}
+		else
+		{
+			_debugTimeScale = 1.0;
+		}
 	}
 
-	ff::State::AdvanceDebugInput(globals);
+	ff::State::AdvanceInput(globals);
 }
 
 void ReTron::AppState::OnFrameRendered(ff::AppGlobals* globals, ff::AdvanceType type, ff::IRenderTarget* target, ff::IRenderDepth* depth)
@@ -361,8 +360,7 @@ bool ReTron::AppState::OnInitialized(ff::AppGlobals* globals)
 
 void ReTron::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 {
-	_xamlGlobals = std::make_shared<ff::XamlGlobalState>(_globals);
-	_xamlGlobals->Startup(this);
+	_xamlGlobals = std::make_shared<ff::XamlGlobalState>(_globals, this);
 
 	InitDebugState();
 	InitGameState();
@@ -458,7 +456,7 @@ void ReTron::AppState::InitResources()
 
 void ReTron::AppState::InitInputDevices()
 {
-	_debugInputDevices._keys.Push(_globals->GetKeysDebug());
+	_debugInputDevices._keys.Push(_globals->GetKeys());
 }
 
 void ReTron::AppState::InitGraphics()
@@ -532,7 +530,8 @@ void ReTron::AppState::InitDebugState()
 	_resourcesRebuiltEventCookie = ff::GetThisModule().GetResourceRebuiltEvent().Add([this](ff::Module*)
 		{
 			_rebuildingResources = false;
-			ReloadResources();
+			InitResources();
+			_reloadResourcesEvent.Notify();
 		});
 }
 
@@ -548,16 +547,4 @@ void ReTron::AppState::InitGameState()
 void ReTron::AppState::ApplySystemOptions()
 {
 	_globals->SetFullScreen(_systemOptions._fullScreen);
-}
-
-void ReTron::AppState::ReloadResources()
-{
-	InitResources();
-
-	if (_xamlGlobals)
-	{
-		_xamlGlobals->SetPalette(GetPalette());
-	}
-
-	_reloadResourcesEvent.Notify();
 }

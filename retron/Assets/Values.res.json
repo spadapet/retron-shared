@@ -15,24 +15,46 @@
       {
         "easy":
         {
-          "lives": 6
+          "lives": 6,
+          "levelSet": "easy"
         },
         "normal":
         {
-          "lives": 3
+          "lives": 3,
+          "levelSet": "normal"
         },
         "hard":
         {
-          "lives": 2
+          "lives": 2,
+          "levelSet": "hard"
         }
       },
 
       "levels":
-      [
+      {
+        "1":
         {
           "grunts": 10
         }
-      ]
+      },
+
+      "levelSets":
+      {
+        "easy":
+        [
+          "1"
+        ],
+
+        "normal":
+        [
+          "1"
+        ],
+
+        "hard":
+        [
+          "1"
+        ]
+      }
     }
   }
 }
