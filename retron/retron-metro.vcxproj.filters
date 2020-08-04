@@ -50,6 +50,9 @@
     <ClCompile Include="States\DebugState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="Core\Values.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -105,6 +108,9 @@
     </ClInclude>
     <ClInclude Include="States\DebugState.h">
       <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Values.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

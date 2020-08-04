@@ -174,6 +174,11 @@ const ReTron::GameOptions& ReTron::AppState::GetDefaultGameOptions() const
 	return _gameOptions;
 }
 
+const ReTron::Values& ReTron::AppState::GetDefaultValues() const
+{
+	return _values;
+}
+
 void ReTron::AppState::SetSystemOptions(const SystemOptions& options)
 {
 	_systemOptions = options;
@@ -437,6 +442,8 @@ void ReTron::AppState::InitOptions()
 // Must be able to be called multiple times (whenever resources are hot reloaded)
 void ReTron::AppState::InitResources()
 {
+	_values.Load();
+
 	_paletteData.Init(L"palette");
 	_palette = nullptr;
 
@@ -475,65 +482,58 @@ void ReTron::AppState::InitGraphics()
 
 void ReTron::AppState::InitDebugState()
 {
-	bool allowDebug = GetResources()->GetValue(ff::String::from_static(L"allowDebug"))->GetValue<ff::BoolValue>();
-	if (allowDebug || ff::GetThisModule().IsDebugBuild())
-	{
-		_debugState = std::make_shared<ReTron::DebugState>(this);
-	}
+	_debugState = std::make_shared<ReTron::DebugState>(this);
 
-	if (_debugState)
-	{
-		_customDebugCookie = _globals->GetDebugPageState()->CustomDebugEvent().Add(
-			[this]()
-			{
-				if (_debugState->GetVisible())
-				{
-					_debugState->Hide();
-				}
-				else
-				{
-					_debugState->SetVisible(_gameState);
-				}
-			});
-
-		_restartLevelEventCookie = _debugState->RestartLevelEvent.Add([this]()
+	_customDebugCookie = _globals->GetDebugPageState()->CustomDebugEvent().Add(
+		[this]()
+		{
+			if (_debugState->GetVisible())
 			{
 				_debugState->Hide();
-
-				std::shared_ptr<GameState> gameState = std::dynamic_pointer_cast<GameState>(_gameState->GetWrappedState());
-				if (gameState)
-				{
-					gameState->RestartLevel();
-				}
-				else
-				{
-					InitGameState();
-				}
-			});
-
-		_restartGameEventCookie = _debugState->RestartGameEvent.Add([this]()
+			}
+			else if (_values._allowDebug || ff::GetThisModule().IsDebugBuild())
 			{
-				_debugState->Hide();
+				_debugState->SetVisible(_gameState);
+			}
+		});
+
+	_restartLevelEventCookie = _debugState->RestartLevelEvent.Add([this]()
+		{
+			_debugState->Hide();
+
+			std::shared_ptr<GameState> gameState = std::dynamic_pointer_cast<GameState>(_gameState->GetWrappedState());
+			if (gameState)
+			{
+				gameState->RestartLevel();
+			}
+			else
+			{
 				InitGameState();
-			});
+			}
+		});
 
-		_rebuildResourcesEventCookie = _debugState->RebuildResourcesEvent.Add([this]()
+	_restartGameEventCookie = _debugState->RestartGameEvent.Add([this]()
+		{
+			_debugState->Hide();
+			InitGameState();
+		});
+
+	_rebuildResourcesEventCookie = _debugState->RebuildResourcesEvent.Add([this]()
+		{
+			_debugState->Hide();
+
+			if (!_rebuildingResources)
 			{
-				_debugState->Hide();
+				_rebuildingResources = true;
+				ff::GetThisModule().RebuildResourcesFromSourceAsync();
+			}
+		});
 
-				if (!_rebuildingResources)
-				{
-					_rebuildingResources = true;
-					ff::GetThisModule().RebuildResourcesFromSourceAsync();
-				}
-			});
-
-		_resourcesRebuiltEventCookie = ff::GetThisModule().GetResourceRebuiltEvent().Add([this](ff::Module*)
-			{
-				_rebuildingResources = false;
-				ReloadResources();
-			});
-	}
+	_resourcesRebuiltEventCookie = ff::GetThisModule().GetResourceRebuiltEvent().Add([this](ff::Module*)
+		{
+			_rebuildingResources = false;
+			ReloadResources();
+		});
 }
 
 void ReTron::AppState::InitGameState()

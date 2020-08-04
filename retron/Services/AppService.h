@@ -18,6 +18,7 @@ namespace ReTron
 {
 	struct GameOptions;
 	struct SystemOptions;
+	struct Values;
 
 	enum class TempTargets
 	{
@@ -38,6 +39,7 @@ namespace ReTron
 		// Options
 		virtual const SystemOptions& GetSystemOptions() const = 0;
 		virtual const GameOptions& GetDefaultGameOptions() const = 0;
+		virtual const Values& GetDefaultValues() const = 0;
 		virtual void SetSystemOptions(const SystemOptions& options) = 0;
 		virtual void SetDefaultGameOptions(const GameOptions& options) = 0;
 

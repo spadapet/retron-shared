@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Core/Options.h"
+#include "Core/Values.h"
 #include "Dict/ValueTable.h"
 #include "Globals/AppGlobalsHelper.h"
 #include "Graph/RenderTarget/Viewport.h"
@@ -45,6 +46,7 @@ namespace ReTron
 		virtual ff::IResourceAccess* GetResources() override;
 		virtual const SystemOptions& GetSystemOptions() const override;
 		virtual const GameOptions& GetDefaultGameOptions() const override;
+		virtual const Values& GetDefaultValues() const override;
 		virtual void SetSystemOptions(const SystemOptions& options) override;
 		virtual void SetDefaultGameOptions(const GameOptions& options) override;
 		virtual ff::IPalette* GetPalette() override;
@@ -93,6 +95,7 @@ namespace ReTron
 		std::shared_ptr<ff::XamlGlobalState> _xamlGlobals;
 		SystemOptions _systemOptions;
 		GameOptions _gameOptions;
+		Values _values;
 
 		// Rendering
 		std::unique_ptr<ff::IRenderer> _render;

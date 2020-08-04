@@ -37,6 +37,7 @@
     <ClCompile Include="Core\Level.cpp" />
     <ClCompile Include="Core\Options.cpp" />
     <ClCompile Include="Core\Player.cpp" />
+    <ClCompile Include="Core\Values.cpp" />
     <ClCompile Include="States\AppState.cpp" />
     <ClCompile Include="States\DebugState.cpp" />
     <ClCompile Include="States\GameState.cpp" />
@@ -57,6 +58,7 @@
     <ClInclude Include="Core\Level.h" />
     <ClInclude Include="Core\Options.h" />
     <ClInclude Include="Core\Player.h" />
+    <ClInclude Include="Core\Values.h" />
     <ClInclude Include="pch.h" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="App.xaml.cpp">
