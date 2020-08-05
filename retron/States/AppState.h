@@ -52,11 +52,6 @@ namespace ReTron
 		virtual ff::IPalette* GetPalette() override;
 		virtual ff::IPalette* GetPlayerPalette(size_t player) override;
 		virtual ff::IRenderer* GetRenderer() const override;
-		virtual void ClearTempTargets(TempTargets tempTargets) override;
-		virtual void RenderTempTargets(TempTargets tempTargets, ff::IRenderTarget* target) override;
-		virtual ff::ITexture* GetTempTexture(TempTargets tempTarget) const override;
-		virtual ff::IRenderTarget* GetTempTarget(TempTargets tempTarget) const override;
-		virtual ff::IRenderDepth* GetTempDepth(TempTargets tempTarget) const override;
 		virtual ff::Event<void>& GetReloadResourcesEvent() override;
 
 		// IXamlGlobalHelper
@@ -98,13 +93,6 @@ namespace ReTron
 
 		// Rendering
 		std::unique_ptr<ff::IRenderer> _render;
-		ff::ComPtr<ff::IRenderDepth> _depth;
-		ff::ComPtr<ff::ITexture> _textureRgbPma1;
-		ff::ComPtr<ff::IRenderTarget> _targetRgbPma1;
-		ff::ComPtr<ff::ITexture> _texturePalette1;
-		ff::ComPtr<ff::IRenderTarget> _targetPalette1;
-		ff::ComPtr<ff::ITexture> _texture1080;
-		ff::ComPtr<ff::IRenderTarget> _target1080;
 		ff::ComPtr<ff::IPalette> _palette;
 		ff::TypedResource<ff::IPaletteData> _paletteData;
 		std::array<ff::ComPtr<ff::IPalette>, Constants::MAX_PLAYERS> _playerPalettes;

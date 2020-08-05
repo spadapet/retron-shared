@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/RenderTargets.h"
 #include "Resource/ResourceValue.h"
 #include "State/State.h"
 
@@ -24,6 +25,7 @@ namespace ReTron
 
 	private:
 		IAppService* _appService;
+		RenderTargets _targets;
 		std::shared_ptr<ff::State> _oldState;
 		std::shared_ptr<ff::State> _newState;
 		ff::TypedResource<ff::ITexture> _image;

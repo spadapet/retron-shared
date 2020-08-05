@@ -27,6 +27,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core\Enemies.cpp" />
+    <ClCompile Include="Core\RenderTargets.cpp" />
     <ClCompile Include="Core\Values.cpp" />
     <ClCompile Include="Core\Level.cpp" />
     <ClCompile Include="Core\Player.cpp" />
@@ -43,6 +44,7 @@
     <ClCompile Include="States\TitleState.cpp" />
     <ClCompile Include="UI\Components.cpp" />
     <ClInclude Include="Core\Enemies.h" />
+    <ClInclude Include="Core\RenderTargets.h" />
     <ClInclude Include="Core\Values.h" />
     <ClInclude Include="Core\Globals.h" />
     <ClInclude Include="Core\Level.h" />

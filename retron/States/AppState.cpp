@@ -217,85 +217,6 @@ ff::IRenderer* ReTron::AppState::GetRenderer() const
 	return _render.get();
 }
 
-void ReTron::AppState::ClearTempTargets(TempTargets tempTargets)
-{
-	if (ff::HasAllFlags(tempTargets, TempTargets::Palette1))
-	{
-		GetTempTarget(TempTargets::Palette1)->Clear(&ff::GetColorNone());
-	}
-
-	if (ff::HasAllFlags(tempTargets, TempTargets::RgbPma2))
-	{
-		GetTempTarget(TempTargets::RgbPma2)->Clear(&ff::GetColorNone());
-	}
-}
-
-void ReTron::AppState::RenderTempTargets(TempTargets tempTargets, ff::IRenderTarget* target)
-{
-	_target1080->Clear(&ff::GetColorNone());
-
-	ff::RendererActive render = ff::PixelRendererActive::BeginRender(_render.get(), _target1080, nullptr, Constants::RENDER_RECT_HIGH, Constants::RENDER_RECT);
-	if (ff::HasAllFlags(tempTargets, TempTargets::Palette1))
-	{
-		render->PushPalette(GetPalette());
-		render->DrawSprite(GetTempTexture(TempTargets::Palette1)->AsSprite(), ff::Transform::Identity());
-	}
-
-	if (ff::HasAllFlags(tempTargets, TempTargets::RgbPma2))
-	{
-		render->PushPreMultipliedAlpha();
-		render->DrawSprite(GetTempTexture(TempTargets::RgbPma2)->AsSprite(), ff::Transform::Identity());
-	}
-
-	ff::RectFixedInt targetRect = _viewport.GetView(target).ToType<ff::FixedInt>();
-	render = ff::PixelRendererActive::BeginRender(_render.get(), target, nullptr, targetRect, Constants::RENDER_RECT_HIGH);
-	render->AsRendererActive11()->PushTextureSampler(D3D11_FILTER_MIN_MAG_MIP_LINEAR);
-	render->DrawSprite(_texture1080->AsSprite(), ff::Transform::Identity());
-}
-
-ff::ITexture* ReTron::AppState::GetTempTexture(TempTargets tempTarget) const
-{
-	switch (tempTarget)
-	{
-	case TempTargets::Palette1:
-		return _texturePalette1;
-
-	case TempTargets::RgbPma2:
-		return _textureRgbPma1;
-
-	default:
-		return nullptr;
-	}
-}
-
-ff::IRenderTarget* ReTron::AppState::GetTempTarget(TempTargets tempTarget) const
-{
-	switch (tempTarget)
-	{
-	case TempTargets::Palette1:
-		return _targetPalette1;
-
-	case TempTargets::RgbPma2:
-		return _targetRgbPma1;
-
-	default:
-		return nullptr;
-	}
-}
-
-ff::IRenderDepth* ReTron::AppState::GetTempDepth(TempTargets tempTarget) const
-{
-	switch (tempTarget)
-	{
-	case TempTargets::Palette1:
-	case TempTargets::RgbPma2:
-		return _depth;
-
-	default:
-		return nullptr;
-	}
-}
-
 ff::Event<void>& ReTron::AppState::GetReloadResourcesEvent()
 {
 	return _reloadResourcesEvent;
@@ -462,20 +383,7 @@ void ReTron::AppState::InitInputDevices()
 void ReTron::AppState::InitGraphics()
 {
 	ff::IGraphDevice* graph = _globals->GetGraph();
-	ff::PointInt lowSize(Constants::RENDER_WIDTH, Constants::RENDER_HEIGHT);
-	ff::PointInt highSize = lowSize * Constants::RENDER_SCALE;
-
 	_render = graph->CreateRenderer();
-	_depth = graph->CreateRenderDepth(lowSize);
-
-	_textureRgbPma1 = graph->CreateTexture(lowSize, ff::TextureFormat::RGBA32);
-	_targetRgbPma1 = graph->CreateRenderTargetTexture(_textureRgbPma1);
-
-	_texturePalette1 = graph->CreateTexture(lowSize, ff::TextureFormat::R8_UINT);
-	_targetPalette1 = graph->CreateRenderTargetTexture(_texturePalette1);
-
-	_texture1080 = graph->CreateTexture(highSize, ff::TextureFormat::RGBA32);
-	_target1080 = graph->CreateRenderTargetTexture(_texture1080);
 }
 
 void ReTron::AppState::InitDebugState()

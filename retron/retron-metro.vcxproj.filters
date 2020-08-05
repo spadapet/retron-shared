@@ -53,6 +53,9 @@
     <ClCompile Include="Core\Values.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Core\RenderTargets.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -110,6 +113,9 @@
       <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="Core\Values.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\RenderTargets.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>

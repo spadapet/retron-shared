@@ -13,6 +13,7 @@
 
 ReTron::TransitionState::TransitionState(IAppService* appService, std::shared_ptr<ff::State> oldState, std::shared_ptr<ff::State> newState, ff::StringRef imageResource, size_t speed, size_t verticalPixelStop)
 	: _appService(appService)
+	, _targets(appService, RenderTargetTypes::RgbPma2)
 	, _oldState(oldState)
 	, _newState(newState)
 	, _image(appService->GetResources(), imageResource)
@@ -112,14 +113,14 @@ void ReTron::TransitionState::Render(ff::AppGlobals* globals, ff::IRenderTarget*
 		}
 	}
 
-	_appService->ClearTempTargets(TempTargets::RgbPma2);
+	_targets.Clear();
 	{
 		ff::RendererActive render = _appService->GetRenderer()->BeginRender(
-			_appService->GetTempTarget(TempTargets::RgbPma2),
-			_appService->GetTempDepth(TempTargets::RgbPma2),
+			_targets.GetTarget(RenderTargetTypes::RgbPma2),
+			_targets.GetDepth(RenderTargetTypes::RgbPma2),
 			Constants::RENDER_RECT.ToType<float>(),
 			Constants::RENDER_RECT.ToType<float>());
 		render->DrawSprite(_texture->AsSprite(), ff::Transform::Identity());
 	}
-	_appService->RenderTempTargets(TempTargets::RgbPma2, target);
+	_targets.Render(target);
 }

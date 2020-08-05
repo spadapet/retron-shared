@@ -20,13 +20,6 @@ namespace ReTron
 	struct SystemOptions;
 	struct Values;
 
-	enum class TempTargets
-	{
-		None = 0x00,
-		Palette1 = 0x01,
-		RgbPma2 = 0x02,
-	};
-
 	class IAppService
 	{
 	public:
@@ -47,11 +40,6 @@ namespace ReTron
 		virtual ff::IPalette* GetPalette() = 0;
 		virtual ff::IPalette* GetPlayerPalette(size_t player) = 0;
 		virtual ff::IRenderer* GetRenderer() const = 0;
-		virtual void ClearTempTargets(TempTargets tempTargets) = 0;
-		virtual void RenderTempTargets(TempTargets tempTargets, ff::IRenderTarget* target) = 0;
-		virtual ff::ITexture* GetTempTexture(TempTargets tempTarget) const = 0;
-		virtual ff::IRenderTarget* GetTempTarget(TempTargets tempTarget) const = 0;
-		virtual ff::IRenderDepth* GetTempDepth(TempTargets tempTarget) const = 0;
 
 		// Debug
 		virtual ff::Event<void>& GetReloadResourcesEvent() = 0;

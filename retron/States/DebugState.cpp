@@ -9,11 +9,12 @@
 
 ReTron::DebugState::DebugState(IAppService* appService)
 	: _appService(appService)
+	, _targets(appService, RenderTargetTypes::RgbPma2)
 {
 	_debugPage = *new ReTron::DebugPage(_appService, this);
 
 	std::shared_ptr<ff::XamlView> view = _appService->GetXamlGlobals().CreateView(_debugPage);
-	_viewState = std::make_shared<ff::XamlViewState>(view, _appService->GetTempTarget(TempTargets::RgbPma2), _appService->GetTempDepth(TempTargets::RgbPma2));
+	_viewState = std::make_shared<ff::XamlViewState>(view, _targets.GetTarget(RenderTargetTypes::RgbPma2), _targets.GetDepth(RenderTargetTypes::RgbPma2));
 }
 
 ReTron::DebugState::~DebugState()
@@ -45,11 +46,11 @@ void ReTron::DebugState::Render(ff::AppGlobals* globals, ff::IRenderTarget* targ
 	if (GetVisible())
 	{
 		_underState->Render(globals, target, depth);
-		_appService->ClearTempTargets(TempTargets::RgbPma2);
+		_targets.Clear();
 
 		ff::State::Render(globals, target, depth);
 
-		_appService->RenderTempTargets(TempTargets::RgbPma2, target);
+		_targets.Render(target);
 	}
 }
 

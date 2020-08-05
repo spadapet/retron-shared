@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/RenderTargets.h"
 #include "State/State.h"
 
 namespace ff
@@ -35,6 +36,7 @@ namespace ReTron
 
 	private:
 		IAppService* _appService;
+		RenderTargets _targets;
 		Noesis::Ptr<DebugPage> _debugPage;
 		std::shared_ptr<ff::XamlViewState> _viewState;
 		std::shared_ptr<ff::State> _underState;

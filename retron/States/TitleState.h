@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/RenderTargets.h"
 #include "Resource/ResourceValue.h"
 #include "State/State.h"
 
@@ -27,6 +28,7 @@ namespace ReTron
 
 	private:
 		IAppService* _appService;
+		RenderTargets _targets;
 		Noesis::Ptr<TitlePage> _titlePage;
 		std::shared_ptr<ff::XamlViewState> _viewState;
 	};

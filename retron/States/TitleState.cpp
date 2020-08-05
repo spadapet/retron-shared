@@ -9,11 +9,12 @@
 
 ReTron::TitleState::TitleState(IAppService* appService)
 	: _appService(appService)
+	, _targets(appService, RenderTargetTypes::RgbPma2)
 {
 	_titlePage = *new ReTron::TitlePage(_appService);
 
 	std::shared_ptr<ff::XamlView> view = _appService->GetXamlGlobals().CreateView(_titlePage);
-	_viewState = std::make_shared<ff::XamlViewState>(view, _appService->GetTempTarget(TempTargets::RgbPma2), _appService->GetTempDepth(TempTargets::RgbPma2));
+	_viewState = std::make_shared<ff::XamlViewState>(view, _targets.GetTarget(RenderTargetTypes::RgbPma2), _targets.GetDepth(RenderTargetTypes::RgbPma2));
 }
 
 std::shared_ptr<ff::State> ReTron::TitleState::Advance(ff::AppGlobals* globals)
@@ -31,11 +32,11 @@ std::shared_ptr<ff::State> ReTron::TitleState::Advance(ff::AppGlobals* globals)
 
 void ReTron::TitleState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth)
 {
-	_appService->ClearTempTargets(TempTargets::RgbPma2);
+	_targets.Clear();
 
 	ff::State::Render(globals, target, depth);
 
-	_appService->RenderTempTargets(TempTargets::RgbPma2, target);
+	_targets.Render(target);
 }
 
 size_t ReTron::TitleState::GetChildStateCount()
