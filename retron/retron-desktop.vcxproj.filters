@@ -33,9 +33,6 @@
     <ClCompile Include="Core\Player.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Enemies.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Level.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -49,6 +46,9 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\RenderTargets.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\Entity.cpp">
       <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
@@ -96,9 +96,6 @@
     <ClInclude Include="Core\Player.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Enemies.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Level.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -112,6 +109,9 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\RenderTargets.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\Entity.h">
       <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>

@@ -31,8 +31,7 @@
 static const float PALETTE_CYCLES_PER_SECOND = 0.25f;
 
 ReTron::AppState::AppState()
-	: _processGlobals(nullptr)
-	, _globals(nullptr)
+	: _globals(nullptr)
 	, _viewport(ff::PointFloat(Constants::RENDER_WIDTH, Constants::RENDER_HEIGHT))
 	, _debugSteppingFrames(false)
 	, _debugStepOneFrame(false)
@@ -55,43 +54,39 @@ std::shared_ptr<ff::State> ReTron::AppState::Advance(ff::AppGlobals* globals)
 
 void ReTron::AppState::AdvanceInput(ff::AppGlobals* globals)
 {
-	const bool debugEnabled = DEBUG;
-	if (!debugEnabled)
+#ifdef _DEBUG
+	if (_debugInput->Advance(_debugInputDevices, ff::SECONDS_PER_ADVANCE_D))
 	{
-		_debugStepOneFrame = false;
-		_debugSteppingFrames = false;
-		_debugTimeScale = 1.0;
+		if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_CANCEL_STEP_ONE_FRAME))
+		{
+			_debugStepOneFrame = false;
+			_debugSteppingFrames = false;
+		}
+
+		if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_STEP_ONE_FRAME))
+		{
+			_debugStepOneFrame = _debugSteppingFrames;
+			_debugSteppingFrames = true;
+		}
+	}
+
+	if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_FAST))
+	{
+		_debugTimeScale = 4.0;
+	}
+	else if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_SLOW))
+	{
+		_debugTimeScale = 0.25;
 	}
 	else
 	{
-		if (_debugInput->Advance(_debugInputDevices, ff::SECONDS_PER_ADVANCE_D))
-		{
-			if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_CANCEL_STEP_ONE_FRAME))
-			{
-				_debugStepOneFrame = false;
-				_debugSteppingFrames = false;
-			}
-
-			if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_STEP_ONE_FRAME))
-			{
-				_debugStepOneFrame = _debugSteppingFrames;
-				_debugSteppingFrames = true;
-			}
-		}
-
-		if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_FAST))
-		{
-			_debugTimeScale = 4.0;
-		}
-		else if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_SLOW))
-		{
-			_debugTimeScale = 0.25;
-		}
-		else
-		{
-			_debugTimeScale = 1.0;
-		}
+		_debugTimeScale = 1.0;
 	}
+#else
+	_debugStepOneFrame = false;
+	_debugSteppingFrames = false;
+	_debugTimeScale = 1.0;
+#endif
 
 	ff::State::AdvanceInput(globals);
 }
@@ -145,7 +140,7 @@ ff::State* ReTron::AppState::GetChildState(size_t index)
 
 ff::ProcessGlobals& ReTron::AppState::GetProcessGlobals()
 {
-	return *_processGlobals;
+	return *ff::ProcessGlobals::Get();
 }
 
 ff::AppGlobals& ReTron::AppState::GetAppGlobals()
@@ -268,13 +263,12 @@ void ReTron::AppState::OnApplicationResourcesLoaded(Noesis::ResourceDictionary* 
 
 bool ReTron::AppState::OnInitialized(ff::AppGlobals* globals)
 {
-	_processGlobals = ff::ProcessGlobals::Get();
 	_globals = globals;
+	_render = globals->GetGraph()->CreateRenderer();
+	_debugInputDevices._keys.Push(_globals->GetKeys());
 
 	InitOptions();
 	InitResources();
-	InitInputDevices();
-	InitGraphics();
 
 	return true;
 }
@@ -373,17 +367,6 @@ void ReTron::AppState::InitResources()
 	}
 
 	_debugInput.Init(L"gameDebugControls");
-}
-
-void ReTron::AppState::InitInputDevices()
-{
-	_debugInputDevices._keys.Push(_globals->GetKeys());
-}
-
-void ReTron::AppState::InitGraphics()
-{
-	ff::IGraphDevice* graph = _globals->GetGraph();
-	_render = graph->CreateRenderer();
 }
 
 void ReTron::AppState::InitDebugState()

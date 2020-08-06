@@ -32,7 +32,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Core\Enemies.cpp" />
+    <ClCompile Include="Core\Entity.cpp" />
     <ClCompile Include="Core\Globals.cpp" />
     <ClCompile Include="Core\Level.cpp" />
     <ClCompile Include="Core\Options.cpp" />
@@ -54,7 +54,7 @@
     <ClInclude Include="App.xaml.h">
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
-    <ClInclude Include="Core\Enemies.h" />
+    <ClInclude Include="Core\Entity.h" />
     <ClInclude Include="Core\Globals.h" />
     <ClInclude Include="Core\Level.h" />
     <ClInclude Include="Core\Options.h" />

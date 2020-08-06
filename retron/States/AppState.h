@@ -76,14 +76,11 @@ namespace ReTron
 	private:
 		void InitOptions();
 		void InitResources();
-		void InitInputDevices();
-		void InitGraphics();
 		void InitDebugState();
 		void InitGameState();
 		void ApplySystemOptions();
 
 		// Globals
-		ff::ProcessGlobals* _processGlobals;
 		ff::AppGlobals* _globals;
 		std::shared_ptr<ff::StateWrapper> _gameState;
 		std::shared_ptr<ff::XamlGlobalState> _xamlGlobals;
