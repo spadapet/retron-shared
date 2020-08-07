@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Core/GameSpec.h"
 #include "Dict/Dict.h"
 #include "Globals/AppGlobals.h"
 #include "Input/Joystick/JoystickDevice.h"
@@ -11,17 +12,16 @@
 #include "States/GameState.h"
 #include "States/LevelState.h"
 
-static ff::StaticString PROP_DIFFICULTIES(L"difficulties");
-static ff::StaticString PROP_LIVES(L"lives");
-
-ReTron::GameState::GameState(IAppService* appService, const GameOptions& gameOptions)
+ReTron::GameState::GameState(IAppService* appService)
 	: _appService(appService)
-	, _gameOptions(gameOptions)
+	, _gameOptions(appService->GetDefaultGameOptions())
+	, _diffSpec(_appService->GetGameSpec()._difficulties.GetKey(_gameOptions.GetDifficultyId())->GetValue())
 	, _levelState(std::make_shared<ff::StateWrapper>())
+	, _level(0)
 {
 	InitPlayers();
-	InitInput();
 	InitLevel();
+	InitInput();
 }
 
 ReTron::GameState::~GameState()
@@ -89,16 +89,24 @@ void ReTron::GameState::RestartLevel()
 
 void ReTron::GameState::InitPlayers()
 {
-	const ff::Dict& diffs = _appService->GetResources()->GetValue(::PROP_DIFFICULTIES)->GetValue<ff::DictValue>();
-	const ff::Dict& diff = diffs.GetValue(_gameOptions.GetDifficultyId())->GetValue<ff::DictValue>();
-	int lives = diff.Get<ff::IntValue>(::PROP_LIVES);
-
 	for (size_t i = 0; i < GetPlayerCount(); i++)
 	{
 		Player& player = _players[i];
 		player._active = true;
-		player._lives = lives;
+		player._lives = _diffSpec._lives;
 	}
+}
+
+void ReTron::GameState::InitLevel()
+{
+	const GameSpec& gameSpec = _appService->GetGameSpec();
+	const LevelSetSpec& levelSetSpec = gameSpec._levelSets.GetKey(_diffSpec._levelSet)->GetValue();
+
+	size_t level = _level % levelSetSpec._levels.Size();
+	ff::String levelId = levelSetSpec._levels[level];
+	const LevelSpec& levelSpec = gameSpec._levels.GetKey(levelId)->GetValue();
+
+	*_levelState = std::make_shared<LevelState>(this, _diffSpec, levelSpec);
 }
 
 void ReTron::GameState::InitInput()
@@ -128,11 +136,6 @@ void ReTron::GameState::InitInput()
 			_playerInputDevices[i]._joys.Push(joystick);
 		}
 	}
-}
-
-void ReTron::GameState::InitLevel()
-{
-	*_levelState = std::make_shared<LevelState>(this);
 }
 
 void ReTron::GameState::AdvanceInput()

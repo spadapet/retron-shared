@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/GameSpec.h"
 #include "Core/Options.h"
 #include "Core/Player.h"
 #include "Input/InputMapping.h"
@@ -21,7 +22,7 @@ namespace ReTron
 		, public IGameService
 	{
 	public:
-		GameState(IAppService* appService, const GameOptions& gameOptions);
+		GameState(IAppService* appService);
 		~GameState();
 
 		// State
@@ -43,12 +44,13 @@ namespace ReTron
 
 	private:
 		void InitPlayers();
-		void InitInput();
 		void InitLevel();
+		void InitInput();
 		void AdvanceInput();
 
 		IAppService* _appService;
 		GameOptions _gameOptions;
+		DifficultySpec _diffSpec;
 
 		// Input
 		ff::TypedResource<ff::IInputMapping> _gameInput;
@@ -60,5 +62,6 @@ namespace ReTron
 
 		// Level
 		std::shared_ptr<ff::StateWrapper> _levelState;
+		size_t _level;
 	};
 }

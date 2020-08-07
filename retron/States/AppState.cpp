@@ -168,9 +168,9 @@ const ReTron::GameOptions& ReTron::AppState::GetDefaultGameOptions() const
 	return _gameOptions;
 }
 
-const ReTron::Values& ReTron::AppState::GetDefaultValues() const
+const ReTron::GameSpec& ReTron::AppState::GetGameSpec() const
 {
-	return _values;
+	return _gameSpec;
 }
 
 void ReTron::AppState::SetSystemOptions(const SystemOptions& options)
@@ -355,7 +355,7 @@ void ReTron::AppState::InitOptions()
 // Must be able to be called multiple times (whenever resources are hot reloaded)
 void ReTron::AppState::InitResources()
 {
-	_values.Load();
+	_gameSpec = GameSpec::Load(GetResources());
 
 	_paletteData.Init(L"palette");
 	_palette = nullptr;
@@ -380,7 +380,7 @@ void ReTron::AppState::InitDebugState()
 			{
 				_debugState->Hide();
 			}
-			else if (_values._allowDebug || ff::GetThisModule().IsDebugBuild())
+			else if (_gameSpec._allowDebug || ff::GetThisModule().IsDebugBuild())
 			{
 				_debugState->SetVisible(_gameState);
 			}

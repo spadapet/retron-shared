@@ -33,12 +33,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Core\Entity.cpp" />
+    <ClCompile Include="Core\GameSpec.cpp" />
     <ClCompile Include="Core\Globals.cpp" />
     <ClCompile Include="Core\Level.cpp" />
     <ClCompile Include="Core\Options.cpp" />
     <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="Core\RenderTargets.cpp" />
-    <ClCompile Include="Core\Values.cpp" />
+    <ClCompile Include="Services\LevelAdvanceService.cpp" />
+    <ClCompile Include="Services\AudioService.cpp" />
+    <ClCompile Include="Services\LevelRenderService.cpp" />
     <ClCompile Include="States\AppState.cpp" />
     <ClCompile Include="States\DebugState.cpp" />
     <ClCompile Include="States\GameState.cpp" />
@@ -55,12 +58,12 @@
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
     <ClInclude Include="Core\Entity.h" />
+    <ClInclude Include="Core\GameSpec.h" />
     <ClInclude Include="Core\Globals.h" />
     <ClInclude Include="Core\Level.h" />
     <ClInclude Include="Core\Options.h" />
     <ClInclude Include="Core\Player.h" />
     <ClInclude Include="Core\RenderTargets.h" />
-    <ClInclude Include="Core\Values.h" />
     <ClInclude Include="pch.h" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="App.xaml.cpp">
@@ -72,9 +75,12 @@
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <ClInclude Include="Services\LevelAdvanceService.h" />
     <ClInclude Include="Services\AppService.h" />
+    <ClInclude Include="Services\AudioService.h" />
     <ClInclude Include="Services\GameService.h" />
     <ClInclude Include="Services\LevelService.h" />
+    <ClInclude Include="Services\LevelRenderService.h" />
     <ClInclude Include="States\AppState.h" />
     <ClInclude Include="States\DebugState.h" />
     <ClInclude Include="States\GameState.h" />

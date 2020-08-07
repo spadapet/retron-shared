@@ -88,7 +88,7 @@ const char* ReTron::TitlePageViewModel::GetFullScreenText() const
 
 void ReTron::TitlePageViewModel::StartGameCommand(Noesis::BaseComponent* param)
 {
-	_pendingState = std::make_shared<GameState>(_appService, _appService->GetDefaultGameOptions());
+	_pendingState = std::make_shared<GameState>(_appService);
 }
 
 void ReTron::TitlePageViewModel::PlayersCommand(Noesis::BaseComponent* param)

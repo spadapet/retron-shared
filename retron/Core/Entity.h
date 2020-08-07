@@ -14,6 +14,9 @@ namespace ReTron
 		ff::PointFixedInt _position;
 		ff::PointFixedInt _velocity;
 
+		typedef size_t ID;
+		static const ID Null = ff::INVALID_SIZE;
+
 		enum class Type : uint16_t
 		{
 			None,
@@ -42,10 +45,8 @@ namespace ReTron
 			None,
 		};
 
-		Type GetType() const
-		{
-			return static_cast<Type>(_type);
-		}
+		void Init(Type type);
+		Type GetType() const;
 
 		template<class T> T& Cast();
 		template<class T> const T& Cast() const;

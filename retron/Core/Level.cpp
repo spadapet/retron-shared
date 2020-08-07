@@ -2,8 +2,13 @@
 #include "Core/Level.h"
 
 ReTron::Level::Level()
-	: _freeDataSize(0)
+	: _firstFreeEntity(Entity::Null)
+	, _firstFreeDataMap(ff::INVALID_SIZE)
+	, _freeDataSize(0)
 {
+	_entities.Reserve(256);
+	_dataMap.Reserve(256);
+	_data.Reserve(1024);
 }
 
 ReTron::Level::Level(const Level& rhs)
@@ -27,10 +32,10 @@ ReTron::Level& ReTron::Level::operator=(const Level& rhs)
 	if (this != &rhs)
 	{
 		_entities = rhs._entities;
-		_data = rhs._data;
 		_dataMap = rhs._dataMap;
-		_freeEntities = rhs._freeEntities;
-		_freeDataMap = rhs._freeDataMap;
+		_data = rhs._data;
+		_firstFreeEntity = rhs._firstFreeEntity;
+		_firstFreeDataMap = rhs._firstFreeDataMap;
 		_freeDataSize = rhs._freeDataSize;
 	}
 
@@ -42,72 +47,129 @@ ReTron::Level& ReTron::Level::operator=(Level&& rhs)
 	if (this != &rhs)
 	{
 		_entities = std::move(rhs._entities);
-		_data = std::move(rhs._data);
 		_dataMap = std::move(rhs._dataMap);
-		_freeEntities = std::move(rhs._freeEntities);
-		_freeDataMap = std::move(rhs._freeDataMap);
+		_data = std::move(rhs._data);
+		_firstFreeEntity = rhs._firstFreeEntity;
+		_firstFreeDataMap = rhs._firstFreeDataMap;
 		_freeDataSize = rhs._freeDataSize;
 	}
 
 	return *this;
 }
 
-uint32_t ReTron::Level::AllocEntity(Entity::Type type)
+ReTron::Entity::ID ReTron::Level::AllocEntity(Entity::Type type)
 {
-	uint32_t id = _entities.Size();
-
-	if (_freeEntities.Size())
+	if (_firstFreeEntity != Entity::Null)
 	{
-		id = _freeEntities.Pop();
+		Entity::ID id = _firstFreeEntity;
+		Entity& entity = GetEntity(_firstFreeEntity);
+		_firstFreeEntity = static_cast<Entity::ID>(entity._levelData);
+		entity.Init(type);
+		return id;
 	}
 	else
 	{
-		_entities.PushEmplace();
+		Entity entity;
+		entity.Init(type);
+		_entities.PushEmplace(std::move(entity));
+		return _entities.Size() - 1;
+	}
+}
+
+void ReTron::Level::FreeEntity(Entity::ID id)
+{
+	Entity& entity = GetEntity(id);
+	entity.Init(Entity::Type::None);
+	entity._levelData = static_cast<uint32_t>(_firstFreeEntity);
+	_firstFreeEntity = id;
+}
+
+ReTron::Entity& ReTron::Level::GetEntity(Entity::ID id)
+{
+	return _entities[id];
+}
+
+const ReTron::Entity& ReTron::Level::GetEntity(Entity::ID id) const
+{
+	return _entities[id];
+}
+
+ReTron::Entity::ID ReTron::Level::GetId(const Entity& entity) const
+{
+	return &entity - _entities.ConstData();
+}
+
+void ReTron::Level::FreeData(Entity& entity)
+{
+	if (entity._levelData != ff::INVALID_DWORD)
+	{
+		size_t index = static_cast<size_t>(entity._levelData);
+		_freeDataSize += _dataMap[index].second;
+		_dataMap[index] = SizePair{_firstFreeDataMap, 0};
+		_firstFreeDataMap = index;
+
+		if (_freeDataSize >= _data.Size() / 2)
+		{
+			CompressDataBytes();
+		}
+	}
+}
+
+size_t ReTron::Level::AllocDataBytes(size_t size)
+{
+	size_t index;
+	if (_firstFreeDataMap != ff::INVALID_SIZE)
+	{
+		index = _firstFreeDataMap;
+		_firstFreeDataMap = _dataMap[_firstFreeDataMap].first;
+	}
+	else
+	{
+		index = _dataMap.Size();
+		_dataMap.PushEmplace(SizePair{});
 	}
 
-	Entity& entity = GetEntity(id);
+	_dataMap[index] = SizePair{_data.Size(), size};
+	_data.InsertDefault(_data.Size(), size);
 
-	return 0;
+	return index;
 }
 
-void ReTron::Level::FreeEntity(uint32_t id)
-{
-}
-
-ReTron::Entity& ReTron::Level::GetEntity(uint32_t id)
-{
-	static Entity e;
-	return e;
-}
-
-const ReTron::Entity& ReTron::Level::GetEntity(uint32_t id) const
-{
-	static Entity e;
-	return e;
-}
-
-uint32_t ReTron::Level::GetId(const Entity& entity) const
-{
-	size_t i = &entity - _entities.ConstData();
-	assert(i < _entities.Size());
-	return static_cast<uint32_t>(i);
-}
-
-void ReTron::Level::FreeData(uint32_t index)
-{
-}
-
-uint32_t ReTron::Level::AllocDataBytes(size_t size)
-{
-	return 0;
-}
-
-uint8_t* ReTron::Level::GetDataBytes(uint32_t index)
+uint8_t* ReTron::Level::GetDataBytes(size_t index)
 {
 	return &_data[_dataMap[index].first];
 }
 
-const uint8_t* ReTron::Level::GetDataBytes(uint32_t index) const
+const uint8_t* ReTron::Level::GetDataBytes(size_t index) const
 {
 	return &_data[_dataMap[index].first];
+}
+
+void ReTron::Level::CompressDataBytes()
+{
+	ff::Vector<SizePair*> sortedDataMap;
+	sortedDataMap.Reserve(_dataMap.Size());
+
+	for (SizePair& i : _dataMap)
+	{
+		if (i.second)
+		{
+			sortedDataMap.Push(&i);
+		}
+	}
+
+	std::sort(sortedDataMap.begin(), sortedDataMap.end(), [](SizePair* lhs, SizePair* rhs)
+		{
+			return lhs->first < rhs->first;
+		});
+
+	size_t pos = 0;
+	for (SizePair* i : sortedDataMap)
+	{
+		std::memmove(_data.Data(pos), _data.Data(i->first), i->second);
+		i->first = pos;
+		pos += i->second;
+	}
+
+	_data.Delete(pos, _data.Size() - pos);
 }
