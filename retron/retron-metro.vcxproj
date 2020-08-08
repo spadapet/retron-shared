@@ -32,16 +32,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Audio.cpp" />
     <ClCompile Include="Core\Entity.cpp" />
+    <ClCompile Include="Core\EntityFactory.cpp" />
     <ClCompile Include="Core\GameSpec.cpp" />
     <ClCompile Include="Core\Globals.cpp" />
     <ClCompile Include="Core\Level.cpp" />
+    <ClCompile Include="Core\LevelAdvance.cpp" />
+    <ClCompile Include="Core\LevelRender.cpp" />
     <ClCompile Include="Core\Options.cpp" />
     <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="Core\RenderTargets.cpp" />
-    <ClCompile Include="Services\LevelAdvanceService.cpp" />
-    <ClCompile Include="Services\AudioService.cpp" />
-    <ClCompile Include="Services\LevelRenderService.cpp" />
     <ClCompile Include="States\AppState.cpp" />
     <ClCompile Include="States\DebugState.cpp" />
     <ClCompile Include="States\GameState.cpp" />
@@ -57,10 +58,14 @@
     <ClInclude Include="App.xaml.h">
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="Core\Audio.h" />
     <ClInclude Include="Core\Entity.h" />
+    <ClInclude Include="Core\EntityFactory.h" />
     <ClInclude Include="Core\GameSpec.h" />
     <ClInclude Include="Core\Globals.h" />
     <ClInclude Include="Core\Level.h" />
+    <ClInclude Include="Core\LevelAdvance.h" />
+    <ClInclude Include="Core\LevelRender.h" />
     <ClInclude Include="Core\Options.h" />
     <ClInclude Include="Core\Player.h" />
     <ClInclude Include="Core\RenderTargets.h" />
@@ -75,12 +80,9 @@
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <ClInclude Include="Services\LevelAdvanceService.h" />
     <ClInclude Include="Services\AppService.h" />
-    <ClInclude Include="Services\AudioService.h" />
     <ClInclude Include="Services\GameService.h" />
     <ClInclude Include="Services\LevelService.h" />
-    <ClInclude Include="Services\LevelRenderService.h" />
     <ClInclude Include="States\AppState.h" />
     <ClInclude Include="States\DebugState.h" />
     <ClInclude Include="States\GameState.h" />

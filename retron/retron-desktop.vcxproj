@@ -26,14 +26,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core\Audio.cpp" />
     <ClCompile Include="Core\Entity.cpp" />
+    <ClCompile Include="Core\EntityFactory.cpp" />
+    <ClCompile Include="Core\LevelAdvance.cpp" />
+    <ClCompile Include="Core\LevelRender.cpp" />
     <ClCompile Include="Core\RenderTargets.cpp" />
     <ClCompile Include="Core\GameSpec.cpp" />
     <ClCompile Include="Core\Level.cpp" />
     <ClCompile Include="Core\Player.cpp" />
-    <ClCompile Include="Services\AudioService.cpp" />
-    <ClCompile Include="Services\LevelAdvanceService.cpp" />
-    <ClCompile Include="Services\LevelRenderService.cpp" />
     <ClCompile Include="States\DebugState.cpp" />
     <ClCompile Include="States\TransitionState.cpp" />
     <ClCompile Include="UI\DebugPage.xaml.cpp" />
@@ -46,7 +47,11 @@
     <ClCompile Include="States\LevelState.cpp" />
     <ClCompile Include="States\TitleState.cpp" />
     <ClCompile Include="UI\Components.cpp" />
+    <ClInclude Include="Core\Audio.h" />
     <ClInclude Include="Core\Entity.h" />
+    <ClInclude Include="Core\EntityFactory.h" />
+    <ClInclude Include="Core\LevelAdvance.h" />
+    <ClInclude Include="Core\LevelRender.h" />
     <ClInclude Include="Core\RenderTargets.h" />
     <ClInclude Include="Core\GameSpec.h" />
     <ClInclude Include="Core\Globals.h" />
@@ -59,10 +64,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClInclude Include="Services\AppService.h" />
-    <ClInclude Include="Services\AudioService.h" />
     <ClInclude Include="Services\GameService.h" />
-    <ClInclude Include="Services\LevelAdvanceService.h" />
-    <ClInclude Include="Services\LevelRenderService.h" />
     <ClInclude Include="Services\LevelService.h" />
     <ClInclude Include="States\AppState.h" />
     <ClInclude Include="States\DebugState.h" />

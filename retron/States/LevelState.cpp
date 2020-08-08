@@ -5,6 +5,7 @@ ReTron::LevelState::LevelState(IGameService* gameService, const DifficultySpec& 
 	: _gameService(gameService)
 	, _diffSpec(diffSpec)
 	, _levelSpec(levelSpec)
+	, _entityFactory(this)
 	, _advance(this)
 	, _render(this)
 {
@@ -17,11 +18,14 @@ ReTron::LevelState::~LevelState()
 
 std::shared_ptr<ff::State> ReTron::LevelState::Advance(ff::AppGlobals* globals)
 {
-	return std::shared_ptr<ff::State>();
+	_advance.Advance();
+
+	return ff::State::Advance(globals);
 }
 
 void ReTron::LevelState::Render(ff::AppGlobals* globals, ff::IRenderTarget* target, ff::IRenderDepth* depth)
 {
+	_render.Render(target, depth);
 }
 
 ReTron::IGameService* ReTron::LevelState::GetGameService() const
@@ -51,4 +55,5 @@ ReTron::Level& ReTron::LevelState::GetLevel()
 
 void ReTron::LevelState::InitLevel()
 {
+	_entityFactory.InitLevel();
 }

@@ -4,10 +4,12 @@ namespace ReTron
 {
 	class ILevelService;
 
-	class LevelRenderService
+	class LevelAdvance
 	{
 	public:
-		LevelRenderService(ILevelService* levelService);
+		LevelAdvance(ILevelService* levelService);
+
+		void Advance();
 
 	private:
 		ILevelService* _levelService;

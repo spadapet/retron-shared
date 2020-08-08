@@ -16,6 +16,7 @@ namespace ff
 
 namespace ReTron
 {
+	class Audio;
 	struct GameOptions;
 	struct SystemOptions;
 	struct GameSpec;
@@ -28,6 +29,7 @@ namespace ReTron
 		virtual ff::AppGlobals& GetAppGlobals() = 0;
 		virtual ff::XamlGlobalState& GetXamlGlobals() = 0;
 		virtual ff::IResourceAccess* GetResources() = 0;
+		virtual Audio& GetAudio() = 0;
 
 		// Options
 		virtual const SystemOptions& GetSystemOptions() const = 0;

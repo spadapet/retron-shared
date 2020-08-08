@@ -1,9 +1,10 @@
 #pragma once
 
+#include "Core/EntityFactory.h"
 #include "Core/GameSpec.h"
 #include "Core/Level.h"
-#include "Services/LevelAdvanceService.h"
-#include "Services/LevelRenderService.h"
+#include "Core/LevelAdvance.h"
+#include "Core/LevelRender.h"
 #include "Services/LevelService.h"
 #include "State/State.h"
 
@@ -35,7 +36,8 @@ namespace ReTron
 		DifficultySpec _diffSpec;
 		LevelSpec _levelSpec;
 		Level _level;
-		LevelAdvanceService _advance;
-		LevelRenderService _render;
+		EntityFactory _entityFactory;
+		LevelAdvance _advance;
+		LevelRender _render;
 	};
 }

@@ -51,14 +51,17 @@
     <ClCompile Include="Core\GameSpec.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Services\AudioService.cpp">
-      <Filter>Services</Filter>
+    <ClCompile Include="Core\Audio.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Services\LevelAdvanceService.cpp">
-      <Filter>Services</Filter>
+    <ClCompile Include="Core\EntityFactory.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Services\LevelRenderService.cpp">
-      <Filter>Services</Filter>
+    <ClCompile Include="Core\LevelAdvance.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Core\LevelRender.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -123,14 +126,17 @@
     <ClInclude Include="Core\GameSpec.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Services\AudioService.h">
-      <Filter>Services</Filter>
+    <ClInclude Include="Core\LevelRender.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Services\LevelAdvanceService.h">
-      <Filter>Services</Filter>
+    <ClInclude Include="Core\Audio.h">
+      <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Services\LevelRenderService.h">
-      <Filter>Services</Filter>
+    <ClInclude Include="Core\EntityFactory.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\LevelAdvance.h">
+      <Filter>Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

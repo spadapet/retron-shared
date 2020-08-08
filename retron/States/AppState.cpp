@@ -158,6 +158,11 @@ ff::IResourceAccess* ReTron::AppState::GetResources()
 	return ff::GetThisModule().GetResources();
 }
 
+ReTron::Audio& ReTron::AppState::GetAudio()
+{
+	return *_audio;
+}
+
 const ReTron::SystemOptions& ReTron::AppState::GetSystemOptions() const
 {
 	return _systemOptions;
@@ -265,6 +270,7 @@ bool ReTron::AppState::OnInitialized(ff::AppGlobals* globals)
 {
 	_globals = globals;
 	_render = globals->GetGraph()->CreateRenderer();
+	_audio = std::make_unique<Audio>(globals);
 	_debugInputDevices._keys.Push(_globals->GetKeys());
 
 	InitOptions();

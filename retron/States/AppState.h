@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Audio.h"
 #include "Core/Options.h"
 #include "Core/GameSpec.h"
 #include "Dict/ValueTable.h"
@@ -44,6 +45,7 @@ namespace ReTron
 		virtual ff::AppGlobals& GetAppGlobals() override;
 		virtual ff::XamlGlobalState& GetXamlGlobals() override;
 		virtual ff::IResourceAccess* GetResources() override;
+		virtual Audio& GetAudio() override;
 		virtual const SystemOptions& GetSystemOptions() const override;
 		virtual const GameOptions& GetDefaultGameOptions() const override;
 		virtual const GameSpec& GetGameSpec() const override;
@@ -95,6 +97,9 @@ namespace ReTron
 		std::array<ff::ComPtr<ff::IPalette>, Constants::MAX_PLAYERS> _playerPalettes;
 		std::array<ff::TypedResource<ff::IPaletteData>, Constants::MAX_PLAYERS> _playerPaletteDatas;
 		ff::Viewport _viewport;
+
+		// Audio
+		std::unique_ptr<Audio> _audio;
 
 		// Debugging
 		std::shared_ptr<ReTron::DebugState> _debugState;

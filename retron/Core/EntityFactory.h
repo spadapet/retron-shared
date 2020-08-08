@@ -4,10 +4,12 @@ namespace ReTron
 {
 	class ILevelService;
 
-	class LevelAdvanceService
+	class EntityFactory
 	{
 	public:
-		LevelAdvanceService(ILevelService* levelService);
+		EntityFactory(ILevelService* levelService);
+
+		void InitLevel();
 
 	private:
 		ILevelService* _levelService;
