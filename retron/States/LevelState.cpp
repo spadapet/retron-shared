@@ -43,14 +43,14 @@ const ReTron::LevelSpec& ReTron::LevelState::GetLevelSpec() const
 	return _levelSpec;
 }
 
-const ReTron::Level& ReTron::LevelState::GetLevel() const
+ReTron::EntityFactory& ReTron::LevelState::GetEntityFactory()
 {
-	return _level;
+	return _entityFactory;
 }
 
-ReTron::Level& ReTron::LevelState::GetLevel()
+ff::EntityDomain& ReTron::LevelState::GetEntityDomain()
 {
-	return _level;
+	return _domain;
 }
 
 void ReTron::LevelState::InitLevel()

@@ -2,7 +2,6 @@
 
 #include "Core/EntityFactory.h"
 #include "Core/GameSpec.h"
-#include "Core/Level.h"
 #include "Core/LevelAdvance.h"
 #include "Core/LevelRender.h"
 #include "Services/LevelService.h"
@@ -26,8 +25,8 @@ namespace ReTron
 		virtual IGameService* GetGameService() const override;
 		virtual const DifficultySpec& GetDifficultySpec() const override;
 		virtual const LevelSpec& GetLevelSpec() const override;
-		virtual const Level& GetLevel() const override;
-		virtual Level& GetLevel() override;
+		virtual EntityFactory& GetEntityFactory() override;
+		virtual ff::EntityDomain& GetEntityDomain() override;
 
 	private:
 		void InitLevel();
@@ -35,9 +34,9 @@ namespace ReTron
 		IGameService* _gameService;
 		DifficultySpec _diffSpec;
 		LevelSpec _levelSpec;
-		Level _level;
 		EntityFactory _entityFactory;
 		LevelAdvance _advance;
 		LevelRender _render;
+		ff::EntityDomain _domain;
 	};
 }
