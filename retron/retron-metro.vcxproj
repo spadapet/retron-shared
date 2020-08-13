@@ -102,6 +102,9 @@
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
+    <ProjectReference Include="..\vendor\box2d\box2d-metro.vcxproj">
+      <Project>{254aaf2e-8ffd-43b2-b00b-8e351d2c1012}</Project>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <ResJson Include="Assets\Assets.res.json" />
