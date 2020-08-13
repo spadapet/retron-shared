@@ -44,6 +44,6 @@ namespace ReTron
 		virtual ff::IRenderer* GetRenderer() const = 0;
 
 		// Debug
-		virtual ff::Event<void>& GetReloadResourcesEvent() = 0;
+		virtual entt::sink<void()> GetReloadResourcesSink() = 0;
 	};
 }

@@ -37,9 +37,6 @@ ReTron::AppState::AppState()
 	, _debugStepOneFrame(false)
 	, _debugTimeScale(1.0)
 	, _customDebugCookie(nullptr)
-	, _restartLevelEventCookie(nullptr)
-	, _restartGameEventCookie(nullptr)
-	, _rebuildResourcesEventCookie(nullptr)
 	, _resourcesRebuiltEventCookie(nullptr)
 	, _rebuildingResources(false)
 {
@@ -217,9 +214,9 @@ ff::IRenderer* ReTron::AppState::GetRenderer() const
 	return _render.get();
 }
 
-ff::Event<void>& ReTron::AppState::GetReloadResourcesEvent()
+entt::sink<void()> ReTron::AppState::GetReloadResourcesSink()
 {
-	return _reloadResourcesEvent;
+	return entt::sink{ _reloadResourcesEvent };
 }
 
 ff::IResourceAccess* ReTron::AppState::GetXamlResources()
@@ -293,12 +290,11 @@ void ReTron::AppState::OnGameThreadShutdown(ff::AppGlobals* globals)
 	if (_debugState)
 	{
 		_globals->GetDebugPageState()->CustomDebugEvent().Remove(_customDebugCookie);
-
-		_debugState->RestartLevelEvent.Remove(_restartLevelEventCookie);
-		_debugState->RestartGameEvent.Remove(_restartGameEventCookie);
-		_debugState->RebuildResourcesEvent.Remove(_rebuildResourcesEventCookie);
-
 		ff::GetThisModule().GetResourceRebuiltEvent().Remove(_resourcesRebuiltEventCookie);
+
+		_restartLevelConnection.release();
+		_restartGameConnection.release();
+		_rebuildResourcesConnection.release();
 	}
 
 	_gameState = nullptr;
@@ -392,44 +388,48 @@ void ReTron::AppState::InitDebugState()
 			}
 		});
 
-	_restartLevelEventCookie = _debugState->RestartLevelEvent.Add([this]()
-		{
-			_debugState->Hide();
-
-			std::shared_ptr<GameState> gameState = std::dynamic_pointer_cast<GameState>(_gameState->GetWrappedState());
-			if (gameState)
-			{
-				gameState->RestartLevel();
-			}
-			else
-			{
-				InitGameState();
-			}
-		});
-
-	_restartGameEventCookie = _debugState->RestartGameEvent.Add([this]()
-		{
-			_debugState->Hide();
-			InitGameState();
-		});
-
-	_rebuildResourcesEventCookie = _debugState->RebuildResourcesEvent.Add([this]()
-		{
-			_debugState->Hide();
-
-			if (!_rebuildingResources)
-			{
-				_rebuildingResources = true;
-				ff::GetThisModule().RebuildResourcesFromSourceAsync();
-			}
-		});
-
 	_resourcesRebuiltEventCookie = ff::GetThisModule().GetResourceRebuiltEvent().Add([this](ff::Module*)
 		{
 			_rebuildingResources = false;
 			InitResources();
-			_reloadResourcesEvent.Notify();
+			_reloadResourcesEvent.publish();
 		});
+
+	_restartLevelConnection = _debugState->RestartLevelEvent.connect<&ReTron::AppState::OnRestartLevel>(this);
+	_restartGameConnection = _debugState->RestartGameEvent.connect<&ReTron::AppState::OnRestartGame>(this);
+	_rebuildResourcesConnection = _debugState->RebuildResourcesEvent.connect<&ReTron::AppState::OnRebuildResources>(this);
+}
+
+void ReTron::AppState::OnRestartLevel()
+{
+	_debugState->Hide();
+
+	std::shared_ptr<GameState> gameState = std::dynamic_pointer_cast<GameState>(_gameState->GetWrappedState());
+	if (gameState)
+	{
+		gameState->RestartLevel();
+	}
+	else
+	{
+		InitGameState();
+	}
+}
+
+void ReTron::AppState::OnRestartGame()
+{
+	_debugState->Hide();
+	InitGameState();
+}
+
+void ReTron::AppState::OnRebuildResources()
+{
+	_debugState->Hide();
+
+	if (!_rebuildingResources)
+	{
+		_rebuildingResources = true;
+		ff::GetThisModule().RebuildResourcesFromSourceAsync();
+	}
 }
 
 void ReTron::AppState::InitGameState()

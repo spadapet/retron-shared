@@ -54,7 +54,7 @@ namespace ReTron
 		virtual ff::IPalette* GetPalette() override;
 		virtual ff::IPalette* GetPlayerPalette(size_t player) override;
 		virtual ff::IRenderer* GetRenderer() const override;
-		virtual ff::Event<void>& GetReloadResourcesEvent() override;
+		virtual entt::sink<void()> GetReloadResourcesSink() override;
 
 		// IXamlGlobalHelper
 		virtual ff::IResourceAccess* GetXamlResources() override;
@@ -82,6 +82,10 @@ namespace ReTron
 		void InitGameState();
 		void ApplySystemOptions();
 
+		void OnRestartLevel();
+		void OnRestartGame();
+		void OnRebuildResources();
+
 		// Globals
 		ff::AppGlobals* _globals;
 		std::shared_ptr<ff::StateWrapper> _gameState;
@@ -106,11 +110,11 @@ namespace ReTron
 		ff::TypedResource<ff::IInputMapping> _debugInput;
 		ff::InputDevices _debugInputDevices;
 		ff::EventCookie _customDebugCookie;
-		ff::EventCookie _restartLevelEventCookie;
-		ff::EventCookie _restartGameEventCookie;
-		ff::EventCookie _rebuildResourcesEventCookie;
 		ff::EventCookie _resourcesRebuiltEventCookie;
-		ff::Event<void> _reloadResourcesEvent;
+		entt::connection _restartLevelConnection;
+		entt::connection _restartGameConnection;
+		entt::connection _rebuildResourcesConnection;
+		entt::sigh<void()> _reloadResourcesEvent;
 		double _debugTimeScale;
 		bool _debugSteppingFrames;
 		bool _debugStepOneFrame;

@@ -10,6 +10,9 @@
 ReTron::DebugState::DebugState(IAppService* appService)
 	: _appService(appService)
 	, _targets(appService, RenderTargetTypes::RgbPma2)
+	, RestartLevelEvent{ _restartLevelEvent }
+	, RestartGameEvent{ _restartGameEvent }
+	, RebuildResourcesEvent{ _rebuildResourcesEvent }
 {
 	_debugPage = *new ReTron::DebugPage(_appService, this);
 

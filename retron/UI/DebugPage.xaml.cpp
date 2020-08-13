@@ -25,17 +25,17 @@ ReTron::DebugPageViewModel::DebugPageViewModel(IAppService* appService, DebugSta
 
 void ReTron::DebugPageViewModel::RestartLevel(Noesis::BaseComponent* param)
 {
-	_debugState->RestartLevelEvent.Notify();
+	_debugState->_restartLevelEvent.publish();
 }
 
 void ReTron::DebugPageViewModel::RestartGame(Noesis::BaseComponent* param)
 {
-	_debugState->RestartGameEvent.Notify();
+	_debugState->_restartGameEvent.publish();
 }
 
 void ReTron::DebugPageViewModel::RebuildResources(Noesis::BaseComponent* param)
 {
-	_debugState->RebuildResourcesEvent.Notify();
+	_debugState->_rebuildResourcesEvent.publish();
 }
 
 void ReTron::DebugPageViewModel::CloseDebug(Noesis::BaseComponent* param)

@@ -50,23 +50,14 @@
     <ClCompile Include="Core\RenderTargets.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Entity.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\GameSpec.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Core\Audio.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\EntityFactory.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\LevelAdvance.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Core\LevelRender.cpp">
-      <Filter>Core</Filter>
+    <ClCompile Include="Components\PositionComponents.cpp">
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -124,23 +115,14 @@
     <ClInclude Include="Core\RenderTargets.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Entity.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\GameSpec.h">
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="Core\Audio.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\EntityFactory.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\LevelAdvance.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Core\LevelRender.h">
-      <Filter>Core</Filter>
+    <ClInclude Include="Components\PositionComponents.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +154,9 @@
     </Filter>
     <Filter Include="Assets\Build">
       <UniqueIdentifier>{8eac9c70-24e3-4db2-9969-b34bf446c498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Components">
+      <UniqueIdentifier>{ee2a16a8-8f83-4e9f-9dee-c75d157bce61}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

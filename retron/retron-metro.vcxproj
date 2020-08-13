@@ -25,6 +25,7 @@
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\util</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\ui</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\noesis\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(DevRoot)vendor</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(FFCoreRoot)core\noesis\Lib\uwp-$(XPlatform)\Noesis.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -32,14 +33,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Components\PositionComponents.cpp" />
     <ClCompile Include="Core\Audio.cpp" />
-    <ClCompile Include="Core\Entity.cpp" />
-    <ClCompile Include="Core\EntityFactory.cpp" />
     <ClCompile Include="Core\GameSpec.cpp" />
     <ClCompile Include="Core\Globals.cpp" />
     <ClCompile Include="Core\Level.cpp" />
-    <ClCompile Include="Core\LevelAdvance.cpp" />
-    <ClCompile Include="Core\LevelRender.cpp" />
     <ClCompile Include="Core\Options.cpp" />
     <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="Core\RenderTargets.cpp" />
@@ -58,14 +56,11 @@
     <ClInclude Include="App.xaml.h">
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="Components\PositionComponents.h" />
     <ClInclude Include="Core\Audio.h" />
-    <ClInclude Include="Core\Entity.h" />
-    <ClInclude Include="Core\EntityFactory.h" />
     <ClInclude Include="Core\GameSpec.h" />
     <ClInclude Include="Core\Globals.h" />
     <ClInclude Include="Core\Level.h" />
-    <ClInclude Include="Core\LevelAdvance.h" />
-    <ClInclude Include="Core\LevelRender.h" />
     <ClInclude Include="Core\Options.h" />
     <ClInclude Include="Core\Player.h" />
     <ClInclude Include="Core\RenderTargets.h" />
