@@ -51,8 +51,11 @@
     <ClCompile Include="Core\Level.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Components\PositionComponents.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="Systems\PositionSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\CollisionSystem.cpp">
+      <Filter>Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,8 +120,11 @@
     <ClInclude Include="Core\Level.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Components\PositionComponents.h">
-      <Filter>Components</Filter>
+    <ClInclude Include="Systems\PositionSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\CollisionSystem.h">
+      <Filter>Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -137,7 +143,7 @@
     <Filter Include="Services">
       <UniqueIdentifier>{1d2da2c0-1fb5-4928-8785-b76fc6f05cb4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components">
+    <Filter Include="Systems">
       <UniqueIdentifier>{32c6714c-a537-4d55-bb55-9ab28749b366}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

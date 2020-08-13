@@ -27,7 +27,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Components\PositionComponents.cpp" />
     <ClCompile Include="Core\Audio.cpp" />
     <ClCompile Include="Core\Level.cpp" />
     <ClCompile Include="Core\RenderTargets.cpp" />
@@ -35,6 +34,8 @@
     <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="States\DebugState.cpp" />
     <ClCompile Include="States\TransitionState.cpp" />
+    <ClCompile Include="Systems\CollisionSystem.cpp" />
+    <ClCompile Include="Systems\PositionSystem.cpp" />
     <ClCompile Include="UI\DebugPage.xaml.cpp" />
     <ClCompile Include="UI\TitlePage.xaml.cpp" />
     <ClInclude Include="Assets\resource.h" />
@@ -45,7 +46,6 @@
     <ClCompile Include="States\LevelState.cpp" />
     <ClCompile Include="States\TitleState.cpp" />
     <ClCompile Include="UI\Components.cpp" />
-    <ClInclude Include="Components\PositionComponents.h" />
     <ClInclude Include="Core\Audio.h" />
     <ClInclude Include="Core\Level.h" />
     <ClInclude Include="Core\RenderTargets.h" />
@@ -67,6 +67,8 @@
     <ClInclude Include="States\LevelState.h" />
     <ClInclude Include="States\TitleState.h" />
     <ClInclude Include="States\TransitionState.h" />
+    <ClInclude Include="Systems\CollisionSystem.h" />
+    <ClInclude Include="Systems\PositionSystem.h" />
     <ClInclude Include="UI\Components.h" />
     <ClInclude Include="UI\DebugPage.xaml.h" />
     <ClInclude Include="UI\TitlePage.xaml.h" />

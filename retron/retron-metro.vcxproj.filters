@@ -56,8 +56,11 @@
     <ClCompile Include="Core\Audio.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Components\PositionComponents.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="Systems\PositionSystem.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="Systems\CollisionSystem.cpp">
+      <Filter>Systems</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -121,8 +124,11 @@
     <ClInclude Include="Core\Audio.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Components\PositionComponents.h">
-      <Filter>Components</Filter>
+    <ClInclude Include="Systems\PositionSystem.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\CollisionSystem.h">
+      <Filter>Systems</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -155,8 +161,8 @@
     <Filter Include="Assets\Build">
       <UniqueIdentifier>{8eac9c70-24e3-4db2-9969-b34bf446c498}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Components">
-      <UniqueIdentifier>{ee2a16a8-8f83-4e9f-9dee-c75d157bce61}</UniqueIdentifier>
+    <Filter Include="Systems">
+      <UniqueIdentifier>{c4e49234-8da5-4ba8-a0d7-cbab2b28c2ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

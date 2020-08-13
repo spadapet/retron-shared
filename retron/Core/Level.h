@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Components/PositionComponents.h"
 #include "Core/GameSpec.h"
+#include "Systems/PositionSystem.h"
 
 namespace ReTron
 {
