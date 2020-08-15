@@ -10,9 +10,6 @@
 ReTron::DebugState::DebugState(IAppService* appService)
 	: _appService(appService)
 	, _targets(appService, RenderTargetTypes::RgbPma2)
-	, RestartLevelEvent{ _restartLevelEvent }
-	, RestartGameEvent{ _restartGameEvent }
-	, RebuildResourcesEvent{ _rebuildResourcesEvent }
 {
 	_debugPage = *new ReTron::DebugPage(_appService, this);
 
@@ -65,4 +62,19 @@ size_t ReTron::DebugState::GetChildStateCount()
 ff::State* ReTron::DebugState::GetChildState(size_t index)
 {
 	return _viewState.get();
+}
+
+entt::sink<void()> ReTron::DebugState::RestartLevelEvent()
+{
+	return _restartLevelEvent;
+}
+
+entt::sink<void()> ReTron::DebugState::RestartGameEvent()
+{
+	return _restartGameEvent;
+}
+
+entt::sink<void()> ReTron::DebugState::RebuildResourcesEvent()
+{
+	return _rebuildResourcesEvent;
 }

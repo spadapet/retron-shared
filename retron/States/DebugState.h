@@ -31,9 +31,9 @@ namespace ReTron
 		virtual State* GetChildState(size_t index) override;
 
 		// UI events
-		entt::sink<void()> RestartLevelEvent;
-		entt::sink<void()> RestartGameEvent;
-		entt::sink<void()> RebuildResourcesEvent;
+		entt::sink<void()> RestartLevelEvent();
+		entt::sink<void()> RestartGameEvent();
+		entt::sink<void()> RebuildResourcesEvent();
 
 	private:
 		friend class DebugPageViewModel;

@@ -395,9 +395,9 @@ void ReTron::AppState::InitDebugState()
 			_reloadResourcesEvent.publish();
 		});
 
-	_restartLevelConnection = _debugState->RestartLevelEvent.connect<&ReTron::AppState::OnRestartLevel>(this);
-	_restartGameConnection = _debugState->RestartGameEvent.connect<&ReTron::AppState::OnRestartGame>(this);
-	_rebuildResourcesConnection = _debugState->RebuildResourcesEvent.connect<&ReTron::AppState::OnRebuildResources>(this);
+	_restartLevelConnection = _debugState->RestartLevelEvent().connect<&ReTron::AppState::OnRestartLevel>(this);
+	_restartGameConnection = _debugState->RestartGameEvent().connect<&ReTron::AppState::OnRestartGame>(this);
+	_rebuildResourcesConnection = _debugState->RebuildResourcesEvent().connect<&ReTron::AppState::OnRebuildResources>(this);
 }
 
 void ReTron::AppState::OnRestartLevel()

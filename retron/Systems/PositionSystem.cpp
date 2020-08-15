@@ -6,167 +6,108 @@ struct PositionComponent
 	ff::PointFixedInt _pos;
 };
 
-struct PositionToHitBoxComponent
+struct DirectionComponent
 {
-	ff::PointFixedInt _topLeft;
-	ff::PointFixedInt _size;
+	ff::PointFixedInt _direction;
 };
 
-struct PositionToBoundingBoxComponent
+struct ScaleComponent
 {
-	ff::PointFixedInt _topLeft;
-	ff::PointFixedInt _size;
+	ff::PointFixedInt _scale;
 };
 
-struct HitBoxComponent
+struct RotationComponent
 {
-	ff::RectFixedInt _box;
+	ff::FixedInt _rotation;
 };
 
-struct OldHitBoxComponent
-{
-	ff::RectFixedInt _box;
-};
-
-struct HitBoxTypeComponent
-{
-	ReTron::HitBoxType _type;
-};
-
-struct BoundingBoxComponent
-{
-	ff::RectFixedInt _box;
-};
-
-struct OldBoundingBoxComponent
-{
-	ff::RectFixedInt _box;
-};
-
-ReTron::PositionComponents::PositionComponents(entt::registry& registry)
+ReTron::PositionSystem::PositionSystem(entt::registry& registry)
 	: _registry(registry)
 {
-	_registry.prepare<PositionComponent>();
-	_registry.prepare<PositionToHitBoxComponent>();
-	_registry.prepare<PositionToBoundingBoxComponent>();
-	_registry.prepare<HitBoxComponent>();
-	_registry.prepare<OldHitBoxComponent>();
-	_registry.prepare<HitBoxTypeComponent>();
-	_registry.prepare<BoundingBoxComponent>();
-	_registry.prepare<OldBoundingBoxComponent>();
-
-	_connections.emplace_front(_registry.on_construct<PositionComponent>().connect<&PositionComponents::OnPositionChanged>(this));
-	_connections.emplace_front(_registry.on_update<PositionComponent>().connect<&PositionComponents::OnPositionChanged>(this));
-	_connections.emplace_front(_registry.on_construct<HitBoxComponent>().connect<&PositionComponents::OnHitBoxChanged>(this));
-	_connections.emplace_front(_registry.on_update<HitBoxComponent>().connect<&PositionComponents::OnHitBoxChanged>(this));
-	_connections.emplace_front(_registry.on_construct<BoundingBoxComponent>().connect<&PositionComponents::OnBoundingBoxChanged>(this));
-	_connections.emplace_front(_registry.on_update<BoundingBoxComponent>().connect<&PositionComponents::OnBoundingBoxChanged>(this));
+	_connections.emplace_front(_registry.on_construct<PositionComponent>().connect<&PositionSystem::OnPositionChanged>(this));
+	_connections.emplace_front(_registry.on_update<PositionComponent>().connect<&PositionSystem::OnPositionChanged>(this));
 }
 
-void ReTron::PositionComponents::Remove(entt::entity entity)
-{
-	_registry.remove_if_exists<
-		PositionComponent,
-		PositionToHitBoxComponent,
-		PositionToBoundingBoxComponent,
-		HitBoxComponent,
-		OldHitBoxComponent,
-		HitBoxTypeComponent,
-		BoundingBoxComponent,
-		OldBoundingBoxComponent>(entity);
-}
-
-void ReTron::PositionComponents::SetPosition(entt::entity entity, const ff::PointFixedInt& value)
+void ReTron::PositionSystem::SetPosition(entt::entity entity, const ff::PointFixedInt& value)
 {
 	_registry.emplace_or_replace<PositionComponent>(entity, value);
 }
 
-const ff::PointFixedInt& ReTron::PositionComponents::GetPosition(entt::entity entity)
+ff::PointFixedInt ReTron::PositionSystem::GetPosition(entt::entity entity)
 {
-	return _registry.get<PositionComponent>(entity)._pos;
+	PositionComponent* c = _registry.try_get<PositionComponent>(entity);
+	return c ? c->_pos : ff::PointFixedInt::Zeros();
 }
 
-void ReTron::PositionComponents::SetHitBox(entt::entity entity, const ff::PointFixedInt& topLeft, const ff::PointFixedInt& size, HitBoxType type)
+void ReTron::PositionSystem::SetDirection(entt::entity entity, const ff::PointFixedInt& value)
 {
-	_registry.emplace_or_replace<HitBoxTypeComponent>(entity, type);
-	_registry.emplace_or_replace<PositionToHitBoxComponent>(entity, topLeft, size);
+	_registry.emplace_or_replace<DirectionComponent>(entity, value);
 }
 
-const ff::RectFixedInt& ReTron::PositionComponents::GetHitBox(entt::entity entity)
+const ff::PointFixedInt ReTron::PositionSystem::GetDirection(entt::entity entity)
 {
-	return _registry.get<HitBoxComponent>(entity)._box;
+	DirectionComponent* c = _registry.try_get<DirectionComponent>(entity);
+	return c ? c->_direction : ff::PointFixedInt::Zeros();
 }
 
-const ff::RectFixedInt* ReTron::PositionComponents::GetOldHitBox(entt::entity entity)
+void ReTron::PositionSystem::SetScale(entt::entity entity, const ff::PointFixedInt& value)
 {
-	const OldHitBoxComponent* box = _registry.try_get<OldHitBoxComponent>(entity);
-	return box ? &box->_box : nullptr;
+	_registry.emplace_or_replace<ScaleComponent>(entity, value);
 }
 
-void ReTron::PositionComponents::SetBoundingBox(entt::entity entity, const ff::PointFixedInt& topLeft, const ff::PointFixedInt& size)
+ff::PointFixedInt ReTron::PositionSystem::GetScale(entt::entity entity)
 {
-	_registry.emplace_or_replace<PositionToBoundingBoxComponent>(entity, topLeft, size);
+	ScaleComponent* c = _registry.try_get<ScaleComponent>(entity);
+	return c ? c->_scale : ff::PointFixedInt::Ones();
 }
 
-const ff::RectFixedInt& ReTron::PositionComponents::GetBoundingBox(entt::entity entity)
+void ReTron::PositionSystem::SetRotation(entt::entity entity, ff::FixedInt value)
 {
-	return _registry.get<BoundingBoxComponent>(entity)._box;
+	_registry.emplace_or_replace<RotationComponent>(entity, 0);
 }
 
-const ff::RectFixedInt* ReTron::PositionComponents::GetOldBoundingBox(entt::entity entity)
+ff::FixedInt ReTron::PositionSystem::GetRotation(entt::entity entity)
 {
-	const OldBoundingBoxComponent* box = _registry.try_get<OldBoundingBoxComponent>(entity);
-	return box ? &box->_box : nullptr;
+	RotationComponent* c = _registry.try_get<RotationComponent>(entity);
+	return c ? c->_rotation : 0_f;
 }
 
-entt::sink<void(ReTron::PositionComponents&, entt::entity)> ReTron::PositionComponents::PositionChangedSink()
+entt::sink<void(entt::entity)> ReTron::PositionSystem::PositionChanged()
 {
-	return _positionChangedSignal;
+	return _positionChanged;
 }
 
-entt::sink<void(ReTron::PositionComponents&, entt::entity)> ReTron::PositionComponents::HitBoxChangedSink()
+entt::sink<void(entt::entity)> ReTron::PositionSystem::DirectionChanged()
 {
-	return _hitBoxChangedSignal;
+	return _directionChanged;
 }
 
-entt::sink<void(ReTron::PositionComponents&, entt::entity)> ReTron::PositionComponents::BoundingBoxChangedSink()
+entt::sink<void(entt::entity)> ReTron::PositionSystem::ScaleChanged()
 {
-	return _boundingBoxChangedSignal;
+	return _scaleChanged;
 }
 
-void ReTron::PositionComponents::OnPositionChanged(entt::registry& registry, entt::entity entity)
+entt::sink<void(entt::entity)> ReTron::PositionSystem::RotationChanged()
 {
-	ff::PointFixedInt pos = GetPosition(entity);
-
-	// Update hit box
-	{
-		const PositionToHitBoxComponent* toHit = _registry.try_get<PositionToHitBoxComponent>(entity);
-		if (toHit)
-		{
-			_registry.emplace_or_replace<HitBoxComponent>(entity, ff::RectFixedInt(pos - toHit->_topLeft, pos - toHit->_topLeft + toHit->_size));
-		}
-	}
-
-	// Update bounding box
-	{
-		const PositionToBoundingBoxComponent* toBounds = _registry.try_get<PositionToBoundingBoxComponent>(entity);
-		if (toBounds)
-		{
-			_registry.emplace_or_replace<BoundingBoxComponent>(entity, ff::RectFixedInt(pos - toBounds->_topLeft, pos - toBounds->_topLeft + toBounds->_size));
-		}
-	}
-
-	_positionChangedSignal.publish(*this, entity);
+	return _rotationChanged;
 }
 
-void ReTron::PositionComponents::OnHitBoxChanged(entt::registry& registry, entt::entity entity)
+void ReTron::PositionSystem::OnPositionChanged(entt::registry& registry, entt::entity entity)
 {
-	_hitBoxChangedSignal.publish(*this, entity);
-	_registry.emplace_or_replace<OldHitBoxComponent>(entity, GetHitBox(entity));
+	_positionChanged.publish(entity);
 }
 
-void ReTron::PositionComponents::OnBoundingBoxChanged(entt::registry& registry, entt::entity entity)
+void ReTron::PositionSystem::OnDirectionChanged(entt::registry& registry, entt::entity entity)
 {
-	_boundingBoxChangedSignal.publish(*this, entity);
-	_registry.emplace_or_replace<OldHitBoxComponent>(entity, GetBoundingBox(entity));
+	_directionChanged.publish(entity);
+}
+
+void ReTron::PositionSystem::OnScaleChanged(entt::registry& registry, entt::entity entity)
+{
+	_scaleChanged.publish(entity);
+}
+
+void ReTron::PositionSystem::OnRotationChanged(entt::registry& registry, entt::entity entity)
+{
+	_rotationChanged.publish(entity);
 }

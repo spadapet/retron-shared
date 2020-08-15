@@ -2,48 +2,40 @@
 
 namespace ReTron
 {
-	enum class HitBoxType
-	{
-		None,
-		Player,
-		Enemy,
-		Electrode,
-		PlayerBullet,
-		EnemyBullet,
-	};
-
-	class PositionComponents
+	class PositionSystem
 	{
 	public:
-		PositionComponents(entt::registry& registry);
-
-		void Remove(entt::entity entity);
+		PositionSystem(entt::registry& registry);
 
 		void SetPosition(entt::entity entity, const ff::PointFixedInt& value);
-		const ff::PointFixedInt& GetPosition(entt::entity entity);
+		ff::PointFixedInt GetPosition(entt::entity entity);
 
-		void SetHitBox(entt::entity entity, const ff::PointFixedInt& topLeft, const ff::PointFixedInt& size, HitBoxType type);
-		const ff::RectFixedInt& GetHitBox(entt::entity entity);
-		const ff::RectFixedInt* GetOldHitBox(entt::entity entity);
+		void SetDirection(entt::entity entity, const ff::PointFixedInt& value);
+		const ff::PointFixedInt GetDirection(entt::entity entity);
 
-		void SetBoundingBox(entt::entity entity, const ff::PointFixedInt& topLeft, const ff::PointFixedInt& size);
-		const ff::RectFixedInt& GetBoundingBox(entt::entity entity);
-		const ff::RectFixedInt* GetOldBoundingBox(entt::entity entity);
+		void SetScale(entt::entity entity, const ff::PointFixedInt& value);
+		ff::PointFixedInt GetScale(entt::entity entity);
 
-		entt::sink<void(PositionComponents&, entt::entity)> PositionChangedSink();
-		entt::sink<void(PositionComponents&, entt::entity)> HitBoxChangedSink();
-		entt::sink<void(PositionComponents&, entt::entity)> BoundingBoxChangedSink();
+		void SetRotation(entt::entity entity, ff::FixedInt value);
+		ff::FixedInt GetRotation(entt::entity entity);
+
+		entt::sink<void(entt::entity)> PositionChanged();
+		entt::sink<void(entt::entity)> DirectionChanged();
+		entt::sink<void(entt::entity)> ScaleChanged();
+		entt::sink<void(entt::entity)> RotationChanged();
 
 	private:
 		void OnPositionChanged(entt::registry& registry, entt::entity entity);
-		void OnHitBoxChanged(entt::registry& registry, entt::entity entity);
-		void OnBoundingBoxChanged(entt::registry& registry, entt::entity entity);
+		void OnDirectionChanged(entt::registry& registry, entt::entity entity);
+		void OnScaleChanged(entt::registry& registry, entt::entity entity);
+		void OnRotationChanged(entt::registry& registry, entt::entity entity);
 
 		entt::registry& _registry;
 		std::forward_list<entt::scoped_connection> _connections;
 
-		entt::sigh<void(PositionComponents&, entt::entity)> _positionChangedSignal;
-		entt::sigh<void(PositionComponents&, entt::entity)> _hitBoxChangedSignal;
-		entt::sigh<void(PositionComponents&, entt::entity)> _boundingBoxChangedSignal;
+		entt::sigh<void(entt::entity)> _positionChanged;
+		entt::sigh<void(entt::entity)> _directionChanged;
+		entt::sigh<void(entt::entity)> _scaleChanged;
+		entt::sigh<void(entt::entity)> _rotationChanged;
 	};
 }

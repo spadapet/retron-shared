@@ -1,6 +1,7 @@
 #pragma once
 
 // Vendor
+#include <box2d/box2d.h>
 #include <entt/entt.hpp>
 
 // Util

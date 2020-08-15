@@ -1,16 +1,18 @@
 #pragma once
 
 #include "Core/GameSpec.h"
+#include "Systems/CollisionSystem.h"
 #include "Systems/PositionSystem.h"
 
 namespace ReTron
 {
-	class PositionComponents;
+	class PositionSystem;
 
 	class Level
 	{
 	public:
 		Level(const DifficultySpec& diffSpec, const LevelSpec& levelSpec);
+		~Level();
 
 	private:
 		void InitLevel();
@@ -19,6 +21,7 @@ namespace ReTron
 		LevelSpec _levelSpec;
 		entt::registry _registry;
 
-		PositionComponents _positionComponents;
+		PositionSystem _positionComponents;
+		CollisionSystem _collisionSystem;
 	};
 }
