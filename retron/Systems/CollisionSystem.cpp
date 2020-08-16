@@ -35,11 +35,10 @@ static void* UserDataFromEntity(entt::entity entity)
 ReTron::CollisionSystem::CollisionSystem(entt::registry& registry, PositionSystem& positionSystem)
 	: _positionSystem(positionSystem)
 	, _registry(registry)
-	, _worldCollide(b2Vec2(0, 0))
-	, _worldNone(b2Vec2(0, 0))
+	, _world(b2Vec2(0, 0))
 {
-	_worldCollide.SetAllowSleeping(false);
-	_worldCollide.SetContactFilter(this);
+	_world.SetAllowSleeping(false);
+	_world.SetContactFilter(this);
 
 	_connections.emplace_front(_registry.on_destroy<HitBoxComponent>().connect<&CollisionSystem::OnHitBoxRemoved>(this));
 	_connections.emplace_front(_registry.on_construct<HitBoxSpecComponent>().connect<&CollisionSystem::OnHitBoxSpecChanged>(this));
@@ -54,9 +53,9 @@ void ReTron::CollisionSystem::DetectCollisions(std::vector<std::pair<entt::entit
 {
 	UpdateDirtyHitBoxes();
 
-	_worldCollide.Step(ff::SECONDS_PER_ADVANCE_F, 1, 1);
+	_world.Step(ff::SECONDS_PER_ADVANCE_F, 1, 1);
 
-	for (const b2Contact* i = _worldCollide.GetContactList(); i; i = i->GetNext())
+	for (const b2Contact* i = _world.GetContactList(); i; i = i->GetNext())
 	{
 		entt::entity entityA = ::EntityFromUserData(i->GetFixtureA()->GetUserData());
 		entt::entity entityB = ::EntityFromUserData(i->GetFixtureB()->GetUserData());
@@ -103,8 +102,7 @@ void ReTron::CollisionSystem::HitTest(ff::RectFixedInt bounds, std::vector<entt:
 	aabb.lowerBound.Set(bounds.left, bounds.top);
 	aabb.upperBound.Set(bounds.right, bounds.bottom);
 
-	_worldCollide.QueryAABB(&callback, aabb);
-	_worldNone.QueryAABB(&callback, aabb);
+	_world.QueryAABB(&callback, aabb);
 }
 
 void ReTron::CollisionSystem::SetHitBox(entt::entity entity, const ff::PointFixedInt& topLeft, const ff::PointFixedInt& size, HitBoxType type)
@@ -157,8 +155,7 @@ bool ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
 			bodyDef.fixedRotation = true;
 			bodyDef.type = b2_dynamicBody;
 
-			b2World& world = (spec._type != HitBoxType::None) ? _worldCollide : _worldNone;
-			hb._body = world.CreateBody(&bodyDef);
+			hb._body = _world.CreateBody(&bodyDef);
 		}
 		else if (_registry.has<DirtyComponent>(entity))
 		{

@@ -41,8 +41,7 @@ namespace ReTron
 
 		PositionSystem& _positionSystem;
 		entt::registry& _registry;
-		b2World _worldCollide;
-		b2World _worldNone;
+		b2World _world;
 		std::forward_list<entt::scoped_connection> _connections;
 	};
 }

@@ -6,6 +6,103 @@
     <ProjectName>util.box2d</ProjectName>
     <ProjectGuid>{254aaf2e-8ffd-43b2-b00b-8e351d2c1012}</ProjectGuid>
   </PropertyGroup>
+  <ItemGroup>
+    <ClCompile Include="b2_block_allocator.cpp" />
+    <ClCompile Include="b2_body.cpp" />
+    <ClCompile Include="b2_broad_phase.cpp" />
+    <ClCompile Include="b2_chain_circle_contact.cpp" />
+    <ClCompile Include="b2_chain_polygon_contact.cpp" />
+    <ClCompile Include="b2_chain_shape.cpp" />
+    <ClCompile Include="b2_circle_contact.cpp" />
+    <ClCompile Include="b2_circle_shape.cpp" />
+    <ClCompile Include="b2_collide_circle.cpp" />
+    <ClCompile Include="b2_collide_edge.cpp" />
+    <ClCompile Include="b2_collide_polygon.cpp" />
+    <ClCompile Include="b2_collision.cpp" />
+    <ClCompile Include="b2_contact.cpp" />
+    <ClCompile Include="b2_contact_manager.cpp" />
+    <ClCompile Include="b2_contact_solver.cpp" />
+    <ClCompile Include="b2_distance.cpp" />
+    <ClCompile Include="b2_distance_joint.cpp" />
+    <ClCompile Include="b2_draw.cpp" />
+    <ClCompile Include="b2_dynamic_tree.cpp" />
+    <ClCompile Include="b2_edge_circle_contact.cpp" />
+    <ClCompile Include="b2_edge_polygon_contact.cpp" />
+    <ClCompile Include="b2_edge_shape.cpp" />
+    <ClCompile Include="b2_fixture.cpp" />
+    <ClCompile Include="b2_friction_joint.cpp" />
+    <ClCompile Include="b2_gear_joint.cpp" />
+    <ClCompile Include="b2_island.cpp" />
+    <ClCompile Include="b2_joint.cpp" />
+    <ClCompile Include="b2_math.cpp" />
+    <ClCompile Include="b2_motor_joint.cpp" />
+    <ClCompile Include="b2_mouse_joint.cpp" />
+    <ClCompile Include="b2_polygon_circle_contact.cpp" />
+    <ClCompile Include="b2_polygon_contact.cpp" />
+    <ClCompile Include="b2_polygon_shape.cpp" />
+    <ClCompile Include="b2_prismatic_joint.cpp" />
+    <ClCompile Include="b2_pulley_joint.cpp" />
+    <ClCompile Include="b2_revolute_joint.cpp" />
+    <ClCompile Include="b2_rope.cpp" />
+    <ClCompile Include="b2_rope_joint.cpp" />
+    <ClCompile Include="b2_settings.cpp" />
+    <ClCompile Include="b2_stack_allocator.cpp" />
+    <ClCompile Include="b2_timer.cpp" />
+    <ClCompile Include="b2_time_of_impact.cpp" />
+    <ClCompile Include="b2_weld_joint.cpp" />
+    <ClCompile Include="b2_wheel_joint.cpp" />
+    <ClCompile Include="b2_world.cpp" />
+    <ClCompile Include="b2_world_callbacks.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="b2_block_allocator.h" />
+    <ClInclude Include="b2_body.h" />
+    <ClInclude Include="b2_broad_phase.h" />
+    <ClInclude Include="b2_chain_circle_contact.h" />
+    <ClInclude Include="b2_chain_polygon_contact.h" />
+    <ClInclude Include="b2_chain_shape.h" />
+    <ClInclude Include="b2_circle_contact.h" />
+    <ClInclude Include="b2_circle_shape.h" />
+    <ClInclude Include="b2_collision.h" />
+    <ClInclude Include="b2_contact.h" />
+    <ClInclude Include="b2_contact_manager.h" />
+    <ClInclude Include="b2_contact_solver.h" />
+    <ClInclude Include="b2_distance.h" />
+    <ClInclude Include="b2_distance_joint.h" />
+    <ClInclude Include="b2_draw.h" />
+    <ClInclude Include="b2_dynamic_tree.h" />
+    <ClInclude Include="b2_edge_circle_contact.h" />
+    <ClInclude Include="b2_edge_polygon_contact.h" />
+    <ClInclude Include="b2_edge_shape.h" />
+    <ClInclude Include="b2_fixture.h" />
+    <ClInclude Include="b2_friction_joint.h" />
+    <ClInclude Include="b2_gear_joint.h" />
+    <ClInclude Include="b2_growable_stack.h" />
+    <ClInclude Include="b2_island.h" />
+    <ClInclude Include="b2_joint.h" />
+    <ClInclude Include="b2_math.h" />
+    <ClInclude Include="b2_motor_joint.h" />
+    <ClInclude Include="b2_mouse_joint.h" />
+    <ClInclude Include="b2_polygon_circle_contact.h" />
+    <ClInclude Include="b2_polygon_contact.h" />
+    <ClInclude Include="b2_polygon_shape.h" />
+    <ClInclude Include="b2_prismatic_joint.h" />
+    <ClInclude Include="b2_pulley_joint.h" />
+    <ClInclude Include="b2_revolute_joint.h" />
+    <ClInclude Include="b2_rope.h" />
+    <ClInclude Include="b2_rope_joint.h" />
+    <ClInclude Include="b2_settings.h" />
+    <ClInclude Include="b2_shape.h" />
+    <ClInclude Include="b2_stack_allocator.h" />
+    <ClInclude Include="b2_timer.h" />
+    <ClInclude Include="b2_time_of_impact.h" />
+    <ClInclude Include="b2_time_step.h" />
+    <ClInclude Include="b2_weld_joint.h" />
+    <ClInclude Include="b2_wheel_joint.h" />
+    <ClInclude Include="b2_world.h" />
+    <ClInclude Include="b2_world_callbacks.h" />
+    <ClInclude Include="box2d.h" />
+  </ItemGroup>
   <Import Project="..\..\ffcore\msbuild\cpp.props" />
   <ItemDefinitionGroup>
     <ClCompile>

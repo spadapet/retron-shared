@@ -57,6 +57,9 @@
     <ClCompile Include="Systems\CollisionSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
+    <ClCompile Include="Systems\EntityManager.cpp">
+      <Filter>Systems</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -86,9 +89,6 @@
     </ClInclude>
     <ClInclude Include="States\LevelState.h">
       <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="Services\LevelService.h">
-      <Filter>Services</Filter>
     </ClInclude>
     <ClInclude Include="Assets\resource.h">
       <Filter>Assets</Filter>
@@ -125,6 +125,12 @@
     </ClInclude>
     <ClInclude Include="Systems\CollisionSystem.h">
       <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Systems\EntityManager.h">
+      <Filter>Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="Services\LevelService.h">
+      <Filter>Services</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

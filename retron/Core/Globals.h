@@ -38,6 +38,11 @@ namespace Constants
 	const ff::PointFixedInt RENDER_SIZE(RENDER_WIDTH, RENDER_HEIGHT);
 	const ff::RectFixedInt RENDER_RECT(0_f, 0_f, RENDER_WIDTH, RENDER_HEIGHT);
 
+	const ff::FixedInt RENDER_LEVEL_WIDTH = 464_f;
+	const ff::FixedInt RENDER_LEVEL_HEIGHT = 254_f;
+	const ff::PointFixedInt RENDER_LEVEL_SIZE(RENDER_LEVEL_WIDTH, RENDER_LEVEL_HEIGHT);
+	const ff::RectFixedInt RENDER_LEVEL_RECT(8_f, 8_f, 472_f, 262_f);
+
 	const ff::FixedInt RENDER_SCALE = 4_f; // scale to a 1080p buffer, which then gets scaled to the screen
 
 	const ff::FixedInt RENDER_WIDTH_HIGH = 1920_f;

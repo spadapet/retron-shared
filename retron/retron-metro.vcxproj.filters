@@ -62,6 +62,7 @@
     <ClCompile Include="Systems\CollisionSystem.cpp">
       <Filter>Systems</Filter>
     </ClCompile>
+    <ClCompile Include="Systems\EntityManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -130,6 +131,7 @@
     <ClInclude Include="Systems\CollisionSystem.h">
       <Filter>Systems</Filter>
     </ClInclude>
+    <ClInclude Include="Systems\EntityManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReTron_TemporaryKey.pfx">

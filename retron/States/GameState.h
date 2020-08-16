@@ -34,6 +34,7 @@ namespace ReTron
 		// IGameService
 		virtual IAppService* GetAppService() const override;
 		virtual const GameOptions& GetGameOptions() const override;
+		virtual const DifficultySpec& GetDifficultySpec() const override;
 		virtual const ff::IInputEvents* GetGameInputEvents();
 		virtual const ff::IInputEvents* GetPlayerInputEvents(size_t player);
 		virtual Player& GetPlayer(size_t player);

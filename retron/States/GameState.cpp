@@ -60,6 +60,11 @@ const ReTron::GameOptions& ReTron::GameState::GetGameOptions() const
 	return _gameOptions;
 }
 
+const ReTron::DifficultySpec& ReTron::GameState::GetDifficultySpec() const
+{
+	return _diffSpec;
+}
+
 const ff::IInputEvents* ReTron::GameState::GetGameInputEvents()
 {
 	return _gameInput.Flush();
@@ -106,7 +111,7 @@ void ReTron::GameState::InitLevel()
 	ff::String levelId = levelSetSpec._levels[level];
 	const LevelSpec& levelSpec = gameSpec._levels.GetKey(levelId)->GetValue();
 
-	*_levelState = std::make_shared<LevelState>(this, _diffSpec, levelSpec);
+	*_levelState = std::make_shared<LevelState>(this, levelSpec);
 }
 
 void ReTron::GameState::InitInput()

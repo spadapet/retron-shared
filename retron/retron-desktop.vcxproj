@@ -38,6 +38,7 @@
     <ClCompile Include="States\DebugState.cpp" />
     <ClCompile Include="States\TransitionState.cpp" />
     <ClCompile Include="Systems\CollisionSystem.cpp" />
+    <ClCompile Include="Systems\EntityManager.cpp" />
     <ClCompile Include="Systems\PositionSystem.cpp" />
     <ClCompile Include="UI\DebugPage.xaml.cpp" />
     <ClCompile Include="UI\TitlePage.xaml.cpp" />
@@ -71,6 +72,7 @@
     <ClInclude Include="States\TitleState.h" />
     <ClInclude Include="States\TransitionState.h" />
     <ClInclude Include="Systems\CollisionSystem.h" />
+    <ClInclude Include="Systems\EntityManager.h" />
     <ClInclude Include="Systems\PositionSystem.h" />
     <ClInclude Include="UI\Components.h" />
     <ClInclude Include="UI\DebugPage.xaml.h" />
