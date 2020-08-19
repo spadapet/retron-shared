@@ -35,19 +35,15 @@ namespace ReTron
 		virtual IAppService* GetAppService() const override;
 		virtual const GameOptions& GetGameOptions() const override;
 		virtual const DifficultySpec& GetDifficultySpec() const override;
-		virtual const ff::IInputEvents* GetGameInputEvents();
-		virtual const ff::IInputEvents* GetPlayerInputEvents(size_t player);
-		virtual Player& GetPlayer(size_t player);
-		virtual size_t GetPlayerCount() const;
+		virtual ff::IInputEvents* GetPlayerInputEvents(size_t index) override;
 
 		// Debug
 		void RestartLevel();
 
 	private:
+		void InitInput();
 		void InitPlayers();
 		void InitLevel();
-		void InitInput();
-		void AdvanceInput();
 
 		IAppService* _appService;
 		GameOptions _gameOptions;
@@ -58,8 +54,7 @@ namespace ReTron
 		ff::InputDevices _gameInputDevices;
 		std::array<ff::TypedResource<ff::IInputMapping>, Constants::MAX_PLAYERS> _playerInput;
 		std::array<ff::InputDevices, Constants::MAX_PLAYERS> _playerInputDevices;
-		std::array<Player, Constants::MAX_PLAYERS> _players;
-		size_t _playerCount;
+		std::array<Player, Constants::MAX_PLAYERS + 1> _players;
 
 		// Level
 		std::shared_ptr<ff::StateWrapper> _levelState;

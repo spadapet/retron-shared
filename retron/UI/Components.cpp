@@ -6,7 +6,7 @@
 
 void ReTron::RegisterNoesisComponents()
 {
-	Noesis::RegisterComponent<Noesis::EnumConverter<ReTron::GameType>>();
+	Noesis::RegisterComponent<Noesis::EnumConverter<ReTron::GameFlags>>();
 	Noesis::RegisterComponent<Noesis::EnumConverter<ReTron::GamePlayers>>();
 	Noesis::RegisterComponent<Noesis::EnumConverter<ReTron::GameDifficulty>>();
 

@@ -6,17 +6,17 @@ static ff::StaticString DIFF_EASY(L"easy");
 static ff::StaticString DIFF_NORMAL(L"normal");
 static ff::StaticString DIFF_HARD(L"hard");
 
-NS_IMPLEMENT_REFLECTION_ENUM(ReTron::GameType, "ReTron.GameType")
+NS_IMPLEMENT_REFLECTION_ENUM(ReTron::GameFlags, "ReTron.GameType")
 {
-	NsVal("Normal", ReTron::GameType::Normal);
-	NsVal("InfiniteLives", ReTron::GameType::InfiniteLives);
-	NsVal("NoBosses", ReTron::GameType::NoBosses);
+	NsVal("Normal", ReTron::GameFlags::Normal);
+	NsVal("InfiniteLives", ReTron::GameFlags::InfiniteLives);
+	NsVal("NoBosses", ReTron::GameFlags::NoBosses);
 }
 
 NS_IMPLEMENT_REFLECTION_ENUM(ReTron::GamePlayers, "ReTron.GamePlayers")
 {
 	NsVal("One", ReTron::GamePlayers::One);
-	NsVal("TwoTogether", ReTron::GamePlayers::TwoTogether);
+	NsVal("TwoTogether", ReTron::GamePlayers::TwoCoop);
 	NsVal("TwoTakeTurns", ReTron::GamePlayers::TwoTakeTurns);
 }
 
@@ -30,7 +30,7 @@ NS_IMPLEMENT_REFLECTION_ENUM(ReTron::GameDifficulty, "ReTron.GameDifficulty")
 
 ReTron::GameOptions::GameOptions()
 	: _version(GameOptions::CurrentVersion)
-	, _type(GameType::Default)
+	, _flags(GameFlags::Default)
 	, _players(GamePlayers::Default)
 	, _difficulty(GameDifficulty::Default)
 {
@@ -63,14 +63,14 @@ size_t ReTron::GameOptions::GetPlayerCount() const
 		return 1;
 
 	case GamePlayers::TwoTakeTurns:
-	case GamePlayers::TwoTogether:
+	case GamePlayers::TwoCoop:
 		return 2;
 	}
 }
 
-bool ReTron::GameOptions::ArePlayersTogether() const
+bool ReTron::GameOptions::IsCoop() const
 {
-	return _players == GamePlayers::TwoTogether;
+	return _players == GamePlayers::TwoCoop;
 }
 
 ReTron::SystemOptions::SystemOptions()

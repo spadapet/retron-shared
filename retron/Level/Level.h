@@ -1,14 +1,13 @@
 #pragma once
 
 #include "Core/GameSpec.h"
-#include "Systems/CollisionSystem.h"
-#include "Systems/EntityManager.h"
-#include "Systems/PositionSystem.h"
+#include "Level/CollisionSystem.h"
+#include "Level/EntityManager.h"
+#include "Level/PositionSystem.h"
 
 namespace ff
 {
 	class IRenderDepth;
-	class IRenderer;
 	class IRenderTarget;
 }
 
@@ -22,8 +21,8 @@ namespace ReTron
 		Level(ILevelService* levelService);
 		~Level();
 
-		void Advance(ff::AppGlobals* globals, ff::RectFixedInt cameraRect);
-		void Render(ff::AppGlobals* globals, ff::IRenderer* render, ff::IRenderTarget* target, ff::IRenderDepth* depth, ff::RectFixedInt targetRect, ff::RectFixedInt cameraRect);
+		void Advance(ff::RectFixedInt cameraRect);
+		void Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, ff::RectFixedInt targetRect, ff::RectFixedInt cameraRect);
 
 		ff::PointFixedInt GetPlayerPosition(size_t index);
 

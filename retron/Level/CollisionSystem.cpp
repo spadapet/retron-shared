@@ -1,6 +1,6 @@
 #include "pch.h"
-#include "Systems/CollisionSystem.h"
-#include "Systems/PositionSystem.h"
+#include "Level/CollisionSystem.h"
+#include "Level/PositionSystem.h"
 
 static const ff::FixedInt PIXEL_TO_WORLD_SCALE = 0.0625_f;
 static const ff::FixedInt WORLD_TO_PIXEL_SCALE = 16_f;

@@ -32,9 +32,6 @@
     <ClCompile Include="UI\TitlePage.xaml.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Level.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="Core\Player.cpp">
       <Filter>Core</Filter>
     </ClCompile>
@@ -56,13 +53,18 @@
     <ClCompile Include="Core\Audio.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Systems\PositionSystem.cpp">
-      <Filter>Systems</Filter>
+    <ClCompile Include="Level\CollisionSystem.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Systems\CollisionSystem.cpp">
-      <Filter>Systems</Filter>
+    <ClCompile Include="Level\EntityManager.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Systems\EntityManager.cpp" />
+    <ClCompile Include="Level\Level.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\PositionSystem.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -101,9 +103,6 @@
     <ClInclude Include="UI\TitlePage.xaml.h">
       <Filter>UI</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Level.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Core\Player.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -125,13 +124,18 @@
     <ClInclude Include="Core\Audio.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Systems\PositionSystem.h">
-      <Filter>Systems</Filter>
+    <ClInclude Include="Level\CollisionSystem.h">
+      <Filter>Level</Filter>
     </ClInclude>
-    <ClInclude Include="Systems\CollisionSystem.h">
-      <Filter>Systems</Filter>
+    <ClInclude Include="Level\EntityManager.h">
+      <Filter>Level</Filter>
     </ClInclude>
-    <ClInclude Include="Systems\EntityManager.h" />
+    <ClInclude Include="Level\Level.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\PositionSystem.h">
+      <Filter>Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReTron_TemporaryKey.pfx">
@@ -163,7 +167,7 @@
     <Filter Include="Assets\Build">
       <UniqueIdentifier>{8eac9c70-24e3-4db2-9969-b34bf446c498}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Systems">
+    <Filter Include="Level">
       <UniqueIdentifier>{c4e49234-8da5-4ba8-a0d7-cbab2b28c2ad}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

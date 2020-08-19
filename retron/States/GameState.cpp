@@ -19,9 +19,9 @@ ReTron::GameState::GameState(IAppService* appService)
 	, _levelState(std::make_shared<ff::StateWrapper>())
 	, _level(0)
 {
+	InitInput();
 	InitPlayers();
 	InitLevel();
-	InitInput();
 }
 
 ReTron::GameState::~GameState()
@@ -30,7 +30,12 @@ ReTron::GameState::~GameState()
 
 std::shared_ptr<ff::State> ReTron::GameState::Advance(ff::AppGlobals* globals)
 {
-	AdvanceInput();
+	_gameInput->Advance(_gameInputDevices, ff::SECONDS_PER_ADVANCE_D);
+
+	for (size_t i = 0; i < _playerInput.size(); i++)
+	{
+		_playerInput[i]->Advance(_playerInputDevices[i], ff::SECONDS_PER_ADVANCE_D);
+	}
 
 	return ff::State::Advance(globals);
 }
@@ -65,26 +70,9 @@ const ReTron::DifficultySpec& ReTron::GameState::GetDifficultySpec() const
 	return _diffSpec;
 }
 
-const ff::IInputEvents* ReTron::GameState::GetGameInputEvents()
+ff::IInputEvents* ReTron::GameState::GetPlayerInputEvents(size_t index)
 {
-	return _gameInput.Flush();
-}
-
-const ff::IInputEvents* ReTron::GameState::GetPlayerInputEvents(size_t player)
-{
-	assertRetVal(player < _playerInput.size(), nullptr);
-	return _playerInput[player].Flush();
-}
-
-ReTron::Player& ReTron::GameState::GetPlayer(size_t player)
-{
-	assertRetVal(player < _playerInput.size(), _players[0]);
-	return _players[player];
-}
-
-size_t ReTron::GameState::GetPlayerCount() const
-{
-	return _gameOptions.GetPlayerCount();
+	return _playerInput[index].Flush();
 }
 
 void ReTron::GameState::RestartLevel()
@@ -92,12 +80,64 @@ void ReTron::GameState::RestartLevel()
 	InitLevel();
 }
 
+void ReTron::GameState::InitInput()
+{
+	ff::AppGlobals& globals = _appService->GetAppGlobals();
+
+	// Game-wide input and devices
+	_gameInput.Init(L"gameControls");
+	_gameInputDevices._keys.Push(globals.GetKeys());
+	_gameInputDevices._mice.Push(globals.GetPointer());
+
+	// Player-specific input
+	for (size_t i = 0; i < _playerInput.size(); i++)
+	{
+		_playerInput[i].Init((i == 0 || !_gameOptions.IsCoop()) ? L"playerControls" : L"secondaryPlayerControls");
+	}
+
+	// Player-specific devices
+	for (size_t i = 0; i < _playerInputDevices.size(); i++)
+	{
+		if (i == 0 || !_gameOptions.IsCoop())
+		{
+			_playerInputDevices[i]._keys.Push(globals.GetKeys());
+			_playerInputDevices[i]._mice.Push(globals.GetPointer());
+		}
+	}
+
+	// Add joysticks game-wide and player-specific
+	for (size_t i = 0; i < globals.GetJoysticks()->GetCount(); i++)
+	{
+		ff::IJoystickDevice* joystick = globals.GetJoysticks()->GetJoystick(i);
+		_gameInputDevices._joys.Push(joystick);
+
+		if (_gameOptions.IsCoop())
+		{
+			if (i < _playerInputDevices.size())
+			{
+				_playerInputDevices[i]._joys.Push(joystick);
+			}
+		}
+		else
+		{
+			for (ff::InputDevices& inputDevices : _playerInputDevices)
+			{
+				inputDevices._joys.Push(joystick);
+			}
+		}
+	}
+}
+
 void ReTron::GameState::InitPlayers()
 {
-	for (size_t i = 0; i < GetPlayerCount(); i++)
+	std::memset(_players.data(), 0, _players.size() * sizeof(Player));
+
+	for (size_t i = 0; i < _gameOptions.GetPlayerCount(); i++)
 	{
 		Player& player = _players[i];
-		player._active = true;
+
+		player._coop = _gameOptions.IsCoop() ? &_players.back() : nullptr;
+		player._index = i;
 		player._lives = _diffSpec._lives;
 	}
 }
@@ -111,46 +151,18 @@ void ReTron::GameState::InitLevel()
 	ff::String levelId = levelSetSpec._levels[level];
 	const LevelSpec& levelSpec = gameSpec._levels.GetKey(levelId)->GetValue();
 
-	*_levelState = std::make_shared<LevelState>(this, levelSpec);
-}
-
-void ReTron::GameState::InitInput()
-{
-	ff::AppGlobals& globals = _appService->GetAppGlobals();
-
-	_gameInput.Init(L"gameControls");
-	_gameInputDevices._keys.Push(globals.GetKeys());
-	_gameInputDevices._mice.Push(globals.GetPointer());
-
-	_playerInputDevices[0]._keys.Push(globals.GetKeys());
-	_playerInputDevices[0]._mice.Push(globals.GetPointer());
-	_playerInput[0].Init(L"playerControls");
-
-	for (size_t i = 1; i < _playerInput.size(); i++)
+	std::vector<Player*> players;
+	if (_gameOptions.IsCoop())
 	{
-		_playerInput[i].Init(L"secondaryPlayerControls");
-	}
-
-	for (size_t i = 0; i < globals.GetJoysticks()->GetCount(); i++)
-	{
-		ff::IJoystickDevice* joystick = globals.GetJoysticks()->GetJoystick(i);
-		_gameInputDevices._joys.Push(joystick);
-
-		if (i < _playerInputDevices.size())
+		for (size_t i = 0; i < _gameOptions.GetPlayerCount(); i++)
 		{
-			_playerInputDevices[i]._joys.Push(joystick);
+			players.push_back(&_players[i]);
 		}
 	}
-}
-
-void ReTron::GameState::AdvanceInput()
-{
-	const double deltaTime = ff::SECONDS_PER_ADVANCE_D;
-
-	_gameInput->Advance(_gameInputDevices, deltaTime);
-
-	for (size_t i = 0; i < _playerInput.size(); i++)
+	else
 	{
-		_playerInput[i]->Advance(_playerInputDevices[i], deltaTime);
+		// ...
 	}
+
+	*_levelState = std::make_shared<LevelState>(this, levelSpec, std::move(players));
 }

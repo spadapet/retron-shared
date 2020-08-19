@@ -2,7 +2,7 @@
 
 namespace ReTron
 {
-	enum class GameType
+	enum class GameFlags
 	{
 		Normal = 0x00,
 		InfiniteLives = 0x01,
@@ -15,7 +15,7 @@ namespace ReTron
 	{
 		One = 0,
 		TwoTakeTurns = 1,
-		TwoTogether = 2,
+		TwoCoop = 2,
 
 		Default = One
 	};
@@ -36,12 +36,12 @@ namespace ReTron
 
 		ff::StringRef GetDifficultyId() const;
 		size_t GetPlayerCount() const;
-		bool ArePlayersTogether() const;
+		bool IsCoop() const;
 
 		static const int CurrentVersion = 1;
 
 		int _version;
-		GameType _type;
+		GameFlags _flags;
 		GamePlayers _players;
 		GameDifficulty _difficulty;
 	};
@@ -61,6 +61,6 @@ namespace ReTron
 	};
 }
 
-NS_DECLARE_REFLECTION_ENUM(ReTron::GameType)
+NS_DECLARE_REFLECTION_ENUM(ReTron::GameFlags)
 NS_DECLARE_REFLECTION_ENUM(ReTron::GamePlayers)
 NS_DECLARE_REFLECTION_ENUM(ReTron::GameDifficulty)

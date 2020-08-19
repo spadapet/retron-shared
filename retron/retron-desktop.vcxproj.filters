@@ -48,17 +48,17 @@
     <ClCompile Include="Core\Audio.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Level.cpp">
-      <Filter>Core</Filter>
+    <ClCompile Include="Level\CollisionSystem.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Systems\PositionSystem.cpp">
-      <Filter>Systems</Filter>
+    <ClCompile Include="Level\EntityManager.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Systems\CollisionSystem.cpp">
-      <Filter>Systems</Filter>
+    <ClCompile Include="Level\PositionSystem.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Systems\EntityManager.cpp">
-      <Filter>Systems</Filter>
+    <ClCompile Include="Level\Level.cpp">
+      <Filter>Level</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,20 +117,20 @@
     <ClInclude Include="Core\Audio.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Level.h">
-      <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\PositionSystem.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\CollisionSystem.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
-    <ClInclude Include="Systems\EntityManager.h">
-      <Filter>Systems</Filter>
-    </ClInclude>
     <ClInclude Include="Services\LevelService.h">
       <Filter>Services</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\CollisionSystem.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\EntityManager.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\PositionSystem.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\Level.h">
+      <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -149,8 +149,8 @@
     <Filter Include="Services">
       <UniqueIdentifier>{1d2da2c0-1fb5-4928-8785-b76fc6f05cb4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Systems">
-      <UniqueIdentifier>{32c6714c-a537-4d55-bb55-9ab28749b366}</UniqueIdentifier>
+    <Filter Include="Level">
+      <UniqueIdentifier>{a796d997-646e-4f0e-ad97-88b920a6d638}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

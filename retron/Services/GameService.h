@@ -10,6 +10,7 @@ namespace ReTron
 	class IAppService;
 	struct DifficultySpec;
 	struct GameOptions;
+	struct Player;
 
 	class IGameService
 	{
@@ -17,7 +18,6 @@ namespace ReTron
 		virtual IAppService* GetAppService() const = 0;
 		virtual const GameOptions& GetGameOptions() const = 0;
 		virtual const DifficultySpec& GetDifficultySpec() const = 0;
-		virtual const ff::IInputEvents* GetGameInputEvents() = 0;
-		virtual const ff::IInputEvents* GetPlayerInputEvents(size_t player) = 0;
+		virtual ff::IInputEvents* GetPlayerInputEvents(size_t index) = 0;
 	};
 }

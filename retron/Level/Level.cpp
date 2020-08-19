@@ -1,8 +1,11 @@
 #include "pch.h"
-#include "Core/Level.h"
 #include "Graph/Render/PixelRenderer.h"
 #include "Graph/Render/Renderer.h"
 #include "Graph/Render/RendererActive.h"
+#include "Level/Level.h"
+#include "Services/AppService.h"
+#include "Services/GameService.h"
+#include "Services/LevelService.h"
 
 ReTron::Level::Level(ILevelService* levelService)
 	: _levelService(levelService)
@@ -17,19 +20,14 @@ ReTron::Level::~Level()
 {
 }
 
-void ReTron::Level::Advance(ff::AppGlobals* globals, ff::RectFixedInt cameraRect)
+void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 {
 	_entityManager.FlushDelete();
 }
 
-void ReTron::Level::Render(
-	ff::AppGlobals* globals,
-	ff::IRenderer* render,
-	ff::IRenderTarget* target,
-	ff::IRenderDepth* depth,
-	ff::RectFixedInt targetRect,
-	ff::RectFixedInt cameraRect)
+void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, ff::RectFixedInt targetRect, ff::RectFixedInt cameraRect)
 {
+	ff::IRenderer* render = _levelService->GetGameService()->GetAppService()->GetRenderer();
 	ff::RendererActive renderActive = ff::PixelRendererActive::BeginRender(render, target, depth, targetRect, cameraRect);
 	ff::PixelRendererActive renderPixel(renderActive);
 	renderPixel.DrawPaletteOutlineRectangle(cameraRect, 77, 3_f);

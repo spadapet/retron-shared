@@ -60,7 +60,7 @@ const char* ReTron::TitlePageViewModel::GetPlayersText() const
 	default: return "";
 	case GamePlayers::One: return "One";
 	case GamePlayers::TwoTakeTurns: return "Two (Swap)";
-	case GamePlayers::TwoTogether: return "Two (Co-Op)";
+	case GamePlayers::TwoCoop: return "Two (Co-Op)";
 	}
 }
 
@@ -98,14 +98,14 @@ void ReTron::TitlePageViewModel::PlayersCommand(Noesis::BaseComponent* param)
 
 	if (forward)
 	{
-		options._players = (options._players == GamePlayers::TwoTogether)
+		options._players = (options._players == GamePlayers::TwoCoop)
 			? GamePlayers::One
 			: (GamePlayers)((int)options._players + 1);
 	}
 	else
 	{
 		options._players = (options._players == GamePlayers::One)
-			? GamePlayers::TwoTogether
+			? GamePlayers::TwoCoop
 			: (GamePlayers)((int)options._players - 1);
 	}
 
