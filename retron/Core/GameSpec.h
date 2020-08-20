@@ -9,19 +9,20 @@ namespace ReTron
 {
 	struct LevelSpec
 	{
-		int _grunts;
+		ff::PointFixedInt _playerStart;
+		size_t _grunts;
 	};
 
 	struct LevelSetSpec
 	{
-		ff::Vector<ff::String> _levels;
+		std::vector<ff::String> _levels;
 	};
 
 	struct DifficultySpec
 	{
 		ff::String _name;
 		ff::String _levelSet;
-		int _lives;
+		size_t _lives;
 	};
 
 	struct GameSpec

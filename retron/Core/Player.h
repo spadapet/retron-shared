@@ -6,7 +6,8 @@ namespace ReTron
 	{
 		Player* _coop;
 		size_t _index;
-		int _lives;
-		int _score;
+		size_t _level;
+		size_t _lives;
+		size_t _score;
 	};
 }

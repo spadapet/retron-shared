@@ -44,10 +44,13 @@ namespace ReTron
 		void InitInput();
 		void InitPlayers();
 		void InitLevel();
+		Player& GetCoopPlayer();
+		const LevelSpec& GetLevelSpec(size_t index) const;
 
 		IAppService* _appService;
 		GameOptions _gameOptions;
 		DifficultySpec _diffSpec;
+		LevelSetSpec _levelSetSpec;
 
 		// Input
 		ff::TypedResource<ff::IInputMapping> _gameInput;
@@ -57,7 +60,7 @@ namespace ReTron
 		std::array<Player, Constants::MAX_PLAYERS + 1> _players;
 
 		// Level
-		std::shared_ptr<ff::StateWrapper> _levelState;
-		size_t _level;
+		std::vector<std::shared_ptr<ff::StateWrapper>> _levelStates;
+		size_t _playingLevelState;
 	};
 }

@@ -15,9 +15,9 @@
 ReTron::GameState::GameState(IAppService* appService)
 	: _appService(appService)
 	, _gameOptions(appService->GetDefaultGameOptions())
-	, _diffSpec(_appService->GetGameSpec()._difficulties.GetKey(_gameOptions.GetDifficultyId())->GetValue())
-	, _levelState(std::make_shared<ff::StateWrapper>())
-	, _level(0)
+	, _diffSpec(appService->GetGameSpec()._difficulties.GetKey(_gameOptions.GetDifficultyId())->GetValue())
+	, _levelSetSpec(appService->GetGameSpec()._levelSets.GetKey(_diffSpec._levelSet)->GetValue())
+	, _playingLevelState(0)
 {
 	InitInput();
 	InitPlayers();
@@ -47,12 +47,12 @@ void ReTron::GameState::Render(ff::AppGlobals* globals, ff::IRenderTarget* targe
 
 size_t ReTron::GameState::GetChildStateCount()
 {
-	return 1;
+	return (_playingLevelState < _levelStates.size()) ? 1 : 0;
 }
 
 ff::State* ReTron::GameState::GetChildState(size_t index)
 {
-	return _levelState.get();
+	return _levelStates[_playingLevelState].get();
 }
 
 ReTron::IAppService* ReTron::GameState::GetAppService() const
@@ -136,7 +136,7 @@ void ReTron::GameState::InitPlayers()
 	{
 		Player& player = _players[i];
 
-		player._coop = _gameOptions.IsCoop() ? &_players.back() : nullptr;
+		player._coop = _gameOptions.IsCoop() ? &GetCoopPlayer() : nullptr;
 		player._index = i;
 		player._lives = _diffSpec._lives;
 	}
@@ -144,25 +144,44 @@ void ReTron::GameState::InitPlayers()
 
 void ReTron::GameState::InitLevel()
 {
-	const GameSpec& gameSpec = _appService->GetGameSpec();
-	const LevelSetSpec& levelSetSpec = gameSpec._levelSets.GetKey(_diffSpec._levelSet)->GetValue();
-
-	size_t level = _level % levelSetSpec._levels.Size();
-	ff::String levelId = levelSetSpec._levels[level];
-	const LevelSpec& levelSpec = gameSpec._levels.GetKey(levelId)->GetValue();
-
-	std::vector<Player*> players;
 	if (_gameOptions.IsCoop())
 	{
+		std::vector<Player*> players;
+
 		for (size_t i = 0; i < _gameOptions.GetPlayerCount(); i++)
 		{
 			players.push_back(&_players[i]);
 		}
+
+		const LevelSpec& levelSpec = GetLevelSpec(GetCoopPlayer()._level);
+		std::shared_ptr<LevelState> levelState = std::make_shared<LevelState>(this, levelSpec, std::move(players));
+		std::shared_ptr<ff::StateWrapper> levelWrapper = std::make_shared<ff::StateWrapper>(levelState);
+		_levelStates.push_back(levelWrapper);
 	}
 	else
 	{
-		// ...
-	}
+		for (size_t i = 0; i < _gameOptions.GetPlayerCount(); i++)
+		{
+			Player& player = _players[i];
+			std::vector<Player*> players;
+			players.push_back(&player);
 
-	*_levelState = std::make_shared<LevelState>(this, levelSpec, std::move(players));
+			const LevelSpec& levelSpec = GetLevelSpec(player._level);
+			std::shared_ptr<LevelState> levelState = std::make_shared<LevelState>(this, levelSpec, std::move(players));
+			std::shared_ptr<ff::StateWrapper> levelWrapper = std::make_shared<ff::StateWrapper>(levelState);
+			_levelStates.push_back(levelWrapper);
+		}
+	}
+}
+
+ReTron::Player& ReTron::GameState::GetCoopPlayer()
+{
+	return _players.back();
+}
+
+const ReTron::LevelSpec& ReTron::GameState::GetLevelSpec(size_t index) const
+{
+	size_t level = index % _levelSetSpec._levels.size();
+	ff::StringRef levelId = _levelSetSpec._levels[level];
+	return _appService->GetGameSpec()._levels.GetKey(levelId)->GetValue();
 }
