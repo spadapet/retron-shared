@@ -14,3 +14,4 @@ obj/
 *.suo
 *.user
 *.vspscc
+*.tiled-session

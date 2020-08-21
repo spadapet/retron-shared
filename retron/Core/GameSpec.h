@@ -7,10 +7,23 @@ namespace ff
 
 namespace ReTron
 {
+	struct LevelObjectsSpec
+	{
+		ff::RectFixedInt _rect;
+		size_t _electrode;
+		size_t _grunt;
+		size_t _hulk;
+		size_t _bonusWoman;
+		size_t _bonusMan;
+		size_t _bonusChild;
+	};
+
 	struct LevelSpec
 	{
+		std::vector<ff::RectFixedInt> _bounds;
+		std::vector<ff::RectFixedInt> _boxes;
+		std::vector<LevelObjectsSpec> _objects;
 		ff::PointFixedInt _playerStart;
-		size_t _grunts;
 	};
 
 	struct LevelSetSpec

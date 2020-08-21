@@ -37,7 +37,7 @@
       {
         "1":
         {
-          "grunts": 10
+          "res:import": "file:Levels/level-001.json"
         }
       },
 
