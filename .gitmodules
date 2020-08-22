@@ -2,3 +2,7 @@
 	path = ffcore
 	url = https://github.com/spadapet/ffcore.git
 	branch = master
+[submodule "vendor/entt"]
+	path = vendor/entt
+	url = https://github.com/spadapet/entt.git
+	branch = master
