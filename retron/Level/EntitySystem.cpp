@@ -45,8 +45,14 @@ void ReTron::EntitySystem::SetPlayer(entt::entity entity, size_t indexInLevel)
 	_registry.emplace<PlayerComponent>(entity, indexInLevel);
 }
 
-size_t ReTron::EntitySystem::GetPlayerIndexInLevel(entt::entity entity)
+size_t ReTron::EntitySystem::GetPlayer(entt::entity entity)
 {
 	PlayerComponent* pc = _registry.try_get<PlayerComponent>(entity);
 	return pc ? pc->_indexInLevel : ff::INVALID_SIZE;
+}
+
+entt::runtime_view ReTron::EntitySystem::GetPlayers()
+{
+	entt::id_type type = entt::type_info<PlayerComponent>::id();
+	return _registry.runtime_view(&type, &type + 1);
 }

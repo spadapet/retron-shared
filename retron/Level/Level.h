@@ -37,6 +37,5 @@ namespace ReTron
 
 		std::vector<entt::entity> _advanceEntities;
 		std::vector<std::pair<entt::entity, entt::entity>> _collisions;
-		std::vector<entt::entity> _players;
 	};
 }

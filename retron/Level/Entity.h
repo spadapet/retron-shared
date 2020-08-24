@@ -13,6 +13,8 @@ namespace ReTron
 		Grunt,
 		Hulk,
 		Electrode,
+		LevelBounds,
+		LevelBox,
 
 		Count
 	};
@@ -23,9 +25,10 @@ namespace ReTron
 		Player,
 		Bonus,
 		Enemy,
-		Electrode,
+		Obstacle,
 		PlayerBullet,
 		EnemyBullet,
+		Level,
 
 		Count
 	};

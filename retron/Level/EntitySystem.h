@@ -17,7 +17,8 @@ namespace ReTron
 		void FlushDelete();
 
 		void SetPlayer(entt::entity entity, size_t indexInLevel);
-		size_t GetPlayerIndexInLevel(entt::entity entity);
+		size_t GetPlayer(entt::entity entity);
+		entt::runtime_view GetPlayers();
 
 	private:
 		entt::registry& _registry;

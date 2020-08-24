@@ -34,9 +34,19 @@ static void* UserDataFromEntity(entt::entity entity)
 
 ff::RectFixedInt GetHitBox(b2Body* body)
 {
-	b2AABB aabb;
-	body->GetFixtureList()->GetShape()->ComputeAABB(&aabb, body->GetTransform(), 0);
-	return ff::RectFixedInt(aabb.lowerBound.x, aabb.lowerBound.y, aabb.upperBound.x, aabb.upperBound.y) * ::WORLD_TO_PIXEL_SCALE;
+	ff::RectFixedInt rect = ff::RectFixedInt::Zeros();
+
+	b2Shape* shape = body->GetFixtureList()->GetShape();
+	for (int i = 0; i < shape->GetChildCount(); i++)
+	{
+		b2AABB aabb;
+		shape->ComputeAABB(&aabb, body->GetTransform(), i);
+
+		ff::RectFixedInt childRect = ff::RectFixedInt(aabb.lowerBound.x, aabb.lowerBound.y, aabb.upperBound.x, aabb.upperBound.y) * ::WORLD_TO_PIXEL_SCALE;
+		rect = !i ? childRect : rect = rect.Bound(childRect);
+	}
+
+	return rect;
 }
 
 ReTron::CollisionSystem::CollisionSystem(entt::registry& registry, PositionSystem& positionSystem, EntitySystem& entitySystem)
@@ -173,9 +183,23 @@ void ReTron::CollisionSystem::DirtyHitBox(entt::entity entity)
 	}
 }
 
+static b2BodyType GetBodyType(ReTron::EntityHitBoxType type)
+{
+	switch (type)
+	{
+	case ReTron::EntityHitBoxType::Obstacle:
+	case ReTron::EntityHitBoxType::Level:
+		return b2_staticBody;
+
+	default:
+		return b2_dynamicBody;
+	}
+}
+
 HitBoxComponent* ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
 {
-	if (GetHitBoxType(entity) != EntityHitBoxType::None)
+	EntityHitBoxType type = GetHitBoxType(entity);
+	if (type != EntityHitBoxType::None)
 	{
 		HitBoxComponent& hb = _registry.get_or_emplace<HitBoxComponent>(entity, HitBoxComponent{});
 		if (!hb._body)
@@ -188,7 +212,7 @@ HitBoxComponent* ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
 			bodyDef.angle = (float)_positionSystem.GetRotation(entity) * ff::DEG_TO_RAD_F;
 			bodyDef.allowSleep = false;
 			bodyDef.fixedRotation = true;
-			bodyDef.type = b2_dynamicBody;
+			bodyDef.type = ::GetBodyType(type);
 
 			hb._body = _world.CreateBody(&bodyDef);
 		}
@@ -206,22 +230,43 @@ HitBoxComponent* ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
 			ff::PointFixedInt tl = spec.TopLeft() * scale;
 			ff::PointFixedInt br = spec.BottomRight() * scale;
 
-			std::array<b2Vec2, 4> points =
-			{
-				b2Vec2{ tl.x, tl.y },
-				b2Vec2{ br.x, tl.y },
-				b2Vec2{ br.x, br.y },
-				b2Vec2{ tl.x, br.y },
-			};
-
-			b2PolygonShape shape;
-			shape.Set(points.data(), 4);
-			shape.m_radius = 0;
-
+			b2PolygonShape polygonShape;
+			b2ChainShape chainShape;
 			b2FixtureDef fixtureDef;
 			fixtureDef.userData = UserDataFromEntity(entity);
-			fixtureDef.shape = &shape;
 			fixtureDef.isSensor = true;
+
+			if (type == EntityHitBoxType::Level && _entitySystem.GetType(entity) == EntityType::LevelBounds)
+			{
+				// Clockwise
+				std::array<b2Vec2, 4> points =
+				{
+					b2Vec2{ tl.x, tl.y },
+					b2Vec2{ br.x, tl.y },
+					b2Vec2{ br.x, br.y },
+					b2Vec2{ tl.x, br.y },
+				};
+
+				chainShape.CreateLoop(points.data(), 4);
+				chainShape.m_radius = 0;
+				fixtureDef.shape = &chainShape;
+			}
+			else
+			{
+				// Counter-clockwise
+				std::array<b2Vec2, 4> points =
+				{
+					b2Vec2{ tl.x, tl.y },
+					b2Vec2{ tl.x, br.y },
+					b2Vec2{ br.x, br.y },
+					b2Vec2{ br.x, tl.y },
+				};
+
+				polygonShape.Set(points.data(), 4);
+				polygonShape.m_radius = 0;
+				fixtureDef.shape = &polygonShape;
+			}
+
 			hb._body->CreateFixture(&fixtureDef);
 		}
 

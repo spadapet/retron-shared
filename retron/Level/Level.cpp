@@ -12,7 +12,7 @@ ReTron::Level::Level(ILevelService* levelService)
 	, _entitySystem(_registry)
 	, _positionSystem(_registry)
 	, _collisionSystem(_registry, _positionSystem, _entitySystem)
-	, _entityFactory(levelService, _registry, _entitySystem, _positionSystem)
+	, _entityFactory(levelService, _registry, _entitySystem, _positionSystem, _collisionSystem)
 {
 	InitLevel();
 }
@@ -41,13 +41,14 @@ void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, f
 	ff::IRenderer* render = _levelService->GetGameService()->GetAppService()->GetRenderer();
 	ff::RendererActive renderActive = ff::PixelRendererActive::BeginRender(render, target, depth, targetRect, cameraRect);
 	ff::PixelRendererActive renderPixel(renderActive);
+	const LevelSpec& spec = _levelService->GetLevelSpec();
 
-	for (const ff::RectFixedInt& rect : _levelService->GetLevelSpec()._bounds)
+	for (const ff::RectFixedInt& rect : spec._bounds)
 	{
 		renderPixel.DrawPaletteOutlineRectangle(rect, 77, -3_f);
 	}
 
-	for (const ff::RectFixedInt& rect : _levelService->GetLevelSpec()._boxes)
+	for (const ff::RectFixedInt& rect : spec._boxes)
 	{
 		renderPixel.DrawPaletteOutlineRectangle(rect, 77, 3_f);
 	}
@@ -58,8 +59,20 @@ void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, f
 
 void ReTron::Level::InitLevel()
 {
+	const LevelSpec& spec = _levelService->GetLevelSpec();
+
+	for (const ff::RectFixedInt& rect : spec._bounds)
+	{
+		_entityFactory.CreateBounds(rect);
+	}
+
+	for (const ff::RectFixedInt& rect : spec._boxes)
+	{
+		_entityFactory.CreateBox(rect);
+	}
+
 	for (size_t i = 0; i < _levelService->GetPlayerCount(); i++)
 	{
-		_players.push_back(_entityFactory.CreatePlayer(i));
+		_entityFactory.CreatePlayer(i);
 	}
 }
