@@ -1,5 +1,12 @@
 #pragma once
 
+struct HitBoxComponent;
+
+namespace ff
+{
+	class PixelRendererActive;
+}
+
 namespace ReTron
 {
 	class EntitySystem;
@@ -18,6 +25,8 @@ namespace ReTron
 		void ResetHitBoxToDefault(entt::entity entity);
 		ff::RectFixedInt GetHitBox(entt::entity entity);
 
+		void RenderDebug(ff::PixelRendererActive& render, const std::vector<std::pair<entt::entity, entt::entity>>& collisions);
+
 	private:
 		// b2ContactFilter
 		virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) override;
@@ -26,7 +35,7 @@ namespace ReTron
 		EntityHitBoxType GetHitBoxType(entt::entity entity);
 		void ResetHitBox(entt::entity entity);
 		void DirtyHitBox(entt::entity entity);
-		bool UpdateHitBox(entt::entity entity);
+		HitBoxComponent* UpdateHitBox(entt::entity entity);
 		void UpdateDirtyHitBoxes();
 
 		void OnEntityCreated(entt::registry& registry, entt::entity entity);

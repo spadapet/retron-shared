@@ -1,5 +1,10 @@
 #pragma once
 
+namespace ff
+{
+	class PixelRendererActive;
+}
+
 namespace ReTron
 {
 	class PositionSystem
@@ -23,6 +28,8 @@ namespace ReTron
 		entt::sink<void(entt::entity)> DirectionChanged();
 		entt::sink<void(entt::entity)> ScaleChanged();
 		entt::sink<void(entt::entity)> RotationChanged();
+
+		void RenderDebug(ff::PixelRendererActive& render);
 
 	private:
 		void OnPositionChanged(entt::registry& registry, entt::entity entity);

@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Graph/Render/PixelRenderer.h"
 #include "Level/CollisionSystem.h"
 #include "Level/EntitySystem.h"
 #include "Level/PositionSystem.h"
@@ -29,6 +30,13 @@ static entt::entity EntityFromUserData(void* data)
 static void* UserDataFromEntity(entt::entity entity)
 {
 	return reinterpret_cast<void*>(static_cast<size_t>(entity));
+}
+
+ff::RectFixedInt GetHitBox(b2Body* body)
+{
+	b2AABB aabb;
+	body->GetFixtureList()->GetShape()->ComputeAABB(&aabb, body->GetTransform(), 0);
+	return ff::RectFixedInt(aabb.lowerBound.x, aabb.lowerBound.y, aabb.upperBound.x, aabb.upperBound.y) * ::WORLD_TO_PIXEL_SCALE;
 }
 
 ReTron::CollisionSystem::CollisionSystem(entt::registry& registry, PositionSystem& positionSystem, EntitySystem& entitySystem)
@@ -116,17 +124,27 @@ void ReTron::CollisionSystem::ResetHitBoxToDefault(entt::entity entity)
 
 ff::RectFixedInt ReTron::CollisionSystem::GetHitBox(entt::entity entity)
 {
-	if (UpdateHitBox(entity))
+	HitBoxComponent* hb = UpdateHitBox(entity);
+	if (hb)
 	{
-		const HitBoxComponent& hb = _registry.get<HitBoxComponent>(entity);
-		b2AABB aabb;
-		hb._body->GetFixtureList()->GetShape()->ComputeAABB(&aabb, hb._body->GetTransform(), 0);
-
-		return ff::RectFixedInt(aabb.lowerBound.x, aabb.lowerBound.y, aabb.upperBound.x, aabb.upperBound.y) * ::WORLD_TO_PIXEL_SCALE;
+		return ::GetHitBox(hb->_body);
 	}
 
 	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
 	return ff::RectFixedInt(pos, pos);
+}
+
+void ReTron::CollisionSystem::RenderDebug(ff::PixelRendererActive& render, const std::vector<std::pair<entt::entity, entt::entity>>& collisions)
+{
+	for (auto [entity, hb] : _registry.view<HitBoxComponent>().proxy())
+	{
+		if (hb._body)
+		{
+			ff::RectFixedInt rect = GetHitBox(entity);
+			int color = hb._body->GetContactList() ? 232 : 252;
+			render.DrawPaletteOutlineRectangle(rect, color, 1_f);
+		}
+	}
 }
 
 const ff::RectFixedInt& ReTron::CollisionSystem::GetHitBoxSpec(entt::entity entity)
@@ -155,7 +173,7 @@ void ReTron::CollisionSystem::DirtyHitBox(entt::entity entity)
 	}
 }
 
-bool ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
+HitBoxComponent* ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
 {
 	if (GetHitBoxType(entity) != EntityHitBoxType::None)
 	{
@@ -198,6 +216,7 @@ bool ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
 
 			b2PolygonShape shape;
 			shape.Set(points.data(), 4);
+			shape.m_radius = 0;
 
 			b2FixtureDef fixtureDef;
 			fixtureDef.userData = UserDataFromEntity(entity);
@@ -207,13 +226,13 @@ bool ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
 		}
 
 		_registry.remove_if_exists<DirtyComponent>(entity);
-		return true;
+		return &hb;
 	}
 	else
 	{
 		_registry.remove_if_exists<HitBoxComponent>(entity);
 		_registry.remove_if_exists<DirtyComponent>(entity);
-		return false;
+		return nullptr;
 	}
 }
 

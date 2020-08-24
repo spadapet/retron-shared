@@ -30,7 +30,7 @@ void ReTron::LevelState::Render(ff::AppGlobals* globals, ff::IRenderTarget* targ
 	_level.Render(
 		_targets.GetTarget(RenderTargetTypes::Palette1),
 		_targets.GetDepth(RenderTargetTypes::Palette1),
-		Constants::RENDER_LEVEL_RECT,
+		Constants::RENDER_RECT,
 		GetCamera());
 
 	_targets.Render(target);
@@ -64,5 +64,5 @@ ReTron::Player& ReTron::LevelState::GetPlayerOrCoop(size_t index) const
 
 ff::RectFixedInt ReTron::LevelState::GetCamera()
 {
-	return ff::RectFixedInt(Constants::RENDER_LEVEL_SIZE);
+	return ff::RectFixedInt(Constants::RENDER_RECT);
 }

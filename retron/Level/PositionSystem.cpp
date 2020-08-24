@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Graph/Render/PixelRenderer.h"
 #include "Level/PositionSystem.h"
 
 struct PositionComponent
@@ -90,6 +91,14 @@ entt::sink<void(entt::entity)> ReTron::PositionSystem::ScaleChanged()
 entt::sink<void(entt::entity)> ReTron::PositionSystem::RotationChanged()
 {
 	return _rotationChanged;
+}
+
+void ReTron::PositionSystem::RenderDebug(ff::PixelRendererActive& render)
+{
+	for (auto [entity, pc] : _registry.view<PositionComponent>().proxy())
+	{
+		render.DrawPaletteFilledRectangle(ff::RectFixedInt(pc._pos.Offset(-1, -1), pc._pos.Offset(1, 1)), 230);
+	}
 }
 
 void ReTron::PositionSystem::OnPositionChanged(entt::registry& registry, entt::entity entity)

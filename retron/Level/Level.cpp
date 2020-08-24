@@ -23,8 +23,9 @@ ReTron::Level::~Level()
 
 void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 {
+	ff::RectFixedInt advanceRect = cameraRect.Deflate(Constants::RENDER_WIDTH / -2_f, Constants::RENDER_HEIGHT / -2_f);
 	_advanceEntities.clear();
-	_collisionSystem.HitTest(cameraRect.Deflate(Constants::RENDER_WIDTH / -2_f, Constants::RENDER_HEIGHT / -2_f), _advanceEntities);
+	_collisionSystem.HitTest(advanceRect, _advanceEntities);
 
 	for (entt::entity entity : _advanceEntities)
 	{
@@ -40,7 +41,19 @@ void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, f
 	ff::IRenderer* render = _levelService->GetGameService()->GetAppService()->GetRenderer();
 	ff::RendererActive renderActive = ff::PixelRendererActive::BeginRender(render, target, depth, targetRect, cameraRect);
 	ff::PixelRendererActive renderPixel(renderActive);
-	renderPixel.DrawPaletteOutlineRectangle(cameraRect, 77, 3_f);
+
+	for (const ff::RectFixedInt& rect : _levelService->GetLevelSpec()._bounds)
+	{
+		renderPixel.DrawPaletteOutlineRectangle(rect, 77, -3_f);
+	}
+
+	for (const ff::RectFixedInt& rect : _levelService->GetLevelSpec()._boxes)
+	{
+		renderPixel.DrawPaletteOutlineRectangle(rect, 77, 3_f);
+	}
+
+	_collisionSystem.RenderDebug(renderPixel, _collisions);
+	_positionSystem.RenderDebug(renderPixel);
 }
 
 void ReTron::Level::InitLevel()
