@@ -37,10 +37,11 @@
     <ClCompile Include="Core\GameSpec.cpp" />
     <ClCompile Include="Core\Globals.cpp" />
     <ClCompile Include="Core\Options.cpp" />
-    <ClCompile Include="Core\Player.cpp" />
     <ClCompile Include="Core\RenderTargets.cpp" />
     <ClCompile Include="Level\CollisionSystem.cpp" />
-    <ClCompile Include="Level\EntityManager.cpp" />
+    <ClCompile Include="Level\Entity.cpp" />
+    <ClCompile Include="Level\EntityFactory.cpp" />
+    <ClCompile Include="Level\EntitySystem.cpp" />
     <ClCompile Include="Level\Level.cpp" />
     <ClCompile Include="Level\PositionSystem.cpp" />
     <ClCompile Include="States\AppState.cpp" />
@@ -65,7 +66,9 @@
     <ClInclude Include="Core\Player.h" />
     <ClInclude Include="Core\RenderTargets.h" />
     <ClInclude Include="Level\CollisionSystem.h" />
-    <ClInclude Include="Level\EntityManager.h" />
+    <ClInclude Include="Level\Entity.h" />
+    <ClInclude Include="Level\EntityFactory.h" />
+    <ClInclude Include="Level\EntitySystem.h" />
     <ClInclude Include="Level\Level.h" />
     <ClInclude Include="Level\PositionSystem.h" />
     <ClInclude Include="pch.h" />

@@ -30,9 +30,6 @@
     <ClCompile Include="States\TransitionState.cpp">
       <Filter>States</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Player.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="UI\DebugPage.xaml.cpp">
       <Filter>UI</Filter>
     </ClCompile>
@@ -51,13 +48,19 @@
     <ClCompile Include="Level\CollisionSystem.cpp">
       <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Level\EntityManager.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
     <ClCompile Include="Level\PositionSystem.cpp">
       <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="Level\Level.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\Entity.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\EntitySystem.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\EntityFactory.cpp">
       <Filter>Level</Filter>
     </ClCompile>
   </ItemGroup>
@@ -123,13 +126,19 @@
     <ClInclude Include="Level\CollisionSystem.h">
       <Filter>Level</Filter>
     </ClInclude>
-    <ClInclude Include="Level\EntityManager.h">
-      <Filter>Level</Filter>
-    </ClInclude>
     <ClInclude Include="Level\PositionSystem.h">
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="Level\Level.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\Entity.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\EntitySystem.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\EntityFactory.h">
       <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>

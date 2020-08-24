@@ -9,9 +9,10 @@
 
 ReTron::Level::Level(ILevelService* levelService)
 	: _levelService(levelService)
-	, _positionComponents(_registry)
-	, _collisionSystem(_registry, _positionComponents)
-	, _entityManager(_registry)
+	, _entitySystem(_registry)
+	, _positionSystem(_registry)
+	, _collisionSystem(_registry, _positionSystem, _entitySystem)
+	, _entityFactory(levelService, _registry, _entitySystem, _positionSystem)
 {
 	InitLevel();
 }
@@ -22,7 +23,16 @@ ReTron::Level::~Level()
 
 void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 {
-	_entityManager.FlushDelete();
+	_advanceEntities.clear();
+	_collisionSystem.HitTest(cameraRect.Deflate(Constants::RENDER_WIDTH / -2_f, Constants::RENDER_HEIGHT / -2_f), _advanceEntities);
+
+	for (entt::entity entity : _advanceEntities)
+	{
+	}
+
+	_collisions.clear();
+	_collisionSystem.DetectCollisions(_collisions);
+	_entitySystem.FlushDelete();
 }
 
 void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, ff::RectFixedInt targetRect, ff::RectFixedInt cameraRect)
@@ -33,11 +43,10 @@ void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, f
 	renderPixel.DrawPaletteOutlineRectangle(cameraRect, 77, 3_f);
 }
 
-ff::PointFixedInt ReTron::Level::GetPlayerPosition(size_t index)
-{
-	return ff::PointFixedInt();
-}
-
 void ReTron::Level::InitLevel()
 {
+	for (size_t i = 0; i < _levelService->GetPlayerCount(); i++)
+	{
+		_players.push_back(_entityFactory.CreatePlayer(i));
+	}
 }

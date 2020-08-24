@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Level/CollisionSystem.h"
+#include "Level/EntitySystem.h"
 #include "Level/PositionSystem.h"
 
 static const ff::FixedInt PIXEL_TO_WORLD_SCALE = 0.0625_f;
@@ -7,15 +8,13 @@ static const ff::FixedInt WORLD_TO_PIXEL_SCALE = 16_f;
 
 struct HitBoxSpecComponent
 {
-	ff::PointFixedInt _topLeft;
-	ff::PointFixedInt _size;
-	ReTron::HitBoxType _type;
+	ff::RectFixedInt _rect;
+	ReTron::EntityHitBoxType _type;
 };
 
 struct HitBoxComponent
 {
 	b2Body* _body;
-	b2Fixture* _fixture;
 };
 
 struct DirtyComponent
@@ -32,14 +31,16 @@ static void* UserDataFromEntity(entt::entity entity)
 	return reinterpret_cast<void*>(static_cast<size_t>(entity));
 }
 
-ReTron::CollisionSystem::CollisionSystem(entt::registry& registry, PositionSystem& positionSystem)
+ReTron::CollisionSystem::CollisionSystem(entt::registry& registry, PositionSystem& positionSystem, EntitySystem& entitySystem)
 	: _positionSystem(positionSystem)
+	, _entitySystem(entitySystem)
 	, _registry(registry)
 	, _world(b2Vec2(0, 0))
 {
 	_world.SetAllowSleeping(false);
 	_world.SetContactFilter(this);
 
+	_connections.emplace_front(_registry.on_construct<EntityType>().connect<&CollisionSystem::OnEntityCreated>(this));
 	_connections.emplace_front(_registry.on_destroy<HitBoxComponent>().connect<&CollisionSystem::OnHitBoxRemoved>(this));
 	_connections.emplace_front(_registry.on_construct<HitBoxSpecComponent>().connect<&CollisionSystem::OnHitBoxSpecChanged>(this));
 	_connections.emplace_front(_registry.on_update<HitBoxSpecComponent>().connect<&CollisionSystem::OnHitBoxSpecChanged>(this));
@@ -60,10 +61,7 @@ void ReTron::CollisionSystem::DetectCollisions(std::vector<std::pair<entt::entit
 		entt::entity entityA = ::EntityFromUserData(i->GetFixtureA()->GetUserData());
 		entt::entity entityB = ::EntityFromUserData(i->GetFixtureB()->GetUserData());
 
-		const HitBoxSpecComponent& specA = _registry.get<HitBoxSpecComponent>(entityA);
-		const HitBoxSpecComponent& specB = _registry.get<HitBoxSpecComponent>(entityB);
-
-		if (specA._type < specB._type)
+		if (GetHitBoxType(entityA) <= GetHitBoxType(entityB))
 		{
 			pairs.emplace_back(entityA, entityB);
 		}
@@ -105,9 +103,15 @@ void ReTron::CollisionSystem::HitTest(ff::RectFixedInt bounds, std::vector<entt:
 	_world.QueryAABB(&callback, aabb);
 }
 
-void ReTron::CollisionSystem::SetHitBox(entt::entity entity, const ff::PointFixedInt& topLeft, const ff::PointFixedInt& size, HitBoxType type)
+void ReTron::CollisionSystem::SetHitBox(entt::entity entity, const ff::RectFixedInt& rect, EntityHitBoxType type)
 {
-	_registry.emplace_or_replace<HitBoxSpecComponent>(entity, topLeft, size, type);
+	_registry.emplace_or_replace<HitBoxSpecComponent>(entity, rect, type);
+}
+
+void ReTron::CollisionSystem::ResetHitBoxToDefault(entt::entity entity)
+{
+	_registry.remove_if_exists<HitBoxSpecComponent>(entity);
+	ResetHitBox(entity);
 }
 
 ff::RectFixedInt ReTron::CollisionSystem::GetHitBox(entt::entity entity)
@@ -116,7 +120,7 @@ ff::RectFixedInt ReTron::CollisionSystem::GetHitBox(entt::entity entity)
 	{
 		const HitBoxComponent& hb = _registry.get<HitBoxComponent>(entity);
 		b2AABB aabb;
-		hb._fixture->GetShape()->ComputeAABB(&aabb, hb._body->GetTransform(), 0);
+		hb._body->GetFixtureList()->GetShape()->ComputeAABB(&aabb, hb._body->GetTransform(), 0);
 
 		return ff::RectFixedInt(aabb.lowerBound.x, aabb.lowerBound.y, aabb.upperBound.x, aabb.upperBound.y) * ::WORLD_TO_PIXEL_SCALE;
 	}
@@ -125,26 +129,39 @@ ff::RectFixedInt ReTron::CollisionSystem::GetHitBox(entt::entity entity)
 	return ff::RectFixedInt(pos, pos);
 }
 
-bool ReTron::CollisionSystem::HasHitBox(entt::entity entity)
+const ff::RectFixedInt& ReTron::CollisionSystem::GetHitBoxSpec(entt::entity entity)
 {
-	return _registry.has<HitBoxSpecComponent>(entity);
+	const HitBoxSpecComponent* spec = _registry.try_get<HitBoxSpecComponent>(entity);
+	return spec ? spec->_rect : ReTron::GetHitBoxSpec(_entitySystem.GetType(entity));
+}
+
+ReTron::EntityHitBoxType ReTron::CollisionSystem::GetHitBoxType(entt::entity entity)
+{
+	HitBoxSpecComponent* spec = _registry.try_get<HitBoxSpecComponent>(entity);
+	return spec ? spec->_type : ReTron::GetHitBoxType(_entitySystem.GetType(entity));
 }
 
 void ReTron::CollisionSystem::ResetHitBox(entt::entity entity)
 {
 	_registry.remove_if_exists<HitBoxComponent>(entity);
-	_registry.emplace_or_replace<DirtyComponent>(entity);
+	DirtyHitBox(entity);
+}
+
+void ReTron::CollisionSystem::DirtyHitBox(entt::entity entity)
+{
+	if (GetHitBoxType(entity) != EntityHitBoxType::None)
+	{
+		_registry.emplace_or_replace<DirtyComponent>(entity);
+	}
 }
 
 bool ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
 {
-	bool hasHitBox = HasHitBox(entity);
-	if (hasHitBox)
+	if (GetHitBoxType(entity) != EntityHitBoxType::None)
 	{
 		HitBoxComponent& hb = _registry.get_or_emplace<HitBoxComponent>(entity, HitBoxComponent{});
 		if (!hb._body)
 		{
-			const HitBoxSpecComponent& spec = _registry.get<HitBoxSpecComponent>(entity);
 			ff::PointFixedInt pos = _positionSystem.GetPosition(entity) * ::PIXEL_TO_WORLD_SCALE;
 
 			b2BodyDef bodyDef{};
@@ -164,12 +181,12 @@ bool ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
 			hb._body->SetTransform(b2Vec2(pos.x, pos.y), angle);
 		}
 
-		if (!hb._fixture)
+		if (!hb._body->GetFixtureList())
 		{
-			const HitBoxSpecComponent& spec = _registry.get<HitBoxSpecComponent>(entity);
-			ff::PointFixedInt scale = _positionSystem.GetScale(entity);
-			ff::PointFixedInt tl = spec._topLeft * scale;
-			ff::PointFixedInt br = tl + spec._size * scale;
+			const ff::RectFixedInt& spec = GetHitBoxSpec(entity);
+			ff::PointFixedInt scale = _positionSystem.GetScale(entity) * ::PIXEL_TO_WORLD_SCALE;
+			ff::PointFixedInt tl = spec.TopLeft() * scale;
+			ff::PointFixedInt br = spec.BottomRight() * scale;
 
 			std::array<b2Vec2, 4> points =
 			{
@@ -186,34 +203,40 @@ bool ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
 			fixtureDef.userData = UserDataFromEntity(entity);
 			fixtureDef.shape = &shape;
 			fixtureDef.isSensor = true;
-			hb._fixture = hb._body->CreateFixture(&fixtureDef);
+			hb._body->CreateFixture(&fixtureDef);
 		}
+
+		_registry.remove_if_exists<DirtyComponent>(entity);
+		return true;
 	}
-
-	_registry.remove_if_exists<DirtyComponent>(entity);
-
-	return hasHitBox;
+	else
+	{
+		_registry.remove_if_exists<HitBoxComponent>(entity);
+		_registry.remove_if_exists<DirtyComponent>(entity);
+		return false;
+	}
 }
 
 void ReTron::CollisionSystem::UpdateDirtyHitBoxes()
 {
-	auto dirtyView = _registry.view<DirtyComponent>();
-	for (entt::entity entity : dirtyView)
+	for (entt::entity entity : _registry.view<DirtyComponent>())
 	{
 		UpdateHitBox(entity);
 	}
 }
 
+void ReTron::CollisionSystem::OnEntityCreated(entt::registry& registry, entt::entity entity)
+{
+	DirtyHitBox(entity);
+}
+
 void ReTron::CollisionSystem::OnHitBoxRemoved(entt::registry& registry, entt::entity entity)
 {
 	HitBoxComponent& hb = _registry.get<HitBoxComponent>(entity);
-	b2Body* body = hb._body;
-
-	if (body)
+	if (hb._body)
 	{
+		hb._body->GetWorld()->DestroyBody(hb._body);
 		hb._body = nullptr;
-		hb._fixture = nullptr;
-		body->GetWorld()->DestroyBody(body);
 	}
 }
 
@@ -224,10 +247,7 @@ void ReTron::CollisionSystem::OnHitBoxSpecChanged(entt::registry& registry, entt
 
 void ReTron::CollisionSystem::OnPositionChanged(entt::entity entity)
 {
-	if (HasHitBox(entity))
-	{
-		_registry.emplace_or_replace<DirtyComponent>(entity);
-	}
+	DirtyHitBox(entity);
 }
 
 void ReTron::CollisionSystem::OnScaleChanged(entt::entity entity)
@@ -240,33 +260,5 @@ bool ReTron::CollisionSystem::ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixt
 	entt::entity entityA = ::EntityFromUserData(fixtureA->GetUserData());
 	entt::entity entityB = ::EntityFromUserData(fixtureB->GetUserData());
 
-	const HitBoxSpecComponent& specA = _registry.get<HitBoxSpecComponent>(entityA);
-	const HitBoxSpecComponent& specB = _registry.get<HitBoxSpecComponent>(entityB);
-
-	HitBoxType typeA = std::min(specA._type, specB._type);
-	HitBoxType typeB = std::max(specA._type, specB._type);
-
-	if (typeA != typeB && typeA != HitBoxType::None && typeB != HitBoxType::None)
-	{
-		switch (typeA)
-		{
-		case HitBoxType::Player:
-			return typeB == HitBoxType::Enemy ||
-				typeB == HitBoxType::Electrode ||
-				typeB == HitBoxType::EnemyBullet;
-
-		case HitBoxType::Enemy:
-			return typeB == HitBoxType::Electrode ||
-				typeB == HitBoxType::PlayerBullet;
-
-		case HitBoxType::Electrode:
-			return typeB == HitBoxType::PlayerBullet ||
-				typeB == HitBoxType::EnemyBullet;
-
-		case HitBoxType::PlayerBullet:
-			return typeB == HitBoxType::EnemyBullet;
-		}
-	}
-
-	return false;
+	return ReTron::CanCollide(GetHitBoxType(entityA), GetHitBoxType(entityB));
 }

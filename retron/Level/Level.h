@@ -2,7 +2,8 @@
 
 #include "Core/GameSpec.h"
 #include "Level/CollisionSystem.h"
-#include "Level/EntityManager.h"
+#include "Level/EntityFactory.h"
+#include "Level/EntitySystem.h"
 #include "Level/PositionSystem.h"
 
 namespace ff
@@ -24,15 +25,18 @@ namespace ReTron
 		void Advance(ff::RectFixedInt cameraRect);
 		void Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, ff::RectFixedInt targetRect, ff::RectFixedInt cameraRect);
 
-		ff::PointFixedInt GetPlayerPosition(size_t index);
-
 	private:
 		void InitLevel();
 
 		ILevelService* _levelService;
 		entt::registry _registry;
-		PositionSystem _positionComponents;
+		EntitySystem _entitySystem;
+		PositionSystem _positionSystem;
 		CollisionSystem _collisionSystem;
-		EntityManager _entityManager;
+		EntityFactory _entityFactory;
+
+		std::vector<entt::entity> _advanceEntities;
+		std::vector<std::pair<entt::entity, entt::entity>> _collisions;
+		std::vector<entt::entity> _players;
 	};
 }

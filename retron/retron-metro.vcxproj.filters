@@ -32,9 +32,6 @@
     <ClCompile Include="UI\TitlePage.xaml.cpp">
       <Filter>UI</Filter>
     </ClCompile>
-    <ClCompile Include="Core\Player.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
     <ClCompile Include="States\TransitionState.cpp">
       <Filter>States</Filter>
     </ClCompile>
@@ -56,15 +53,15 @@
     <ClCompile Include="Level\CollisionSystem.cpp">
       <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Level\EntityManager.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
     <ClCompile Include="Level\Level.cpp">
       <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="Level\PositionSystem.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="Level\Entity.cpp" />
+    <ClCompile Include="Level\EntityFactory.cpp" />
+    <ClCompile Include="Level\EntitySystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -127,15 +124,15 @@
     <ClInclude Include="Level\CollisionSystem.h">
       <Filter>Level</Filter>
     </ClInclude>
-    <ClInclude Include="Level\EntityManager.h">
-      <Filter>Level</Filter>
-    </ClInclude>
     <ClInclude Include="Level\Level.h">
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="Level\PositionSystem.h">
       <Filter>Level</Filter>
     </ClInclude>
+    <ClInclude Include="Level\Entity.h" />
+    <ClInclude Include="Level\EntityFactory.h" />
+    <ClInclude Include="Level\EntitySystem.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ReTron_TemporaryKey.pfx">
