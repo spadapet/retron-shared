@@ -41,7 +41,6 @@ ff::RectFixedInt GetHitBox(b2Body* body)
 	{
 		b2AABB aabb;
 		shape->ComputeAABB(&aabb, body->GetTransform(), i);
-
 		ff::RectFixedInt childRect = ff::RectFixedInt(aabb.lowerBound.x, aabb.lowerBound.y, aabb.upperBound.x, aabb.upperBound.y) * ::WORLD_TO_PIXEL_SCALE;
 		rect = !i ? childRect : rect = rect.Bound(childRect);
 	}
@@ -76,16 +75,19 @@ void ReTron::CollisionSystem::DetectCollisions(std::vector<std::pair<entt::entit
 
 	for (const b2Contact* i = _world.GetContactList(); i; i = i->GetNext())
 	{
-		entt::entity entityA = ::EntityFromUserData(i->GetFixtureA()->GetUserData());
-		entt::entity entityB = ::EntityFromUserData(i->GetFixtureB()->GetUserData());
+		if (i->IsEnabled() && i->IsTouching())
+		{
+			entt::entity entityA = ::EntityFromUserData(i->GetFixtureA()->GetUserData());
+			entt::entity entityB = ::EntityFromUserData(i->GetFixtureB()->GetUserData());
 
-		if (GetHitBoxType(entityA) <= GetHitBoxType(entityB))
-		{
-			pairs.emplace_back(entityA, entityB);
-		}
-		else
-		{
-			pairs.emplace_back(entityB, entityA);
+			if (GetHitBoxType(entityA) <= GetHitBoxType(entityB))
+			{
+				pairs.emplace_back(entityA, entityB);
+			}
+			else
+			{
+				pairs.emplace_back(entityB, entityA);
+			}
 		}
 	}
 }
@@ -148,12 +150,18 @@ void ReTron::CollisionSystem::RenderDebug(ff::PixelRendererActive& render, const
 {
 	for (auto [entity, hb] : _registry.view<HitBoxComponent>().proxy())
 	{
-		if (hb._body)
+		ff::RectFixedInt rect = GetHitBox(entity);
+		int color = 252;
+		for (const b2ContactEdge* i = hb._body->GetContactList(); i; i = i->next)
 		{
-			ff::RectFixedInt rect = GetHitBox(entity);
-			int color = hb._body->GetContactList() ? 232 : 252;
-			render.DrawPaletteOutlineRectangle(rect, color, 1_f);
+			if (i->contact->IsEnabled() && i->contact->IsTouching())
+			{
+				color = 232;
+				break;
+			}
 		}
+
+		render.DrawPaletteOutlineRectangle(rect, color, 1_f);
 	}
 }
 
@@ -297,11 +305,8 @@ void ReTron::CollisionSystem::OnEntityCreated(entt::registry& registry, entt::en
 void ReTron::CollisionSystem::OnHitBoxRemoved(entt::registry& registry, entt::entity entity)
 {
 	HitBoxComponent& hb = _registry.get<HitBoxComponent>(entity);
-	if (hb._body)
-	{
-		hb._body->GetWorld()->DestroyBody(hb._body);
-		hb._body = nullptr;
-	}
+	hb._body->GetWorld()->DestroyBody(hb._body);
+	hb._body = nullptr;
 }
 
 void ReTron::CollisionSystem::OnHitBoxSpecChanged(entt::registry& registry, entt::entity entity)

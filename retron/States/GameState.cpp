@@ -70,9 +70,14 @@ const ReTron::DifficultySpec& ReTron::GameState::GetDifficultySpec() const
 	return _diffSpec;
 }
 
-ff::IInputEvents* ReTron::GameState::GetPlayerInputEvents(size_t index)
+const ff::IInputEvents* ReTron::GameState::GetPlayerInputEvents(size_t index)
 {
 	return _playerInput[index].Flush();
+}
+
+const ff::InputDevices& ReTron::GameState::GetPlayerInputDevices(size_t index)
+{
+	return _playerInputDevices[index];
 }
 
 void ReTron::GameState::RestartLevel()
