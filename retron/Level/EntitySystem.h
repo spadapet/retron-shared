@@ -22,6 +22,7 @@ namespace ReTron
 		EntityType GetType(entt::entity entity);
 		size_t GetEntityCount() const;
 		entt::entity GetEntity(size_t index) const;
+
 		size_t GetGruntCount() const;
 		entt::entity GetGrunt(size_t index) const;
 

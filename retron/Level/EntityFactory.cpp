@@ -16,17 +16,22 @@ ReTron::EntityFactory::EntityFactory(ILevelService* levelService, entt::registry
 {
 }
 
+entt::entity ReTron::EntityFactory::CreateEntity(EntityType type, const ff::PointFixedInt& pos)
+{
+	entt::entity entity = _entitySystem.Create(type);
+	_positionSystem.SetPosition(entity, pos);
+	return entity;
+}
+
 entt::entity ReTron::EntityFactory::CreatePlayer(size_t indexInLevel)
 {
 	Player& player = _levelService->GetPlayer(indexInLevel);
 	ff::PointFixedInt pos = _levelService->GetLevelSpec()._playerStart;
-
 	pos.x += indexInLevel * 16;
 	pos.x -= _levelService->GetPlayerCount() * 8 - 8;
 
-	entt::entity entity = _entitySystem.Create(EntityType::Player);
+	entt::entity entity = CreateEntity(EntityType::Player, pos);
 	_entitySystem.SetPlayer(entity, indexInLevel);
-	_positionSystem.SetPosition(entity, pos);
 
 	return entity;
 }

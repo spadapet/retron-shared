@@ -26,15 +26,16 @@ namespace ReTron
 		void Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, ff::RectFixedInt targetRect, ff::RectFixedInt cameraRect);
 
 	private:
-		entt::delegate<void(entt::entity, EntityType)> AdvanceEntityCallback();
+		entt::entity CreateObject(EntityType type, const ff::RectFixedInt& rect, const std::vector<ff::RectFixedInt>& boxes);
+
 		void AdvanceEntity(entt::entity entity, EntityType type);
 		void AdvancePlayer(entt::entity entity);
 		void AdvanceGrunts();
 		void AdvanceCollisions();
 
-		entt::delegate<void(entt::entity, EntityType, ff::PixelRendererActive&)> RenderEntityCallback();
 		void RenderEntity(entt::entity entity, EntityType type, ff::PixelRendererActive& render);
 		void RenderPlayer(entt::entity entity, ff::PixelRendererActive& render);
+		void RenderGrunt(entt::entity entity, ff::PixelRendererActive& render);
 
 		template<typename... Args>
 		void EnumEntities(entt::delegate<void(entt::entity, EntityType, Args&&...)> func, Args&&... args)
@@ -48,6 +49,9 @@ namespace ReTron
 
 		ILevelService* _levelService;
 		entt::registry _registry;
+		entt::delegate<void(entt::entity, EntityType)> _advanceCallback;
+		entt::delegate<void(entt::entity, EntityType, ff::PixelRendererActive&)> _renderCallback;
+
 		EntitySystem _entitySystem;
 		PositionSystem _positionSystem;
 		CollisionSystem _collisionSystem;

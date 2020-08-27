@@ -16,6 +16,9 @@ ReTron::Level::Level(ILevelService* levelService)
 	, _collisionSystem(_registry, _positionSystem, _entitySystem)
 	, _entityFactory(levelService, _registry, _entitySystem, _positionSystem, _collisionSystem)
 {
+	_advanceCallback.connect<&Level::AdvanceEntity>(this);
+	_renderCallback.connect<&Level::RenderEntity>(this);
+
 	const LevelSpec& spec = _levelService->GetLevelSpec();
 
 	for (const ff::RectFixedInt& rect : spec._bounds)
@@ -32,6 +35,14 @@ ReTron::Level::Level(ILevelService* levelService)
 	{
 		_entityFactory.CreatePlayer(i);
 	}
+
+	for (const LevelObjectsSpec& objSpec : spec._objects)
+	{
+		for (size_t i = 0; i < objSpec._grunt; i++)
+		{
+			CreateObject(EntityType::Grunt, objSpec._rect, spec._boxes);
+		}
+	}
 }
 
 ReTron::Level::~Level()
@@ -40,7 +51,7 @@ ReTron::Level::~Level()
 
 void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 {
-	EnumEntities(AdvanceEntityCallback());
+	EnumEntities(_advanceCallback);
 	AdvanceGrunts();
 	AdvanceCollisions();
 
@@ -49,24 +60,48 @@ void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 
 void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, ff::RectFixedInt targetRect, ff::RectFixedInt cameraRect)
 {
-	ff::IRenderer* render = _levelService->GetGameService()->GetAppService()->GetRenderer();
-	ff::RendererActive renderActive = ff::PixelRendererActive::BeginRender(render, target, depth, targetRect, cameraRect);
-	ff::PixelRendererActive renderPixel(renderActive);
-
-	EnumEntities<ff::PixelRendererActive&>(RenderEntityCallback(), renderPixel);
+	ff::RendererActive renderActive = ff::PixelRendererActive::BeginRender(_levelService->GetGameService()->GetAppService()->GetRenderer(), target, depth, targetRect, cameraRect);
+	EnumEntities<ff::PixelRendererActive&>(_renderCallback, ff::PixelRendererActive(renderActive));
 
 	if (_levelService->GetGameService()->GetAppService()->ShouldRenderDebug())
 	{
-		_collisionSystem.RenderDebug(renderPixel);
-		_positionSystem.RenderDebug(renderPixel);
+		_collisionSystem.RenderDebug(ff::PixelRendererActive(renderActive));
+		_positionSystem.RenderDebug(ff::PixelRendererActive(renderActive));
 	}
 }
 
-entt::delegate<void(entt::entity, ReTron::EntityType)> ReTron::Level::AdvanceEntityCallback()
+entt::entity ReTron::Level::CreateObject(EntityType type, const ff::RectFixedInt& rect, const std::vector<ff::RectFixedInt>& boxes)
 {
-	entt::delegate<void(entt::entity, EntityType)> callback{};
-	callback.connect<&Level::AdvanceEntity>(this);
-	return callback;
+	const ff::RectFixedInt& hitSpec = ReTron::GetHitBoxSpec(type);
+	entt::entity entity = entt::null;
+
+	for (size_t i = 0; i < 2048; i++)
+	{
+		ff::PointFixedInt pos(
+			(std::rand() << 2) % (int)(rect.Width() - hitSpec.Width()) - (int)hitSpec.left + (int)rect.left,
+			(std::rand() << 2) % (int)(rect.Height() - hitSpec.Height()) - (int)hitSpec.top + (int)rect.top);
+
+		ff::RectFixedInt hitBox = hitSpec + pos;
+		bool goodPos = true;
+
+		for (const ff::RectFixedInt& box : boxes)
+		{
+			if (hitBox.DoesIntersect(box))
+			{
+				goodPos = false;
+				break;
+			}
+		}
+
+		if (goodPos)
+		{
+			entity = _entityFactory.CreateEntity(type, pos);
+			break;
+		}
+	}
+
+	assert(entity != entt::null); // probably too many boxes in the level
+	return entity;
 }
 
 void ReTron::Level::AdvanceEntity(entt::entity entity, EntityType type)
@@ -104,19 +139,10 @@ void ReTron::Level::AdvanceGrunts()
 
 void ReTron::Level::AdvanceCollisions()
 {
-	size_t count = _collisionSystem.DetectCollisions();
-
-	for (size_t i = 0; i < count; i++)
+	for (size_t i = _collisionSystem.DetectCollisions(); i != 0; i--)
 	{
-		std::pair<entt::entity, entt::entity> pair = _collisionSystem.GetCollision(i);
+		auto [entity1, entity2] = _collisionSystem.GetCollision(i - 1);
 	}
-}
-
-entt::delegate<void(entt::entity, ReTron::EntityType, ff::PixelRendererActive&)> ReTron::Level::RenderEntityCallback()
-{
-	entt::delegate<void(entt::entity, EntityType, ff::PixelRendererActive&)> callback{};
-	callback.connect<&Level::RenderEntity>(this);
-	return callback;
 }
 
 void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::PixelRendererActive& render)
@@ -125,6 +151,10 @@ void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::Pixel
 	{
 	case EntityType::Player:
 		RenderPlayer(entity, render);
+		break;
+
+	case EntityType::Grunt:
+		RenderGrunt(entity, render);
 		break;
 
 	case EntityType::LevelBounds:
@@ -139,5 +169,11 @@ void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::Pixel
 void ReTron::Level::RenderPlayer(entt::entity entity, ff::PixelRendererActive& render)
 {
 	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-	render.DrawPaletteFilledCircle(pos.Offset(0, -4), 4, Colors::LEVEL_BORDER);
+	render.DrawPaletteFilledCircle(pos.Offset(0, -4), 4, 236);
+}
+
+void ReTron::Level::RenderGrunt(entt::entity entity, ff::PixelRendererActive& render)
+{
+	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
+	render.DrawPaletteFilledRectangle(_collisionSystem.GetHitBox(entity), 248);
 }
