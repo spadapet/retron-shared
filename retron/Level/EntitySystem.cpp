@@ -60,7 +60,8 @@ size_t ReTron::EntitySystem::SortEntities()
 
 		_registry.sort<EntityType>([](EntityType typeA, EntityType typeB)
 			{
-				return typeA < typeB;
+				// Since we loop backwards
+				return typeA > typeB;
 			});
 	}
 

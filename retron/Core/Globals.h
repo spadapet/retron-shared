@@ -7,6 +7,11 @@ namespace Strings
 	extern const ff::StaticString ID_SYSTEM_OPTIONS;
 }
 
+namespace Colors
+{
+	const int LEVEL_BORDER = 77;
+}
+
 namespace InputEvents
 {
 	extern const ff::hash_t ID_UP;
@@ -32,6 +37,8 @@ namespace InputEvents
 namespace Constants
 {
 	const size_t MAX_PLAYERS = 2;
+	const ff::FixedInt LEVEL_BORDER_THICKNESS = -3_f;
+	const ff::FixedInt LEVEL_BOX_THICKNESS = 3_f;
 
 	const ff::FixedInt RENDER_WIDTH = 480_f; // 1920 / 4
 	const ff::FixedInt RENDER_HEIGHT = 270_f; // 1080 / 4
