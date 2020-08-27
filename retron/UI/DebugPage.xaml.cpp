@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Services/AppService.h"
+#include "Core/AppService.h"
 #include "States/DebugState.h"
 #include "States/GameState.h"
 #include "UI/DebugPage.xaml.h"

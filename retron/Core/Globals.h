@@ -26,7 +26,7 @@ namespace InputEvents
 	extern const ff::hash_t ID_DEBUG_CANCEL_STEP_ONE_FRAME;
 	extern const ff::hash_t ID_DEBUG_SPEED_SLOW;
 	extern const ff::hash_t ID_DEBUG_SPEED_FAST;
-	extern const ff::hash_t ID_DEBUG_SHOW_UI;
+	extern const ff::hash_t ID_DEBUG_RENDER_TOGGLE;
 }
 
 namespace Constants

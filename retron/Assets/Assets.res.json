@@ -637,6 +637,15 @@
           ],
           "repeat": 0.25
         }
+      ],
+      "debugRenderToggle":
+      [
+        {
+          "action":
+          [
+            "0"
+          ]
+        }
       ]
     },
     "values":

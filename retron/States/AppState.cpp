@@ -39,6 +39,7 @@ ReTron::AppState::AppState()
 	, _customDebugCookie(nullptr)
 	, _resourcesRebuiltEventCookie(nullptr)
 	, _rebuildingResources(false)
+	, _renderDebug(false)
 {
 }
 
@@ -51,39 +52,47 @@ std::shared_ptr<ff::State> ReTron::AppState::Advance(ff::AppGlobals* globals)
 
 void ReTron::AppState::AdvanceInput(ff::AppGlobals* globals)
 {
-#ifdef _DEBUG
-	if (_debugInput->Advance(_debugInputDevices, ff::SECONDS_PER_ADVANCE_D))
+	if (_gameSpec._allowDebug || DEBUG)
 	{
-		if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_CANCEL_STEP_ONE_FRAME))
+		if (_debugInput->Advance(_debugInputDevices, ff::SECONDS_PER_ADVANCE_D))
 		{
-			_debugStepOneFrame = false;
-			_debugSteppingFrames = false;
+			if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_CANCEL_STEP_ONE_FRAME))
+			{
+				_debugStepOneFrame = false;
+				_debugSteppingFrames = false;
+			}
+
+			if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_STEP_ONE_FRAME))
+			{
+				_debugStepOneFrame = _debugSteppingFrames;
+				_debugSteppingFrames = true;
+			}
+
+			if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_RENDER_TOGGLE))
+			{
+				_renderDebug = !_renderDebug;
+			}
 		}
 
-		if (_debugInput->HasStartEvent(InputEvents::ID_DEBUG_STEP_ONE_FRAME))
+		if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_FAST))
 		{
-			_debugStepOneFrame = _debugSteppingFrames;
-			_debugSteppingFrames = true;
+			_debugTimeScale = 4.0;
 		}
-	}
-
-	if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_FAST))
-	{
-		_debugTimeScale = 4.0;
-	}
-	else if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_SLOW))
-	{
-		_debugTimeScale = 0.25;
+		else if (_debugInput->GetDigitalValue(_debugInputDevices, InputEvents::ID_DEBUG_SPEED_SLOW))
+		{
+			_debugTimeScale = 0.25;
+		}
+		else
+		{
+			_debugTimeScale = 1.0;
+		}
 	}
 	else
 	{
+		_debugStepOneFrame = false;
+		_debugSteppingFrames = false;
 		_debugTimeScale = 1.0;
 	}
-#else
-	_debugStepOneFrame = false;
-	_debugSteppingFrames = false;
-	_debugTimeScale = 1.0;
-#endif
 
 	ff::State::AdvanceInput(globals);
 }
@@ -217,6 +226,11 @@ ff::IRenderer* ReTron::AppState::GetRenderer() const
 entt::sink<void()> ReTron::AppState::GetReloadResourcesSink()
 {
 	return entt::sink{ _reloadResourcesEvent };
+}
+
+bool ReTron::AppState::ShouldRenderDebug() const
+{
+	return _renderDebug;
 }
 
 ff::IResourceAccess* ReTron::AppState::GetXamlResources()
@@ -382,7 +396,7 @@ void ReTron::AppState::InitDebugState()
 			{
 				_debugState->Hide();
 			}
-			else if (_gameSpec._allowDebug || ff::GetThisModule().IsDebugBuild())
+			else if (_gameSpec._allowDebug || DEBUG)
 			{
 				_debugState->SetVisible(_gameState);
 			}

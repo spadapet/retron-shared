@@ -51,7 +51,10 @@
     <ClCompile Include="States\LevelState.cpp" />
     <ClCompile Include="States\TitleState.cpp" />
     <ClCompile Include="UI\Components.cpp" />
+    <ClInclude Include="Core\AppService.h" />
     <ClInclude Include="Core\Audio.h" />
+    <ClInclude Include="Core\GameService.h" />
+    <ClInclude Include="Core\LevelService.h" />
     <ClInclude Include="Core\RenderTargets.h" />
     <ClInclude Include="Core\GameSpec.h" />
     <ClInclude Include="Core\Globals.h" />
@@ -68,9 +71,6 @@
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClInclude Include="Services\AppService.h" />
-    <ClInclude Include="Services\GameService.h" />
-    <ClInclude Include="Services\LevelService.h" />
     <ClInclude Include="States\AppState.h" />
     <ClInclude Include="States\DebugState.h" />
     <ClInclude Include="States\GameState.h" />

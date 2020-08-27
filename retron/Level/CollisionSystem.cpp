@@ -57,21 +57,22 @@ ReTron::CollisionSystem::CollisionSystem(entt::registry& registry, PositionSyste
 	_world.SetAllowSleeping(false);
 	_world.SetContactFilter(this);
 
-	_connections.emplace_front(_registry.on_construct<EntityType>().connect<&CollisionSystem::OnEntityCreated>(this));
 	_connections.emplace_front(_registry.on_destroy<HitBoxComponent>().connect<&CollisionSystem::OnHitBoxRemoved>(this));
 	_connections.emplace_front(_registry.on_construct<HitBoxSpecComponent>().connect<&CollisionSystem::OnHitBoxSpecChanged>(this));
 	_connections.emplace_front(_registry.on_update<HitBoxSpecComponent>().connect<&CollisionSystem::OnHitBoxSpecChanged>(this));
+	_connections.emplace_front(entitySystem.EntityCreated().connect<&CollisionSystem::OnEntityCreated>(this));
 	_connections.emplace_front(positionSystem.PositionChanged().connect<&CollisionSystem::OnPositionChanged>(this));
 	_connections.emplace_front(positionSystem.RotationChanged().connect<&CollisionSystem::OnPositionChanged>(this));
 	_connections.emplace_front(positionSystem.DirectionChanged().connect<&CollisionSystem::OnScaleChanged>(this));
 	_connections.emplace_front(positionSystem.ScaleChanged().connect<&CollisionSystem::OnScaleChanged>(this));
 }
 
-void ReTron::CollisionSystem::DetectCollisions(std::vector<std::pair<entt::entity, entt::entity>>& pairs)
+size_t ReTron::CollisionSystem::DetectCollisions()
 {
 	UpdateDirtyHitBoxes();
 
 	_world.Step(ff::SECONDS_PER_ADVANCE_F, 1, 1);
+	_collisions.clear();
 
 	for (const b2Contact* i = _world.GetContactList(); i; i = i->GetNext())
 	{
@@ -82,14 +83,26 @@ void ReTron::CollisionSystem::DetectCollisions(std::vector<std::pair<entt::entit
 
 			if (GetHitBoxType(entityA) <= GetHitBoxType(entityB))
 			{
-				pairs.emplace_back(entityA, entityB);
+				_collisions.emplace_back(entityA, entityB);
 			}
 			else
 			{
-				pairs.emplace_back(entityB, entityA);
+				_collisions.emplace_back(entityB, entityA);
 			}
 		}
 	}
+
+	return _collisions.size();
+}
+
+size_t ReTron::CollisionSystem::GetCollisionCount() const
+{
+	return _collisions.size();
+}
+
+std::pair<entt::entity, entt::entity> ReTron::CollisionSystem::GetCollision(size_t index) const
+{
+	return _collisions[index];
 }
 
 void ReTron::CollisionSystem::HitTest(ff::RectFixedInt bounds, std::vector<entt::entity>& entities)
@@ -146,7 +159,7 @@ ff::RectFixedInt ReTron::CollisionSystem::GetHitBox(entt::entity entity)
 	return ff::RectFixedInt(pos, pos);
 }
 
-void ReTron::CollisionSystem::RenderDebug(ff::PixelRendererActive& render, const std::vector<std::pair<entt::entity, entt::entity>>& collisions)
+void ReTron::CollisionSystem::RenderDebug(ff::PixelRendererActive& render)
 {
 	for (auto [entity, hb] : _registry.view<HitBoxComponent>().proxy())
 	{
@@ -234,7 +247,8 @@ HitBoxComponent* ReTron::CollisionSystem::UpdateHitBox(entt::entity entity)
 		if (!hb._body->GetFixtureList())
 		{
 			const ff::RectFixedInt& spec = GetHitBoxSpec(entity);
-			ff::PointFixedInt scale = _positionSystem.GetScale(entity) * ::PIXEL_TO_WORLD_SCALE;
+			ff::PointFixedInt dir = _positionSystem.GetDirection(entity);
+			ff::PointFixedInt scale = _positionSystem.GetScale(entity) * ff::PointFixedInt(dir.x < 0_f ? -1 : 1, dir.y < 0_f ? -1 : 1) * ::PIXEL_TO_WORLD_SCALE;
 			ff::PointFixedInt tl = spec.TopLeft() * scale;
 			ff::PointFixedInt br = spec.BottomRight() * scale;
 
@@ -297,11 +311,6 @@ void ReTron::CollisionSystem::UpdateDirtyHitBoxes()
 	}
 }
 
-void ReTron::CollisionSystem::OnEntityCreated(entt::registry& registry, entt::entity entity)
-{
-	DirtyHitBox(entity);
-}
-
 void ReTron::CollisionSystem::OnHitBoxRemoved(entt::registry& registry, entt::entity entity)
 {
 	HitBoxComponent& hb = _registry.get<HitBoxComponent>(entity);
@@ -312,6 +321,11 @@ void ReTron::CollisionSystem::OnHitBoxRemoved(entt::registry& registry, entt::en
 void ReTron::CollisionSystem::OnHitBoxSpecChanged(entt::registry& registry, entt::entity entity)
 {
 	ResetHitBox(entity);
+}
+
+void ReTron::CollisionSystem::OnEntityCreated(entt::entity entity)
+{
+	DirtyHitBox(entity);
 }
 
 void ReTron::CollisionSystem::OnPositionChanged(entt::entity entity)

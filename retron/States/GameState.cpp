@@ -1,4 +1,5 @@
 #include "pch.h"
+#include "Core/AppService.h"
 #include "Core/GameSpec.h"
 #include "Dict/Dict.h"
 #include "Globals/AppGlobals.h"
@@ -7,7 +8,6 @@
 #include "Input/Keyboard/KeyboardDevice.h"
 #include "Input/Pointer/PointerDevice.h"
 #include "Resource/Resources.h"
-#include "Services/AppService.h"
 #include "State/StateWrapper.h"
 #include "States/GameState.h"
 #include "States/LevelState.h"
@@ -70,14 +70,14 @@ const ReTron::DifficultySpec& ReTron::GameState::GetDifficultySpec() const
 	return _diffSpec;
 }
 
-const ff::IInputEvents* ReTron::GameState::GetPlayerInputEvents(size_t index)
+const ff::IInputEvents* ReTron::GameState::GetInputEvents(const Player& player)
 {
-	return _playerInput[index].Flush();
+	return _playerInput[player._index].Flush();
 }
 
-const ff::InputDevices& ReTron::GameState::GetPlayerInputDevices(size_t index)
+const ff::InputDevices& ReTron::GameState::GetInputDevices(const Player& player)
 {
-	return _playerInputDevices[index];
+	return _playerInputDevices[player._index];
 }
 
 void ReTron::GameState::RestartLevel()

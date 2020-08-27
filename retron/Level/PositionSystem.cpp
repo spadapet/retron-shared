@@ -4,7 +4,12 @@
 
 struct PositionComponent
 {
-	ff::PointFixedInt _pos;
+	ff::PointFixedInt _position;
+};
+
+struct VelocityComponent
+{
+	ff::PointFixedInt _velocity;
 };
 
 struct DirectionComponent
@@ -37,7 +42,18 @@ void ReTron::PositionSystem::SetPosition(entt::entity entity, const ff::PointFix
 ff::PointFixedInt ReTron::PositionSystem::GetPosition(entt::entity entity)
 {
 	PositionComponent* c = _registry.try_get<PositionComponent>(entity);
-	return c ? c->_pos : ff::PointFixedInt::Zeros();
+	return c ? c->_position : ff::PointFixedInt::Zeros();
+}
+
+void ReTron::PositionSystem::SetVelocity(entt::entity entity, const ff::PointFixedInt& value)
+{
+	_registry.emplace_or_replace<VelocityComponent>(entity, value);
+}
+
+ff::PointFixedInt ReTron::PositionSystem::GetVelocity(entt::entity entity)
+{
+	VelocityComponent* c = _registry.try_get<VelocityComponent>(entity);
+	return c ? c->_velocity : ff::PointFixedInt::Zeros();
 }
 
 void ReTron::PositionSystem::SetDirection(entt::entity entity, const ff::PointFixedInt& value)
@@ -97,7 +113,7 @@ void ReTron::PositionSystem::RenderDebug(ff::PixelRendererActive& render)
 {
 	for (auto [entity, pc] : _registry.view<PositionComponent>().proxy())
 	{
-		render.DrawPaletteFilledRectangle(ff::RectFixedInt(pc._pos.Offset(-1, -1), pc._pos.Offset(1, 1)), 230);
+		render.DrawPaletteFilledRectangle(ff::RectFixedInt(pc._position.Offset(-1, -1), pc._position.Offset(1, 1)), 230);
 	}
 }
 

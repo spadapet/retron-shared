@@ -18,14 +18,16 @@ namespace ReTron
 	public:
 		CollisionSystem(entt::registry& registry, PositionSystem& positionSystem, EntitySystem& entitySystem);
 
-		void DetectCollisions(std::vector<std::pair<entt::entity, entt::entity>>& pairs);
+		size_t DetectCollisions();
+		size_t GetCollisionCount() const;
+		std::pair<entt::entity, entt::entity> GetCollision(size_t index) const;
 		void HitTest(ff::RectFixedInt bounds, std::vector<entt::entity>& entities);
 
 		void SetHitBox(entt::entity entity, const ff::RectFixedInt& rect, EntityHitBoxType type);
 		void ResetHitBoxToDefault(entt::entity entity);
 		ff::RectFixedInt GetHitBox(entt::entity entity);
 
-		void RenderDebug(ff::PixelRendererActive& render, const std::vector<std::pair<entt::entity, entt::entity>>& collisions);
+		void RenderDebug(ff::PixelRendererActive& render);
 
 	private:
 		// b2ContactFilter
@@ -38,9 +40,9 @@ namespace ReTron
 		HitBoxComponent* UpdateHitBox(entt::entity entity);
 		void UpdateDirtyHitBoxes();
 
-		void OnEntityCreated(entt::registry& registry, entt::entity entity);
 		void OnHitBoxRemoved(entt::registry& registry, entt::entity entity);
 		void OnHitBoxSpecChanged(entt::registry& registry, entt::entity entity);
+		void OnEntityCreated(entt::entity entity);
 		void OnPositionChanged(entt::entity entity);
 		void OnScaleChanged(entt::entity entity);
 
@@ -49,5 +51,6 @@ namespace ReTron
 		entt::registry& _registry;
 		b2World _world;
 		std::forward_list<entt::scoped_connection> _connections;
+		std::vector<std::pair<entt::entity, entt::entity>> _collisions;
 	};
 }

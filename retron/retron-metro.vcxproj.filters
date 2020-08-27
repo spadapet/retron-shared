@@ -59,9 +59,15 @@
     <ClCompile Include="Level\PositionSystem.cpp">
       <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Level\Entity.cpp" />
-    <ClCompile Include="Level\EntityFactory.cpp" />
-    <ClCompile Include="Level\EntitySystem.cpp" />
+    <ClCompile Include="Level\Entity.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\EntityFactory.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\EntitySystem.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -82,20 +88,11 @@
     <ClInclude Include="Core\Options.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Services\AppService.h">
-      <Filter>Services</Filter>
-    </ClInclude>
-    <ClInclude Include="Services\GameService.h">
-      <Filter>Services</Filter>
-    </ClInclude>
     <ClInclude Include="States\GameState.h">
       <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="States\LevelState.h">
       <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="Services\LevelService.h">
-      <Filter>Services</Filter>
     </ClInclude>
     <ClInclude Include="UI\TitlePage.xaml.h">
       <Filter>UI</Filter>
@@ -130,9 +127,24 @@
     <ClInclude Include="Level\PositionSystem.h">
       <Filter>Level</Filter>
     </ClInclude>
-    <ClInclude Include="Level\Entity.h" />
-    <ClInclude Include="Level\EntityFactory.h" />
-    <ClInclude Include="Level\EntitySystem.h" />
+    <ClInclude Include="Core\AppService.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GameService.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\LevelService.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\Entity.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\EntityFactory.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\EntitySystem.h">
+      <Filter>Level</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReTron_TemporaryKey.pfx">
@@ -157,9 +169,6 @@
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{9a3d8d6c-f9de-4199-95cb-4293e4627a69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Services">
-      <UniqueIdentifier>{1d2da2c0-1fb5-4928-8785-b76fc6f05cb4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assets\Build">
       <UniqueIdentifier>{8eac9c70-24e3-4db2-9969-b34bf446c498}</UniqueIdentifier>

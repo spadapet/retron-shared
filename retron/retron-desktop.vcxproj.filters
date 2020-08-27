@@ -81,12 +81,6 @@
     <ClInclude Include="Core\Options.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Services\AppService.h">
-      <Filter>Services</Filter>
-    </ClInclude>
-    <ClInclude Include="Services\GameService.h">
-      <Filter>Services</Filter>
-    </ClInclude>
     <ClInclude Include="States\GameState.h">
       <Filter>States</Filter>
     </ClInclude>
@@ -120,9 +114,6 @@
     <ClInclude Include="Core\Audio.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Services\LevelService.h">
-      <Filter>Services</Filter>
-    </ClInclude>
     <ClInclude Include="Level\CollisionSystem.h">
       <Filter>Level</Filter>
     </ClInclude>
@@ -141,6 +132,15 @@
     <ClInclude Include="Level\EntityFactory.h">
       <Filter>Level</Filter>
     </ClInclude>
+    <ClInclude Include="Core\AppService.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\GameService.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Core\LevelService.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">
@@ -154,9 +154,6 @@
     </Filter>
     <Filter Include="Core">
       <UniqueIdentifier>{9a3d8d6c-f9de-4199-95cb-4293e4627a69}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Services">
-      <UniqueIdentifier>{1d2da2c0-1fb5-4928-8785-b76fc6f05cb4}</UniqueIdentifier>
     </Filter>
     <Filter Include="Level">
       <UniqueIdentifier>{a796d997-646e-4f0e-ad97-88b920a6d638}</UniqueIdentifier>

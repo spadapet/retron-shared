@@ -15,6 +15,9 @@ namespace ReTron
 		void SetPosition(entt::entity entity, const ff::PointFixedInt& value);
 		ff::PointFixedInt GetPosition(entt::entity entity);
 
+		void SetVelocity(entt::entity entity, const ff::PointFixedInt& value);
+		ff::PointFixedInt GetVelocity(entt::entity entity);
+
 		void SetDirection(entt::entity entity, const ff::PointFixedInt& value);
 		const ff::PointFixedInt GetDirection(entt::entity entity);
 

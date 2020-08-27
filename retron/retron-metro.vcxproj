@@ -59,9 +59,12 @@
     <ClInclude Include="App.xaml.h">
       <DependentUpon>App.xaml</DependentUpon>
     </ClInclude>
+    <ClInclude Include="Core\AppService.h" />
     <ClInclude Include="Core\Audio.h" />
+    <ClInclude Include="Core\GameService.h" />
     <ClInclude Include="Core\GameSpec.h" />
     <ClInclude Include="Core\Globals.h" />
+    <ClInclude Include="Core\LevelService.h" />
     <ClInclude Include="Core\Options.h" />
     <ClInclude Include="Core\Player.h" />
     <ClInclude Include="Core\RenderTargets.h" />
@@ -82,9 +85,6 @@
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <ClInclude Include="Services\AppService.h" />
-    <ClInclude Include="Services\GameService.h" />
-    <ClInclude Include="Services\LevelService.h" />
     <ClInclude Include="States\AppState.h" />
     <ClInclude Include="States\DebugState.h" />
     <ClInclude Include="States\GameState.h" />

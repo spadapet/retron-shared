@@ -1,13 +1,13 @@
 #include "pch.h"
+#include "Core/AppService.h"
+#include "Core/GameService.h"
+#include "Core/LevelService.h"
 #include "Core/Player.h"
 #include "Graph/Render/PixelRenderer.h"
 #include "Graph/Render/Renderer.h"
 #include "Graph/Render/RendererActive.h"
 #include "Input/InputMapping.h"
 #include "Level/Level.h"
-#include "Services/AppService.h"
-#include "Services/GameService.h"
-#include "Services/LevelService.h"
 
 ReTron::Level::Level(ILevelService* levelService)
 	: _levelService(levelService)
@@ -25,11 +25,21 @@ ReTron::Level::~Level()
 
 void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 {
-	for (entt::entity entity : _entitySystem.GetPlayers())
+	size_t count = _entitySystem.SortEntities();
+	for (size_t i = 0; i < count; i++)
 	{
-		AdvancePlayer(entity);
+		entt::entity entity = _entitySystem.GetEntity(i);
+		EntityType type = _entitySystem.GetType(entity);
+
+		switch (type)
+		{
+		case EntityType::Player:
+			AdvancePlayer(entity);
+			break;
+		}
 	}
 
+	AdvanceGrunts();
 	HandleCollisions();
 
 	_entitySystem.FlushDelete();
@@ -40,20 +50,27 @@ void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, f
 	ff::IRenderer* render = _levelService->GetGameService()->GetAppService()->GetRenderer();
 	ff::RendererActive renderActive = ff::PixelRendererActive::BeginRender(render, target, depth, targetRect, cameraRect);
 	ff::PixelRendererActive renderPixel(renderActive);
-	const LevelSpec& spec = _levelService->GetLevelSpec();
 
-	for (const ff::RectFixedInt& rect : spec._bounds)
+	size_t count = _entitySystem.SortEntities();
+	for (size_t i = 0; i < count; i++)
 	{
-		renderPixel.DrawPaletteOutlineRectangle(rect, 77, -3_f);
+		entt::entity entity = _entitySystem.GetEntity(i);
+		EntityType type = _entitySystem.GetType(entity);
+
+		switch (type)
+		{
+		case EntityType::LevelBounds:
+		case EntityType::LevelBox:
+			renderPixel.DrawPaletteOutlineRectangle(_collisionSystem.GetHitBox(entity), 77, (type == EntityType::LevelBounds) ? -3_f : 3_f);
+			break;
+		}
 	}
 
-	for (const ff::RectFixedInt& rect : spec._boxes)
+	if (_levelService->GetGameService()->GetAppService()->ShouldRenderDebug())
 	{
-		renderPixel.DrawPaletteOutlineRectangle(rect, 77, 3_f);
+		_collisionSystem.RenderDebug(renderPixel);
+		_positionSystem.RenderDebug(renderPixel);
 	}
-
-	_collisionSystem.RenderDebug(renderPixel, _collisions);
-	_positionSystem.RenderDebug(renderPixel);
 }
 
 void ReTron::Level::InitLevel()
@@ -81,8 +98,8 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 	size_t index = _entitySystem.GetPlayer(entity);
 	Player& player = _levelService->GetPlayer(index);
 
-	const ff::InputDevices& inputDevices = _levelService->GetGameService()->GetPlayerInputDevices(player._index);
-	const ff::IInputEvents* inputEvents = _levelService->GetGameService()->GetPlayerInputEvents(player._index);
+	const ff::InputDevices& inputDevices = _levelService->GetGameService()->GetInputDevices(player);
+	const ff::IInputEvents* inputEvents = _levelService->GetGameService()->GetInputEvents(player);
 
 	ff::RectFixedInt dirPress(
 		inputEvents->GetAnalogValue(inputDevices, InputEvents::ID_LEFT),
@@ -95,12 +112,16 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 	_positionSystem.SetPosition(entity, pos);
 }
 
+void ReTron::Level::AdvanceGrunts()
+{
+}
+
 void ReTron::Level::HandleCollisions()
 {
-	_collisions.clear();
-	_collisionSystem.DetectCollisions(_collisions);
+	size_t count = _collisionSystem.DetectCollisions();
 
-	for (const std::pair<entt::entity, entt::entity>& collision : _collisions)
+	for (size_t i = 0; i < count; i++)
 	{
+		std::pair<entt::entity, entt::entity> pair = _collisionSystem.GetCollision(i);
 	}
 }

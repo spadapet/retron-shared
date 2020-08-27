@@ -4,12 +4,8 @@ namespace ff
 {
 	class AppGlobals;
 	class IPalette;
-	class IRenderDepth;
 	class IRenderer;
-	class IRenderTarget;
 	class IResourceAccess;
-	class IValueAccess;
-	class ITexture;
 	class ProcessGlobals;
 	class XamlGlobalState;
 }
@@ -45,5 +41,6 @@ namespace ReTron
 
 		// Debug
 		virtual entt::sink<void()> GetReloadResourcesSink() = 0;
+		virtual bool ShouldRenderDebug() const = 0;
 	};
 }

@@ -4,6 +4,7 @@ namespace ReTron
 {
 	class IGameService;
 	struct LevelSpec;
+	struct Player;
 
 	class ILevelService
 	{

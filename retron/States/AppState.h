@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/AppService.h"
 #include "Core/Audio.h"
 #include "Core/Options.h"
 #include "Core/GameSpec.h"
@@ -9,7 +10,6 @@
 #include "Input/InputMapping.h"
 #include "Resource/Resources.h"
 #include "Resource/ResourceValue.h"
-#include "Services/AppService.h"
 #include "State/StateWrapper.h"
 #include "UI/XamlGlobalHelper.h"
 
@@ -55,6 +55,7 @@ namespace ReTron
 		virtual ff::IPalette* GetPlayerPalette(size_t player) override;
 		virtual ff::IRenderer* GetRenderer() const override;
 		virtual entt::sink<void()> GetReloadResourcesSink() override;
+		virtual bool ShouldRenderDebug() const override;
 
 		// IXamlGlobalHelper
 		virtual ff::IResourceAccess* GetXamlResources() override;
@@ -119,5 +120,6 @@ namespace ReTron
 		bool _debugSteppingFrames;
 		bool _debugStepOneFrame;
 		bool _rebuildingResources;
+		bool _renderDebug;
 	};
 }

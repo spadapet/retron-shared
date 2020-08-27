@@ -1,11 +1,11 @@
 #include "pch.h"
 #include "Core/GameSpec.h"
+#include "Core/LevelService.h"
 #include "Core/Player.h"
 #include "Level/CollisionSystem.h"
 #include "Level/EntityFactory.h"
 #include "Level/EntitySystem.h"
 #include "Level/PositionSystem.h"
-#include "Services/LevelService.h"
 
 ReTron::EntityFactory::EntityFactory(ILevelService* levelService, entt::registry& registry, EntitySystem& entitySystem, PositionSystem& positionSystem, CollisionSystem& collisionSystem)
 	: _levelService(levelService)

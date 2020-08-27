@@ -22,3 +22,4 @@ const ff::hash_t InputEvents::ID_DEBUG_STEP_ONE_FRAME = ff::HashStaticString(L"s
 const ff::hash_t InputEvents::ID_DEBUG_CANCEL_STEP_ONE_FRAME = ff::HashStaticString(L"cancelStepOneFrame");
 const ff::hash_t InputEvents::ID_DEBUG_SPEED_SLOW = ff::HashStaticString(L"speedSlow");
 const ff::hash_t InputEvents::ID_DEBUG_SPEED_FAST = ff::HashStaticString(L"speedFast");
+const ff::hash_t InputEvents::ID_DEBUG_RENDER_TOGGLE = ff::HashStaticString(L"debugRenderToggle");

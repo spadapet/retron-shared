@@ -1,11 +1,11 @@
 #pragma once
 
+#include "Core/GameService.h"
 #include "Core/GameSpec.h"
 #include "Core/Options.h"
 #include "Core/Player.h"
 #include "Input/InputMapping.h"
 #include "Resource/ResourceValue.h"
-#include "Services/GameService.h"
 #include "State/State.h"
 
 namespace ff
@@ -35,8 +35,8 @@ namespace ReTron
 		virtual IAppService* GetAppService() const override;
 		virtual const GameOptions& GetGameOptions() const override;
 		virtual const DifficultySpec& GetDifficultySpec() const override;
-		virtual const ff::IInputEvents* GetPlayerInputEvents(size_t index) override;
-		virtual const ff::InputDevices& GetPlayerInputDevices(size_t index) override;
+		virtual const ff::IInputEvents* GetInputEvents(const Player& player) override;
+		virtual const ff::InputDevices& GetInputDevices(const Player& player) override;
 
 		// Debug
 		void RestartLevel();

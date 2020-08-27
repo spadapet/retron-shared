@@ -1,6 +1,6 @@
 #include "pch.h"
+#include "Core/AppService.h"
 #include "Globals/AppGlobals.h"
-#include "Services/AppService.h"
 #include "States/DebugState.h"
 #include "UI/DebugPage.xaml.h"
 #include "UI/XamlGlobalState.h"

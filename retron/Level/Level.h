@@ -28,6 +28,7 @@ namespace ReTron
 	private:
 		void InitLevel();
 		void AdvancePlayer(entt::entity entity);
+		void AdvanceGrunts();
 		void HandleCollisions();
 
 		ILevelService* _levelService;
@@ -36,7 +37,5 @@ namespace ReTron
 		PositionSystem _positionSystem;
 		CollisionSystem _collisionSystem;
 		EntityFactory _entityFactory;
-
-		std::vector<std::pair<entt::entity, entt::entity>> _collisions;
 	};
 }
