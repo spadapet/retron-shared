@@ -38,6 +38,31 @@ ReTron::Level::Level(ILevelService* levelService)
 
 	for (const LevelObjectsSpec& objSpec : spec._objects)
 	{
+		for (size_t i = 0; i < objSpec._bonusWoman; i++)
+		{
+			CreateObject(EntityType::BonusWoman, objSpec._rect, spec._boxes);
+		}
+
+		for (size_t i = 0; i < objSpec._bonusMan; i++)
+		{
+			CreateObject(EntityType::BonusMan, objSpec._rect, spec._boxes);
+		}
+
+		for (size_t i = 0; i < objSpec._bonusChild; i++)
+		{
+			CreateObject(EntityType::BonusChild, objSpec._rect, spec._boxes);
+		}
+
+		for (size_t i = 0; i < objSpec._electrode; i++)
+		{
+			CreateObject(EntityType::Electrode, objSpec._rect, spec._boxes);
+		}
+
+		for (size_t i = 0; i < objSpec._hulk; i++)
+		{
+			CreateObject(EntityType::Hulk, objSpec._rect, spec._boxes);
+		}
+
 		for (size_t i = 0; i < objSpec._grunt; i++)
 		{
 			CreateObject(EntityType::Grunt, objSpec._rect, spec._boxes);
@@ -153,6 +178,20 @@ void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::Pixel
 		RenderPlayer(entity, render);
 		break;
 
+	case EntityType::BonusWoman:
+	case EntityType::BonusMan:
+	case EntityType::BonusChild:
+		RenderBonus(entity, type, render);
+		break;
+
+	case EntityType::Electrode:
+		RenderElectrode(entity, render);
+		break;
+
+	case EntityType::Hulk:
+		RenderHulk(entity, render);
+		break;
+
 	case EntityType::Grunt:
 		RenderGrunt(entity, render);
 		break;
@@ -170,6 +209,31 @@ void ReTron::Level::RenderPlayer(entt::entity entity, ff::PixelRendererActive& r
 {
 	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
 	render.DrawPaletteFilledCircle(pos.Offset(0, -4), 4, 236);
+}
+
+void ReTron::Level::RenderBonus(entt::entity entity, EntityType type, ff::PixelRendererActive& render)
+{
+	int color = 251;
+	switch (type)
+	{
+	case EntityType::BonusWoman: color = 238; break;
+	case EntityType::BonusMan: color = 246; break;
+	}
+
+	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
+	render.DrawPaletteFilledRectangle(_collisionSystem.GetHitBox(entity), color);
+}
+
+void ReTron::Level::RenderElectrode(entt::entity entity, ff::PixelRendererActive& render)
+{
+	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
+	render.DrawPaletteFilledRectangle(_collisionSystem.GetHitBox(entity), 45);
+}
+
+void ReTron::Level::RenderHulk(entt::entity entity, ff::PixelRendererActive& render)
+{
+	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
+	render.DrawPaletteFilledRectangle(_collisionSystem.GetHitBox(entity), 235);
 }
 
 void ReTron::Level::RenderGrunt(entt::entity entity, ff::PixelRendererActive& render)

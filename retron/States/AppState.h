@@ -112,9 +112,7 @@ namespace ReTron
 		ff::InputDevices _debugInputDevices;
 		ff::EventCookie _customDebugCookie;
 		ff::EventCookie _resourcesRebuiltEventCookie;
-		entt::connection _restartLevelConnection;
-		entt::connection _restartGameConnection;
-		entt::connection _rebuildResourcesConnection;
+		std::forward_list<entt::scoped_connection> _connections;
 		entt::sigh<void()> _reloadResourcesEvent;
 		double _debugTimeScale;
 		bool _debugSteppingFrames;

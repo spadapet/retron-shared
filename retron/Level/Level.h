@@ -35,6 +35,9 @@ namespace ReTron
 
 		void RenderEntity(entt::entity entity, EntityType type, ff::PixelRendererActive& render);
 		void RenderPlayer(entt::entity entity, ff::PixelRendererActive& render);
+		void RenderBonus(entt::entity entity, EntityType type, ff::PixelRendererActive& render);
+		void RenderElectrode(entt::entity entity, ff::PixelRendererActive& render);
+		void RenderHulk(entt::entity entity, ff::PixelRendererActive& render);
 		void RenderGrunt(entt::entity entity, ff::PixelRendererActive& render);
 
 		template<typename... Args>

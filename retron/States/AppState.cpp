@@ -306,9 +306,7 @@ void ReTron::AppState::OnGameThreadShutdown(ff::AppGlobals* globals)
 		_globals->GetDebugPageState()->CustomDebugEvent().Remove(_customDebugCookie);
 		ff::GetThisModule().GetResourceRebuiltEvent().Remove(_resourcesRebuiltEventCookie);
 
-		_restartLevelConnection.release();
-		_restartGameConnection.release();
-		_rebuildResourcesConnection.release();
+		_connections.clear();
 	}
 
 	_gameState = nullptr;
@@ -409,9 +407,9 @@ void ReTron::AppState::InitDebugState()
 			_reloadResourcesEvent.publish();
 		});
 
-	_restartLevelConnection = _debugState->RestartLevelEvent().connect<&ReTron::AppState::OnRestartLevel>(this);
-	_restartGameConnection = _debugState->RestartGameEvent().connect<&ReTron::AppState::OnRestartGame>(this);
-	_rebuildResourcesConnection = _debugState->RebuildResourcesEvent().connect<&ReTron::AppState::OnRebuildResources>(this);
+	_connections.emplace_front(_debugState->RestartLevelEvent().connect<&ReTron::AppState::OnRestartLevel>(this));
+	_connections.emplace_front(_debugState->RestartGameEvent().connect<&ReTron::AppState::OnRestartGame>(this));
+	_connections.emplace_front(_debugState->RebuildResourcesEvent().connect<&ReTron::AppState::OnRebuildResources>(this));
 }
 
 void ReTron::AppState::OnRestartLevel()

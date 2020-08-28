@@ -149,6 +149,9 @@ void ReTron::GameState::InitPlayers()
 
 void ReTron::GameState::InitLevel()
 {
+	_levelStates.clear();
+	_playingLevelState = 0;
+
 	if (_gameOptions.IsCoop())
 	{
 		std::vector<Player*> players;
