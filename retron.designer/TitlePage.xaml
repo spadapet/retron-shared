@@ -248,6 +248,7 @@
                 <TranslateTransform/>
             </Grid.RenderTransform>
             <Image x:Name="aboutImage" Source="Title/title-about.png" Width="139" Height="32" VerticalAlignment="Top" Margin="0,60,0,0" />
+            <Image Source="Title/noesis-logo.png" Width="16" Height="16" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,28,28" />
             <StackPanel Margin="0,120,0,0">
                 <StackPanel HorizontalAlignment="Center">
                     <Grid>
@@ -271,20 +272,17 @@
                     <TextBlock Margin="0,8,0,0" FontFamily="{StaticResource Font.Family.Small}">
                         <Run Text="Libraries and Fonts:" />
                     </TextBlock>
-                    <StackPanel Orientation="Horizontal" Margin="8,2,0,0">
-                        <TextBlock FontFamily="{StaticResource Font.Family.Small}" VerticalAlignment="Center">
-                            <Hyperlink Focusable="True" NavigateUri="https://www.noesisengine.com"><Run Text="Noesis Gui" /></Hyperlink>
-                        </TextBlock>
-                        <Image Source="Title/noesis-logo.png" Width="16" Height="16" Margin="4,0,0,0" />
-                    </StackPanel>
-                    <TextBlock Margin="8,-1,0,0" FontFamily="{StaticResource Font.Family.Small}">
-                        <Hyperlink NavigateUri="https://www.zlib.net"><Run Text="zlib" /></Hyperlink>
+                    <TextBlock Margin="8,4,0,0" FontFamily="{StaticResource Font.Family.Small}">
+                        <Hyperlink Focusable="True" NavigateUri="https://www.noesisengine.com"><Run Text="Noesis Gui" /></Hyperlink>
                     </TextBlock>
                     <TextBlock Margin="8,4,0,0" FontFamily="{StaticResource Font.Family.Small}">
-                        <Hyperlink NavigateUri="http://www.libpng.org/pub/png/libpng.html"><Run Text="libpng" /></Hyperlink>
-                    </TextBlock>
-                    <TextBlock Margin="8,4,0,0" FontFamily="{StaticResource Font.Family.Small}">
+                        <Hyperlink NavigateUri="https://www.zlib.net"><Run Text="zlib, " /></Hyperlink>
+                        <Hyperlink NavigateUri="http://www.libpng.org/pub/png/libpng.html"><Run Text="libpng, " /></Hyperlink>
                         <Hyperlink NavigateUri="https://github.com/microsoft/DirectXTex"><Run Text="DirectXTex" /></Hyperlink>
+                    </TextBlock>
+                    <TextBlock Margin="8,4,0,0" FontFamily="{StaticResource Font.Family.Small}">
+                        <Hyperlink NavigateUri="https://github.com/skypjack/entt"><Run Text="EnTT, " /></Hyperlink>
+                        <Hyperlink NavigateUri="https://github.com/erincatto/box2d"><Run Text="Box2D" /></Hyperlink>
                     </TextBlock>
                     <TextBlock Margin="8,4,0,0" FontFamily="{StaticResource Font.Family.Small}">
                         <Hyperlink NavigateUri="https://fontstruct.com/fontstructions/show/474939/robotron_2084"><Run Text="Font by Patrick Lauke" /></Hyperlink>

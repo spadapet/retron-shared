@@ -3,12 +3,12 @@
   {
     "global":
     {
-      "noesisLicenseName": "46d808ec-d1d4-491e-89a0-ae6210be8637",
-      "noesisLicenseKey": "+vK5E7i6uRPxznIfkyf23yd4VnFDsEE2Q1pYBzQsaUR94reR",
+      "noesisLicenseName": "9718d3ca-0774-4e75-81d3-e7a731c69d64",
+      "noesisLicenseKey": "lGLD8vAqw/LJAg5+wIO84kP/p5dcj9V+cJ/fd65gEvBdBIjL",
 
       "app":
       {
-        "allowDebug": false
+        "allowDebug": true
       },
 
       "difficulties":

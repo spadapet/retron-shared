@@ -27,15 +27,15 @@
                  "y":135
                 }, 
                 {
-                 "height":250,
+                 "height":256,
                  "id":4,
                  "name":"Bounds",
                  "rotation":0,
                  "type":"Bounds",
                  "visible":true,
-                 "width":458,
-                 "x":11,
-                 "y":11
+                 "width":464,
+                 "x":8,
+                 "y":8
                 }, 
                 {
                  "height":48,
@@ -44,8 +44,8 @@
                  "rotation":0,
                  "type":"Box",
                  "visible":true,
-                 "width":48,
-                 "x":32,
+                 "width":40,
+                 "x":48,
                  "y":112
                 }, 
                 {
@@ -55,9 +55,20 @@
                  "rotation":0,
                  "type":"Box",
                  "visible":true,
-                 "width":48,
-                 "x":400,
+                 "width":40,
+                 "x":392,
                  "y":112
+                }, 
+                {
+                 "height":128,
+                 "id":14,
+                 "name":"Safe",
+                 "rotation":0,
+                 "type":"Safe",
+                 "visible":true,
+                 "width":224,
+                 "x":128,
+                 "y":72
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -99,12 +110,12 @@
                 }],
          "opacity":1,
          "type":"objectgroup",
-         "visible":true,
+         "visible":false,
          "x":0,
          "y":0
         }],
  "nextlayerid":6,
- "nextobjectid":14,
+ "nextobjectid":16,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.4.2",

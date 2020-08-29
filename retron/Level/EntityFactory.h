@@ -17,6 +17,7 @@ namespace ReTron
 		entt::entity CreatePlayer(size_t indexInLevel);
 		entt::entity CreateBounds(const ff::RectFixedInt& rect);
 		entt::entity CreateBox(const ff::RectFixedInt& rect);
+		void CreateObjects(size_t count, EntityType type, const ff::RectFixedInt& rect, const std::vector<ff::RectFixedInt>& avoidRects);
 
 	private:
 		ILevelService* _levelService;

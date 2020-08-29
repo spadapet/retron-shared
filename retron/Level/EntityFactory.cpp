@@ -49,3 +49,36 @@ entt::entity ReTron::EntityFactory::CreateBox(const ff::RectFixedInt& rect)
 	_collisionSystem.SetHitBox(entity, rect, EntityHitBoxType::Level);
 	return entity;
 }
+
+void ReTron::EntityFactory::CreateObjects(size_t count, EntityType type, const ff::RectFixedInt& rect, const std::vector<ff::RectFixedInt>& avoidRects)
+{
+	const ff::RectFixedInt& hitSpec = ReTron::GetHitBoxSpec(type);
+
+	for (size_t i = 0; i < count; i++)
+	{
+		for (size_t attempt = 0; attempt < 2048; attempt++)
+		{
+			ff::PointFixedInt pos(
+				(std::rand() << 2) % (int)(rect.Width() - hitSpec.Width()) - (int)hitSpec.left + (int)rect.left,
+				(std::rand() << 2) % (int)(rect.Height() - hitSpec.Height()) - (int)hitSpec.top + (int)rect.top);
+
+			ff::RectFixedInt hitRect = hitSpec + pos;
+			bool goodPos = true;
+
+			for (const ff::RectFixedInt& avoidRect : avoidRects)
+			{
+				if (hitRect.DoesIntersect(avoidRect))
+				{
+					goodPos = false;
+					break;
+				}
+			}
+
+			if (goodPos)
+			{
+				CreateEntity(type, pos);
+				break;
+			}
+		}
+	}
+}

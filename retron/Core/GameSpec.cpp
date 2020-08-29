@@ -37,6 +37,7 @@ static ReTron::DifficultySpec LoadDifficultySpec(const ff::Dict& dict)
 static ReTron::LevelObjectsSpec LoadLevelObjectsSpec(ff::RectFixedInt rect, const ff::Vector<ff::ValuePtr>& properties)
 {
 	ReTron::LevelObjectsSpec objectsSpec{};
+	objectsSpec._type = ReTron::LevelRect::Type::Objects;
 	objectsSpec._rect = rect;
 
 	for (ff::ValuePtr propertyValue : properties)
@@ -96,29 +97,36 @@ static void LoadLevelSpecObjectLayer(ReTron::LevelSpec& levelSpec, const ff::Dic
 		{
 			ff::PointFixedInt pos(objectDict.Get<ff::FixedIntValue>(::PROP_X), objectDict.Get<ff::FixedIntValue>(::PROP_Y));
 			ff::PointFixedInt size(objectDict.Get<ff::FixedIntValue>(::PROP_WIDTH), objectDict.Get<ff::FixedIntValue>(::PROP_HEIGHT));
-			ff::RectFixedInt rect(pos, pos + size);
+			ReTron::LevelRect levelRect{};
+			levelRect._rect = ff::RectFixedInt(pos, pos + size);
 
-			if (!rect.Area())
+			if (objectType == L"Bounds")
 			{
-				assertSz(false, ff::String::format_new(L"Invalid size for object: %s", objectType.c_str()).c_str());
-			}
-			else if (objectType == L"Bounds")
-			{
-				levelSpec._bounds.push_back(rect);
+				levelRect._type = ReTron::LevelRect::Type::Bounds;
+				levelSpec._rects.push_back(levelRect);
 			}
 			else if (objectType == L"Box")
 			{
-				levelSpec._boxes.push_back(rect);
+				levelRect._type = ReTron::LevelRect::Type::Box;
+				levelSpec._rects.push_back(levelRect);
+			}
+			else if (objectType == L"Safe")
+			{
+				levelRect._type = ReTron::LevelRect::Type::Safe;
+				levelSpec._rects.push_back(levelRect);
 			}
 			else if (objectType == L"Objects")
 			{
-				ReTron::LevelObjectsSpec objectsSpec = ::LoadLevelObjectsSpec(rect, objectDict.Get<ff::ValueVectorValue>(::PROP_PROPERTIES));
+				levelRect._type = ReTron::LevelRect::Type::Objects;
+				ReTron::LevelObjectsSpec objectsSpec = ::LoadLevelObjectsSpec(levelRect._rect, objectDict.Get<ff::ValueVectorValue>(::PROP_PROPERTIES));
 				levelSpec._objects.push_back(std::move(objectsSpec));
 			}
 			else
 			{
 				assertSz(false, ff::String::format_new(L"Unknown level object type: %s", objectType.c_str()).c_str());
 			}
+
+			assertSz(levelRect._rect.Area(), ff::String::format_new(L"Invalid size for object: %s", objectType.c_str()).c_str());
 		}
 	}
 }

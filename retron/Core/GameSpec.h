@@ -7,9 +7,23 @@ namespace ff
 
 namespace ReTron
 {
-	struct LevelObjectsSpec
+	struct LevelRect
 	{
+		enum class Type
+		{
+			None,
+			Bounds,
+			Box,
+			Safe,
+			Objects,
+		};
+
+		Type _type;
 		ff::RectFixedInt _rect;
+	};
+
+	struct LevelObjectsSpec : public LevelRect
+	{
 		size_t _electrode;
 		size_t _grunt;
 		size_t _hulk;
@@ -20,8 +34,7 @@ namespace ReTron
 
 	struct LevelSpec
 	{
-		std::vector<ff::RectFixedInt> _bounds;
-		std::vector<ff::RectFixedInt> _boxes;
+		std::vector<LevelRect> _rects;
 		std::vector<LevelObjectsSpec> _objects;
 		ff::PointFixedInt _playerStart;
 	};
