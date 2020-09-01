@@ -183,3 +183,4 @@ ReTron::GameSpec ReTron::GameSpec::Load(ff::IResourceAccess* resources)
 
 	return spec;
 }
+

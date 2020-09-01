@@ -2,7 +2,6 @@
 
 #include "Core/GameSpec.h"
 #include "Level/CollisionSystem.h"
-#include "Level/EntityFactory.h"
 #include "Level/EntitySystem.h"
 #include "Level/PositionSystem.h"
 
@@ -26,9 +25,15 @@ namespace ReTron
 		void Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, ff::RectFixedInt targetRect, ff::RectFixedInt cameraRect);
 
 	private:
+		entt::entity CreateEntity(EntityType type, const ff::PointFixedInt& pos);
+		entt::entity CreatePlayer(size_t indexInLevel);
+		entt::entity CreateBounds(const ff::RectFixedInt& rect);
+		entt::entity CreateBox(const ff::RectFixedInt& rect);
+		void CreateObjects(size_t count, EntityType type, const ff::RectFixedInt& rect, const std::vector<ff::RectFixedInt>& avoidRects);
+
 		void AdvanceEntity(entt::entity entity, EntityType type);
 		void AdvancePlayer(entt::entity entity);
-		void AdvanceGrunts();
+		void AdvanceGrunt(entt::entity entity);
 		void AdvanceCollisions();
 
 		void RenderEntity(entt::entity entity, EntityType type, ff::PixelRendererActive& render);
@@ -38,24 +43,22 @@ namespace ReTron
 		void RenderHulk(entt::entity entity, ff::PixelRendererActive& render);
 		void RenderGrunt(entt::entity entity, ff::PixelRendererActive& render);
 
+		size_t PickGruntMoveCounter();
+
 		template<typename... Args>
-		void EnumEntities(entt::delegate<void(entt::entity, EntityType, Args&&...)> func, Args&&... args)
-		{
-			for (size_t i = _entitySystem.SortEntities(); i != 0; i--)
-			{
-				entt::entity entity = _entitySystem.GetEntity(i - 1);
-				func(entity, _entitySystem.GetType(entity), std::forward<Args>(args)...);
-			}
-		}
+		void EnumEntities(entt::delegate<void(entt::entity, EntityType, Args&&...)> func, Args&&... args);
 
 		ILevelService* _levelService;
+		const DifficultySpec& _difficultySpec;
+		size_t _ticks;
+
 		entt::registry _registry;
 		entt::delegate<void(entt::entity, EntityType)> _advanceCallback;
 		entt::delegate<void(entt::entity, EntityType, ff::PixelRendererActive&)> _renderCallback;
+		std::forward_list<entt::scoped_connection> _connections;
 
 		EntitySystem _entitySystem;
 		PositionSystem _positionSystem;
 		CollisionSystem _collisionSystem;
-		EntityFactory _entityFactory;
 	};
 }

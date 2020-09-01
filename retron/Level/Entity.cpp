@@ -87,3 +87,4 @@ bool ReTron::CanCollide(EntityHitBoxType typeA, EntityHitBoxType typeB)
 
 	return false;
 }
+

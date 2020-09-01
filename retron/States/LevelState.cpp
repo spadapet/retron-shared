@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "Core/GameService.h"
-#include "Core/Player.h"
 #include "States/LevelState.h"
 
 ReTron::LevelState::LevelState(IGameService* gameService, const LevelSpec& levelSpec, std::vector<Player*>&& players)

@@ -3,7 +3,6 @@
 #include "Core/GameService.h"
 #include "Core/GameSpec.h"
 #include "Core/Options.h"
-#include "Core/Player.h"
 #include "Input/InputMapping.h"
 #include "Resource/ResourceValue.h"
 #include "State/State.h"

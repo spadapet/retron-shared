@@ -23,3 +23,21 @@ const ff::hash_t InputEvents::ID_DEBUG_CANCEL_STEP_ONE_FRAME = ff::HashStaticStr
 const ff::hash_t InputEvents::ID_DEBUG_SPEED_SLOW = ff::HashStaticString(L"speedSlow");
 const ff::hash_t InputEvents::ID_DEBUG_SPEED_FAST = ff::HashStaticString(L"speedFast");
 const ff::hash_t InputEvents::ID_DEBUG_RENDER_TOGGLE = ff::HashStaticString(L"debugRenderToggle");
+
+static std::default_random_engine randomEngine(std::random_device{}());
+static std::uniform_int_distribution<int> randomInt;
+
+int Random::Positive()
+{
+	return ::randomInt(::randomEngine);
+}
+
+int Random::Sign()
+{
+	return -std::uniform_int_distribution<int>{0, 1}(::randomEngine);
+}
+
+int Random::Range(int start, int end)
+{
+	return std::uniform_int_distribution<int>{start, end}(::randomEngine);
+}

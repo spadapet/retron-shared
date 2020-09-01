@@ -2,26 +2,37 @@
 #include "Core/AppService.h"
 #include "Core/GameService.h"
 #include "Core/LevelService.h"
-#include "Core/Player.h"
 #include "Graph/Render/PixelRenderer.h"
 #include "Graph/Render/Renderer.h"
 #include "Graph/Render/RendererActive.h"
 #include "Input/InputMapping.h"
 #include "Level/Level.h"
 
+struct PlayerData
+{
+	size_t _indexInLevel;
+};
+
+struct GruntData
+{
+	size_t _index;
+	size_t _moveCounter;
+};
+
 ReTron::Level::Level(ILevelService* levelService)
 	: _levelService(levelService)
+	, _difficultySpec(levelService->GetGameService()->GetDifficultySpec())
 	, _entitySystem(_registry)
 	, _positionSystem(_registry)
 	, _collisionSystem(_registry, _positionSystem, _entitySystem)
-	, _entityFactory(levelService, _registry, _entitySystem, _positionSystem, _collisionSystem)
+	, _ticks(0)
 {
 	_advanceCallback.connect<&Level::AdvanceEntity>(this);
 	_renderCallback.connect<&Level::RenderEntity>(this);
 
 	for (size_t i = 0; i < _levelService->GetPlayerCount(); i++)
 	{
-		_entityFactory.CreatePlayer(i);
+		CreatePlayer(i);
 	}
 
 	const LevelSpec& spec = _levelService->GetLevelSpec();
@@ -34,11 +45,11 @@ ReTron::Level::Level(ILevelService* levelService)
 		switch (levelRect._type)
 		{
 		case LevelRect::Type::Bounds:
-			_entityFactory.CreateBounds(levelRect._rect.Deflate(Constants::LEVEL_BORDER_THICKNESS, Constants::LEVEL_BORDER_THICKNESS));
+			CreateBounds(levelRect._rect.Deflate(Constants::LEVEL_BORDER_THICKNESS, Constants::LEVEL_BORDER_THICKNESS));
 			break;
 
 		case LevelRect::Type::Box:
-			_entityFactory.CreateBox(levelRect._rect);
+			CreateBox(levelRect._rect);
 			avoidRects.push_back(levelRect._rect);
 			break;
 
@@ -50,12 +61,12 @@ ReTron::Level::Level(ILevelService* levelService)
 
 	for (const LevelObjectsSpec& objSpec : spec._objects)
 	{
-		_entityFactory.CreateObjects(objSpec._bonusWoman, EntityType::BonusWoman, objSpec._rect, avoidRects);
-		_entityFactory.CreateObjects(objSpec._bonusMan, EntityType::BonusMan, objSpec._rect, avoidRects);
-		_entityFactory.CreateObjects(objSpec._bonusChild, EntityType::BonusChild, objSpec._rect, avoidRects);
-		_entityFactory.CreateObjects(objSpec._electrode, EntityType::Electrode, objSpec._rect, avoidRects);
-		_entityFactory.CreateObjects(objSpec._hulk, EntityType::Hulk, objSpec._rect, avoidRects);
-		_entityFactory.CreateObjects(objSpec._grunt, EntityType::Grunt, objSpec._rect, avoidRects);
+		CreateObjects(objSpec._bonusWoman, EntityType::BonusWoman, objSpec._rect, avoidRects);
+		CreateObjects(objSpec._bonusMan, EntityType::BonusMan, objSpec._rect, avoidRects);
+		CreateObjects(objSpec._bonusChild, EntityType::BonusChild, objSpec._rect, avoidRects);
+		CreateObjects(objSpec._electrode, EntityType::Electrode, objSpec._rect, avoidRects);
+		CreateObjects(objSpec._hulk, EntityType::Hulk, objSpec._rect, avoidRects);
+		CreateObjects(objSpec._grunt, EntityType::Grunt, objSpec._rect, avoidRects);
 	}
 }
 
@@ -65,8 +76,9 @@ ReTron::Level::~Level()
 
 void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 {
+	_ticks++;
+
 	EnumEntities(_advanceCallback);
-	AdvanceGrunts();
 	AdvanceCollisions();
 
 	_entitySystem.FlushDelete();
@@ -84,6 +96,79 @@ void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, f
 	}
 }
 
+entt::entity ReTron::Level::CreateEntity(EntityType type, const ff::PointFixedInt& pos)
+{
+	entt::entity entity = _entitySystem.Create(type);
+	_positionSystem.SetPosition(entity, pos);
+
+	switch (type)
+	{
+	case EntityType::Grunt:
+		_registry.emplace<GruntData>(entity, _registry.size<GruntData>(), PickGruntMoveCounter());
+		break;
+	}
+
+	return entity;
+}
+
+entt::entity ReTron::Level::CreatePlayer(size_t indexInLevel)
+{
+	ff::PointFixedInt pos = _levelService->GetLevelSpec()._playerStart;
+	pos.x += indexInLevel * 16 - _levelService->GetPlayerCount() * 8 + 8;
+
+	entt::entity entity = CreateEntity(EntityType::Player, pos);
+	_registry.emplace<PlayerData>(entity, indexInLevel);
+
+	return entity;
+}
+
+entt::entity ReTron::Level::CreateBounds(const ff::RectFixedInt& rect)
+{
+	entt::entity entity = _entitySystem.Create(EntityType::LevelBounds);
+	_collisionSystem.SetHitBox(entity, rect, EntityHitBoxType::Level);
+	return entity;
+}
+
+entt::entity ReTron::Level::CreateBox(const ff::RectFixedInt& rect)
+{
+	entt::entity entity = _entitySystem.Create(EntityType::LevelBox);
+	_collisionSystem.SetHitBox(entity, rect, EntityHitBoxType::Level);
+	return entity;
+}
+
+void ReTron::Level::CreateObjects(size_t count, EntityType type, const ff::RectFixedInt& rect, const std::vector<ff::RectFixedInt>& avoidRects)
+{
+	const ff::RectFixedInt& hitSpec = ReTron::GetHitBoxSpec(type);
+
+	for (size_t i = 0; i < count; i++)
+	{
+		for (size_t attempt = 0; attempt < 2048; attempt++)
+		{
+			ff::PointFixedInt pos(
+				(Random::Positive() & ~0x3) % (int)(rect.Width() - hitSpec.Width()) - (int)hitSpec.left + (int)rect.left,
+				(Random::Positive() & ~0x3) % (int)(rect.Height() - hitSpec.Height()) - (int)hitSpec.top + (int)rect.top);
+
+			ff::RectFixedInt hitRect = hitSpec + pos;
+			bool goodPos = true;
+
+			for (const ff::RectFixedInt& avoidRect : avoidRects)
+			{
+				if (hitRect.DoesIntersect(avoidRect))
+				{
+					goodPos = false;
+					break;
+				}
+			}
+
+			if (goodPos)
+			{
+				CreateEntity(type, pos);
+				break;
+			}
+		}
+	}
+}
+
 void ReTron::Level::AdvanceEntity(entt::entity entity, EntityType type)
 {
 	switch (type)
@@ -91,12 +176,16 @@ void ReTron::Level::AdvanceEntity(entt::entity entity, EntityType type)
 	case EntityType::Player:
 		AdvancePlayer(entity);
 		break;
+
+	case EntityType::Grunt:
+		AdvanceGrunt(entity);
+		break;
 	}
 }
 
 void ReTron::Level::AdvancePlayer(entt::entity entity)
 {
-	size_t index = _entitySystem.GetPlayer(entity);
+	size_t index = _registry.get<PlayerData>(entity)._indexInLevel;
 	Player& player = _levelService->GetPlayer(index);
 
 	const ff::InputDevices& inputDevices = _levelService->GetGameService()->GetInputDevices(player);
@@ -114,8 +203,36 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 	_positionSystem.SetPosition(entity, pos);
 }
 
-void ReTron::Level::AdvanceGrunts()
+void ReTron::Level::AdvanceGrunt(entt::entity entity)
 {
+	GruntData& data = _registry.get<GruntData>(entity);
+	if (data._moveCounter)
+	{
+		data._moveCounter--;
+		return;
+	}
+
+	data._moveCounter = PickGruntMoveCounter();
+
+	size_t playerCount = _registry.size<PlayerData>();
+	if (playerCount)
+	{
+		size_t player = data._index % playerCount;
+		entt::entity playerEntity = _registry.data<PlayerData>()[player];
+		ff::PointFixedInt playerPos = _positionSystem.GetPosition(playerEntity);
+		ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
+		const ff::FixedInt move = 4;
+
+		pos.x += (pos.x != playerPos.x)
+			? std::copysign(move, playerPos.x - pos.x)
+			: std::copysign(move, ff::FixedInt(Random::Sign()));
+
+		pos.y += (pos.y != playerPos.y)
+			? std::copysign(move, playerPos.y - pos.y)
+			: std::copysign(move, ff::FixedInt(Random::Sign()));
+
+		_positionSystem.SetPosition(entity, pos);
+	}
 }
 
 void ReTron::Level::AdvanceCollisions()
@@ -196,4 +313,25 @@ void ReTron::Level::RenderGrunt(entt::entity entity, ff::PixelRendererActive& re
 {
 	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
 	render.DrawPaletteFilledRectangle(_collisionSystem.GetHitBox(entity), 248);
+}
+
+size_t ReTron::Level::PickGruntMoveCounter()
+{
+	size_t i = _ticks / 75;
+	if (i >= 32)
+	{
+		return 3; // Constants::GRUNT_TICK_FRAMES;
+	}
+
+	return Random::Range(1, 32 - (int)i) * Constants::GRUNT_TICK_FRAMES;
+}
+
+template<typename... Args>
+void ReTron::Level::EnumEntities(entt::delegate<void(entt::entity, EntityType, Args&&...)> func, Args&&... args)
+{
+	for (size_t i = _entitySystem.SortEntities(); i != 0; i--)
+	{
+		entt::entity entity = _entitySystem.GetEntity(i - 1);
+		func(entity, _entitySystem.GetType(entity), std::forward<Args>(args)...);
+	}
 }

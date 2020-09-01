@@ -60,9 +60,6 @@
     <ClCompile Include="Level\EntitySystem.cpp">
       <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Level\EntityFactory.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -96,9 +93,6 @@
     <ClInclude Include="States\TransitionState.h">
       <Filter>States</Filter>
     </ClInclude>
-    <ClInclude Include="Core\Player.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="UI\DebugPage.xaml.h">
       <Filter>UI</Filter>
     </ClInclude>
@@ -127,9 +121,6 @@
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="Level\EntitySystem.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Level\EntityFactory.h">
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="Core\AppService.h">
