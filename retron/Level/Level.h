@@ -50,7 +50,7 @@ namespace ReTron
 
 		ILevelService* _levelService;
 		const DifficultySpec& _difficultySpec;
-		size_t _ticks;
+		size_t _frames;
 
 		entt::registry _registry;
 		entt::delegate<void(entt::entity, EntityType)> _advanceCallback;

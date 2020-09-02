@@ -25,7 +25,7 @@ ReTron::Level::Level(ILevelService* levelService)
 	, _entitySystem(_registry)
 	, _positionSystem(_registry)
 	, _collisionSystem(_registry, _positionSystem, _entitySystem)
-	, _ticks(0)
+	, _frames(0)
 {
 	_advanceCallback.connect<&Level::AdvanceEntity>(this);
 	_renderCallback.connect<&Level::RenderEntity>(this);
@@ -76,7 +76,7 @@ ReTron::Level::~Level()
 
 void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 {
-	_ticks++;
+	_frames++;
 
 	EnumEntities(_advanceCallback);
 	AdvanceCollisions();
@@ -206,9 +206,10 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 void ReTron::Level::AdvanceGrunt(entt::entity entity)
 {
 	GruntData& data = _registry.get<GruntData>(entity);
-	if (data._moveCounter)
+	assert(data._moveCounter);
+
+	if (--data._moveCounter)
 	{
-		data._moveCounter--;
 		return;
 	}
 
@@ -317,13 +318,9 @@ void ReTron::Level::RenderGrunt(entt::entity entity, ff::PixelRendererActive& re
 
 size_t ReTron::Level::PickGruntMoveCounter()
 {
-	size_t i = _ticks / 75;
-	if (i >= 32)
-	{
-		return 3; // Constants::GRUNT_TICK_FRAMES;
-	}
-
-	return Random::Range(1, 32 - (int)i) * Constants::GRUNT_TICK_FRAMES;
+	size_t i = std::min<size_t>(_frames / _difficultySpec._gruntMaxTicksRate, _difficultySpec._gruntMaxTicks - 1);
+	i = Random::RangeSize(1, _difficultySpec._gruntMaxTicks - i) * _difficultySpec._gruntTickFrames;
+	return std::max<size_t>(i, _difficultySpec._gruntMinTicks);
 }
 
 template<typename... Args>

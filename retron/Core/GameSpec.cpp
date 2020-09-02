@@ -7,12 +7,17 @@
 static ff::StaticString PROP_ALLOW_DEBUG(L"allowDebug");
 static ff::StaticString PROP_APP(L"app");
 static ff::StaticString PROP_DIFFICULTIES(L"difficulties");
+static ff::StaticString PROP_GRUNT_MAX_TICKS(L"gruntMaxTicks");
+static ff::StaticString PROP_GRUNT_MAX_TICKS_RATE(L"gruntMaxTicksRate");
+static ff::StaticString PROP_GRUNT_MIN_TICKS(L"gruntMinTicks");
+static ff::StaticString PROP_GRUNT_TICK_FRAMES(L"gruntTickFrames");
 static ff::StaticString PROP_HEIGHT(L"height");
 static ff::StaticString PROP_LAYERS(L"layers");
 static ff::StaticString PROP_LEVEL_SET(L"levelSet");
 static ff::StaticString PROP_LEVEL_SETS(L"levelSets");
 static ff::StaticString PROP_LEVELS(L"levels");
 static ff::StaticString PROP_LIVES(L"lives");
+static ff::StaticString PROP_LOOP_START(L"loopStart");
 static ff::StaticString PROP_NAME(L"name");
 static ff::StaticString PROP_OBJECTS(L"objects");
 static ff::StaticString PROP_PLAYER_START(L"playerStart");
@@ -28,10 +33,23 @@ static ReTron::DifficultySpec LoadDifficultySpec(const ff::Dict& dict)
 {
 	ReTron::DifficultySpec diffSpec{};
 	diffSpec._name = dict.Get<ff::StringValue>(::PROP_NAME);
-	diffSpec._lives = dict.Get<ff::SizeValue>(::PROP_LIVES);
 	diffSpec._levelSet = dict.Get<ff::StringValue>(::PROP_LEVEL_SET);
+	diffSpec._lives = dict.Get<ff::SizeValue>(::PROP_LIVES);
+	diffSpec._gruntMaxTicks = dict.Get<ff::SizeValue>(::PROP_GRUNT_MAX_TICKS);
+	diffSpec._gruntMinTicks = dict.Get<ff::SizeValue>(::PROP_GRUNT_MIN_TICKS);
+	diffSpec._gruntMaxTicksRate = dict.Get<ff::SizeValue>(::PROP_GRUNT_MAX_TICKS_RATE);
+	diffSpec._gruntTickFrames = dict.Get<ff::SizeValue>(::PROP_GRUNT_TICK_FRAMES);
 
 	return diffSpec;
+}
+
+static ReTron::LevelSetSpec LoadLevelSetSpec(const ff::Dict& dict)
+{
+	ReTron::LevelSetSpec levelSetSpec{};
+	levelSetSpec._levels = dict.Get<ff::StringStdVectorValue>(::PROP_LEVELS);
+	levelSetSpec._loopStart = dict.Get<ff::SizeValue>(::PROP_LOOP_START);
+
+	return levelSetSpec;
 }
 
 static ReTron::LevelObjectsSpec LoadLevelObjectsSpec(ff::RectFixedInt rect, const ff::Vector<ff::ValuePtr>& properties)
@@ -170,8 +188,7 @@ ReTron::GameSpec ReTron::GameSpec::Load(ff::IResourceAccess* resources)
 
 	for (ff::String name : levelSetsDict.GetAllNames())
 	{
-		LevelSetSpec levelSetSpec{};
-		levelSetSpec._levels = levelSetsDict.Get<ff::StringStdVectorValue>(name);
+		LevelSetSpec levelSetSpec = ::LoadLevelSetSpec(levelSetsDict.Get<ff::DictValue>(name));
 		spec._levelSets.SetKey(std::move(name), std::move(levelSetSpec));
 	}
 

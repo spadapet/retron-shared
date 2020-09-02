@@ -51,13 +51,12 @@ namespace Constants
 	const ff::FixedInt RENDER_HEIGHT_HIGH = 1080_f;
 	const ff::PointFixedInt RENDER_SIZE_HIGH(RENDER_WIDTH_HIGH, RENDER_HEIGHT_HIGH);
 	const ff::RectFixedInt RENDER_RECT_HIGH(0_f, 0_f, RENDER_WIDTH_HIGH, RENDER_HEIGHT_HIGH);
-
-	const size_t GRUNT_TICK_FRAMES = 4;
 }
 
 namespace Random
 {
 	int Positive();
 	int Sign(); // -1 or 1
-	int Range(int start, int end);
+	int RangeInt(int start, int end);
+	size_t RangeSize(size_t start, size_t end);
 }

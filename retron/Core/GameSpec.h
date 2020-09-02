@@ -42,6 +42,7 @@ namespace ReTron
 	struct LevelSetSpec
 	{
 		std::vector<ff::String> _levels;
+		size_t _loopStart;
 	};
 
 	struct DifficultySpec
@@ -49,6 +50,10 @@ namespace ReTron
 		ff::String _name;
 		ff::String _levelSet;
 		size_t _lives;
+		size_t _gruntTickFrames; // grunts only move each "tick" number of frames
+		size_t _gruntMaxTicks; // random 1-max ticks per move
+		size_t _gruntMaxTicksRate; // frames to decrease max ticks
+		size_t _gruntMinTicks;
 	};
 
 	struct GameSpec

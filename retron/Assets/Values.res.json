@@ -8,7 +8,7 @@
 
       "app":
       {
-        "allowDebug": true
+        "allowDebug": false
       },
 
       "difficulties":
@@ -17,19 +17,31 @@
         {
           "name": "Easy",
           "levelSet": "easy",
-          "lives": 6
+          "lives": 6,
+          "gruntTickFrames": 4,
+          "gruntMaxTicks": 32,
+          "gruntMinTicks": 1,
+          "gruntMaxTicksRate": 75
         },
         "normal":
         {
           "name": "Normal",
           "levelSet": "normal",
-          "lives": 3
+          "lives": 3,
+          "gruntTickFrames": 4,
+          "gruntMaxTicks": 32,
+          "gruntMinTicks": 1,
+          "gruntMaxTicksRate": 75
         },
         "hard":
         {
           "name": "Hard",
           "levelSet": "hard",
-          "lives": 2
+          "lives": 2,
+          "gruntTickFrames": 4,
+          "gruntMaxTicks": 32,
+          "gruntMinTicks": 1,
+          "gruntMaxTicksRate": 75
         }
       },
 
@@ -44,19 +56,31 @@
       "levelSets":
       {
         "easy":
-        [
-          "1"
-        ],
+        {
+          "levels":
+          [
+            "1"
+          ],
+          "loopStart": 0
+        },
 
         "normal":
-        [
-          "1"
-        ],
+        {
+          "levels":
+          [
+            "1"
+          ],
+          "loopStart": 0
+        },
 
         "hard":
-        [
-          "1"
-        ]
+        {
+          "levels":
+          [
+            "1"
+          ],
+          "loopStart": 0
+        }
       }
     }
   }

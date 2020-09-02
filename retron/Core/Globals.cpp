@@ -37,7 +37,12 @@ int Random::Sign()
 	return -std::uniform_int_distribution<int>{0, 1}(::randomEngine);
 }
 
-int Random::Range(int start, int end)
+int Random::RangeInt(int start, int end)
 {
 	return std::uniform_int_distribution<int>{start, end}(::randomEngine);
+}
+
+size_t Random::RangeSize(size_t start, size_t end)
+{
+	return std::uniform_int_distribution<size_t>{start, end}(::randomEngine);
 }
