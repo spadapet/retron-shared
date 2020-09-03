@@ -125,14 +125,14 @@ entt::entity ReTron::Level::CreatePlayer(size_t indexInLevel)
 entt::entity ReTron::Level::CreateBounds(const ff::RectFixedInt& rect)
 {
 	entt::entity entity = _entitySystem.Create(EntityType::LevelBounds);
-	_collisionSystem.SetHitBox(entity, rect, EntityHitBoxType::Level);
+	_collisionSystem.SetBox(entity, rect, EntityBoxType::Level, CollisionBoxType::BoundsBox);
 	return entity;
 }
 
 entt::entity ReTron::Level::CreateBox(const ff::RectFixedInt& rect)
 {
 	entt::entity entity = _entitySystem.Create(EntityType::LevelBox);
-	_collisionSystem.SetHitBox(entity, rect, EntityHitBoxType::Level);
+	_collisionSystem.SetBox(entity, rect, EntityBoxType::Level, CollisionBoxType::BoundsBox);
 	return entity;
 }
 
@@ -238,10 +238,31 @@ void ReTron::Level::AdvanceGrunt(entt::entity entity)
 
 void ReTron::Level::AdvanceCollisions()
 {
-	for (size_t i = _collisionSystem.DetectCollisions(); i != 0; i--)
+	bool boundsCollision = true;
+	for (size_t pass = 0; boundsCollision && pass != 2; pass++)
+	{
+		boundsCollision = false;
+		for (size_t i = _collisionSystem.DetectCollisions(CollisionBoxType::BoundsBox); i != 0; i--)
+		{
+			auto [entity1, entity2] = _collisionSystem.GetCollision(i - 1);
+			HandleBoundsCollision(entity1, entity2);
+			boundsCollision = true;
+		}
+	}
+
+	for (size_t i = _collisionSystem.DetectCollisions(CollisionBoxType::HitBox); i != 0; i--)
 	{
 		auto [entity1, entity2] = _collisionSystem.GetCollision(i - 1);
+		HandleEntityCollision(entity1, entity2);
 	}
+}
+
+void ReTron::Level::HandleBoundsCollision(entt::entity entity1, entt::entity entity2)
+{
+}
+
+void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity entity2)
+{
 }
 
 void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::PixelRendererActive& render)
@@ -272,7 +293,7 @@ void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::Pixel
 
 	case EntityType::LevelBounds:
 	case EntityType::LevelBox:
-		render.DrawPaletteOutlineRectangle(_collisionSystem.GetHitBox(entity), Colors::LEVEL_BORDER,
+		render.DrawPaletteOutlineRectangle(_collisionSystem.GetBox(entity, CollisionBoxType::BoundsBox), Colors::LEVEL_BORDER,
 			(type == EntityType::LevelBounds) ? -Constants::LEVEL_BORDER_THICKNESS : Constants::LEVEL_BOX_THICKNESS);
 		break;
 	}
@@ -295,25 +316,25 @@ void ReTron::Level::RenderBonus(entt::entity entity, EntityType type, ff::PixelR
 	}
 
 	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-	render.DrawPaletteFilledRectangle(_collisionSystem.GetHitBox(entity), color);
+	render.DrawPaletteFilledRectangle(_collisionSystem.GetBox(entity, CollisionBoxType::HitBox), color);
 }
 
 void ReTron::Level::RenderElectrode(entt::entity entity, ff::PixelRendererActive& render)
 {
 	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-	render.DrawPaletteFilledRectangle(_collisionSystem.GetHitBox(entity), 45);
+	render.DrawPaletteFilledRectangle(_collisionSystem.GetBox(entity, CollisionBoxType::HitBox), 45);
 }
 
 void ReTron::Level::RenderHulk(entt::entity entity, ff::PixelRendererActive& render)
 {
 	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-	render.DrawPaletteFilledRectangle(_collisionSystem.GetHitBox(entity), 235);
+	render.DrawPaletteFilledRectangle(_collisionSystem.GetBox(entity, CollisionBoxType::HitBox), 235);
 }
 
 void ReTron::Level::RenderGrunt(entt::entity entity, ff::PixelRendererActive& render)
 {
 	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-	render.DrawPaletteFilledRectangle(_collisionSystem.GetHitBox(entity), 248);
+	render.DrawPaletteFilledRectangle(_collisionSystem.GetBox(entity, CollisionBoxType::HitBox), 248);
 }
 
 size_t ReTron::Level::PickGruntMoveCounter()

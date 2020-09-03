@@ -36,6 +36,9 @@ namespace ReTron
 		void AdvanceGrunt(entt::entity entity);
 		void AdvanceCollisions();
 
+		void HandleBoundsCollision(entt::entity entity1, entt::entity entity2);
+		void HandleEntityCollision(entt::entity entity1, entt::entity entity2);
+
 		void RenderEntity(entt::entity entity, EntityType type, ff::PixelRendererActive& render);
 		void RenderPlayer(entt::entity entity, ff::PixelRendererActive& render);
 		void RenderBonus(entt::entity entity, EntityType type, ff::PixelRendererActive& render);

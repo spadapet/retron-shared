@@ -19,7 +19,7 @@ namespace ReTron
 		Count
 	};
 
-	enum class EntityHitBoxType
+	enum class EntityBoxType
 	{
 		None,
 		Player,
@@ -33,7 +33,11 @@ namespace ReTron
 		Count
 	};
 
-	EntityHitBoxType GetHitBoxType(EntityType type);
+	EntityBoxType GetBoxType(EntityType type);
+
 	const ff::RectFixedInt& GetHitBoxSpec(EntityType type);
-	bool CanCollide(EntityHitBoxType typeA, EntityHitBoxType typeB);
+	bool CanHitBoxCollide(EntityBoxType typeA, EntityBoxType typeB);
+
+	const ff::RectFixedInt& GetBoundsBoxSpec(EntityType type);
+	bool CanBoundsBoxCollide(EntityBoxType typeA, EntityBoxType typeB);
 }

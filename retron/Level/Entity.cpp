@@ -1,20 +1,20 @@
 #include "pch.h"
 #include "Level/Entity.h"
 
-ReTron::EntityHitBoxType ReTron::GetHitBoxType(EntityType type)
+ReTron::EntityBoxType ReTron::GetBoxType(EntityType type)
 {
-	static EntityHitBoxType types[] =
+	static EntityBoxType types[] =
 	{
-		EntityHitBoxType::None, // None
-		EntityHitBoxType::Player, // Player
-		EntityHitBoxType::Bonus, // BonusWoman
-		EntityHitBoxType::Bonus, // BonusMan
-		EntityHitBoxType::Bonus, // BonusChild
-		EntityHitBoxType::Enemy, // Grunt
-		EntityHitBoxType::Enemy, // Hulk
-		EntityHitBoxType::Obstacle, // Electrode
-		EntityHitBoxType::None, // LevelBorder
-		EntityHitBoxType::None, // LevelBox
+		EntityBoxType::None, // None
+		EntityBoxType::Player, // Player
+		EntityBoxType::Bonus, // BonusWoman
+		EntityBoxType::Bonus, // BonusMan
+		EntityBoxType::Bonus, // BonusChild
+		EntityBoxType::Enemy, // Grunt
+		EntityBoxType::Enemy, // Hulk
+		EntityBoxType::Obstacle, // Electrode
+		EntityBoxType::None, // LevelBorder
+		EntityBoxType::None, // LevelBox
 	};
 
 	static_assert(_countof(types) == (size_t)EntityType::Count);
@@ -43,9 +43,30 @@ const ff::RectFixedInt& ReTron::GetHitBoxSpec(EntityType type)
 	return rects[(size_t)type];
 }
 
-bool ReTron::CanCollide(EntityHitBoxType typeA, EntityHitBoxType typeB)
+const ff::RectFixedInt& ReTron::GetBoundsBoxSpec(EntityType type)
 {
-	if (typeA != typeB && typeA != EntityHitBoxType::None && typeB != EntityHitBoxType::None)
+	static ff::RectFixedInt rects[] =
+	{
+		ff::RectFixedInt::Zeros(), // None
+		ff::RectFixedInt(-5, -12, 5, 0), // Player
+		ff::RectFixedInt(-5, -12, 5, 0), // BonusWoman
+		ff::RectFixedInt(-5, -12, 5, 0), // BonusMan
+		ff::RectFixedInt(-5, -12, 5, 0), // BonusChild
+		ff::RectFixedInt(-5, -12, 5, 0), // Grunt
+		ff::RectFixedInt(-5, -12, 5, 0), // Hulk
+		ff::RectFixedInt(-4, -4, 4, 4), // Electrode
+		ff::RectFixedInt::Zeros(), // LevelBorder
+		ff::RectFixedInt::Zeros(), // LevelBox
+	};
+
+	static_assert(_countof(rects) == (size_t)EntityType::Count);
+	assert((size_t)type < _countof(rects));
+	return rects[(size_t)type];
+}
+
+bool ReTron::CanHitBoxCollide(EntityBoxType typeA, EntityBoxType typeB)
+{
+	if (typeA != typeB && typeA != EntityBoxType::None && typeB != EntityBoxType::None)
 	{
 		if (typeA > typeB)
 		{
@@ -54,37 +75,41 @@ bool ReTron::CanCollide(EntityHitBoxType typeA, EntityHitBoxType typeB)
 
 		switch (typeA)
 		{
-		case EntityHitBoxType::Player:
-			return typeB == EntityHitBoxType::Bonus ||
-				typeB == EntityHitBoxType::Enemy ||
-				typeB == EntityHitBoxType::Obstacle ||
-				typeB == EntityHitBoxType::EnemyBullet ||
-				typeB == EntityHitBoxType::Level;
+		case EntityBoxType::Player:
+			return typeB == EntityBoxType::Bonus ||
+				typeB == EntityBoxType::Enemy ||
+				typeB == EntityBoxType::Obstacle ||
+				typeB == EntityBoxType::EnemyBullet ||
+				typeB == EntityBoxType::Level;
 
-		case EntityHitBoxType::Bonus:
-			return typeB == EntityHitBoxType::Enemy ||
-				typeB == EntityHitBoxType::Obstacle ||
-				typeB == EntityHitBoxType::EnemyBullet ||
-				typeB == EntityHitBoxType::Level;
+		case EntityBoxType::Bonus:
+			return typeB == EntityBoxType::Enemy ||
+				typeB == EntityBoxType::Obstacle ||
+				typeB == EntityBoxType::EnemyBullet ||
+				typeB == EntityBoxType::Level;
 
-		case EntityHitBoxType::Enemy:
-			return typeB == EntityHitBoxType::Obstacle ||
-				typeB == EntityHitBoxType::PlayerBullet ||
-				typeB == EntityHitBoxType::Level;
+		case EntityBoxType::Enemy:
+			return typeB == EntityBoxType::Obstacle ||
+				typeB == EntityBoxType::PlayerBullet ||
+				typeB == EntityBoxType::Level;
 
-		case EntityHitBoxType::Obstacle:
-			return typeB == EntityHitBoxType::PlayerBullet ||
-				typeB == EntityHitBoxType::EnemyBullet;
+		case EntityBoxType::Obstacle:
+			return typeB == EntityBoxType::PlayerBullet ||
+				typeB == EntityBoxType::EnemyBullet;
 
-		case EntityHitBoxType::PlayerBullet:
-			return typeB == EntityHitBoxType::EnemyBullet ||
-				typeB == EntityHitBoxType::Level;
+		case EntityBoxType::PlayerBullet:
+			return typeB == EntityBoxType::EnemyBullet ||
+				typeB == EntityBoxType::Level;
 
-		case EntityHitBoxType::EnemyBullet:
-			return typeB == EntityHitBoxType::Level;
+		case EntityBoxType::EnemyBullet:
+			return typeB == EntityBoxType::Level;
 		}
 	}
 
 	return false;
 }
 
+bool ReTron::CanBoundsBoxCollide(EntityBoxType typeA, EntityBoxType typeB)
+{
+	return (typeA != typeB) && (typeA == EntityBoxType::Level || typeB == EntityBoxType::Level);
+}
