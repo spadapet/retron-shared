@@ -36,7 +36,10 @@ ReTron::PositionSystem::PositionSystem(entt::registry& registry)
 
 void ReTron::PositionSystem::SetPosition(entt::entity entity, const ff::PointFixedInt& value)
 {
-	_registry.emplace_or_replace<PositionComponent>(entity, value);
+	if (value != GetPosition(entity))
+	{
+		_registry.emplace_or_replace<PositionComponent>(entity, value);
+	}
 }
 
 ff::PointFixedInt ReTron::PositionSystem::GetPosition(entt::entity entity)
@@ -47,7 +50,10 @@ ff::PointFixedInt ReTron::PositionSystem::GetPosition(entt::entity entity)
 
 void ReTron::PositionSystem::SetVelocity(entt::entity entity, const ff::PointFixedInt& value)
 {
-	_registry.emplace_or_replace<VelocityComponent>(entity, value);
+	if (value != GetVelocity(entity))
+	{
+		_registry.emplace_or_replace<VelocityComponent>(entity, value);
+	}
 }
 
 ff::PointFixedInt ReTron::PositionSystem::GetVelocity(entt::entity entity)
@@ -58,7 +64,10 @@ ff::PointFixedInt ReTron::PositionSystem::GetVelocity(entt::entity entity)
 
 void ReTron::PositionSystem::SetDirection(entt::entity entity, const ff::PointFixedInt& value)
 {
-	_registry.emplace_or_replace<DirectionComponent>(entity, value);
+	if (value != GetDirection(entity))
+	{
+		_registry.emplace_or_replace<DirectionComponent>(entity, value);
+	}
 }
 
 const ff::PointFixedInt ReTron::PositionSystem::GetDirection(entt::entity entity)
@@ -69,7 +78,10 @@ const ff::PointFixedInt ReTron::PositionSystem::GetDirection(entt::entity entity
 
 void ReTron::PositionSystem::SetScale(entt::entity entity, const ff::PointFixedInt& value)
 {
-	_registry.emplace_or_replace<ScaleComponent>(entity, value);
+	if (value != GetScale(entity))
+	{
+		_registry.emplace_or_replace<ScaleComponent>(entity, value);
+	}
 }
 
 ff::PointFixedInt ReTron::PositionSystem::GetScale(entt::entity entity)
@@ -80,7 +92,10 @@ ff::PointFixedInt ReTron::PositionSystem::GetScale(entt::entity entity)
 
 void ReTron::PositionSystem::SetRotation(entt::entity entity, ff::FixedInt value)
 {
-	_registry.emplace_or_replace<RotationComponent>(entity, 0);
+	if (value != GetRotation(entity))
+	{
+		_registry.emplace_or_replace<RotationComponent>(entity, value);
+	}
 }
 
 ff::FixedInt ReTron::PositionSystem::GetRotation(entt::entity entity)

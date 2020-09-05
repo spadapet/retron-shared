@@ -79,7 +79,7 @@ void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 	_frames++;
 
 	EnumEntities(_advanceCallback);
-	AdvanceCollisions();
+	HandleCollisions();
 
 	_entitySystem.FlushDelete();
 }
@@ -198,6 +198,11 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 		dirScale * inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_RIGHT),
 		dirScale * inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_DOWN));
 
+	ff::PointFixedInt dir = _positionSystem.GetDirection(entity);
+	dir.x = dirPress.left ? -1_f : (dirPress.right ? 1_f : dir.x);
+	dir.y = dirPress.top ? -1_f : (dirPress.bottom ? 1_f : dir.y);
+	_positionSystem.SetDirection(entity, dir);
+
 	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
 	pos = pos.Offset(dirPress.right - dirPress.left, dirPress.bottom - dirPress.top);
 	_positionSystem.SetPosition(entity, pos);
@@ -206,8 +211,6 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 void ReTron::Level::AdvanceGrunt(entt::entity entity)
 {
 	GruntData& data = _registry.get<GruntData>(entity);
-	assert(data._moveCounter);
-
 	if (--data._moveCounter)
 	{
 		return;
@@ -215,28 +218,51 @@ void ReTron::Level::AdvanceGrunt(entt::entity entity)
 
 	data._moveCounter = PickGruntMoveCounter();
 
-	size_t playerCount = _registry.size<PlayerData>();
-	if (playerCount)
+	// Must be a player to target
+	if (!_registry.size<PlayerData>())
 	{
-		size_t player = data._index % playerCount;
-		entt::entity playerEntity = _registry.data<PlayerData>()[player];
-		ff::PointFixedInt playerPos = _positionSystem.GetPosition(playerEntity);
-		ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-		const ff::FixedInt move = 4;
-
-		pos.x += (pos.x != playerPos.x)
-			? std::copysign(move, playerPos.x - pos.x)
-			: std::copysign(move, ff::FixedInt(Random::Sign()));
-
-		pos.y += (pos.y != playerPos.y)
-			? std::copysign(move, playerPos.y - pos.y)
-			: std::copysign(move, ff::FixedInt(Random::Sign()));
-
-		_positionSystem.SetPosition(entity, pos);
+		return;
 	}
+
+	// Spread the grunts out to target each player evenly
+	size_t player = data._index % _registry.size<PlayerData>();
+	entt::entity playerEntity = _registry.data<PlayerData>()[player];
+	ff::PointFixedInt playerPos = _positionSystem.GetPosition(playerEntity);
+	ff::PointFixedInt gruntPos = _positionSystem.GetPosition(entity);
+	ff::PointFixedInt destPos = playerPos;
+
+	// Move around boxes in the level
+	auto [boxEntity, boxHitPos, boxHitNormal] = _collisionSystem.RayTest(gruntPos, playerPos, CollisionBoxType::BoundsBox);
+	if (boxEntity != entt::null)
+	{
+		ff::RectFixedInt entityBoxSpec = _collisionSystem.GetBoxSpec(entity, CollisionBoxType::BoundsBox);
+		ff::RectFixedInt box = _collisionSystem.GetBox(boxEntity, CollisionBoxType::BoundsBox);
+		box = box.Inflate(entityBoxSpec.right, entityBoxSpec.bottom, -entityBoxSpec.left, -entityBoxSpec.top);
+
+		ff::FixedInt bestDist = -1_f;
+		for (ff::PointFixedInt corner : box.Corners())
+		{
+			ff::FixedInt dist = (corner - playerPos).LengthSquared();
+			if (bestDist < 0_f || dist < bestDist)
+			{
+				bestDist = dist;
+				destPos = corner;
+			}
+		}
+	}
+
+	gruntPos.x += (gruntPos.x != destPos.x)
+		? std::copysign(_difficultySpec._gruntMove, destPos.x - gruntPos.x)
+		: std::copysign(_difficultySpec._gruntMove, ff::FixedInt(Random::Sign())); // always move diagnally
+
+	gruntPos.y += (gruntPos.y != destPos.y)
+		? std::copysign(_difficultySpec._gruntMove, destPos.y - gruntPos.y)
+		: std::copysign(_difficultySpec._gruntMove, ff::FixedInt(Random::Sign())); // always move diagnally
+
+	_positionSystem.SetPosition(entity, gruntPos);
 }
 
-void ReTron::Level::AdvanceCollisions()
+void ReTron::Level::HandleCollisions()
 {
 	bool boundsCollision = true;
 	for (size_t pass = 0; boundsCollision && pass != 2; pass++)
@@ -259,6 +285,25 @@ void ReTron::Level::AdvanceCollisions()
 
 void ReTron::Level::HandleBoundsCollision(entt::entity entity1, entt::entity entity2)
 {
+	ff::RectFixedInt oldRect = _collisionSystem.GetBox(entity1, CollisionBoxType::BoundsBox);
+	ff::RectFixedInt newRect = oldRect;
+
+	ff::RectFixedInt levelRect = _collisionSystem.GetBox(entity2, CollisionBoxType::BoundsBox);
+	EntityType levelType = _entitySystem.GetType(entity2);
+
+	switch (levelType)
+	{
+	case EntityType::LevelBounds:
+		newRect = oldRect.MoveInside(levelRect);
+		break;
+
+	case EntityType::LevelBox:
+		newRect = oldRect.MoveOutside(levelRect);
+		break;
+	}
+
+	ff::PointFixedInt offset = newRect.TopLeft() - oldRect.TopLeft();
+	_positionSystem.SetPosition(entity1, _positionSystem.GetPosition(entity1) + offset);
 }
 
 void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity entity2)

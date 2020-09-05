@@ -34,8 +34,8 @@ namespace ReTron
 		void AdvanceEntity(entt::entity entity, EntityType type);
 		void AdvancePlayer(entt::entity entity);
 		void AdvanceGrunt(entt::entity entity);
-		void AdvanceCollisions();
 
+		void HandleCollisions();
 		void HandleBoundsCollision(entt::entity entity1, entt::entity entity2);
 		void HandleEntityCollision(entt::entity entity1, entt::entity entity2);
 

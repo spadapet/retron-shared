@@ -25,11 +25,15 @@ namespace ReTron
 		size_t DetectCollisions(CollisionBoxType collisionType);
 		size_t GetCollisionCount() const;
 		std::pair<entt::entity, entt::entity> GetCollision(size_t index) const;
-		void HitTest(ff::RectFixedInt bounds, std::vector<entt::entity>& entities, CollisionBoxType collisionType);
+		void HitTest(const ff::RectFixedInt& bounds, std::vector<entt::entity>& entities, CollisionBoxType collisionType);
+		std::tuple<entt::entity, ff::PointFixedInt, ff::PointFixedInt> RayTest(const ff::PointFixedInt& start, const ff::PointFixedInt& end, CollisionBoxType collisionType);
+		std::tuple<bool, ff::PointFixedInt, ff::PointFixedInt> RayTest(entt::entity entity, const ff::PointFixedInt& start, const ff::PointFixedInt& end, CollisionBoxType collisionType);
 
 		void SetBox(entt::entity entity, const ff::RectFixedInt& rect, EntityBoxType type, CollisionBoxType collisionType);
 		void ResetBoxToDefault(entt::entity entity, CollisionBoxType collisionType);
+		ff::RectFixedInt GetBoxSpec(entt::entity entity, CollisionBoxType collisionType);
 		ff::RectFixedInt GetBox(entt::entity entity, CollisionBoxType collisionType);
+		EntityBoxType GetBoxType(entt::entity entity, CollisionBoxType collisionType);
 
 		void RenderDebug(ff::PixelRendererActive& render);
 
@@ -56,8 +60,6 @@ namespace ReTron
 			CollisionSystem* _collisionSystem;
 		};
 
-		const ff::RectFixedInt& GetBoxSpec(entt::entity entity, CollisionBoxType collisionType);
-		EntityBoxType GetBoxType(entt::entity entity, CollisionBoxType collisionType);
 		void ResetBox(entt::entity entity, CollisionBoxType collisionType);
 		void DirtyBox(entt::entity entity, CollisionBoxType collisionType);
 		template<typename BoxType, typename DirtyType> b2Body* UpdateBox(entt::entity entity, ReTron::EntityBoxType type, ReTron::CollisionBoxType collisionType);

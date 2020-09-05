@@ -21,7 +21,8 @@
           "gruntTickFrames": 4,
           "gruntMaxTicks": 32,
           "gruntMinTicks": 1,
-          "gruntMaxTicksRate": 75
+          "gruntMaxTicksRate": 75,
+          "gruntMove": 4
         },
         "normal":
         {
@@ -31,7 +32,8 @@
           "gruntTickFrames": 4,
           "gruntMaxTicks": 32,
           "gruntMinTicks": 1,
-          "gruntMaxTicksRate": 75
+          "gruntMaxTicksRate": 75,
+          "gruntMove": 4
         },
         "hard":
         {
@@ -41,7 +43,8 @@
           "gruntTickFrames": 4,
           "gruntMaxTicks": 32,
           "gruntMinTicks": 1,
-          "gruntMaxTicksRate": 75
+          "gruntMaxTicksRate": 75,
+          "gruntMove": 4
         }
       },
 

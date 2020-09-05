@@ -10,6 +10,7 @@ static ff::StaticString PROP_DIFFICULTIES(L"difficulties");
 static ff::StaticString PROP_GRUNT_MAX_TICKS(L"gruntMaxTicks");
 static ff::StaticString PROP_GRUNT_MAX_TICKS_RATE(L"gruntMaxTicksRate");
 static ff::StaticString PROP_GRUNT_MIN_TICKS(L"gruntMinTicks");
+static ff::StaticString PROP_GRUNT_MOVE(L"gruntMove");
 static ff::StaticString PROP_GRUNT_TICK_FRAMES(L"gruntTickFrames");
 static ff::StaticString PROP_HEIGHT(L"height");
 static ff::StaticString PROP_LAYERS(L"layers");
@@ -39,6 +40,7 @@ static ReTron::DifficultySpec LoadDifficultySpec(const ff::Dict& dict)
 	diffSpec._gruntMinTicks = dict.Get<ff::SizeValue>(::PROP_GRUNT_MIN_TICKS);
 	diffSpec._gruntMaxTicksRate = dict.Get<ff::SizeValue>(::PROP_GRUNT_MAX_TICKS_RATE);
 	diffSpec._gruntTickFrames = dict.Get<ff::SizeValue>(::PROP_GRUNT_TICK_FRAMES);
+	diffSpec._gruntMove = dict.Get<ff::FixedIntValue>(::PROP_GRUNT_MOVE);
 
 	return diffSpec;
 }
