@@ -70,6 +70,8 @@ static ff::RectFixedInt GetBox(const b2Body* body)
 	ff::RectFixedInt rect = ff::RectFixedInt::Zeros();
 
 	const b2Shape* shape = body->GetFixtureList()->GetShape();
+	assert(!shape->m_radius);
+
 	for (int i = 0; i < shape->GetChildCount(); i++)
 	{
 		b2AABB aabb;
@@ -437,8 +439,6 @@ template<typename BoxType, typename DirtyType>
 b2Body* ReTron::CollisionSystem::UpdateBox(entt::entity entity, ReTron::EntityBoxType type, ReTron::CollisionBoxType collisionType)
 {
 	BoxComponent& hb = _registry.get_or_emplace<BoxType>(entity, BoxType{});
-	b2World& world = _worlds[(size_t)collisionType];
-
 	if (!hb._body)
 	{
 		ff::PointFixedInt pos = _positionSystem.GetPosition(entity) * ::PIXEL_TO_WORLD_SCALE;
@@ -451,6 +451,7 @@ b2Body* ReTron::CollisionSystem::UpdateBox(entt::entity entity, ReTron::EntityBo
 		bodyDef.fixedRotation = true;
 		bodyDef.type = ::GetBodyType(type);
 
+		b2World& world = _worlds[(size_t)collisionType];
 		hb._body = world.CreateBody(&bodyDef);
 	}
 	else if (_registry.has<DirtyType>(entity))
@@ -484,7 +485,6 @@ b2Body* ReTron::CollisionSystem::UpdateBox(entt::entity entity, ReTron::EntityBo
 			};
 
 			chainShape.CreateLoop(points.data(), 4);
-			chainShape.m_radius = 0;
 			fixtureDef.shape = &chainShape;
 		}
 		else
@@ -499,11 +499,11 @@ b2Body* ReTron::CollisionSystem::UpdateBox(entt::entity entity, ReTron::EntityBo
 			};
 
 			polygonShape.Set(points.data(), 4);
-			polygonShape.m_radius = 0;
 			fixtureDef.shape = &polygonShape;
 		}
 
-		hb._body->CreateFixture(&fixtureDef);
+		b2Fixture* fixture = hb._body->CreateFixture(&fixtureDef);
+		fixture->GetShape()->m_radius = 0;
 	}
 
 	_registry.remove_if_exists<DirtyType>(entity);
