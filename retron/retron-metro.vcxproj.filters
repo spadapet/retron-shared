@@ -144,6 +144,9 @@
     <None Include="$(FFCoreRoot)core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll">
       <Filter>Assets\Build</Filter>
     </None>
+    <None Include="Assets\Assets.Graphics.res.json">
+      <Filter>Assets</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Assets">

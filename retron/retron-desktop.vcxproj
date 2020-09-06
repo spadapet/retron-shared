@@ -14,6 +14,7 @@
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\util</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\ui</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\noesis\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(DevRoot)vendor\box2d\include</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(DevRoot)vendor</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -25,7 +26,7 @@
     <ProjectReference Include="$(FFCoreRoot)core\util\util.vcxproj">
       <Project>{8877ef09-1cdd-4e67-95ba-58e3b251b7d8}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\vendor\box2d\box2d-desktop.vcxproj">
+    <ProjectReference Include="..\vendor\box2d-desktop.vcxproj">
       <Project>{3dfedc2b-4438-4cf7-8da4-733623cb8f47}</Project>
     </ProjectReference>
   </ItemGroup>

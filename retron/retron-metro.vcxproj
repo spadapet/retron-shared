@@ -25,6 +25,7 @@
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\util</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\ui</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\noesis\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(DevRoot)vendor\box2d\include</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(DevRoot)vendor</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -104,7 +105,7 @@
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
     </ProjectReference>
-    <ProjectReference Include="..\vendor\box2d\box2d-metro.vcxproj">
+    <ProjectReference Include="..\vendor\box2d-metro.vcxproj">
       <Project>{254aaf2e-8ffd-43b2-b00b-8e351d2c1012}</Project>
     </ProjectReference>
   </ItemGroup>
@@ -117,6 +118,9 @@
     <None Include="$(FFCoreRoot)core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll">
       <DeploymentContent>true</DeploymentContent>
     </None>
+    <ResJson Include="Assets\Assets.Graphics.res.json">
+      <FileType>Document</FileType>
+    </ResJson>
     <None Include="ReTron_TemporaryKey.pfx" />
     <Page Include="UI\FailurePage.xaml" />
   </ItemGroup>

@@ -23,7 +23,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "ffcore\core\util\ut
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.zlib", "ffcore\core\zlib\zlib.vcxproj", "{968D9F08-835D-4844-A809-51A3EFB915AC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.box2d", "vendor\box2d\box2d-desktop.vcxproj", "{3DFEDC2B-4438-4CF7-8DA4-733623CB8F47}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.box2d", "vendor\box2d-desktop.vcxproj", "{3DFEDC2B-4438-4CF7-8DA4-733623CB8F47}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

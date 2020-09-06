@@ -160,6 +160,7 @@
     <ResJson Include="Assets\Assets.Xaml.res.json">
       <Filter>Assets</Filter>
     </ResJson>
+    <ResJson Include="Assets\Assets.Graphics.res.json" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Assets\resource.rc">
@@ -168,10 +169,5 @@
   </ItemGroup>
   <ItemGroup>
     <Manifest Include="app.manifest" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Assets\Assets.Graphics.res.json">
-      <Filter>Assets</Filter>
-    </None>
   </ItemGroup>
 </Project>
