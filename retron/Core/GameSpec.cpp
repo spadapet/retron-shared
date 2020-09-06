@@ -6,6 +6,7 @@
 
 static ff::StaticString PROP_ALLOW_DEBUG(L"allowDebug");
 static ff::StaticString PROP_APP(L"app");
+static ff::StaticString PROP_DEFAULT(L"default");
 static ff::StaticString PROP_DIFFICULTIES(L"difficulties");
 static ff::StaticString PROP_GRUNT_MAX_TICKS(L"gruntMaxTicks");
 static ff::StaticString PROP_GRUNT_MAX_TICKS_RATE(L"gruntMaxTicksRate");
@@ -32,19 +33,25 @@ static ff::StaticString PROP_WIDTH(L"width");
 static ff::StaticString PROP_X(L"x");
 static ff::StaticString PROP_Y(L"y");
 
-static ReTron::DifficultySpec LoadDifficultySpec(const ff::Dict& dict)
+template<typename ValueType>
+static auto GetValue(const ff::Dict& dict, const ff::Dict& defaultDict, ff::StringRef name)
+{
+	return dict.Get<ValueType>(name, defaultDict.Get<ValueType>(name));
+}
+
+static ReTron::DifficultySpec LoadDifficultySpec(const ff::Dict& dict, const ff::Dict& defaultDict)
 {
 	ReTron::DifficultySpec diffSpec{};
-	diffSpec._name = dict.Get<ff::StringValue>(::PROP_NAME);
-	diffSpec._levelSet = dict.Get<ff::StringValue>(::PROP_LEVEL_SET);
-	diffSpec._lives = dict.Get<ff::SizeValue>(::PROP_LIVES);
-	diffSpec._gruntMaxTicks = dict.Get<ff::SizeValue>(::PROP_GRUNT_MAX_TICKS);
-	diffSpec._gruntMinTicks = dict.Get<ff::SizeValue>(::PROP_GRUNT_MIN_TICKS);
-	diffSpec._gruntMaxTicksRate = dict.Get<ff::SizeValue>(::PROP_GRUNT_MAX_TICKS_RATE);
-	diffSpec._gruntTickFrames = dict.Get<ff::SizeValue>(::PROP_GRUNT_TICK_FRAMES);
-	diffSpec._gruntMove = dict.Get<ff::FixedIntValue>(::PROP_GRUNT_MOVE);
-	diffSpec._playerShotMove = dict.Get<ff::FixedIntValue>(::PLAYER_SHOT_MOVE);
-	diffSpec._playerShotCounter = dict.Get<ff::SizeValue>(::PLAYER_SHOT_COUNTER);
+	diffSpec._name = ::GetValue<ff::StringValue>(dict, defaultDict, ::PROP_NAME);
+	diffSpec._levelSet = ::GetValue<ff::StringValue>(dict, defaultDict, ::PROP_LEVEL_SET);
+	diffSpec._lives = ::GetValue<ff::SizeValue>(dict, defaultDict, ::PROP_LIVES);
+	diffSpec._gruntMaxTicks = ::GetValue<ff::SizeValue>(dict, defaultDict, ::PROP_GRUNT_MAX_TICKS);
+	diffSpec._gruntMinTicks = ::GetValue<ff::SizeValue>(dict, defaultDict, ::PROP_GRUNT_MIN_TICKS);
+	diffSpec._gruntMaxTicksRate = ::GetValue<ff::SizeValue>(dict, defaultDict, ::PROP_GRUNT_MAX_TICKS_RATE);
+	diffSpec._gruntTickFrames = ::GetValue<ff::SizeValue>(dict, defaultDict, ::PROP_GRUNT_TICK_FRAMES);
+	diffSpec._gruntMove = ::GetValue<ff::FixedIntValue>(dict, defaultDict, ::PROP_GRUNT_MOVE);
+	diffSpec._playerShotMove = ::GetValue<ff::FixedIntValue>(dict, defaultDict, ::PLAYER_SHOT_MOVE);
+	diffSpec._playerShotCounter = ::GetValue<ff::SizeValue>(dict, defaultDict, ::PLAYER_SHOT_COUNTER);
 
 	return diffSpec;
 }
@@ -182,14 +189,18 @@ ReTron::GameSpec ReTron::GameSpec::Load(ff::IResourceAccess* resources)
 	const ff::Dict& diffsDict = resources->GetValue(::PROP_DIFFICULTIES)->GetValue<ff::DictValue>();
 	const ff::Dict& levelSetsDict = resources->GetValue(::PROP_LEVEL_SETS)->GetValue<ff::DictValue>();
 	const ff::Dict& levelsDict = resources->GetValue(::PROP_LEVELS)->GetValue<ff::DictValue>();
+	const ff::Dict& defaultDiffDict = diffsDict.Get<ff::DictValue>(::PROP_DEFAULT);
 
 	GameSpec spec{};
 	spec._allowDebug = appDict.Get<ff::BoolValue>(::PROP_ALLOW_DEBUG);
 
 	for (ff::String name : diffsDict.GetAllNames())
 	{
-		DifficultySpec diffSpec = ::LoadDifficultySpec(diffsDict.Get<ff::DictValue>(name));
-		spec._difficulties.SetKey(std::move(name), std::move(diffSpec));
+		if (name != ::PROP_DEFAULT.GetString())
+		{
+			DifficultySpec diffSpec = ::LoadDifficultySpec(diffsDict.Get<ff::DictValue>(name), defaultDiffDict);
+			spec._difficulties.SetKey(std::move(name), std::move(diffSpec));
+		}
 	}
 
 	for (ff::String name : levelSetsDict.GetAllNames())

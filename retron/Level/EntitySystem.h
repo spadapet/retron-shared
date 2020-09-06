@@ -10,7 +10,7 @@ namespace ReTron
 		EntitySystem(entt::registry& registry);
 
 		entt::entity Create(EntityType type);
-		void DelayDelete(entt::entity entity);
+		bool DelayDelete(entt::entity entity);
 		bool IsDeleted(entt::entity entity);
 		void FlushDelete();
 

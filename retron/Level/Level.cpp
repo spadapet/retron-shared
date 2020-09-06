@@ -286,7 +286,7 @@ void ReTron::Level::AdvanceGrunt(entt::entity entity)
 
 	// Move around boxes in the level
 	auto [boxEntity, boxHitPos, boxHitNormal] = _collisionSystem.RayTest(gruntPos, playerPos, CollisionBoxType::BoundsBox);
-	if (boxEntity != entt::null)
+	if (boxEntity != entt::null && boxHitPos != playerPos)
 	{
 		ff::RectFixedInt entityBoxSpec = _collisionSystem.GetBoxSpec(entity, CollisionBoxType::BoundsBox);
 		ff::RectFixedInt box = _collisionSystem.GetBox(boxEntity, CollisionBoxType::BoundsBox);
@@ -378,8 +378,10 @@ void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity ent
 		switch (type2)
 		{
 		case EntityBoxType::PlayerBullet:
-			_entitySystem.DelayDelete(entity1);
-			_entitySystem.DelayDelete(entity2);
+			if (_entitySystem.DelayDelete(entity2))
+			{
+				_entitySystem.DelayDelete(entity1);
+			}
 			break;
 		}
 		break;
@@ -388,8 +390,10 @@ void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity ent
 		switch (type2)
 		{
 		case EntityBoxType::EnemyBullet:
-			_entitySystem.DelayDelete(entity1);
-			_entitySystem.DelayDelete(entity2);
+			if (_entitySystem.DelayDelete(entity1))
+			{
+				_entitySystem.DelayDelete(entity2);
+			}
 			break;
 		}
 		break;

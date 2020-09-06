@@ -70,8 +70,6 @@ static ff::RectFixedInt GetBox(const b2Body* body)
 	ff::RectFixedInt rect = ff::RectFixedInt::Zeros();
 
 	const b2Shape* shape = body->GetFixtureList()->GetShape();
-	assert(!shape->m_radius);
-
 	for (int i = 0; i < shape->GetChildCount(); i++)
 	{
 		b2AABB aabb;
@@ -81,6 +79,22 @@ static ff::RectFixedInt GetBox(const b2Body* body)
 	}
 
 	return rect;
+}
+
+static bool DoesOverlap(const b2Fixture* f1, const b2Fixture* f2)
+{
+	for (int i1 = 0; i1 < f1->GetShape()->GetChildCount(); i1++)
+	{
+		for (int i2 = 0; i2 < f2->GetShape()->GetChildCount(); i2++)
+		{
+			if (b2TestOverlap(f1->GetShape(), i1, f2->GetShape(), i2, f1->GetBody()->GetTransform(), f2->GetBody()->GetTransform()))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 ReTron::CollisionSystem::CollisionSystem(entt::registry& registry, PositionSystem& positionSystem, EntitySystem& entitySystem)
@@ -127,21 +141,15 @@ size_t ReTron::CollisionSystem::DetectCollisions(CollisionBoxType collisionType)
 			entt::entity entityA = ::EntityFromUserData(i->GetFixtureA()->GetUserData());
 			entt::entity entityB = ::EntityFromUserData(i->GetFixtureB()->GetUserData());
 
-			if (!_entitySystem.IsDeleted(entityA) && !_entitySystem.IsDeleted(entityB))
+			if (::DoesOverlap(i->GetFixtureA(), i->GetFixtureB()))
 			{
-				ff::RectFixedInt boxA = ::GetBox(i->GetFixtureA()->GetBody());
-				ff::RectFixedInt boxB = ::GetBox(i->GetFixtureB()->GetBody());
-
-				if (boxA.DoesIntersect(boxB))
+				if (GetBoxType(entityA, collisionType) <= GetBoxType(entityB, collisionType))
 				{
-					if (GetBoxType(entityA, collisionType) <= GetBoxType(entityB, collisionType))
-					{
-						_collisions.emplace_back(entityA, entityB);
-					}
-					else
-					{
-						_collisions.emplace_back(entityB, entityA);
-					}
+					_collisions.emplace_back(entityA, entityB);
+				}
+				else
+				{
+					_collisions.emplace_back(entityB, entityA);
 				}
 			}
 		}
@@ -197,6 +205,11 @@ std::tuple<entt::entity, ff::PointFixedInt, ff::PointFixedInt> ReTron::Collision
 	const ff::PointFixedInt& end,
 	CollisionBoxType collisionType)
 {
+	if (start == end)
+	{
+		return std::make_tuple(entt::null, ff::PointFixedInt::Zeros(), ff::PointFixedInt::Zeros());
+	}
+
 	UpdateDirtyBoxes(collisionType);
 
 	ff::PointFixedInt worldStart = start * ::PIXEL_TO_WORLD_SCALE;
@@ -210,6 +223,7 @@ std::tuple<entt::entity, ff::PointFixedInt, ff::PointFixedInt> ReTron::Collision
 			, _collisionType(collisionType)
 			, _entity(entt::null)
 			, _point(ff::PointFixedInt::Zeros())
+			, _normal(ff::PointFixedInt::Zeros())
 			, _fraction(0)
 		{
 		}
@@ -618,9 +632,12 @@ bool ReTron::CollisionSystem::HitFilter::ShouldCollide(b2Fixture* fixtureA, b2Fi
 	entt::entity entityA = ::EntityFromUserData(fixtureA->GetUserData());
 	entt::entity entityB = ::EntityFromUserData(fixtureB->GetUserData());
 
-	return ReTron::CanHitBoxCollide(
-		_collisionSystem->GetBoxType(entityA, CollisionBoxType::HitBox),
-		_collisionSystem->GetBoxType(entityB, CollisionBoxType::HitBox));
+	return
+		!_collisionSystem->_entitySystem.IsDeleted(entityA) &&
+		!_collisionSystem->_entitySystem.IsDeleted(entityB) &&
+		ReTron::CanHitBoxCollide(
+			_collisionSystem->GetBoxType(entityA, CollisionBoxType::HitBox),
+			_collisionSystem->GetBoxType(entityB, CollisionBoxType::HitBox));
 }
 
 ReTron::CollisionSystem::BoundsFilter::BoundsFilter(CollisionSystem* collisionSystem)
@@ -633,7 +650,10 @@ bool ReTron::CollisionSystem::BoundsFilter::ShouldCollide(b2Fixture* fixtureA, b
 	entt::entity entityA = ::EntityFromUserData(fixtureA->GetUserData());
 	entt::entity entityB = ::EntityFromUserData(fixtureB->GetUserData());
 
-	return ReTron::CanBoundsBoxCollide(
-		_collisionSystem->GetBoxType(entityA, CollisionBoxType::BoundsBox),
-		_collisionSystem->GetBoxType(entityB, CollisionBoxType::BoundsBox));
+	return
+		!_collisionSystem->_entitySystem.IsDeleted(entityA) &&
+		!_collisionSystem->_entitySystem.IsDeleted(entityB) &&
+		ReTron::CanBoundsBoxCollide(
+			_collisionSystem->GetBoxType(entityA, CollisionBoxType::BoundsBox),
+			_collisionSystem->GetBoxType(entityB, CollisionBoxType::BoundsBox));
 }

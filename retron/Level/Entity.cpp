@@ -51,7 +51,7 @@ const ff::RectFixedInt& ReTron::GetBoundsBoxSpec(EntityType type)
 	{
 		ff::RectFixedInt::Zeros(), // None
 		ff::RectFixedInt(-5, -12, 5, 0), // Player
-		ff::RectFixedInt(-6, 0, 0, 1), // PlayerBullet
+		ff::RectFixedInt(-10, 0, 0, 1), // PlayerBullet
 		ff::RectFixedInt(-5, -12, 5, 0), // BonusWoman
 		ff::RectFixedInt(-5, -12, 5, 0), // BonusMan
 		ff::RectFixedInt(-5, -12, 5, 0), // BonusChild

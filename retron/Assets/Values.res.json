@@ -13,23 +13,8 @@
 
       "difficulties":
       {
-        "easy":
+        "default":
         {
-          "name": "Easy",
-          "levelSet": "easy",
-          "lives": 6,
-          "gruntTickFrames": 4,
-          "gruntMaxTicks": 32,
-          "gruntMinTicks": 1,
-          "gruntMaxTicksRate": 75,
-          "gruntMove": 4,
-          "playerShotMove": 3,
-          "playerShotCounter": 12
-        },
-        "normal":
-        {
-          "name": "Normal",
-          "levelSet": "normal",
           "lives": 3,
           "gruntTickFrames": 4,
           "gruntMaxTicks": 32,
@@ -39,18 +24,22 @@
           "playerShotMove": 8,
           "playerShotCounter": 8
         },
+
+        "easy":
+        {
+          "name": "Easy",
+          "levelSet": "easy",
+          "lives": 6
+        },
+        "normal":
+        {
+          "name": "Normal",
+          "levelSet": "normal"
+        },
         "hard":
         {
           "name": "Hard",
-          "levelSet": "hard",
-          "lives": 2,
-          "gruntTickFrames": 4,
-          "gruntMaxTicks": 32,
-          "gruntMinTicks": 1,
-          "gruntMaxTicksRate": 75,
-          "gruntMove": 4,
-          "playerShotMove": 8,
-          "playerShotCounter": 8
+          "levelSet": "hard"
         }
       },
 

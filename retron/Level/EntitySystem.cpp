@@ -21,10 +21,16 @@ entt::entity ReTron::EntitySystem::Create(EntityType type)
 	return entity;
 }
 
-void ReTron::EntitySystem::DelayDelete(entt::entity entity)
+bool ReTron::EntitySystem::DelayDelete(entt::entity entity)
 {
-	_registry.emplace_or_replace<PendingDelete>(entity);
-	_entityDeleting.publish(entity);
+	if (!IsDeleted(entity))
+	{
+		_registry.emplace_or_replace<PendingDelete>(entity);
+		_entityDeleting.publish(entity);
+		return true;
+	}
+
+	return false;
 }
 
 bool ReTron::EntitySystem::IsDeleted(entt::entity entity)
