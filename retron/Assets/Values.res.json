@@ -22,7 +22,9 @@
           "gruntMaxTicks": 32,
           "gruntMinTicks": 1,
           "gruntMaxTicksRate": 75,
-          "gruntMove": 4
+          "gruntMove": 4,
+          "playerShotMove": 3,
+          "playerShotCounter": 12
         },
         "normal":
         {
@@ -33,7 +35,9 @@
           "gruntMaxTicks": 32,
           "gruntMinTicks": 1,
           "gruntMaxTicksRate": 75,
-          "gruntMove": 4
+          "gruntMove": 4,
+          "playerShotMove": 8,
+          "playerShotCounter": 8
         },
         "hard":
         {
@@ -44,7 +48,9 @@
           "gruntMaxTicks": 32,
           "gruntMinTicks": 1,
           "gruntMaxTicksRate": 75,
-          "gruntMove": 4
+          "gruntMove": 4,
+          "playerShotMove": 8,
+          "playerShotCounter": 8
         }
       },
 

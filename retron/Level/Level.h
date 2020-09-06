@@ -27,12 +27,14 @@ namespace ReTron
 	private:
 		entt::entity CreateEntity(EntityType type, const ff::PointFixedInt& pos);
 		entt::entity CreatePlayer(size_t indexInLevel);
+		entt::entity CreatePlayerBullet(ff::PointFixedInt shotPos, ff::PointFixedInt shotDir);
 		entt::entity CreateBounds(const ff::RectFixedInt& rect);
 		entt::entity CreateBox(const ff::RectFixedInt& rect);
 		void CreateObjects(size_t count, EntityType type, const ff::RectFixedInt& rect, const std::vector<ff::RectFixedInt>& avoidRects);
 
 		void AdvanceEntity(entt::entity entity, EntityType type);
 		void AdvancePlayer(entt::entity entity);
+		void AdvancePlayerBullet(entt::entity entity);
 		void AdvanceGrunt(entt::entity entity);
 
 		void HandleCollisions();
@@ -41,6 +43,7 @@ namespace ReTron
 
 		void RenderEntity(entt::entity entity, EntityType type, ff::PixelRendererActive& render);
 		void RenderPlayer(entt::entity entity, ff::PixelRendererActive& render);
+		void RenderPlayerBullet(entt::entity entity, ff::PixelRendererActive& render);
 		void RenderBonus(entt::entity entity, EntityType type, ff::PixelRendererActive& render);
 		void RenderElectrode(entt::entity entity, ff::PixelRendererActive& render);
 		void RenderHulk(entt::entity entity, ff::PixelRendererActive& render);
@@ -54,6 +57,8 @@ namespace ReTron
 		ILevelService* _levelService;
 		const DifficultySpec& _difficultySpec;
 		size_t _frames;
+
+		ff::TypedResource<ff::ISprite> _playerBulletSprite;
 
 		entt::registry _registry;
 		entt::delegate<void(entt::entity, EntityType)> _advanceCallback;

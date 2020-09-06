@@ -60,3 +60,8 @@ namespace Random
 	int RangeInt(int start, int end);
 	size_t RangeSize(size_t start, size_t end);
 }
+
+namespace Helpers
+{
+	ff::FixedInt DirToDegrees(ff::PointFixedInt dir);
+}

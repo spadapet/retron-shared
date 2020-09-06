@@ -65,11 +65,11 @@ static b2BodyType GetBodyType(ReTron::EntityBoxType type)
 	}
 }
 
-static ff::RectFixedInt GetBox(b2Body* body)
+static ff::RectFixedInt GetBox(const b2Body* body)
 {
 	ff::RectFixedInt rect = ff::RectFixedInt::Zeros();
 
-	b2Shape* shape = body->GetFixtureList()->GetShape();
+	const b2Shape* shape = body->GetFixtureList()->GetShape();
 	for (int i = 0; i < shape->GetChildCount(); i++)
 	{
 		b2AABB aabb;
@@ -99,7 +99,7 @@ ReTron::CollisionSystem::CollisionSystem(entt::registry& registry, PositionSyste
 	_connections.emplace_front(_registry.on_construct<HitBoxSpecComponent>().connect<&CollisionSystem::OnHitBoxSpecChanged>(this));
 	_connections.emplace_front(_registry.on_update<HitBoxSpecComponent>().connect<&CollisionSystem::OnHitBoxSpecChanged>(this));
 
-	_connections.emplace_front(_registry.on_destroy<BoundsBoxSpecComponent>().connect<&CollisionSystem::OnBoundsBoxRemoved>(this));
+	_connections.emplace_front(_registry.on_destroy<BoundsBoxComponent>().connect<&CollisionSystem::OnBoundsBoxRemoved>(this));
 	_connections.emplace_front(_registry.on_construct<BoundsBoxSpecComponent>().connect<&CollisionSystem::OnBoundsBoxSpecChanged>(this));
 	_connections.emplace_front(_registry.on_update<BoundsBoxSpecComponent>().connect<&CollisionSystem::OnBoundsBoxSpecChanged>(this));
 
@@ -125,13 +125,22 @@ size_t ReTron::CollisionSystem::DetectCollisions(CollisionBoxType collisionType)
 			entt::entity entityA = ::EntityFromUserData(i->GetFixtureA()->GetUserData());
 			entt::entity entityB = ::EntityFromUserData(i->GetFixtureB()->GetUserData());
 
-			if (GetBoxType(entityA, collisionType) <= GetBoxType(entityB, collisionType))
+			if (!_entitySystem.IsDeleted(entityA) && !_entitySystem.IsDeleted(entityB))
 			{
-				_collisions.emplace_back(entityA, entityB);
-			}
-			else
-			{
-				_collisions.emplace_back(entityB, entityA);
+				ff::RectFixedInt boxA = ::GetBox(i->GetFixtureA()->GetBody());
+				ff::RectFixedInt boxB = ::GetBox(i->GetFixtureB()->GetBody());
+
+				if (boxA.DoesIntersect(boxB))
+				{
+					if (GetBoxType(entityA, collisionType) <= GetBoxType(entityB, collisionType))
+					{
+						_collisions.emplace_back(entityA, entityB);
+					}
+					else
+					{
+						_collisions.emplace_back(entityB, entityA);
+					}
+				}
 			}
 		}
 	}
@@ -437,7 +446,7 @@ b2Body* ReTron::CollisionSystem::UpdateBox(entt::entity entity, ReTron::EntityBo
 		b2BodyDef bodyDef{};
 		bodyDef.userData = ::UserDataFromEntity(entity);
 		bodyDef.position.Set(pos.x, pos.y);
-		bodyDef.angle = (float)_positionSystem.GetRotation(entity) * ff::DEG_TO_RAD_F;
+		bodyDef.angle = (float)_positionSystem.GetRotation(entity) * -ff::DEG_TO_RAD_F;
 		bodyDef.allowSleep = false;
 		bodyDef.fixedRotation = true;
 		bodyDef.type = ::GetBodyType(type);
@@ -447,7 +456,7 @@ b2Body* ReTron::CollisionSystem::UpdateBox(entt::entity entity, ReTron::EntityBo
 	else if (_registry.has<DirtyType>(entity))
 	{
 		ff::PointFixedInt pos = _positionSystem.GetPosition(entity) * ::PIXEL_TO_WORLD_SCALE;
-		float angle = (float)_positionSystem.GetRotation(entity) * ff::DEG_TO_RAD_F;
+		float angle = (float)_positionSystem.GetRotation(entity) * -ff::DEG_TO_RAD_F;
 		hb._body->SetTransform(b2Vec2(pos.x, pos.y), angle);
 	}
 

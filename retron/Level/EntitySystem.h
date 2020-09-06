@@ -11,6 +11,7 @@ namespace ReTron
 
 		entt::entity Create(EntityType type);
 		void DelayDelete(entt::entity entity);
+		bool IsDeleted(entt::entity entity);
 		void FlushDelete();
 
 		size_t SortEntities();

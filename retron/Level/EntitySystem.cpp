@@ -27,6 +27,11 @@ void ReTron::EntitySystem::DelayDelete(entt::entity entity)
 	_entityDeleting.publish(entity);
 }
 
+bool ReTron::EntitySystem::IsDeleted(entt::entity entity)
+{
+	return _registry.has<PendingDelete>(entity);
+}
+
 void ReTron::EntitySystem::FlushDelete()
 {
 	for (entt::entity entity : _registry.view<PendingDelete>())

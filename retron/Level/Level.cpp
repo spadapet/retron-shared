@@ -2,15 +2,18 @@
 #include "Core/AppService.h"
 #include "Core/GameService.h"
 #include "Core/LevelService.h"
+#include "Graph/Anim/Transform.h"
 #include "Graph/Render/PixelRenderer.h"
 #include "Graph/Render/Renderer.h"
 #include "Graph/Render/RendererActive.h"
+#include "Graph/Sprite/Sprite.h"
 #include "Input/InputMapping.h"
 #include "Level/Level.h"
 
 struct PlayerData
 {
 	size_t _indexInLevel;
+	size_t _shotCounter;
 };
 
 struct GruntData
@@ -26,6 +29,7 @@ ReTron::Level::Level(ILevelService* levelService)
 	, _positionSystem(_registry)
 	, _collisionSystem(_registry, _positionSystem, _entitySystem)
 	, _frames(0)
+	, _playerBulletSprite(L"sprites.player-bullet")
 {
 	_advanceCallback.connect<&Level::AdvanceEntity>(this);
 	_renderCallback.connect<&Level::RenderEntity>(this);
@@ -122,6 +126,17 @@ entt::entity ReTron::Level::CreatePlayer(size_t indexInLevel)
 	return entity;
 }
 
+entt::entity ReTron::Level::CreatePlayerBullet(ff::PointFixedInt shotPos, ff::PointFixedInt shotDir)
+{
+	ff::PointFixedInt vel(_difficultySpec._playerShotMove * shotDir.x, _difficultySpec._playerShotMove * shotDir.y);
+	entt::entity entity = CreateEntity(EntityType::PlayerBullet, shotPos + vel);
+
+	_positionSystem.SetVelocity(entity, vel);
+	_positionSystem.SetRotation(entity, Helpers::DirToDegrees(shotDir));
+
+	return entity;
+}
+
 entt::entity ReTron::Level::CreateBounds(const ff::RectFixedInt& rect)
 {
 	entt::entity entity = _entitySystem.Create(EntityType::LevelBounds);
@@ -177,6 +192,10 @@ void ReTron::Level::AdvanceEntity(entt::entity entity, EntityType type)
 		AdvancePlayer(entity);
 		break;
 
+	case EntityType::PlayerBullet:
+		AdvancePlayerBullet(entity);
+		break;
+
 	case EntityType::Grunt:
 		AdvanceGrunt(entity);
 		break;
@@ -185,8 +204,8 @@ void ReTron::Level::AdvanceEntity(entt::entity entity, EntityType type)
 
 void ReTron::Level::AdvancePlayer(entt::entity entity)
 {
-	size_t index = _registry.get<PlayerData>(entity)._indexInLevel;
-	Player& player = _levelService->GetPlayer(index);
+	PlayerData& playerData = _registry.get<PlayerData>(entity);
+	Player& player = _levelService->GetPlayer(playerData._indexInLevel);
 
 	const ff::InputDevices& inputDevices = _levelService->GetGameService()->GetInputDevices(player);
 	const ff::IInputEvents* inputEvents = _levelService->GetGameService()->GetInputEvents(player);
@@ -206,6 +225,40 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
 	pos = pos.Offset(dirPress.right - dirPress.left, dirPress.bottom - dirPress.top);
 	_positionSystem.SetPosition(entity, pos);
+
+	if (playerData._shotCounter)
+	{
+		playerData._shotCounter--;
+	}
+
+	if (!playerData._shotCounter)
+	{
+		ff::RectInt shotPress(
+			inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_SHOOT_LEFT),
+			inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_SHOOT_UP),
+			inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_SHOOT_RIGHT),
+			inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_SHOOT_DOWN));
+
+		if (!shotPress.IsZeros())
+		{
+			playerData._shotCounter = _difficultySpec._playerShotCounter;
+
+			ff::RectFixedInt box = _collisionSystem.GetBox(entity, CollisionBoxType::BoundsBox);
+			ff::PointFixedInt shotPos = box.Center();
+			ff::PointFixedInt shotDir(
+				shotPress.left ? -1 : (shotPress.right ? 1 : 0),
+				shotPress.top ? -1 : (shotPress.bottom ? 1 : 0));
+
+			CreatePlayerBullet(shotPos, shotDir);
+		}
+	}
+}
+
+void ReTron::Level::AdvancePlayerBullet(entt::entity entity)
+{
+	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
+	ff::PointFixedInt vel = _positionSystem.GetVelocity(entity);
+	_positionSystem.SetPosition(entity, pos + vel);
 }
 
 void ReTron::Level::AdvanceGrunt(entt::entity entity)
@@ -285,6 +338,14 @@ void ReTron::Level::HandleCollisions()
 
 void ReTron::Level::HandleBoundsCollision(entt::entity entity1, entt::entity entity2)
 {
+	EntityType entityType = _entitySystem.GetType(entity1);
+	switch (entityType)
+	{
+	case EntityType::PlayerBullet:
+		_entitySystem.DelayDelete(entity1);
+		break;
+	}
+
 	ff::RectFixedInt oldRect = _collisionSystem.GetBox(entity1, CollisionBoxType::BoundsBox);
 	ff::RectFixedInt newRect = oldRect;
 
@@ -308,6 +369,31 @@ void ReTron::Level::HandleBoundsCollision(entt::entity entity1, entt::entity ent
 
 void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity entity2)
 {
+	EntityBoxType type1 = _collisionSystem.GetBoxType(entity1, CollisionBoxType::HitBox);
+	EntityBoxType type2 = _collisionSystem.GetBoxType(entity2, CollisionBoxType::HitBox);
+
+	switch (type1)
+	{
+	case EntityBoxType::Enemy:
+		switch (type2)
+		{
+		case EntityBoxType::PlayerBullet:
+			_entitySystem.DelayDelete(entity1);
+			_entitySystem.DelayDelete(entity2);
+			break;
+		}
+		break;
+
+	case EntityBoxType::PlayerBullet:
+		switch (type2)
+		{
+		case EntityBoxType::EnemyBullet:
+			_entitySystem.DelayDelete(entity1);
+			_entitySystem.DelayDelete(entity2);
+			break;
+		}
+		break;
+	}
 }
 
 void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::PixelRendererActive& render)
@@ -316,6 +402,10 @@ void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::Pixel
 	{
 	case EntityType::Player:
 		RenderPlayer(entity, render);
+		break;
+
+	case EntityType::PlayerBullet:
+		RenderPlayerBullet(entity, render);
 		break;
 
 	case EntityType::BonusWoman:
@@ -349,6 +439,15 @@ void ReTron::Level::RenderPlayer(entt::entity entity, ff::PixelRendererActive& r
 {
 	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
 	render.DrawPaletteFilledCircle(pos.Offset(0, -4), 4, 236);
+}
+
+void ReTron::Level::RenderPlayerBullet(entt::entity entity, ff::PixelRendererActive& render)
+{
+	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
+	ff::PointFixedInt scale = _positionSystem.GetScale(entity);
+	ff::FixedInt rotation = _positionSystem.GetRotation(entity);
+
+	render.DrawSprite(_playerBulletSprite.Flush(), ff::PixelTransform::Create(pos, scale, rotation));
 }
 
 void ReTron::Level::RenderBonus(entt::entity entity, EntityType type, ff::PixelRendererActive& render)

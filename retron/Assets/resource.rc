@@ -51,3 +51,4 @@ END
 ID_RES_VALUES RESDICT "Values.res.pack"
 ID_RES_ASSETS RESDICT "Assets.res.pack"
 ID_RES_ASSETS_XAML RESDICT "Assets.Xaml.res.pack"
+ID_RES_ASSETS_GRAPHICS RESDICT "Assets.Graphics.res.pack"

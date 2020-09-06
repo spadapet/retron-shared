@@ -21,6 +21,8 @@ static ff::StaticString PROP_LIVES(L"lives");
 static ff::StaticString PROP_LOOP_START(L"loopStart");
 static ff::StaticString PROP_NAME(L"name");
 static ff::StaticString PROP_OBJECTS(L"objects");
+static ff::StaticString PLAYER_SHOT_COUNTER(L"playerShotCounter");
+static ff::StaticString PLAYER_SHOT_MOVE(L"playerShotMove");
 static ff::StaticString PROP_PLAYER_START(L"playerStart");
 static ff::StaticString PROP_POINT(L"point");
 static ff::StaticString PROP_PROPERTIES(L"properties");
@@ -41,6 +43,8 @@ static ReTron::DifficultySpec LoadDifficultySpec(const ff::Dict& dict)
 	diffSpec._gruntMaxTicksRate = dict.Get<ff::SizeValue>(::PROP_GRUNT_MAX_TICKS_RATE);
 	diffSpec._gruntTickFrames = dict.Get<ff::SizeValue>(::PROP_GRUNT_TICK_FRAMES);
 	diffSpec._gruntMove = dict.Get<ff::FixedIntValue>(::PROP_GRUNT_MOVE);
+	diffSpec._playerShotMove = dict.Get<ff::FixedIntValue>(::PLAYER_SHOT_MOVE);
+	diffSpec._playerShotCounter = dict.Get<ff::SizeValue>(::PLAYER_SHOT_COUNTER);
 
 	return diffSpec;
 }

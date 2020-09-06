@@ -46,3 +46,8 @@ size_t Random::RangeSize(size_t start, size_t end)
 {
 	return std::uniform_int_distribution<size_t>{start, end}(::randomEngine);
 }
+
+ff::FixedInt Helpers::DirToDegrees(ff::PointFixedInt dir)
+{
+	return ff::FixedInt(std::atan2f(-dir.y, dir.x) * ff::RAD_TO_DEG_F);
+}

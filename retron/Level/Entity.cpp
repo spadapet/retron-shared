@@ -7,6 +7,7 @@ ReTron::EntityBoxType ReTron::GetBoxType(EntityType type)
 	{
 		EntityBoxType::None, // None
 		EntityBoxType::Player, // Player
+		EntityBoxType::PlayerBullet, // PlayerBullet
 		EntityBoxType::Bonus, // BonusWoman
 		EntityBoxType::Bonus, // BonusMan
 		EntityBoxType::Bonus, // BonusChild
@@ -28,10 +29,11 @@ const ff::RectFixedInt& ReTron::GetHitBoxSpec(EntityType type)
 	{
 		ff::RectFixedInt::Zeros(), // None
 		ff::RectFixedInt(-5, -12, 5, 0), // Player
+		ff::RectFixedInt(-10, 0, 0, 1), // PlayerBullet
 		ff::RectFixedInt(-4, -8, 4, 0), // BonusWoman
 		ff::RectFixedInt(-4, -8, 4, 0), // BonusMan
 		ff::RectFixedInt(-4, -8, 4, 0), // BonusChild
-		ff::RectFixedInt(-3, -6, 3, 0), // Grunt
+		ff::RectFixedInt(-4, -10, 4, 0), // Grunt
 		ff::RectFixedInt(-5, -8, 5, 0), // Hulk
 		ff::RectFixedInt(-3, -3, 3, 3), // Electrode
 		ff::RectFixedInt::Zeros(), // LevelBorder
@@ -49,6 +51,7 @@ const ff::RectFixedInt& ReTron::GetBoundsBoxSpec(EntityType type)
 	{
 		ff::RectFixedInt::Zeros(), // None
 		ff::RectFixedInt(-5, -12, 5, 0), // Player
+		ff::RectFixedInt(-6, 0, 0, 1), // PlayerBullet
 		ff::RectFixedInt(-5, -12, 5, 0), // BonusWoman
 		ff::RectFixedInt(-5, -12, 5, 0), // BonusMan
 		ff::RectFixedInt(-5, -12, 5, 0), // BonusChild

@@ -1,0 +1,25 @@
+{
+  "sprites":
+  {
+    "res:type": "sprites",
+    "format": "pal",
+    "mips": 1,
+    "sprites":
+    {
+      "player-bullet":
+      {
+        "file": "file:Graphics/player-bullet.png",
+        "size":
+        [
+          6,
+          1
+        ],
+        "handle":
+        [
+          6,
+          0
+        ]
+      }
+    }
+  }
+}

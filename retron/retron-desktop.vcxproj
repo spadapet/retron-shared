@@ -87,6 +87,11 @@
   <ItemGroup>
     <Manifest Include="app.manifest" />
   </ItemGroup>
+  <ItemGroup>
+    <ResJson Include="Assets\Assets.Graphics.res.json">
+      <FileType>Document</FileType>
+    </ResJson>
+  </ItemGroup>
   <Import Project="$(FFCoreRoot)msbuild\cpp.targets" />
   <Target Name="AfterBuild">
     <Copy SourceFiles="$(FFCoreRoot)core\noesis\Bin\$(XPlatform)\Noesis.dll" DestinationFolder="$(OutDir)" SkipUnchangedFiles="True" />

@@ -4,5 +4,6 @@
 #define ID_RES_VALUES 100
 #define ID_RES_ASSETS 101
 #define ID_RES_ASSETS_XAML 102
+#define ID_RES_ASSETS_GRAPHICS 103
 
 #endif

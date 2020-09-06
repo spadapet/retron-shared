@@ -169,4 +169,9 @@
   <ItemGroup>
     <Manifest Include="app.manifest" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\Assets.Graphics.res.json">
+      <Filter>Assets</Filter>
+    </None>
+  </ItemGroup>
 </Project>

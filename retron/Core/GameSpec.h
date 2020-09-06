@@ -54,7 +54,9 @@ namespace ReTron
 		size_t _gruntMaxTicks; // random 1-max ticks per move
 		size_t _gruntMaxTicksRate; // frames to decrease max ticks
 		size_t _gruntMinTicks;
+		size_t _playerShotCounter;
 		ff::FixedInt _gruntMove;
+		ff::FixedInt _playerShotMove;
 	};
 
 	struct GameSpec

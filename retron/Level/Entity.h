@@ -7,6 +7,7 @@ namespace ReTron
 	{
 		None,
 		Player,
+		PlayerBullet,
 		BonusWoman,
 		BonusMan,
 		BonusChild,
