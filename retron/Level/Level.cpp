@@ -25,9 +25,9 @@ struct GruntData
 ReTron::Level::Level(ILevelService* levelService)
 	: _levelService(levelService)
 	, _difficultySpec(levelService->GetGameService()->GetDifficultySpec())
-	, _entitySystem(_registry)
-	, _positionSystem(_registry)
-	, _collisionSystem(_registry, _positionSystem, _entitySystem)
+	, _entities(_registry)
+	, _position(_registry)
+	, _collision(_registry, _position, _entities)
 	, _frames(0)
 	, _playerBulletSprite(L"sprites.player-bullet")
 {
@@ -85,7 +85,7 @@ void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 	EnumEntities(_advanceCallback);
 	HandleCollisions();
 
-	_entitySystem.FlushDelete();
+	_entities.FlushDelete();
 }
 
 void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, ff::RectFixedInt targetRect, ff::RectFixedInt cameraRect)
@@ -95,15 +95,15 @@ void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, f
 
 	if (_levelService->GetGameService()->GetAppService()->ShouldRenderDebug())
 	{
-		_collisionSystem.RenderDebug(ff::PixelRendererActive(renderActive));
-		_positionSystem.RenderDebug(ff::PixelRendererActive(renderActive));
+		_collision.RenderDebug(ff::PixelRendererActive(renderActive));
+		_position.RenderDebug(ff::PixelRendererActive(renderActive));
 	}
 }
 
 entt::entity ReTron::Level::CreateEntity(EntityType type, const ff::PointFixedInt& pos)
 {
-	entt::entity entity = _entitySystem.Create(type);
-	_positionSystem.SetPosition(entity, pos);
+	entt::entity entity = _entities.Create(type);
+	_position.SetPosition(entity, pos);
 
 	switch (type)
 	{
@@ -131,23 +131,23 @@ entt::entity ReTron::Level::CreatePlayerBullet(ff::PointFixedInt shotPos, ff::Po
 	ff::PointFixedInt vel(_difficultySpec._playerShotMove * shotDir.x, _difficultySpec._playerShotMove * shotDir.y);
 	entt::entity entity = CreateEntity(EntityType::PlayerBullet, shotPos + vel);
 
-	_positionSystem.SetVelocity(entity, vel);
-	_positionSystem.SetRotation(entity, Helpers::DirToDegrees(shotDir));
+	_position.SetVelocity(entity, vel);
+	_position.SetRotation(entity, Helpers::DirToDegrees(shotDir));
 
 	return entity;
 }
 
 entt::entity ReTron::Level::CreateBounds(const ff::RectFixedInt& rect)
 {
-	entt::entity entity = _entitySystem.Create(EntityType::LevelBounds);
-	_collisionSystem.SetBox(entity, rect, EntityBoxType::Level, CollisionBoxType::BoundsBox);
+	entt::entity entity = _entities.Create(EntityType::LevelBounds);
+	_collision.SetBox(entity, rect, EntityBoxType::Level, CollisionBoxType::BoundsBox);
 	return entity;
 }
 
 entt::entity ReTron::Level::CreateBox(const ff::RectFixedInt& rect)
 {
-	entt::entity entity = _entitySystem.Create(EntityType::LevelBox);
-	_collisionSystem.SetBox(entity, rect, EntityBoxType::Level, CollisionBoxType::BoundsBox);
+	entt::entity entity = _entities.Create(EntityType::LevelBox);
+	_collision.SetBox(entity, rect, EntityBoxType::Level, CollisionBoxType::BoundsBox);
 	return entity;
 }
 
@@ -217,14 +217,14 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 		dirScale * inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_RIGHT),
 		dirScale * inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_DOWN));
 
-	ff::PointFixedInt dir = _positionSystem.GetDirection(entity);
+	ff::PointFixedInt dir = _position.GetDirection(entity);
 	dir.x = dirPress.left ? -1_f : (dirPress.right ? 1_f : dir.x);
 	dir.y = dirPress.top ? -1_f : (dirPress.bottom ? 1_f : dir.y);
-	_positionSystem.SetDirection(entity, dir);
+	_position.SetDirection(entity, dir);
 
-	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
+	ff::PointFixedInt pos = _position.GetPosition(entity);
 	pos = pos.Offset(dirPress.right - dirPress.left, dirPress.bottom - dirPress.top);
-	_positionSystem.SetPosition(entity, pos);
+	_position.SetPosition(entity, pos);
 
 	if (playerData._shotCounter)
 	{
@@ -243,7 +243,7 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 		{
 			playerData._shotCounter = _difficultySpec._playerShotCounter;
 
-			ff::RectFixedInt box = _collisionSystem.GetBox(entity, CollisionBoxType::BoundsBox);
+			ff::RectFixedInt box = _collision.GetBox(entity, CollisionBoxType::BoundsBox);
 			ff::PointFixedInt shotPos = box.Center();
 			ff::PointFixedInt shotDir(
 				shotPress.left ? -1 : (shotPress.right ? 1 : 0),
@@ -256,63 +256,39 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 
 void ReTron::Level::AdvancePlayerBullet(entt::entity entity)
 {
-	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-	ff::PointFixedInt vel = _positionSystem.GetVelocity(entity);
-	_positionSystem.SetPosition(entity, pos + vel);
+	ff::PointFixedInt pos = _position.GetPosition(entity);
+	ff::PointFixedInt vel = _position.GetVelocity(entity);
+	_position.SetPosition(entity, pos + vel);
 }
 
 void ReTron::Level::AdvanceGrunt(entt::entity entity)
 {
 	GruntData& data = _registry.get<GruntData>(entity);
-	if (--data._moveCounter)
+	if (!--data._moveCounter)
 	{
-		return;
-	}
+		data._moveCounter = PickGruntMoveCounter();
 
-	data._moveCounter = PickGruntMoveCounter();
-
-	// Must be a player to target
-	if (!_registry.size<PlayerData>())
-	{
-		return;
-	}
-
-	// Spread the grunts out to target each player evenly
-	size_t player = data._index % _registry.size<PlayerData>();
-	entt::entity playerEntity = _registry.data<PlayerData>()[player];
-	ff::PointFixedInt playerPos = _positionSystem.GetPosition(playerEntity);
-	ff::PointFixedInt gruntPos = _positionSystem.GetPosition(entity);
-	ff::PointFixedInt destPos = playerPos;
-
-	// Move around boxes in the level
-	auto [boxEntity, boxHitPos, boxHitNormal] = _collisionSystem.RayTest(gruntPos, playerPos, CollisionBoxType::BoundsBox);
-	if (boxEntity != entt::null && boxHitPos != playerPos)
-	{
-		ff::RectFixedInt entityBoxSpec = _collisionSystem.GetBoxSpec(entity, CollisionBoxType::BoundsBox);
-		ff::RectFixedInt box = _collisionSystem.GetBox(boxEntity, CollisionBoxType::BoundsBox);
-		box = box.Inflate(entityBoxSpec.right, entityBoxSpec.bottom, -entityBoxSpec.left, -entityBoxSpec.top);
-
-		ff::FixedInt bestDist = -1_f;
-		for (ff::PointFixedInt corner : box.Corners())
+		// Must be a player to target
+		if (_registry.size<PlayerData>())
 		{
-			ff::FixedInt dist = (corner - playerPos).LengthSquared();
-			if (bestDist < 0_f || dist < bestDist)
-			{
-				bestDist = dist;
-				destPos = corner;
-			}
+			// Spread the grunts out to target each player evenly
+			size_t player = data._index % _registry.size<PlayerData>();
+			entt::entity playerEntity = _registry.data<PlayerData>()[player];
+			ff::PointFixedInt destPos = PickMoveDestination(entity, playerEntity);
+			ff::PointFixedInt gruntPos = _position.GetPosition(entity);
+			ff::RectFixedInt gruntBox = _collision.GetBox(entity, CollisionBoxType::BoundsBox);
+
+			ff::PointFixedInt vel(
+				(gruntPos.x != destPos.x)
+					? std::copysign(_difficultySpec._gruntMove, destPos.x - gruntPos.x)
+					: std::copysign(_difficultySpec._gruntMove, ff::FixedInt(Random::Sign())),
+				(gruntPos.y != destPos.y)
+					? std::copysign(_difficultySpec._gruntMove, destPos.y - gruntPos.y)
+					: std::copysign(_difficultySpec._gruntMove, ff::FixedInt(Random::Sign())));
+
+			_position.SetPosition(entity, gruntPos + vel);
 		}
 	}
-
-	gruntPos.x += (gruntPos.x != destPos.x)
-		? std::copysign(_difficultySpec._gruntMove, destPos.x - gruntPos.x)
-		: std::copysign(_difficultySpec._gruntMove, ff::FixedInt(Random::Sign())); // always move diagnally
-
-	gruntPos.y += (gruntPos.y != destPos.y)
-		? std::copysign(_difficultySpec._gruntMove, destPos.y - gruntPos.y)
-		: std::copysign(_difficultySpec._gruntMove, ff::FixedInt(Random::Sign())); // always move diagnally
-
-	_positionSystem.SetPosition(entity, gruntPos);
 }
 
 void ReTron::Level::HandleCollisions()
@@ -321,36 +297,36 @@ void ReTron::Level::HandleCollisions()
 	for (size_t pass = 0; boundsCollision && pass != 2; pass++)
 	{
 		boundsCollision = false;
-		for (size_t i = _collisionSystem.DetectCollisions(CollisionBoxType::BoundsBox); i != 0; i--)
+		for (size_t i = _collision.DetectCollisions(CollisionBoxType::BoundsBox); i != 0; i--)
 		{
-			auto [entity1, entity2] = _collisionSystem.GetCollision(i - 1);
+			auto [entity1, entity2] = _collision.GetCollision(i - 1);
 			HandleBoundsCollision(entity1, entity2);
 			boundsCollision = true;
 		}
 	}
 
-	for (size_t i = _collisionSystem.DetectCollisions(CollisionBoxType::HitBox); i != 0; i--)
+	for (size_t i = _collision.DetectCollisions(CollisionBoxType::HitBox); i != 0; i--)
 	{
-		auto [entity1, entity2] = _collisionSystem.GetCollision(i - 1);
+		auto [entity1, entity2] = _collision.GetCollision(i - 1);
 		HandleEntityCollision(entity1, entity2);
 	}
 }
 
 void ReTron::Level::HandleBoundsCollision(entt::entity entity1, entt::entity entity2)
 {
-	EntityType entityType = _entitySystem.GetType(entity1);
+	EntityType entityType = _entities.GetType(entity1);
 	switch (entityType)
 	{
 	case EntityType::PlayerBullet:
-		_entitySystem.DelayDelete(entity1);
+		_entities.DelayDelete(entity1);
 		break;
 	}
 
-	ff::RectFixedInt oldRect = _collisionSystem.GetBox(entity1, CollisionBoxType::BoundsBox);
+	ff::RectFixedInt oldRect = _collision.GetBox(entity1, CollisionBoxType::BoundsBox);
 	ff::RectFixedInt newRect = oldRect;
 
-	ff::RectFixedInt levelRect = _collisionSystem.GetBox(entity2, CollisionBoxType::BoundsBox);
-	EntityType levelType = _entitySystem.GetType(entity2);
+	ff::RectFixedInt levelRect = _collision.GetBox(entity2, CollisionBoxType::BoundsBox);
+	EntityType levelType = _entities.GetType(entity2);
 
 	switch (levelType)
 	{
@@ -364,13 +340,13 @@ void ReTron::Level::HandleBoundsCollision(entt::entity entity1, entt::entity ent
 	}
 
 	ff::PointFixedInt offset = newRect.TopLeft() - oldRect.TopLeft();
-	_positionSystem.SetPosition(entity1, _positionSystem.GetPosition(entity1) + offset);
+	_position.SetPosition(entity1, _position.GetPosition(entity1) + offset);
 }
 
 void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity entity2)
 {
-	EntityBoxType type1 = _collisionSystem.GetBoxType(entity1, CollisionBoxType::HitBox);
-	EntityBoxType type2 = _collisionSystem.GetBoxType(entity2, CollisionBoxType::HitBox);
+	EntityBoxType type1 = _collision.GetBoxType(entity1, CollisionBoxType::HitBox);
+	EntityBoxType type2 = _collision.GetBoxType(entity2, CollisionBoxType::HitBox);
 
 	switch (type1)
 	{
@@ -378,9 +354,9 @@ void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity ent
 		switch (type2)
 		{
 		case EntityBoxType::PlayerBullet:
-			if (_entitySystem.DelayDelete(entity2))
+			if (_entities.DelayDelete(entity2))
 			{
-				_entitySystem.DelayDelete(entity1);
+				_entities.DelayDelete(entity1);
 			}
 			break;
 		}
@@ -390,9 +366,9 @@ void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity ent
 		switch (type2)
 		{
 		case EntityBoxType::EnemyBullet:
-			if (_entitySystem.DelayDelete(entity1))
+			if (_entities.DelayDelete(entity1))
 			{
-				_entitySystem.DelayDelete(entity2);
+				_entities.DelayDelete(entity2);
 			}
 			break;
 		}
@@ -432,7 +408,7 @@ void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::Pixel
 
 	case EntityType::LevelBounds:
 	case EntityType::LevelBox:
-		render.DrawPaletteOutlineRectangle(_collisionSystem.GetBox(entity, CollisionBoxType::BoundsBox), Colors::LEVEL_BORDER,
+		render.DrawPaletteOutlineRectangle(_collision.GetBox(entity, CollisionBoxType::BoundsBox), Colors::LEVEL_BORDER,
 			(type == EntityType::LevelBounds) ? -Constants::LEVEL_BORDER_THICKNESS : Constants::LEVEL_BOX_THICKNESS);
 		break;
 	}
@@ -441,15 +417,15 @@ void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::Pixel
 
 void ReTron::Level::RenderPlayer(entt::entity entity, ff::PixelRendererActive& render)
 {
-	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
+	ff::PointFixedInt pos = _position.GetPosition(entity);
 	render.DrawPaletteFilledCircle(pos.Offset(0, -4), 4, 236);
 }
 
 void ReTron::Level::RenderPlayerBullet(entt::entity entity, ff::PixelRendererActive& render)
 {
-	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-	ff::PointFixedInt scale = _positionSystem.GetScale(entity);
-	ff::FixedInt rotation = _positionSystem.GetRotation(entity);
+	ff::PointFixedInt pos = _position.GetPosition(entity);
+	ff::PointFixedInt scale = _position.GetScale(entity);
+	ff::FixedInt rotation = _position.GetRotation(entity);
 
 	render.DrawSprite(_playerBulletSprite.Flush(), ff::PixelTransform::Create(pos, scale, rotation));
 }
@@ -463,26 +439,26 @@ void ReTron::Level::RenderBonus(entt::entity entity, EntityType type, ff::PixelR
 	case EntityType::BonusMan: color = 246; break;
 	}
 
-	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-	render.DrawPaletteFilledRectangle(_collisionSystem.GetBox(entity, CollisionBoxType::HitBox), color);
+	ff::PointFixedInt pos = _position.GetPosition(entity);
+	render.DrawPaletteFilledRectangle(_collision.GetBox(entity, CollisionBoxType::HitBox), color);
 }
 
 void ReTron::Level::RenderElectrode(entt::entity entity, ff::PixelRendererActive& render)
 {
-	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-	render.DrawPaletteFilledRectangle(_collisionSystem.GetBox(entity, CollisionBoxType::HitBox), 45);
+	ff::PointFixedInt pos = _position.GetPosition(entity);
+	render.DrawPaletteFilledRectangle(_collision.GetBox(entity, CollisionBoxType::HitBox), 45);
 }
 
 void ReTron::Level::RenderHulk(entt::entity entity, ff::PixelRendererActive& render)
 {
-	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-	render.DrawPaletteFilledRectangle(_collisionSystem.GetBox(entity, CollisionBoxType::HitBox), 235);
+	ff::PointFixedInt pos = _position.GetPosition(entity);
+	render.DrawPaletteFilledRectangle(_collision.GetBox(entity, CollisionBoxType::HitBox), 235);
 }
 
 void ReTron::Level::RenderGrunt(entt::entity entity, ff::PixelRendererActive& render)
 {
-	ff::PointFixedInt pos = _positionSystem.GetPosition(entity);
-	render.DrawPaletteFilledRectangle(_collisionSystem.GetBox(entity, CollisionBoxType::HitBox), 248);
+	ff::PointFixedInt pos = _position.GetPosition(entity);
+	render.DrawPaletteFilledRectangle(_collision.GetBox(entity, CollisionBoxType::HitBox), 248);
 }
 
 size_t ReTron::Level::PickGruntMoveCounter()
@@ -492,12 +468,41 @@ size_t ReTron::Level::PickGruntMoveCounter()
 	return std::max<size_t>(i, _difficultySpec._gruntMinTicks);
 }
 
+ff::PointFixedInt ReTron::Level::PickMoveDestination(entt::entity entity, entt::entity destEntity)
+{
+	ff::PointFixedInt entityPos = _position.GetPosition(entity);
+	ff::PointFixedInt destPos = _position.GetPosition(destEntity);
+	ff::PointFixedInt result = destPos;
+
+	// Move around boxes in the level
+	auto [boxEntity, boxHitPos, boxHitNormal] = _collision.RayTest(entityPos, destPos, CollisionBoxType::BoundsBox);
+	if (boxEntity != entt::null && boxHitPos != destPos)
+	{
+		ff::RectFixedInt entityBoxSpec = _collision.GetBoxSpec(entity, CollisionBoxType::BoundsBox);
+		ff::RectFixedInt box = _collision.GetBox(boxEntity, CollisionBoxType::BoundsBox);
+		box = box.Inflate(entityBoxSpec.right, entityBoxSpec.bottom, -entityBoxSpec.left, -entityBoxSpec.top);
+
+		ff::FixedInt bestDist = -1_f;
+		for (ff::PointFixedInt corner : box.Corners())
+		{
+			ff::FixedInt dist = (corner - destPos).LengthSquared();
+			if (bestDist < 0_f || dist < bestDist)
+			{
+				bestDist = dist;
+				result = corner;
+			}
+		}
+	}
+
+	return result;
+}
+
 template<typename... Args>
 void ReTron::Level::EnumEntities(entt::delegate<void(entt::entity, EntityType, Args&&...)> func, Args&&... args)
 {
-	for (size_t i = _entitySystem.SortEntities(); i != 0; i--)
+	for (size_t i = _entities.SortEntities(); i != 0; i--)
 	{
-		entt::entity entity = _entitySystem.GetEntity(i - 1);
-		func(entity, _entitySystem.GetType(entity), std::forward<Args>(args)...);
+		entt::entity entity = _entities.GetEntity(i - 1);
+		func(entity, _entities.GetType(entity), std::forward<Args>(args)...);
 	}
 }

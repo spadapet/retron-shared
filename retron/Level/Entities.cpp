@@ -1,5 +1,9 @@
 #include "pch.h"
-#include "Level/Entity.h"
+#include "Level/Entities.h"
+
+struct PendingDelete
+{
+};
 
 ReTron::EntityBoxType ReTron::GetBoxType(EntityType type)
 {
@@ -115,4 +119,86 @@ bool ReTron::CanHitBoxCollide(EntityBoxType typeA, EntityBoxType typeB)
 bool ReTron::CanBoundsBoxCollide(EntityBoxType typeA, EntityBoxType typeB)
 {
 	return (typeA != typeB) && (typeA == EntityBoxType::Level || typeB == EntityBoxType::Level);
+}
+
+ReTron::Entities::Entities(entt::registry& registry)
+	: _registry(registry)
+	, _sortEntities(false)
+{
+}
+
+entt::entity ReTron::Entities::Create(EntityType type)
+{
+	entt::entity entity = _registry.create();
+	_registry.emplace<EntityType>(entity, type);
+	_sortEntities = true;
+	_entityCreated.publish(entity);
+
+	return entity;
+}
+
+bool ReTron::Entities::DelayDelete(entt::entity entity)
+{
+	if (!IsDeleted(entity))
+	{
+		_registry.emplace_or_replace<PendingDelete>(entity);
+		_entityDeleting.publish(entity);
+		return true;
+	}
+
+	return false;
+}
+
+bool ReTron::Entities::IsDeleted(entt::entity entity)
+{
+	return _registry.has<PendingDelete>(entity);
+}
+
+void ReTron::Entities::FlushDelete()
+{
+	for (entt::entity entity : _registry.view<PendingDelete>())
+	{
+		_registry.remove_all(entity);
+	}
+}
+
+size_t ReTron::Entities::SortEntities()
+{
+	if (_sortEntities)
+	{
+		_sortEntities = false;
+
+		_registry.sort<EntityType>([](EntityType typeA, EntityType typeB)
+			{
+				// Since we loop backwards
+				return typeA > typeB;
+			});
+	}
+
+	return GetEntityCount();
+}
+
+size_t ReTron::Entities::GetEntityCount() const
+{
+	return _registry.size<EntityType>();
+}
+
+entt::entity ReTron::Entities::GetEntity(size_t index) const
+{
+	return _registry.data<EntityType>()[index];
+}
+
+ReTron::EntityType ReTron::Entities::GetType(entt::entity entity)
+{
+	return _registry.get<EntityType>(entity);
+}
+
+entt::sink<void(entt::entity)> ReTron::Entities::EntityCreated()
+{
+	return _entityCreated;
+}
+
+entt::sink<void(entt::entity)> ReTron::Entities::EntityDeleting()
+{
+	return _entityDeleting;
 }

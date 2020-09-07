@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Core/GameSpec.h"
-#include "Level/CollisionSystem.h"
-#include "Level/EntitySystem.h"
-#include "Level/PositionSystem.h"
+#include "Level/Collision.h"
+#include "Level/Entities.h"
+#include "Level/Position.h"
 
 namespace ff
 {
@@ -50,6 +50,7 @@ namespace ReTron
 		void RenderGrunt(entt::entity entity, ff::PixelRendererActive& render);
 
 		size_t PickGruntMoveCounter();
+		ff::PointFixedInt PickMoveDestination(entt::entity entity, entt::entity destEntity);
 
 		template<typename... Args>
 		void EnumEntities(entt::delegate<void(entt::entity, EntityType, Args&&...)> func, Args&&... args);
@@ -65,8 +66,8 @@ namespace ReTron
 		entt::delegate<void(entt::entity, EntityType, ff::PixelRendererActive&)> _renderCallback;
 		std::forward_list<entt::scoped_connection> _connections;
 
-		EntitySystem _entitySystem;
-		PositionSystem _positionSystem;
-		CollisionSystem _collisionSystem;
+		Entities _entities;
+		Position _position;
+		Collision _collision;
 	};
 }

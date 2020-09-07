@@ -45,19 +45,16 @@
     <ClCompile Include="Core\Audio.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Level\CollisionSystem.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
-    <ClCompile Include="Level\PositionSystem.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
     <ClCompile Include="Level\Level.cpp">
       <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Level\Entity.cpp">
+    <ClCompile Include="Level\Entities.cpp">
       <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Level\EntitySystem.cpp">
+    <ClCompile Include="Level\Collision.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\Position.cpp">
       <Filter>Level</Filter>
     </ClCompile>
   </ItemGroup>
@@ -108,19 +105,7 @@
     <ClInclude Include="Core\Audio.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Level\CollisionSystem.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Level\PositionSystem.h">
-      <Filter>Level</Filter>
-    </ClInclude>
     <ClInclude Include="Level\Level.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Level\Entity.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Level\EntitySystem.h">
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="Core\AppService.h">
@@ -131,6 +116,15 @@
     </ClInclude>
     <ClInclude Include="Core\LevelService.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\Entities.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\Collision.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\Position.h">
+      <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

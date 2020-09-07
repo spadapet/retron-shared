@@ -7,10 +7,10 @@ namespace ff
 
 namespace ReTron
 {
-	class PositionSystem
+	class Position
 	{
 	public:
-		PositionSystem(entt::registry& registry);
+		Position(entt::registry& registry);
 
 		void SetPosition(entt::entity entity, const ff::PointFixedInt& value);
 		ff::PointFixedInt GetPosition(entt::entity entity);

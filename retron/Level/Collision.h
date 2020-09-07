@@ -7,8 +7,8 @@ namespace ff
 
 namespace ReTron
 {
-	class EntitySystem;
-	class PositionSystem;
+	class Entities;
+	class Position;
 	enum class EntityBoxType;
 
 	enum class CollisionBoxType
@@ -17,10 +17,10 @@ namespace ReTron
 		BoundsBox,
 	};
 
-	class CollisionSystem
+	class Collision
 	{
 	public:
-		CollisionSystem(entt::registry& registry, PositionSystem& positionSystem, EntitySystem& entitySystem);
+		Collision(entt::registry& registry, Position& position, Entities& entities);
 
 		size_t DetectCollisions(CollisionBoxType collisionType);
 		size_t GetCollisionCount() const;
@@ -41,23 +41,23 @@ namespace ReTron
 		class HitFilter : public b2ContactFilter
 		{
 		public:
-			HitFilter(CollisionSystem* collisionSystem);
+			HitFilter(Collision* collision);
 
 		private:
 			virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) override;
 
-			CollisionSystem* _collisionSystem;
+			Collision* _collision;
 		};
 
 		class BoundsFilter : public b2ContactFilter
 		{
 		public:
-			BoundsFilter(CollisionSystem* collisionSystem);
+			BoundsFilter(Collision* collision);
 
 		private:
 			virtual bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) override;
 
-			CollisionSystem* _collisionSystem;
+			Collision* _collision;
 		};
 
 		void ResetBox(entt::entity entity, CollisionBoxType collisionType);
@@ -75,8 +75,8 @@ namespace ReTron
 		void OnScaleChanged(entt::entity entity);
 
 		// Entities
-		PositionSystem& _positionSystem;
-		EntitySystem& _entitySystem;
+		Position& _position;
+		Entities& _entities;
 		entt::registry& _registry;
 		std::forward_list<entt::scoped_connection> _connections;
 
