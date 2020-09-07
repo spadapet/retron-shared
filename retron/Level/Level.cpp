@@ -264,31 +264,51 @@ void ReTron::Level::AdvancePlayerBullet(entt::entity entity)
 void ReTron::Level::AdvanceGrunt(entt::entity entity)
 {
 	GruntData& data = _registry.get<GruntData>(entity);
-	if (!--data._moveCounter)
+	if (--data._moveCounter)
 	{
-		data._moveCounter = PickGruntMoveCounter();
-
-		// Must be a player to target
-		if (_registry.size<PlayerData>())
-		{
-			// Spread the grunts out to target each player evenly
-			size_t player = data._index % _registry.size<PlayerData>();
-			entt::entity playerEntity = _registry.data<PlayerData>()[player];
-			ff::PointFixedInt destPos = PickMoveDestination(entity, playerEntity);
-			ff::PointFixedInt gruntPos = _position.GetPosition(entity);
-			ff::RectFixedInt gruntBox = _collision.GetBox(entity, CollisionBoxType::BoundsBox);
-
-			ff::PointFixedInt vel(
-				(gruntPos.x != destPos.x)
-					? std::copysign(_difficultySpec._gruntMove, destPos.x - gruntPos.x)
-					: std::copysign(_difficultySpec._gruntMove, ff::FixedInt(Random::Sign())),
-				(gruntPos.y != destPos.y)
-					? std::copysign(_difficultySpec._gruntMove, destPos.y - gruntPos.y)
-					: std::copysign(_difficultySpec._gruntMove, ff::FixedInt(Random::Sign())));
-
-			_position.SetPosition(entity, gruntPos + vel);
-		}
+		return;
 	}
+
+	data._moveCounter = PickGruntMoveCounter();
+
+	// Must be a player to target
+	if (!_registry.size<PlayerData>())
+	{
+		return;
+	}
+
+	entt::entity playerEntity = _registry.data<PlayerData>()[data._index % _registry.size<PlayerData>()];
+	ff::PointFixedInt destPos = PickMoveDestination(entity, playerEntity);
+	ff::PointFixedInt gruntPos = _position.GetPosition(entity);
+
+	ff::PointFixedInt vel(
+		(gruntPos.x != destPos.x)
+			? std::copysign(_difficultySpec._gruntMove, destPos.x - gruntPos.x)
+			: std::copysign(_difficultySpec._gruntMove, ff::FixedInt(Random::Sign())),
+		(gruntPos.y != destPos.y)
+			? std::copysign(_difficultySpec._gruntMove, destPos.y - gruntPos.y)
+			: std::copysign(_difficultySpec._gruntMove, ff::FixedInt(Random::Sign())));
+
+	// Adjust movement if colliding into a wall
+	//{
+	//	ff::RectFixedInt gruntBox = _collision.GetBox(entity, CollisionBoxType::BoundsBox);
+	//	ff::RectFixedInt testBox = gruntBox + vel;
+
+	//	for (entt::entity hitEntity : _collision.HitTest(testBox, _hits, EntityBoxType::Level, CollisionBoxType::BoundsBox))
+	//	{
+	//		ff::RectFixedInt levelBox = _collision.GetBox(hitEntity, CollisionBoxType::BoundsBox);
+	//		if (levelBox.LeftEdge().DoesIntersect(testBox) || levelBox.RightEdge().DoesIntersect(testBox))
+	//		{
+	//			vel.y = (data._index % 2) ? _difficultySpec._gruntMove : -_difficultySpec._gruntMove;
+	//		}
+	//		else if (levelBox.TopEdge().DoesIntersect(testBox) || levelBox.BottomEdge().DoesIntersect(testBox))
+	//		{
+	//			vel.x = (data._index % 2) ? _difficultySpec._gruntMove : -_difficultySpec._gruntMove;
+	//		}
+	//	}
+	//}
+
+	_position.SetPosition(entity, gruntPos + vel);
 }
 
 void ReTron::Level::HandleCollisions()

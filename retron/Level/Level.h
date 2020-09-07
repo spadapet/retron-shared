@@ -65,6 +65,7 @@ namespace ReTron
 		entt::delegate<void(entt::entity, EntityType)> _advanceCallback;
 		entt::delegate<void(entt::entity, EntityType, ff::PixelRendererActive&)> _renderCallback;
 		std::forward_list<entt::scoped_connection> _connections;
+		std::vector<entt::entity> _hits;
 
 		Entities _entities;
 		Position _position;

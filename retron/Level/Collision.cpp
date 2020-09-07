@@ -168,27 +168,43 @@ std::pair<entt::entity, entt::entity> ReTron::Collision::GetCollision(size_t ind
 	return _collisions[index];
 }
 
-void ReTron::Collision::HitTest(const ff::RectFixedInt& bounds, std::vector<entt::entity>& entities, CollisionBoxType collisionType)
+const std::vector<entt::entity>& ReTron::Collision::HitTest(
+	const ff::RectFixedInt& bounds,
+	std::vector<entt::entity>& entities,
+	EntityBoxType boxTypeFilter,
+	CollisionBoxType collisionType)
 {
+	entities.clear();
 	UpdateDirtyBoxes(collisionType);
 
 	class Callback : public b2QueryCallback
 	{
 	public:
-		Callback(std::vector<entt::entity>& entities)
-			: _entities(entities)
+		Callback(Collision* owner, std::vector<entt::entity>& entities, EntityBoxType boxTypeFilter, CollisionBoxType collisionType)
+			: _owner(owner)
+			, _entities(entities)
+			, _boxTypeFilter(boxTypeFilter)
+			, _collisionType(collisionType)
 		{
 		}
 
 		virtual bool ReportFixture(b2Fixture* fixture) override
 		{
-			_entities.push_back(::EntityFromUserData(fixture->GetUserData()));
+			entt::entity entity = ::EntityFromUserData(fixture->GetUserData());
+			if (_boxTypeFilter == EntityBoxType::None || _boxTypeFilter == _owner->GetBoxType(entity, _collisionType))
+			{
+				_entities.push_back(entity);
+			}
+
 			return true;
 		}
 
 	private:
+		Collision* _owner;
 		std::vector<entt::entity>& _entities;
-	} callback(entities);
+		EntityBoxType _boxTypeFilter;
+		CollisionBoxType _collisionType;
+	} callback(this, entities, boxTypeFilter, collisionType);
 
 	ff::RectFixedInt worldBounds = bounds * ::PIXEL_TO_WORLD_SCALE;
 
@@ -198,6 +214,8 @@ void ReTron::Collision::HitTest(const ff::RectFixedInt& bounds, std::vector<entt
 
 	b2World& world = _worlds[(size_t)collisionType];
 	world.QueryAABB(&callback, aabb);
+
+	return entities;
 }
 
 std::tuple<entt::entity, ff::PointFixedInt, ff::PointFixedInt> ReTron::Collision::RayTest(

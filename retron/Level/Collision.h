@@ -25,7 +25,8 @@ namespace ReTron
 		size_t DetectCollisions(CollisionBoxType collisionType);
 		size_t GetCollisionCount() const;
 		std::pair<entt::entity, entt::entity> GetCollision(size_t index) const;
-		void HitTest(const ff::RectFixedInt& bounds, std::vector<entt::entity>& entities, CollisionBoxType collisionType);
+
+		const std::vector<entt::entity>& HitTest(const ff::RectFixedInt& bounds, std::vector<entt::entity>& entities, EntityBoxType boxTypeFilter, CollisionBoxType collisionType);
 		std::tuple<entt::entity, ff::PointFixedInt, ff::PointFixedInt> RayTest(const ff::PointFixedInt& start, const ff::PointFixedInt& end, CollisionBoxType collisionType);
 		std::tuple<bool, ff::PointFixedInt, ff::PointFixedInt> RayTest(entt::entity entity, const ff::PointFixedInt& start, const ff::PointFixedInt& end, CollisionBoxType collisionType);
 
