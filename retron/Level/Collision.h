@@ -15,6 +15,8 @@ namespace ReTron
 	{
 		HitBox,
 		BoundsBox,
+		GruntAvoidBox,
+		Count
 	};
 
 	class Collision
@@ -22,12 +24,9 @@ namespace ReTron
 	public:
 		Collision(entt::registry& registry, Position& position, Entities& entities);
 
-		size_t DetectCollisions(CollisionBoxType collisionType);
-		size_t GetCollisionCount() const;
-		std::pair<entt::entity, entt::entity> GetCollision(size_t index) const;
-
+		const std::vector<std::pair<entt::entity, entt::entity>>& DetectCollisions(std::vector<std::pair<entt::entity, entt::entity>>& collisions, CollisionBoxType collisionType);
 		const std::vector<entt::entity>& HitTest(const ff::RectFixedInt& bounds, std::vector<entt::entity>& entities, EntityBoxType boxTypeFilter, CollisionBoxType collisionType);
-		std::tuple<entt::entity, ff::PointFixedInt, ff::PointFixedInt> RayTest(const ff::PointFixedInt& start, const ff::PointFixedInt& end, CollisionBoxType collisionType);
+		std::tuple<entt::entity, ff::PointFixedInt, ff::PointFixedInt> RayTest(const ff::PointFixedInt& start, const ff::PointFixedInt& end, EntityBoxType boxTypeFilter, CollisionBoxType collisionType);
 		std::tuple<bool, ff::PointFixedInt, ff::PointFixedInt> RayTest(entt::entity entity, const ff::PointFixedInt& start, const ff::PointFixedInt& end, CollisionBoxType collisionType);
 
 		void SetBox(entt::entity entity, const ff::RectFixedInt& rect, EntityBoxType type, CollisionBoxType collisionType);
@@ -63,17 +62,19 @@ namespace ReTron
 
 		void ResetBox(entt::entity entity, CollisionBoxType collisionType);
 		void DirtyBox(entt::entity entity, CollisionBoxType collisionType);
-		template<typename BoxType, typename DirtyType> b2Body* UpdateBox(entt::entity entity, ReTron::EntityBoxType type, ReTron::CollisionBoxType collisionType);
 		b2Body* UpdateBox(entt::entity entity, CollisionBoxType collisionType);
 		void UpdateDirtyBoxes(CollisionBoxType collisionType);
+		bool NeedsLevelBoxAvoidSkin(entt::entity entity, CollisionBoxType collisionType);
 
-		void OnHitBoxRemoved(entt::registry& registry, entt::entity entity);
-		void OnHitBoxSpecChanged(entt::registry& registry, entt::entity entity);
 		void OnBoundsBoxRemoved(entt::registry& registry, entt::entity entity);
-		void OnBoundsBoxSpecChanged(entt::registry& registry, entt::entity entity);
 		void OnEntityCreated(entt::entity entity);
 		void OnPositionChanged(entt::entity entity);
 		void OnScaleChanged(entt::entity entity);
+
+		template<typename BoxType, typename DirtyType> b2Body* UpdateBox(entt::entity entity, ReTron::EntityBoxType type, ReTron::CollisionBoxType collisionType);
+		template<typename BoxType> void RenderDebug(ff::PixelRendererActive& render, CollisionBoxType collisionType, int thickness, int color, int colorHit);
+		template<typename T> void OnBoxRemoved(entt::registry& registry, entt::entity entity);
+		template<CollisionBoxType T> void OnBoxSpecChanged(entt::registry& registry, entt::entity entity);
 
 		// Entities
 		Position& _position;
@@ -84,8 +85,6 @@ namespace ReTron
 		// Box2d
 		HitFilter _hitFilter;
 		BoundsFilter _boundsFilter;
-		std::array<b2World, 2> _worlds;
-
-		std::vector<std::pair<entt::entity, entt::entity>> _collisions;
+		std::array<b2World, (size_t)CollisionBoxType::Count> _worlds;
 	};
 }

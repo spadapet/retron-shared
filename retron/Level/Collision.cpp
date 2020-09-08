@@ -6,41 +6,34 @@
 
 static const ff::FixedInt PIXEL_TO_WORLD_SCALE = 0.0625_f;
 static const ff::FixedInt WORLD_TO_PIXEL_SCALE = 16_f;
+static const ff::FixedInt LEVEL_BOX_AVOID_SKIN = 0.125_f;
+
+static const std::array<ReTron::CollisionBoxType, (size_t)ReTron::CollisionBoxType::Count> CollisionBoxTypes =
+{
+	ReTron::CollisionBoxType::HitBox,
+	ReTron::CollisionBoxType::BoundsBox,
+	ReTron::CollisionBoxType::GruntAvoidBox,
+};
 
 struct BoxSpecComponent
 {
 	ff::RectFixedInt _rect;
 	ReTron::EntityBoxType _type;
 };
-
-struct HitBoxSpecComponent : public BoxSpecComponent
-{
-};
-
-struct BoundsBoxSpecComponent : public BoxSpecComponent
-{
-};
+struct HitBoxSpecComponent : public BoxSpecComponent { };
+struct BoundsBoxSpecComponent : public BoxSpecComponent { };
 
 struct BoxComponent
 {
 	b2Body* _body;
 };
+struct HitBoxComponent : public BoxComponent { };
+struct BoundsBoxComponent : public BoxComponent { };
+struct GruntAvoidBoxComponent : public BoxComponent { };
 
-struct HitBoxComponent : public BoxComponent
-{
-};
-
-struct BoundsBoxComponent : public BoxComponent
-{
-};
-
-struct HitDirtyComponent
-{
-};
-
-struct BoundsDirtyComponent
-{
-};
+struct HitDirtyComponent { };
+struct BoundsDirtyComponent { };
+struct GruntAvoidDirtyComponent { };
 
 static entt::entity EntityFromUserData(void* data)
 {
@@ -75,14 +68,17 @@ static ff::RectFixedInt GetBox(const b2Body* body)
 		b2AABB aabb;
 		shape->ComputeAABB(&aabb, body->GetTransform(), i);
 		ff::RectFixedInt childRect = ff::RectFixedInt(aabb.lowerBound.x, aabb.lowerBound.y, aabb.upperBound.x, aabb.upperBound.y) * ::WORLD_TO_PIXEL_SCALE;
-		rect = !i ? childRect : rect = rect.Bound(childRect);
+		rect = !i ? childRect : rect.Bound(childRect);
 	}
 
 	return rect;
 }
 
-static bool DoesOverlap(const b2Fixture* f1, const b2Fixture* f2)
+static bool DoesOverlap(const b2Contact* contact)
 {
+	const b2Fixture* f1 = contact->GetFixtureA();
+	const b2Fixture* f2 = contact->GetFixtureB();
+
 	for (int i1 = 0; i1 < f1->GetShape()->GetChildCount(); i1++)
 	{
 		for (int i2 = 0; i2 < f2->GetShape()->GetChildCount(); i2++)
@@ -103,21 +99,37 @@ ReTron::Collision::Collision(entt::registry& registry, Position& position, Entit
 	, _registry(registry)
 	, _hitFilter(this)
 	, _boundsFilter(this)
-	, _worlds{ b2World(b2Vec2(0, 0)), b2World(b2Vec2(0, 0)) }
+	, _worlds{ b2World({0, 0}), b2World({0, 0}), b2World({0, 0}) }
 {
-	_worlds[0].SetAllowSleeping(false);
-	_worlds[0].SetContactFilter(&_hitFilter);
+	for (b2World& world : _worlds)
+	{
+		world.SetAllowSleeping(false);
 
-	_worlds[1].SetAllowSleeping(false);
-	_worlds[1].SetContactFilter(&_boundsFilter);
+		switch ((CollisionBoxType)(&world - _worlds.data()))
+		{
+		case CollisionBoxType::BoundsBox:
+			world.SetContactFilter(&_boundsFilter);
+			break;
 
-	_connections.emplace_front(_registry.on_destroy<HitBoxComponent>().connect<&Collision::OnHitBoxRemoved>(this));
-	_connections.emplace_front(_registry.on_construct<HitBoxSpecComponent>().connect<&Collision::OnHitBoxSpecChanged>(this));
-	_connections.emplace_front(_registry.on_update<HitBoxSpecComponent>().connect<&Collision::OnHitBoxSpecChanged>(this));
+		case CollisionBoxType::HitBox:
+			world.SetContactFilter(&_hitFilter);
+			break;
+		}
+	}
 
+	_connections.emplace_front(_registry.on_destroy<HitBoxComponent>().connect<&Collision::OnBoxRemoved<HitBoxComponent>>(this));
+	_connections.emplace_front(_registry.on_construct<HitBoxSpecComponent>().connect<&Collision::OnBoxSpecChanged<CollisionBoxType::HitBox>>(this));
+	_connections.emplace_front(_registry.on_update<HitBoxSpecComponent>().connect<&Collision::OnBoxSpecChanged<CollisionBoxType::HitBox>>(this));
+
+	_connections.emplace_front(_registry.on_destroy<BoundsBoxComponent>().connect<&Collision::OnBoxRemoved<BoundsBoxComponent>>(this));
+	_connections.emplace_front(_registry.on_construct<BoundsBoxSpecComponent>().connect<&Collision::OnBoxSpecChanged<CollisionBoxType::BoundsBox>>(this));
+	_connections.emplace_front(_registry.on_update<BoundsBoxSpecComponent>().connect<&Collision::OnBoxSpecChanged<CollisionBoxType::BoundsBox>>(this));
+
+	// GruntAvoidBox relies on BoundsBoxSpecComponent
+	_connections.emplace_front(_registry.on_destroy<GruntAvoidBoxComponent>().connect<&Collision::OnBoxRemoved<GruntAvoidBoxComponent>>(this));
 	_connections.emplace_front(_registry.on_destroy<BoundsBoxComponent>().connect<&Collision::OnBoundsBoxRemoved>(this));
-	_connections.emplace_front(_registry.on_construct<BoundsBoxSpecComponent>().connect<&Collision::OnBoundsBoxSpecChanged>(this));
-	_connections.emplace_front(_registry.on_update<BoundsBoxSpecComponent>().connect<&Collision::OnBoundsBoxSpecChanged>(this));
+	_connections.emplace_front(_registry.on_construct<BoundsBoxSpecComponent>().connect<&Collision::OnBoxSpecChanged<CollisionBoxType::GruntAvoidBox>>(this));
+	_connections.emplace_front(_registry.on_update<BoundsBoxSpecComponent>().connect<&Collision::OnBoxSpecChanged<CollisionBoxType::GruntAvoidBox>>(this));
 
 	_connections.emplace_front(entities.EntityCreated().connect<&Collision::OnEntityCreated>(this));
 	_connections.emplace_front(position.PositionChanged().connect<&Collision::OnPositionChanged>(this));
@@ -126,13 +138,15 @@ ReTron::Collision::Collision(entt::registry& registry, Position& position, Entit
 	_connections.emplace_front(position.ScaleChanged().connect<&Collision::OnScaleChanged>(this));
 }
 
-size_t ReTron::Collision::DetectCollisions(CollisionBoxType collisionType)
+const std::vector<std::pair<entt::entity, entt::entity>>& ReTron::Collision::DetectCollisions(
+	std::vector<std::pair<entt::entity, entt::entity>>& collisions,
+	CollisionBoxType collisionType)
 {
+	collisions.clear();
 	UpdateDirtyBoxes(collisionType);
 
 	b2World& world = _worlds[(size_t)collisionType];
 	world.Step(ff::SECONDS_PER_ADVANCE_F, 1, 1);
-	_collisions.clear();
 
 	for (const b2Contact* i = world.GetContactList(); i; i = i->GetNext())
 	{
@@ -141,31 +155,21 @@ size_t ReTron::Collision::DetectCollisions(CollisionBoxType collisionType)
 			entt::entity entityA = ::EntityFromUserData(i->GetFixtureA()->GetUserData());
 			entt::entity entityB = ::EntityFromUserData(i->GetFixtureB()->GetUserData());
 
-			if (::DoesOverlap(i->GetFixtureA(), i->GetFixtureB()))
+			if (::DoesOverlap(i))
 			{
 				if (GetBoxType(entityA, collisionType) <= GetBoxType(entityB, collisionType))
 				{
-					_collisions.emplace_back(entityA, entityB);
+					collisions.emplace_back(entityA, entityB);
 				}
 				else
 				{
-					_collisions.emplace_back(entityB, entityA);
+					collisions.emplace_back(entityB, entityA);
 				}
 			}
 		}
 	}
 
-	return _collisions.size();
-}
-
-size_t ReTron::Collision::GetCollisionCount() const
-{
-	return _collisions.size();
-}
-
-std::pair<entt::entity, entt::entity> ReTron::Collision::GetCollision(size_t index) const
-{
-	return _collisions[index];
+	return collisions;
 }
 
 const std::vector<entt::entity>& ReTron::Collision::HitTest(
@@ -207,13 +211,8 @@ const std::vector<entt::entity>& ReTron::Collision::HitTest(
 	} callback(this, entities, boxTypeFilter, collisionType);
 
 	ff::RectFixedInt worldBounds = bounds * ::PIXEL_TO_WORLD_SCALE;
-
-	b2AABB aabb;
-	aabb.lowerBound.Set(worldBounds.left, worldBounds.top);
-	aabb.upperBound.Set(worldBounds.right, worldBounds.bottom);
-
 	b2World& world = _worlds[(size_t)collisionType];
-	world.QueryAABB(&callback, aabb);
+	world.QueryAABB(&callback, { { worldBounds.left, worldBounds.top }, { worldBounds.right, worldBounds.bottom } });
 
 	return entities;
 }
@@ -221,6 +220,7 @@ const std::vector<entt::entity>& ReTron::Collision::HitTest(
 std::tuple<entt::entity, ff::PointFixedInt, ff::PointFixedInt> ReTron::Collision::RayTest(
 	const ff::PointFixedInt& start,
 	const ff::PointFixedInt& end,
+	EntityBoxType boxTypeFilter,
 	CollisionBoxType collisionType)
 {
 	if (start == end)
@@ -236,8 +236,9 @@ std::tuple<entt::entity, ff::PointFixedInt, ff::PointFixedInt> ReTron::Collision
 	class Callback : public b2RayCastCallback
 	{
 	public:
-		Callback(Collision& collision, CollisionBoxType collisionType)
+		Callback(Collision& collision, EntityBoxType boxTypeFilter, CollisionBoxType collisionType)
 			: _collision(collision)
+			, _boxTypeFilter(boxTypeFilter)
 			, _collisionType(collisionType)
 			, _entity(entt::null)
 			, _point(ff::PointFixedInt::Zeros())
@@ -260,10 +261,9 @@ std::tuple<entt::entity, ff::PointFixedInt, ff::PointFixedInt> ReTron::Collision
 				return -1;
 			}
 
-			// Has to be a level box
 			entt::entity entity = ::EntityFromUserData(fixture->GetUserData());
 			EntityBoxType type = _collision.GetBoxType(entity, _collisionType);
-			if (type != EntityBoxType::Level)
+			if (_boxTypeFilter != EntityBoxType::None && _boxTypeFilter != type)
 			{
 				return -1;
 			}
@@ -277,15 +277,16 @@ std::tuple<entt::entity, ff::PointFixedInt, ff::PointFixedInt> ReTron::Collision
 		}
 
 		Collision& _collision;
+		EntityBoxType _boxTypeFilter;
 		CollisionBoxType _collisionType;
 		entt::entity _entity;
 		ff::PointFixedInt _point;
 		ff::PointFixedInt _normal;
 		float _fraction;
-	} callback(*this, collisionType);
+	} callback(*this, boxTypeFilter, collisionType);
 
 	b2World& world = _worlds[(size_t)collisionType];
-	world.RayCast(&callback, b2Vec2{ worldStart.x, worldStart.y }, b2Vec2{ worldEnd.x, worldEnd.y });
+	world.RayCast(&callback, { worldStart.x, worldStart.y }, { worldEnd.x, worldEnd.y });
 
 	return callback.GetResult();
 }
@@ -326,13 +327,16 @@ void ReTron::Collision::SetBox(entt::entity entity, const ff::RectFixedInt& rect
 {
 	switch (collisionType)
 	{
-	default:
 	case CollisionBoxType::HitBox:
 		_registry.emplace_or_replace<HitBoxSpecComponent>(entity, rect, type);
 		break;
 
 	case CollisionBoxType::BoundsBox:
 		_registry.emplace_or_replace<BoundsBoxSpecComponent>(entity, rect, type);
+		break;
+
+	default:
+		assert(false);
 		break;
 	}
 }
@@ -341,13 +345,16 @@ void ReTron::Collision::ResetBoxToDefault(entt::entity entity, CollisionBoxType 
 {
 	switch (collisionType)
 	{
-	default:
 	case CollisionBoxType::HitBox:
 		_registry.remove_if_exists<HitBoxSpecComponent>(entity);
 		break;
 
 	case CollisionBoxType::BoundsBox:
 		_registry.remove_if_exists<BoundsBoxSpecComponent>(entity);
+		break;
+
+	default:
+		assert(false);
 		break;
 	}
 
@@ -360,7 +367,6 @@ ff::RectFixedInt ReTron::Collision::GetBoxSpec(entt::entity entity, CollisionBox
 
 	switch (collisionType)
 	{
-	default:
 	case CollisionBoxType::HitBox:
 	{
 		BoxSpecComponent* spec = _registry.try_get<HitBoxSpecComponent>(entity);
@@ -374,6 +380,26 @@ ff::RectFixedInt ReTron::Collision::GetBoxSpec(entt::entity entity, CollisionBox
 		box = spec ? spec->_rect : ReTron::GetBoundsBoxSpec(_entities.GetType(entity));
 	}
 	break;
+
+	case CollisionBoxType::GruntAvoidBox:
+	{
+		const ff::RectFixedInt& gruntSpec = ReTron::GetBoundsBoxSpec(EntityType::Grunt);
+		box = GetBoxSpec(entity, CollisionBoxType::BoundsBox);
+
+		if (_entities.GetType(entity) == EntityType::LevelBounds)
+		{
+			return box.Deflate(-gruntSpec.left, -gruntSpec.top, gruntSpec.right, gruntSpec.bottom);
+		}
+		else
+		{
+			return box.Inflate(gruntSpec.right, gruntSpec.bottom, -gruntSpec.left, -gruntSpec.top);
+		}
+	}
+	break;
+
+	default:
+		assert(false);
+		return ff::RectFixedInt::Zeros();
 	}
 
 	return box * _position.GetScale(entity);
@@ -384,7 +410,8 @@ ff::RectFixedInt ReTron::Collision::GetBox(entt::entity entity, CollisionBoxType
 	b2Body* body = UpdateBox(entity, collisionType);
 	if (body)
 	{
-		return ::GetBox(body);
+		ff::RectFixedInt box = ::GetBox(body);
+		return NeedsLevelBoxAvoidSkin(entity, collisionType) ? box.Inflate(::LEVEL_BOX_AVOID_SKIN, ::LEVEL_BOX_AVOID_SKIN) : box;
 	}
 
 	ff::PointFixedInt pos = _position.GetPosition(entity);
@@ -403,6 +430,7 @@ ReTron::EntityBoxType ReTron::Collision::GetBoxType(entt::entity entity, Collisi
 		break;
 
 	case CollisionBoxType::BoundsBox:
+	case CollisionBoxType::GruntAvoidBox:
 		spec = _registry.try_get<BoundsBoxSpecComponent>(entity);
 		break;
 	}
@@ -410,10 +438,17 @@ ReTron::EntityBoxType ReTron::Collision::GetBoxType(entt::entity entity, Collisi
 	return spec ? spec->_type : ReTron::GetBoxType(_entities.GetType(entity));
 }
 
-template<typename BoxType>
-static void RenderDebug(entt::registry& registry, ff::PixelRendererActive& render, int thickness, int color, int colorHit)
+void ReTron::Collision::RenderDebug(ff::PixelRendererActive& render)
 {
-	for (auto [entity, hb] : registry.view<BoxType>().proxy())
+	RenderDebug<GruntAvoidBoxComponent>(render, CollisionBoxType::GruntAvoidBox, 1, 245, 248);
+	RenderDebug<BoundsBoxComponent>(render, CollisionBoxType::BoundsBox, 2, 245, 248);
+	RenderDebug<HitBoxComponent>(render, CollisionBoxType::HitBox, 1, 252, 232);
+}
+
+template<typename BoxType>
+void ReTron::Collision::RenderDebug(ff::PixelRendererActive& render, CollisionBoxType collisionType, int thickness, int color, int colorHit)
+{
+	for (auto [entity, hb] : _registry.view<BoxType>().proxy())
 	{
 		bool hit = false;
 		for (const b2ContactEdge* i = hb._body->GetContactList(); !hit && i; i = i->next)
@@ -421,15 +456,9 @@ static void RenderDebug(entt::registry& registry, ff::PixelRendererActive& rende
 			hit = i->contact->IsEnabled() && i->contact->IsTouching();
 		}
 
-		ff::RectFixedInt rect = ::GetBox(hb._body);
+		ff::RectFixedInt rect = GetBox(entity, collisionType);
 		render.DrawPaletteOutlineRectangle(rect.Inflate(thickness / 2, thickness / 2), hit ? colorHit : color, thickness);
 	}
-}
-
-void ReTron::Collision::RenderDebug(ff::PixelRendererActive& render)
-{
-	::RenderDebug<BoundsBoxComponent>(_registry, render, 2, 245, 248);
-	::RenderDebug<HitBoxComponent>(_registry, render, 1, 252, 232);
 }
 
 void ReTron::Collision::ResetBox(entt::entity entity, CollisionBoxType collisionType)
@@ -443,6 +472,8 @@ void ReTron::Collision::ResetBox(entt::entity entity, CollisionBoxType collision
 
 	case CollisionBoxType::BoundsBox:
 		_registry.remove_if_exists<BoundsBoxComponent>(entity);
+		_registry.remove_if_exists<GruntAvoidBoxComponent>(entity);
+		DirtyBox(entity, CollisionBoxType::GruntAvoidBox);
 		break;
 	}
 
@@ -451,7 +482,8 @@ void ReTron::Collision::ResetBox(entt::entity entity, CollisionBoxType collision
 
 void ReTron::Collision::DirtyBox(entt::entity entity, CollisionBoxType collisionType)
 {
-	if (GetBoxType(entity, collisionType) != EntityBoxType::None)
+	const EntityBoxType type = GetBoxType(entity, collisionType);
+	if (type != EntityBoxType::None)
 	{
 		switch (collisionType)
 		{
@@ -462,6 +494,13 @@ void ReTron::Collision::DirtyBox(entt::entity entity, CollisionBoxType collision
 
 		case CollisionBoxType::BoundsBox:
 			_registry.emplace_or_replace<BoundsDirtyComponent>(entity);
+			break;
+
+		case CollisionBoxType::GruntAvoidBox:
+			if (type == EntityBoxType::Level)
+			{
+				_registry.emplace_or_replace<GruntAvoidDirtyComponent>(entity);
+			}
 			break;
 		}
 	}
@@ -495,7 +534,14 @@ b2Body* ReTron::Collision::UpdateBox(entt::entity entity, ReTron::EntityBoxType 
 
 	if (!hb._body->GetFixtureList())
 	{
-		ff::RectFixedInt spec = GetBoxSpec(entity, collisionType) * ::PIXEL_TO_WORLD_SCALE;
+		ff::RectFixedInt spec = GetBoxSpec(entity, collisionType);
+		if (NeedsLevelBoxAvoidSkin(entity, collisionType))
+		{
+			spec = spec.Deflate(::LEVEL_BOX_AVOID_SKIN, ::LEVEL_BOX_AVOID_SKIN);
+		}
+
+		spec = spec * ::PIXEL_TO_WORLD_SCALE;
+
 		ff::PointFixedInt tl = spec.TopLeft();
 		ff::PointFixedInt br = spec.BottomRight();
 
@@ -555,13 +601,17 @@ b2Body* ReTron::Collision::UpdateBox(entt::entity entity, CollisionBoxType colli
 
 		case CollisionBoxType::BoundsBox:
 			return UpdateBox<BoundsBoxComponent, BoundsDirtyComponent>(entity, type, collisionType);
+
+		case CollisionBoxType::GruntAvoidBox:
+			return (type == EntityBoxType::Level)
+				? UpdateBox<GruntAvoidBoxComponent, GruntAvoidDirtyComponent>(entity, type, collisionType)
+				: UpdateBox<BoundsBoxComponent, BoundsDirtyComponent>(entity, type, collisionType);
 		}
 	}
 	else
 	{
 		switch (collisionType)
 		{
-		default:
 		case CollisionBoxType::HitBox:
 			_registry.remove_if_exists<HitBoxComponent>(entity);
 			_registry.remove_if_exists<HitDirtyComponent>(entity);
@@ -570,6 +620,15 @@ b2Body* ReTron::Collision::UpdateBox(entt::entity entity, CollisionBoxType colli
 		case CollisionBoxType::BoundsBox:
 			_registry.remove_if_exists<BoundsBoxComponent>(entity);
 			_registry.remove_if_exists<BoundsDirtyComponent>(entity);
+			break;
+
+		case CollisionBoxType::GruntAvoidBox:
+			_registry.remove_if_exists<GruntAvoidBoxComponent>(entity);
+			_registry.remove_if_exists<GruntAvoidDirtyComponent>(entity);
+			break;
+
+		default:
+			assert(false);
 			break;
 		}
 
@@ -581,7 +640,6 @@ void ReTron::Collision::UpdateDirtyBoxes(CollisionBoxType collisionType)
 {
 	switch (collisionType)
 	{
-	default:
 	case CollisionBoxType::HitBox:
 		for (entt::entity entity : _registry.view<HitDirtyComponent>())
 		{
@@ -595,49 +653,63 @@ void ReTron::Collision::UpdateDirtyBoxes(CollisionBoxType collisionType)
 			UpdateBox(entity, CollisionBoxType::BoundsBox);
 		}
 		break;
+
+	case CollisionBoxType::GruntAvoidBox:
+		for (entt::entity entity : _registry.view<GruntAvoidDirtyComponent>())
+		{
+			UpdateBox(entity, CollisionBoxType::GruntAvoidBox);
+		}
+		break;
+
+	default:
+		assert(false);
+		break;
 	}
 }
 
-void ReTron::Collision::OnHitBoxRemoved(entt::registry& registry, entt::entity entity)
+bool ReTron::Collision::NeedsLevelBoxAvoidSkin(entt::entity entity, CollisionBoxType collisionType)
 {
-	HitBoxComponent& hb = _registry.get<HitBoxComponent>(entity);
+	return collisionType == ReTron::CollisionBoxType::GruntAvoidBox && _entities.GetType(entity) == EntityType::LevelBox;
+}
+
+template<typename T>
+void ReTron::Collision::OnBoxRemoved(entt::registry& registry, entt::entity entity)
+{
+	BoxComponent& hb = _registry.get<T>(entity);
 	hb._body->GetWorld()->DestroyBody(hb._body);
 	hb._body = nullptr;
 }
 
-void ReTron::Collision::OnHitBoxSpecChanged(entt::registry& registry, entt::entity entity)
+template<ReTron::CollisionBoxType T>
+void ReTron::Collision::OnBoxSpecChanged(entt::registry& registry, entt::entity entity)
 {
-	ResetBox(entity, CollisionBoxType::HitBox);
+	ResetBox(entity, T);
 }
 
 void ReTron::Collision::OnBoundsBoxRemoved(entt::registry& registry, entt::entity entity)
 {
-	BoundsBoxComponent& bb = _registry.get<BoundsBoxComponent>(entity);
-	bb._body->GetWorld()->DestroyBody(bb._body);
-	bb._body = nullptr;
-}
-
-void ReTron::Collision::OnBoundsBoxSpecChanged(entt::registry& registry, entt::entity entity)
-{
-	ResetBox(entity, CollisionBoxType::BoundsBox);
+	_registry.remove_if_exists<GruntAvoidBoxComponent>(entity);
 }
 
 void ReTron::Collision::OnEntityCreated(entt::entity entity)
 {
-	DirtyBox(entity, CollisionBoxType::HitBox);
-	DirtyBox(entity, CollisionBoxType::BoundsBox);
+	OnPositionChanged(entity);
 }
 
 void ReTron::Collision::OnPositionChanged(entt::entity entity)
 {
-	DirtyBox(entity, CollisionBoxType::HitBox);
-	DirtyBox(entity, CollisionBoxType::BoundsBox);
+	for (CollisionBoxType type : ::CollisionBoxTypes)
+	{
+		DirtyBox(entity, type);
+	}
 }
 
 void ReTron::Collision::OnScaleChanged(entt::entity entity)
 {
-	ResetBox(entity, CollisionBoxType::HitBox);
-	ResetBox(entity, CollisionBoxType::BoundsBox);
+	for (CollisionBoxType type : ::CollisionBoxTypes)
+	{
+		ResetBox(entity, type);
+	}
 }
 
 ReTron::Collision::HitFilter::HitFilter(Collision* collision)

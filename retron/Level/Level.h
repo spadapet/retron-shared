@@ -48,9 +48,10 @@ namespace ReTron
 		void RenderElectrode(entt::entity entity, ff::PixelRendererActive& render);
 		void RenderHulk(entt::entity entity, ff::PixelRendererActive& render);
 		void RenderGrunt(entt::entity entity, ff::PixelRendererActive& render);
+		void RenderDebug(ff::PixelRendererActive& render);
 
 		size_t PickGruntMoveCounter();
-		ff::PointFixedInt PickMoveDestination(entt::entity entity, entt::entity destEntity);
+		ff::PointFixedInt PickMoveDestination(entt::entity entity, entt::entity destEntity, CollisionBoxType collisionType);
 
 		template<typename... Args>
 		void EnumEntities(entt::delegate<void(entt::entity, EntityType, Args&&...)> func, Args&&... args);
@@ -65,6 +66,7 @@ namespace ReTron
 		entt::delegate<void(entt::entity, EntityType)> _advanceCallback;
 		entt::delegate<void(entt::entity, EntityType, ff::PixelRendererActive&)> _renderCallback;
 		std::forward_list<entt::scoped_connection> _connections;
+		std::vector<std::pair<entt::entity, entt::entity>> _collisions;
 		std::vector<entt::entity> _hits;
 
 		Entities _entities;
