@@ -5,7 +5,7 @@
     <ProjectName>ReTron</ProjectName>
     <ProjectGuid>{9CD231EF-367F-47D8-8F5E-7CF37C648E39}</ProjectGuid>
   </PropertyGroup>
-  <Import Project="..\ffcore\msbuild\cpp.props" />
+  <Import Project="..\vendor\ffcore\msbuild\cpp.props" />
   <PropertyGroup>
     <AdditionalResJsonInputs>$(DevRoot)retron.designer\**\*.xaml;$(DevRoot)retron.designer\**\*.ttf;$(DevRoot)retron.designer\**\*.png</AdditionalResJsonInputs>
   </PropertyGroup>

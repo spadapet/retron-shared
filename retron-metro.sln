@@ -6,22 +6,22 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{E1ABBA80-AB79-45AC-B565-C7E91FCA9339}"
 	ProjectSection(SolutionItems) = preProject
 		build.props = build.props
-		ffcore\msbuild\cpp.props = ffcore\msbuild\cpp.props
-		ffcore\msbuild\cpp.targets = ffcore\msbuild\cpp.targets
-		ffcore\msbuild\cpp.xml = ffcore\msbuild\cpp.xml
+		vendor\ffcore\msbuild\cpp.props = vendor\ffcore\msbuild\cpp.props
+		vendor\ffcore\msbuild\cpp.targets = vendor\ffcore\msbuild\cpp.targets
+		vendor\ffcore\msbuild\cpp.xml = vendor\ffcore\msbuild\cpp.xml
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReTron", "retron\retron-metro.vcxproj", "{857BF46A-94E0-4C02-A857-DF0AD4A75870}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReTron.Designer", "retron.designer\ReTron.Designer.csproj", "{9D9345C4-576B-43F4-84C3-1F2FC4EB6483}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "ffcore\core\util\util-metro.vcxproj", "{EFF8144D-F91E-4BBD-B09B-D6DB6B3A5512}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "vendor\ffcore\core\util\util-metro.vcxproj", "{EFF8144D-F91E-4BBD-B09B-D6DB6B3A5512}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.dxtex", "ffcore\core\dxtex\dxtex-metro.vcxproj", "{D6F468CF-1B2B-46E1-91DD-2C36AC216E7A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.dxtex", "vendor\ffcore\core\dxtex\dxtex-metro.vcxproj", "{D6F468CF-1B2B-46E1-91DD-2C36AC216E7A}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.zlib", "ffcore\core\zlib\zlib-metro.vcxproj", "{49F8C1B7-6D04-44B7-82BA-A813D826B2F1}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.zlib", "vendor\ffcore\core\zlib\zlib-metro.vcxproj", "{49F8C1B7-6D04-44B7-82BA-A813D826B2F1}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.libpng", "ffcore\core\libpng\libpng-metro.vcxproj", "{DAB734EE-9037-4B24-ADCA-A6DC9D0D66DC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.libpng", "vendor\ffcore\core\libpng\libpng-metro.vcxproj", "{DAB734EE-9037-4B24-ADCA-A6DC9D0D66DC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.box2d", "vendor\box2d-metro.vcxproj", "{254AAF2E-8FFD-43B2-B00B-8E351D2C1012}"
 EndProject

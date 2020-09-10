@@ -6,22 +6,22 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{E1ABBA80-AB79-45AC-B565-C7E91FCA9339}"
 	ProjectSection(SolutionItems) = preProject
 		build.props = build.props
-		ffcore\msbuild\cpp.props = ffcore\msbuild\cpp.props
-		ffcore\msbuild\cpp.targets = ffcore\msbuild\cpp.targets
-		ffcore\msbuild\cpp.xml = ffcore\msbuild\cpp.xml
+		vendor\ffcore\msbuild\cpp.props = vendor\ffcore\msbuild\cpp.props
+		vendor\ffcore\msbuild\cpp.targets = vendor\ffcore\msbuild\cpp.targets
+		vendor\ffcore\msbuild\cpp.xml = vendor\ffcore\msbuild\cpp.xml
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReTron", "retron\retron-desktop.vcxproj", "{9CD231EF-367F-47D8-8F5E-7CF37C648E39}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReTron.Designer", "retron.designer\ReTron.Designer.csproj", "{9D9345C4-576B-43F4-84C3-1F2FC4EB6483}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.dxtex", "ffcore\core\dxtex\dxtex.vcxproj", "{FB3FBBCF-8CF9-4C53-8BAA-D451F3F79B42}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.dxtex", "vendor\ffcore\core\dxtex\dxtex.vcxproj", "{FB3FBBCF-8CF9-4C53-8BAA-D451F3F79B42}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.libpng", "ffcore\core\libpng\libpng.vcxproj", "{20AD1CF4-69EF-49F3-B258-01903326BF25}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.libpng", "vendor\ffcore\core\libpng\libpng.vcxproj", "{20AD1CF4-69EF-49F3-B258-01903326BF25}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "ffcore\core\util\util.vcxproj", "{8877EF09-1CDD-4E67-95BA-58E3B251B7D8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "vendor\ffcore\core\util\util.vcxproj", "{8877EF09-1CDD-4E67-95BA-58E3B251B7D8}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.zlib", "ffcore\core\zlib\zlib.vcxproj", "{968D9F08-835D-4844-A809-51A3EFB915AC}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.zlib", "vendor\ffcore\core\zlib\zlib.vcxproj", "{968D9F08-835D-4844-A809-51A3EFB915AC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.box2d", "vendor\box2d-desktop.vcxproj", "{3DFEDC2B-4438-4CF7-8DA4-733623CB8F47}"
 EndProject

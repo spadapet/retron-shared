@@ -50,19 +50,16 @@
     <ClCompile Include="Core\Audio.cpp">
       <Filter>Core</Filter>
     </ClCompile>
-    <ClCompile Include="Level\CollisionSystem.cpp">
+    <ClCompile Include="Level\Collision.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
+    <ClCompile Include="Level\Entities.cpp">
       <Filter>Level</Filter>
     </ClCompile>
     <ClCompile Include="Level\Level.cpp">
       <Filter>Level</Filter>
     </ClCompile>
-    <ClCompile Include="Level\PositionSystem.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
-    <ClCompile Include="Level\Entity.cpp">
-      <Filter>Level</Filter>
-    </ClCompile>
-    <ClCompile Include="Level\EntitySystem.cpp">
+    <ClCompile Include="Level\Position.cpp">
       <Filter>Level</Filter>
     </ClCompile>
   </ItemGroup>
@@ -112,15 +109,6 @@
     <ClInclude Include="Core\Audio.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Level\CollisionSystem.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Level\Level.h">
-      <Filter>Level</Filter>
-    </ClInclude>
-    <ClInclude Include="Level\PositionSystem.h">
-      <Filter>Level</Filter>
-    </ClInclude>
     <ClInclude Include="Core\AppService.h">
       <Filter>Core</Filter>
     </ClInclude>
@@ -130,10 +118,16 @@
     <ClInclude Include="Core\LevelService.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Level\Entity.h">
+    <ClInclude Include="Level\Collision.h">
       <Filter>Level</Filter>
     </ClInclude>
-    <ClInclude Include="Level\EntitySystem.h">
+    <ClInclude Include="Level\Entities.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\Level.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\Position.h">
       <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>
@@ -143,9 +137,6 @@
     </None>
     <None Include="$(FFCoreRoot)core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll">
       <Filter>Assets\Build</Filter>
-    </None>
-    <None Include="Assets\Assets.Graphics.res.json">
-      <Filter>Assets</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -342,6 +333,9 @@
       <Filter>Assets</Filter>
     </ResJson>
     <ResJson Include="Assets\Assets.Xaml.res.json">
+      <Filter>Assets</Filter>
+    </ResJson>
+    <ResJson Include="Assets\Assets.Graphics.res.json">
       <Filter>Assets</Filter>
     </ResJson>
   </ItemGroup>
