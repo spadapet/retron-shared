@@ -57,8 +57,17 @@ namespace Random
 {
 	int Positive();
 	int Sign(); // -1 or 1
-	int RangeInt(int start, int end);
-	size_t RangeSize(size_t start, size_t end);
+
+	int Range(int start, int end);
+	ff::FixedInt Range(ff::FixedInt start, ff::FixedInt end);
+	size_t Range(size_t start, size_t end);
+	float Range(float start, float afterEnd);
+
+	template<typename T>
+	T Range(const std::pair<T, T>& range)
+	{
+		return Random::Range(range.first, range.second);
+	}
 }
 
 namespace Helpers

@@ -10,8 +10,8 @@ ReTron::EntityBoxType ReTron::GetBoxType(EntityType type)
 	static EntityBoxType types[] =
 	{
 		EntityBoxType::None, // None
-		EntityBoxType::Player, // Player
 		EntityBoxType::PlayerBullet, // PlayerBullet
+		EntityBoxType::Player, // Player
 		EntityBoxType::Bonus, // BonusWoman
 		EntityBoxType::Bonus, // BonusMan
 		EntityBoxType::Bonus, // BonusChild
@@ -32,8 +32,8 @@ const ff::RectFixedInt& ReTron::GetHitBoxSpec(EntityType type)
 	static ff::RectFixedInt rects[] =
 	{
 		ff::RectFixedInt::Zeros(), // None
-		ff::RectFixedInt(-5, -12, 5, 0), // Player
-		ff::RectFixedInt(-9, -1, 1, 1), // PlayerBullet
+		ff::RectFixedInt(-8, -1, 0, 1), // PlayerBullet
+		ff::RectFixedInt(-4, -14, 5, 0), // Player
 		ff::RectFixedInt(-4, -8, 4, 0), // BonusWoman
 		ff::RectFixedInt(-4, -8, 4, 0), // BonusMan
 		ff::RectFixedInt(-4, -8, 4, 0), // BonusChild
@@ -54,8 +54,8 @@ const ff::RectFixedInt& ReTron::GetBoundsBoxSpec(EntityType type)
 	static ff::RectFixedInt rects[] =
 	{
 		ff::RectFixedInt::Zeros(), // None
-		ff::RectFixedInt(-5, -12, 5, 0), // Player
-		ff::RectFixedInt(-9, -1, 1, 1), // PlayerBullet
+		ff::RectFixedInt(-8, -1, 0, 1), // PlayerBullet
+		ff::RectFixedInt(-4, -14, 5, 0), // Player
 		ff::RectFixedInt(-5, -12, 5, 0), // BonusWoman
 		ff::RectFixedInt(-5, -12, 5, 0), // BonusMan
 		ff::RectFixedInt(-5, -12, 5, 0), // BonusChild

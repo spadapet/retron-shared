@@ -2,18 +2,31 @@
 #include "Core/AppService.h"
 #include "Core/GameService.h"
 #include "Core/LevelService.h"
+#include "Graph/Anim/Animation.h"
 #include "Graph/Anim/Transform.h"
 #include "Graph/Render/PixelRenderer.h"
 #include "Graph/Render/Renderer.h"
 #include "Graph/Render/RendererActive.h"
 #include "Graph/Sprite/Sprite.h"
+#include "Graph/Texture/Palette.h"
 #include "Input/InputMapping.h"
 #include "Level/Level.h"
+#include "Resource/Resources.h"
+
+static ff::StaticString LEVEL_PARTICLES(L"LevelParticles");
+static ff::StaticString PARTICLES_EnterPlayer(L"EnterPlayer");
+static ff::StaticString PARTICLES_PlayerBulletHitBounds(L"PlayerBulletHitBounds");
 
 struct PlayerData
 {
 	size_t _indexInLevel;
 	size_t _shotCounter;
+	int _enterParticleEffect;
+};
+
+struct PlayerBulletData
+{
+	entt::entity _player;
 };
 
 struct GruntData
@@ -25,13 +38,19 @@ struct GruntData
 
 ReTron::Level::Level(ILevelService* levelService)
 	: _levelService(levelService)
-	, _difficultySpec(levelService->GetGameService()->GetDifficultySpec())
+	, _gameService(levelService->GetGameService())
+	, _appService(_gameService->GetAppService())
+	, _gameSpec(_appService->GetGameSpec())
+	, _levelSpec(levelService->GetLevelSpec())
+	, _difficultySpec(_gameService->GetDifficultySpec())
+	, _frames(0)
 	, _entities(_registry)
 	, _position(_registry)
 	, _collision(_registry, _position, _entities)
-	, _frames(0)
-	, _playerBulletSprite(L"sprites.player-bullet")
 {
+	InitResources();
+
+	_connections.emplace_front(_appService->GetReloadResourcesSink().connect<&Level::InitResources>(this));
 	_advanceCallback.connect<&Level::AdvanceEntity>(this);
 	_renderCallback.connect<&Level::RenderEntity>(this);
 
@@ -40,12 +59,10 @@ ReTron::Level::Level(ILevelService* levelService)
 		CreatePlayer(i);
 	}
 
-	const LevelSpec& spec = _levelService->GetLevelSpec();
-
 	std::vector<ff::RectFixedInt> avoidRects;
-	avoidRects.reserve(spec._rects.size());
+	avoidRects.reserve(_levelSpec._rects.size());
 
-	for (const LevelRect& levelRect : spec._rects)
+	for (const LevelRect& levelRect : _levelSpec._rects)
 	{
 		switch (levelRect._type)
 		{
@@ -64,7 +81,7 @@ ReTron::Level::Level(ILevelService* levelService)
 		}
 	}
 
-	for (const LevelObjectsSpec& objSpec : spec._objects)
+	for (const LevelObjectsSpec& objSpec : _levelSpec._objects)
 	{
 		CreateObjects(objSpec._bonusWoman, EntityType::BonusWoman, objSpec._rect, avoidRects);
 		CreateObjects(objSpec._bonusMan, EntityType::BonusMan, objSpec._rect, avoidRects);
@@ -83,21 +100,33 @@ void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 {
 	_frames++;
 
+	ff::AtScope particleScope = _particles.AdvanceAsync();
 	EnumEntities(_advanceCallback);
 	HandleCollisions();
-
 	_entities.FlushDelete();
 }
 
 void ReTron::Level::Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, ff::RectFixedInt targetRect, ff::RectFixedInt cameraRect)
 {
-	ff::RendererActive renderActive = ff::PixelRendererActive::BeginRender(_levelService->GetGameService()->GetAppService()->GetRenderer(), target, depth, targetRect, cameraRect);
-	EnumEntities<ff::PixelRendererActive&>(_renderCallback, ff::PixelRendererActive(renderActive));
+	ff::RendererActive renderActive = ff::PixelRendererActive::BeginRender(_appService->GetRenderer(), target, depth, targetRect, cameraRect);
+	ff::PixelRendererActive pixelRender(renderActive);
 
-	if (_levelService->GetGameService()->GetAppService()->ShouldRenderDebug())
-	{
-		RenderDebug(ff::PixelRendererActive(renderActive));
-	}
+	EnumEntities<ff::PixelRendererActive&>(_renderCallback, pixelRender);
+	RenderParticles(pixelRender);
+	RenderDebug(pixelRender);
+}
+
+void ReTron::Level::InitResources()
+{
+	_playerSprite.Init(L"sprites.player");
+	_playerBulletSprite.Init(L"sprites.player-bullet");
+
+	ff::AutoResourceValue levelParticlesRes(_appService->GetResources(), ::LEVEL_PARTICLES);
+	ff::ValuePtrT<ff::DictValue> levelParticlesValue = levelParticlesRes.Flush();
+	ff::Dict levelParticlesDict = levelParticlesValue.GetValue();
+
+	_playerBulletHitBoundsParticles = Particles::Effect(levelParticlesDict.GetValue(::PARTICLES_PlayerBulletHitBounds));
+	_playerEnterParticles = Particles::Effect(levelParticlesDict.GetValue(::PARTICLES_EnterPlayer));
 }
 
 entt::entity ReTron::Level::CreateEntity(EntityType type, const ff::PointFixedInt& pos)
@@ -117,19 +146,21 @@ entt::entity ReTron::Level::CreateEntity(EntityType type, const ff::PointFixedIn
 
 entt::entity ReTron::Level::CreatePlayer(size_t indexInLevel)
 {
-	ff::PointFixedInt pos = _levelService->GetLevelSpec()._playerStart;
+	ff::PointFixedInt pos = _levelSpec._playerStart;
 	pos.x += indexInLevel * 16 - _levelService->GetPlayerCount() * 8 + 8;
 
 	entt::entity entity = CreateEntity(EntityType::Player, pos);
-	_registry.emplace<PlayerData>(entity, indexInLevel);
+	int effectId = _playerEnterParticles.Add(_particles, pos.Offset(0, -6));
+	_registry.emplace<PlayerData>(entity, PlayerData{ indexInLevel, 0, effectId });
 
 	return entity;
 }
 
-entt::entity ReTron::Level::CreatePlayerBullet(ff::PointFixedInt shotPos, ff::PointFixedInt shotDir)
+entt::entity ReTron::Level::CreatePlayerBullet(entt::entity player, ff::PointFixedInt shotPos, ff::PointFixedInt shotDir)
 {
 	ff::PointFixedInt vel(_difficultySpec._playerShotMove * shotDir.x, _difficultySpec._playerShotMove * shotDir.y);
 	entt::entity entity = CreateEntity(EntityType::PlayerBullet, shotPos + vel);
+	_registry.emplace<PlayerBulletData>(entity, player);
 
 	_position.SetVelocity(entity, vel);
 	_position.SetRotation(entity, Helpers::DirToDegrees(shotDir));
@@ -207,15 +238,19 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 	PlayerData& playerData = _registry.get<PlayerData>(entity);
 	Player& player = _levelService->GetPlayer(playerData._indexInLevel);
 
-	const ff::InputDevices& inputDevices = _levelService->GetGameService()->GetInputDevices(player);
-	const ff::IInputEvents* inputEvents = _levelService->GetGameService()->GetInputEvents(player);
-	const ff::FixedInt dirScale = 1.5_f;
+	const ff::InputDevices& inputDevices = _gameService->GetInputDevices(player);
+	const ff::IInputEvents* inputEvents = _gameService->GetInputEvents(player);
 
 	ff::RectFixedInt dirPress(
-		dirScale * inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_LEFT),
-		dirScale * inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_UP),
-		dirScale * inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_RIGHT),
-		dirScale * inputEvents->GetDigitalValue(inputDevices, InputEvents::ID_DOWN));
+		inputEvents->GetAnalogValue(inputDevices, InputEvents::ID_LEFT),
+		inputEvents->GetAnalogValue(inputDevices, InputEvents::ID_UP),
+		inputEvents->GetAnalogValue(inputDevices, InputEvents::ID_RIGHT),
+		inputEvents->GetAnalogValue(inputDevices, InputEvents::ID_DOWN));
+
+	dirPress.left = (dirPress.left >= _gameSpec._joystickMin) ? dirPress.left * _difficultySpec._playerMove : 0_f;
+	dirPress.top = (dirPress.top >= _gameSpec._joystickMin) ? dirPress.top * _difficultySpec._playerMove : 0_f;
+	dirPress.right = (dirPress.right >= _gameSpec._joystickMin) ? dirPress.right * _difficultySpec._playerMove : 0_f;
+	dirPress.bottom = (dirPress.bottom >= _gameSpec._joystickMin) ? dirPress.bottom * _difficultySpec._playerMove : 0_f;
 
 	ff::PointFixedInt dir = _position.GetDirection(entity);
 	dir.x = dirPress.left ? -1_f : (dirPress.right ? 1_f : dir.x);
@@ -225,6 +260,18 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 	ff::PointFixedInt pos = _position.GetPosition(entity);
 	pos = pos.Offset(dirPress.right - dirPress.left, dirPress.bottom - dirPress.top);
 	_position.SetPosition(entity, pos);
+
+	if (playerData._enterParticleEffect)
+	{
+		if (_particles.IsEffectActive(playerData._enterParticleEffect))
+		{
+			_particles.SetEffectPosition(playerData._enterParticleEffect, pos.Offset(0, -6));
+		}
+		else
+		{
+			playerData._enterParticleEffect = 0;
+		}
+	}
 
 	if (playerData._shotCounter)
 	{
@@ -249,7 +296,7 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 				shotPress.left ? -1 : (shotPress.right ? 1 : 0),
 				shotPress.top ? -1 : (shotPress.bottom ? 1 : 0));
 
-			CreatePlayerBullet(shotPos, shotDir);
+			CreatePlayerBullet(entity, shotPos, shotDir);
 		}
 	}
 }
@@ -298,20 +345,11 @@ void ReTron::Level::HandleCollisions()
 
 void ReTron::Level::HandleBoundsCollision(entt::entity entity1, entt::entity entity2)
 {
-	EntityType entityType = _entities.GetType(entity1);
-	switch (entityType)
-	{
-	case EntityType::PlayerBullet:
-		_entities.DelayDelete(entity1);
-		break;
-	}
-
 	ff::RectFixedInt oldRect = _collision.GetBox(entity1, CollisionBoxType::BoundsBox);
 	ff::RectFixedInt newRect = oldRect;
 
 	ff::RectFixedInt levelRect = _collision.GetBox(entity2, CollisionBoxType::BoundsBox);
 	EntityType levelType = _entities.GetType(entity2);
-
 	switch (levelType)
 	{
 	case EntityType::LevelBounds:
@@ -324,7 +362,42 @@ void ReTron::Level::HandleBoundsCollision(entt::entity entity1, entt::entity ent
 	}
 
 	ff::PointFixedInt offset = newRect.TopLeft() - oldRect.TopLeft();
-	_position.SetPosition(entity1, _position.GetPosition(entity1) + offset);
+	ff::PointFixedInt pos = _position.GetPosition(entity1) + offset;
+	_position.SetPosition(entity1, pos);
+
+	switch (_entities.GetType(entity1))
+	{
+	case EntityType::PlayerBullet:
+		HandlePlayerBulletBoundsCollision(entity1);
+		break;
+	}
+}
+
+void ReTron::Level::HandlePlayerBulletBoundsCollision(entt::entity entity)
+{
+	_entities.DelayDelete(entity);
+
+	ff::PointFixedInt vel = _position.GetVelocity(entity);
+	ff::FixedInt angle = _position.GetReverseVelocityAsAngle(entity);
+	ff::PointFixedInt pos = _position.GetPosition(entity);
+	ff::PointFixedInt pos2(pos.x + (vel.x ? std::copysign(1_f, vel.x) : 0_f), pos.y + (vel.y ? std::copysign(1_f, vel.y) : 0_f));
+	std::array<ff::PointFixedInt, 2> posArray{ pos, pos2 };
+
+	Particles::EffectOptions options;
+	options._angle = std::make_pair(angle - 60_f, angle + 60_f);
+
+	// Set palette for bullet particles
+	{
+		PlayerBulletData& bulletData = _registry.get<PlayerBulletData>(entity);
+		PlayerData* playerData = _registry.valid(bulletData._player) ? _registry.try_get<PlayerData>(bulletData._player) : nullptr;
+		if (playerData)
+		{
+			Player& player = _levelService->GetPlayer(playerData->_indexInLevel);
+			options._type = static_cast<uint8_t>(player._index);
+		}
+	}
+
+	_playerBulletHitBoundsParticles.Add(_particles, posArray.data(), posArray.size(), &options);
 }
 
 void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity entity2)
@@ -357,6 +430,27 @@ void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity ent
 			break;
 		}
 		break;
+	}
+}
+
+void ReTron::Level::RenderParticles(ff::PixelRendererActive& render)
+{
+	// Render particles for the default palette, which includes player 0
+	_particles.Render(render, 0);
+
+	// Render particles for other players
+	for (size_t i = 0; i < _levelService->GetPlayerCount(); i++)
+	{
+		Player& player = _levelService->GetPlayer(i);
+		if (player._index)
+		{
+			ff::IPalette* palette = _appService->GetPlayerPalette(player._index);
+			render.GetRenderer()->PushPaletteRemap(palette->GetRemap(), palette->GetRemapHash());
+
+			_particles.Render(render, static_cast<uint8_t>(player._index));
+
+			render.GetRenderer()->PopPaletteRemap();
+		}
 	}
 }
 
@@ -396,22 +490,24 @@ void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::Pixel
 			(type == EntityType::LevelBounds) ? -Constants::LEVEL_BORDER_THICKNESS : Constants::LEVEL_BOX_THICKNESS);
 		break;
 	}
-
 }
 
 void ReTron::Level::RenderPlayer(entt::entity entity, ff::PixelRendererActive& render)
 {
-	ff::PointFixedInt pos = _position.GetPosition(entity);
-	render.DrawPaletteFilledCircle(pos.Offset(0, -4), 4, 236);
+	PlayerData& playerData = _registry.get<PlayerData>(entity);
+	Player& player = _levelService->GetPlayer(playerData._indexInLevel);
+
+	ff::IPalette* palette = _appService->GetPlayerPalette(player._index);
+	render.GetRenderer()->PushPaletteRemap(palette->GetRemap(), palette->GetRemapHash());
+
+	RenderAnimation(entity, render, _playerSprite.Flush(), 0);
+
+	render.GetRenderer()->PopPaletteRemap();
 }
 
 void ReTron::Level::RenderPlayerBullet(entt::entity entity, ff::PixelRendererActive& render)
 {
-	ff::PointFixedInt pos = _position.GetPosition(entity);
-	ff::PointFixedInt scale = _position.GetScale(entity);
-	ff::FixedInt rotation = _position.GetRotation(entity);
-
-	render.DrawSprite(_playerBulletSprite.Flush(), ff::PixelTransform::Create(pos, scale, rotation));
+	RenderAnimation(entity, render, _playerBulletSprite.Flush(), 0);
 }
 
 void ReTron::Level::RenderBonus(entt::entity entity, EntityType type, ff::PixelRendererActive& render)
@@ -445,21 +541,33 @@ void ReTron::Level::RenderGrunt(entt::entity entity, ff::PixelRendererActive& re
 	render.DrawPaletteFilledRectangle(_collision.GetBox(entity, CollisionBoxType::HitBox), 248);
 }
 
+void ReTron::Level::RenderAnimation(entt::entity entity, ff::PixelRendererActive& render, ff::IAnimation* anim, ff::FixedInt frame)
+{
+	ff::PointFloat pos = _position.GetPosition(entity).ToType<int>().ToType<float>();
+	ff::PointFloat scale = _position.GetScale(entity).ToType<float>();
+	ff::FixedInt rotation = _position.GetRotation(entity);
+
+	anim->RenderFrame(render.GetRenderer(), ff::Transform::Create(pos, scale, rotation), frame);
+}
+
 void ReTron::Level::RenderDebug(ff::PixelRendererActive& render)
 {
-	for (auto [entity, data] : _registry.view<GruntData>().proxy())
+	if (_appService->ShouldRenderDebug())
 	{
-		render.DrawPaletteLine(_position.GetPosition(entity), data._destPos, 245, 1);
-	}
+		for (auto [entity, data] : _registry.view<GruntData>().proxy())
+		{
+			render.DrawPaletteLine(_position.GetPosition(entity), data._destPos, 245, 1);
+		}
 
-	_collision.RenderDebug(render);
-	_position.RenderDebug(render);
+		_collision.RenderDebug(render);
+		_position.RenderDebug(render);
+	}
 }
 
 size_t ReTron::Level::PickGruntMoveCounter()
 {
 	size_t i = std::min<size_t>(_frames / _difficultySpec._gruntMaxTicksRate, _difficultySpec._gruntMaxTicks - 1);
-	i = Random::RangeSize(1, _difficultySpec._gruntMaxTicks - i) * _difficultySpec._gruntTickFrames;
+	i = Random::Range(1u, _difficultySpec._gruntMaxTicks - i) * _difficultySpec._gruntTickFrames;
 	return std::max<size_t>(i, _difficultySpec._gruntMinTicks);
 }
 

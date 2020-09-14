@@ -6,6 +6,76 @@
     "mips": 1,
     "sprites":
     {
+      "player":
+      {
+        "file": "file:Graphics/player.png",
+        "pos": [ 0, 0 ],
+        "size": [ 9, 15 ],
+        "handle": [ 4, 15 ]
+      },
+      "player-part0":
+      {
+        "file": "file:Graphics/player.png",
+        "pos": [ 10, 0 ],
+        "size": [ 9, 15 ],
+        "handle": [ 2, 2 ]
+      },
+      "player-part1":
+      {
+        "file": "file:Graphics/player.png",
+        "pos": [ 20, 0 ],
+        "size": [ 9, 15 ],
+        "handle": [ 6, 2 ]
+      },
+      "player-part2":
+      {
+        "file": "file:Graphics/player.png",
+        "pos": [ 30, 0 ],
+        "size": [ 9, 15 ],
+        "handle": [ 4, 5 ]
+      },
+      "player-part3":
+      {
+        "file": "file:Graphics/player.png",
+        "pos": [ 40, 0 ],
+        "size": [ 9, 15 ],
+        "handle": [ 4, 3 ]
+      },
+      "player-part4":
+      {
+        "file": "file:Graphics/player.png",
+        "pos": [ 50, 0 ],
+        "size": [ 9, 15 ],
+        "handle": [ 4, 10 ]
+      },
+      "player-part5":
+      {
+        "file": "file:Graphics/player.png",
+        "pos": [ 60, 0 ],
+        "size": [ 9, 15 ],
+        "handle": [ 3, 12 ]
+      },
+      "player-part6":
+      {
+        "file": "file:Graphics/player.png",
+        "pos": [ 70, 0 ],
+        "size": [ 9, 15 ],
+        "handle": [ 5, 12 ]
+      },
+      "player-part7":
+      {
+        "file": "file:Graphics/player.png",
+        "pos": [ 80, 0 ],
+        "size": [ 9, 15 ],
+        "handle": [ 1, 9 ]
+      },
+      "player-part8":
+      {
+        "file": "file:Graphics/player.png",
+        "pos": [ 90, 0 ],
+        "size": [ 9, 15 ],
+        "handle": [ 7, 9 ]
+      },
       "player-bullet":
       {
         "file": "file:Graphics/player-bullet.png",
@@ -16,10 +86,78 @@
         ],
         "handle":
         [
-          7,
+          8,
           1
         ]
       }
     }
+  },
+
+  "transition-bg-1.png":
+  {
+    "res:type": "texture",
+    "format": "pal",
+    "file": "file:transition-bg-1.png"
+  },
+
+  "transition-bg-2.png":
+  {
+    "res:type": "texture",
+    "format": "pal",
+    "file": "file:transition-bg-2.png"
+  },
+
+  "LevelParticles":
+  {
+    "PlayerBulletHitBounds":
+    [
+      {
+        "life": [ 8, 32 ],
+        "count": [ 32, 64 ],
+        "distance": [ 0, 4 ],
+        "velocity": [ 0.125, 1.5 ],
+        "colors": [ 232, 232, 233, 248, 249 ]
+      },
+      {
+        "life": [ 16, 24 ],
+        "count": [ 24, 32 ],
+        "distance": [ 2, 4 ],
+        "velocity": [ 0.0625, 0.25 ],
+        "angle": [ 0, 360 ],
+        "colors": [ 229, 230, 230 ]
+      }
+    ],
+
+    "EnterPlayer":
+    [
+      {
+        "life": [ 32, 128 ],
+        "delay": [ 0, 32 ],
+        "count": [ 32, 32 ],
+        "distance": [ 0, 8 ],
+        "velocity": [ 0.5, 2 ],
+        "animations": [ "ref:sprites.player-part0", "ref:sprites.player-part1", "ref:sprites.player-part2", "ref:sprites.player-part3", "ref:sprites.player-part4", "ref:sprites.player-part5", "ref:sprites.player-part6", "ref:sprites.player-part7", "ref:sprites.player-part8" ],
+        "angle": [ 0, 360 ],
+        "angleVelocity": [ 0.125, 1 ],
+        "spin": [ 0, 360 ],
+        "spinVelocity": [ 0.5, 4 ],
+        "scale": [ 0.25, 1 ],
+        "reverse": true
+      },
+
+      {
+        "life": [ 32, 128 ],
+        "delay": [ 0, 32 ],
+        "count": [ 64, 64],
+        "size": [ 1, 2 ],
+        "distance": [ 0, 8 ],
+        "velocity": [ 0.5, 2 ],
+        "colors": [ 112, 230, 231, 232, 233, 239 ],
+        "angle": [ 0, 360 ],
+        "angleVelocity": [ 0.125, 1 ],
+        "scale": [ 0.25, 1 ],
+        "reverse": true
+      },
+    ]
   }
 }

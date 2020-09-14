@@ -37,14 +37,24 @@ int Random::Sign()
 	return -std::uniform_int_distribution<int>{0, 1}(::randomEngine);
 }
 
-int Random::RangeInt(int start, int end)
+int Random::Range(int start, int end)
 {
 	return std::uniform_int_distribution<int>{start, end}(::randomEngine);
 }
 
-size_t Random::RangeSize(size_t start, size_t end)
+ff::FixedInt Random::Range(ff::FixedInt start, ff::FixedInt end)
+{
+	return ff::FixedInt::FromRaw(Random::Range(start.GetRaw(), end.GetRaw()));
+}
+
+size_t Random::Range(size_t start, size_t end)
 {
 	return std::uniform_int_distribution<size_t>{start, end}(::randomEngine);
+}
+
+float Random::Range(float start, float afterEnd)
+{
+	return std::uniform_real_distribution<float>{start, afterEnd}(::randomEngine);
 }
 
 ff::FixedInt Helpers::DirToDegrees(ff::PointFixedInt dir)

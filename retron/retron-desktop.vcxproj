@@ -37,6 +37,7 @@
     <ClCompile Include="Level\Collision.cpp" />
     <ClCompile Include="Level\Entities.cpp" />
     <ClCompile Include="Level\Level.cpp" />
+    <ClCompile Include="Level\Particles.cpp" />
     <ClCompile Include="Level\Position.cpp" />
     <ClCompile Include="States\DebugState.cpp" />
     <ClCompile Include="States\TransitionState.cpp" />
@@ -61,6 +62,7 @@
     <ClInclude Include="Level\Collision.h" />
     <ClInclude Include="Level\Entities.h" />
     <ClInclude Include="Level\Level.h" />
+    <ClInclude Include="Level\Particles.h" />
     <ClInclude Include="Level\Position.h" />
     <ClInclude Include="pch.h" />
     <ClCompile Include="Main.cpp" />

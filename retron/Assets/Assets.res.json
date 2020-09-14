@@ -302,6 +302,12 @@
         {
           "action":
           [
+            "i"
+          ]
+        },
+        {
+          "action":
+          [
             "joy-rup"
           ]
         }
@@ -312,6 +318,12 @@
           "action":
           [
             "down"
+          ]
+        },
+        {
+          "action":
+          [
+            "k"
           ]
         },
         {
@@ -332,6 +344,12 @@
         {
           "action":
           [
+            "j"
+          ]
+        },
+        {
+          "action":
+          [
             "joy-rleft"
           ]
         }
@@ -342,6 +360,12 @@
           "action":
           [
             "right"
+          ]
+        },
+        {
+          "action":
+          [
+            "l"
           ]
         },
         {
@@ -408,6 +432,9 @@
           "action": "up"
         },
         {
+          "action": "i"
+        },
+        {
           "action": "joy-rup"
         }
       ],
@@ -415,6 +442,9 @@
       [
         {
           "action": "down"
+        },
+        {
+          "action": "k"
         },
         {
           "action": "joy-rdown"
@@ -426,6 +456,9 @@
           "action": "left"
         },
         {
+          "action": "j"
+        },
+        {
           "action": "joy-rleft"
         }
       ],
@@ -435,172 +468,8 @@
           "action": "right"
         },
         {
-          "action": "joy-rright"
-        }
-      ]
-    }
-  },
-
-  "secondaryPlayerControls":
-  {
-    "res:type": "input",
-    "events":
-    {
-      "up":
-      [
-        {
-          "action":
-          [
-            "joy-lup"
-          ]
+          "action": "l"
         },
-        {
-          "action":
-          [
-            "joy-dup"
-          ]
-        }
-      ],
-      "down":
-      [
-        {
-          "action":
-          [
-            "joy-ldown"
-          ]
-        },
-        {
-          "action":
-          [
-            "joy-ddown"
-          ]
-        }
-      ],
-      "left":
-      [
-        {
-          "action":
-          [
-            "joy-lleft"
-          ]
-        },
-        {
-          "action":
-          [
-            "joy-dleft"
-          ]
-        }
-      ],
-      "right":
-      [
-        {
-          "action":
-          [
-            "joy-lright"
-          ]
-        },
-        {
-          "action":
-          [
-            "joy-dright"
-          ]
-        }
-      ],
-      "shoot-up":
-      [
-        {
-          "action":
-          [
-            "joy-rup"
-          ]
-        }
-      ],
-      "shoot-down":
-      [
-        {
-          "action":
-          [
-            "joy-rdown"
-          ]
-        }
-      ],
-      "shoot-left":
-      [
-        {
-          "action":
-          [
-            "joy-rleft"
-          ]
-        }
-      ],
-      "shoot-right":
-      [
-        {
-          "action":
-          [
-            "joy-rright"
-          ]
-        }
-      ]
-    },
-    "values":
-    {
-      "up":
-      [
-        {
-          "action": "joy-lup"
-        },
-        {
-          "action": "joy-dup"
-        }
-      ],
-      "down":
-      [
-        {
-          "action": "joy-ldown"
-        },
-        {
-          "action": "joy-ddown"
-        }
-      ],
-      "left":
-      [
-        {
-          "action": "joy-lleft"
-        },
-        {
-          "action": "joy-dleft"
-        }
-      ],
-      "right":
-      [
-        {
-          "action": "joy-lright"
-        },
-        {
-          "action": "joy-dright"
-        }
-      ],
-      "shoot-up":
-      [
-        {
-          "action": "joy-rup"
-        }
-      ],
-      "shoot-down":
-      [
-        {
-          "action": "joy-rdown"
-        }
-      ],
-      "shoot-left":
-      [
-        {
-          "action": "joy-rleft"
-        }
-      ],
-      "shoot-right":
-      [
         {
           "action": "joy-rright"
         }
@@ -665,10 +534,28 @@
     }
   },
 
-  "palette":
+  "palette-main":
   {
     "res:type": "palette",
-    "file": "file:PaletteCycle.png"
+    "file": "file:palette-main.png",
+
+    "remaps":
+    {
+      "player-0":
+      [
+      ],
+      "player-1":
+      [
+        [
+          232,
+          236
+        ],
+        [
+          248,
+          252
+        ]
+      ]
+    }
   },
 
   "GameFontData":
@@ -697,19 +584,5 @@
     "data": "ref:GameFontSmallData",
     "size": 6,
     "outline": 1
-  },
-
-  "transition-bg-1.png":
-  {
-    "res:type": "texture",
-    "format": "pal",
-    "file": "file:transition-bg-1.png"
-  },
-
-  "transition-bg-2.png":
-  {
-    "res:type": "texture",
-    "format": "pal",
-    "file": "file:transition-bg-2.png"
   }
 }

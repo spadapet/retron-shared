@@ -97,10 +97,8 @@ namespace ReTron
 
 		// Rendering
 		std::unique_ptr<ff::IRenderer> _render;
-		ff::ComPtr<ff::IPalette> _palette;
-		ff::TypedResource<ff::IPaletteData> _paletteData;
 		std::array<ff::ComPtr<ff::IPalette>, Constants::MAX_PLAYERS> _playerPalettes;
-		std::array<ff::TypedResource<ff::IPaletteData>, Constants::MAX_PLAYERS> _playerPaletteDatas;
+		ff::TypedResource<ff::IPaletteData> _paletteData;
 		ff::Viewport _viewport;
 
 		// Audio

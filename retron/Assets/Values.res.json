@@ -8,7 +8,9 @@
 
       "app":
       {
-        "allowDebug": false
+        "allowDebug": false,
+        "joystickMin": 0.3,
+        "joystickMax": 0.9
       },
 
       "difficulties":
@@ -21,7 +23,8 @@
           "gruntMinTicks": 1,
           "gruntMaxTicksRate": 75,
           "gruntMove": 4,
-          "playerShotMove": 8,
+          "playerMove": 1,
+          "playerShotMove": 6,
           "playerShotCounter": 8
         },
 

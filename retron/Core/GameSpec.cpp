@@ -15,6 +15,8 @@ static ff::StaticString PROP_GRUNT_MOVE(L"gruntMove");
 static ff::StaticString PROP_GRUNT_TICK_FRAMES(L"gruntTickFrames");
 static ff::StaticString PROP_HEIGHT(L"height");
 static ff::StaticString PROP_LAYERS(L"layers");
+static ff::StaticString PROP_JOYSTICK_MIN(L"joystickMin");
+static ff::StaticString PROP_JOYSTICK_MAX(L"joystickMax");
 static ff::StaticString PROP_LEVEL_SET(L"levelSet");
 static ff::StaticString PROP_LEVEL_SETS(L"levelSets");
 static ff::StaticString PROP_LEVELS(L"levels");
@@ -23,6 +25,7 @@ static ff::StaticString PROP_LOOP_START(L"loopStart");
 static ff::StaticString PROP_NAME(L"name");
 static ff::StaticString PROP_OBJECTS(L"objects");
 static ff::StaticString PLAYER_SHOT_COUNTER(L"playerShotCounter");
+static ff::StaticString PLAYER_MOVE(L"playerMove");
 static ff::StaticString PLAYER_SHOT_MOVE(L"playerShotMove");
 static ff::StaticString PROP_PLAYER_START(L"playerStart");
 static ff::StaticString PROP_POINT(L"point");
@@ -50,6 +53,7 @@ static ReTron::DifficultySpec LoadDifficultySpec(const ff::Dict& dict, const ff:
 	diffSpec._gruntMaxTicksRate = ::GetValue<ff::SizeValue>(dict, defaultDict, ::PROP_GRUNT_MAX_TICKS_RATE);
 	diffSpec._gruntTickFrames = ::GetValue<ff::SizeValue>(dict, defaultDict, ::PROP_GRUNT_TICK_FRAMES);
 	diffSpec._gruntMove = ::GetValue<ff::FixedIntValue>(dict, defaultDict, ::PROP_GRUNT_MOVE);
+	diffSpec._playerMove = ::GetValue<ff::FixedIntValue>(dict, defaultDict, ::PLAYER_MOVE);
 	diffSpec._playerShotMove = ::GetValue<ff::FixedIntValue>(dict, defaultDict, ::PLAYER_SHOT_MOVE);
 	diffSpec._playerShotCounter = ::GetValue<ff::SizeValue>(dict, defaultDict, ::PLAYER_SHOT_COUNTER);
 
@@ -193,6 +197,8 @@ ReTron::GameSpec ReTron::GameSpec::Load(ff::IResourceAccess* resources)
 
 	GameSpec spec{};
 	spec._allowDebug = appDict.Get<ff::BoolValue>(::PROP_ALLOW_DEBUG);
+	spec._joystickMin = appDict.Get<ff::FixedIntValue>(::PROP_JOYSTICK_MIN);
+	spec._joystickMax = appDict.Get<ff::FixedIntValue>(::PROP_JOYSTICK_MAX);
 
 	for (ff::String name : diffsDict.GetAllNames())
 	{

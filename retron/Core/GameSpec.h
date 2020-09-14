@@ -56,6 +56,7 @@ namespace ReTron
 		size_t _gruntMinTicks;
 		size_t _playerShotCounter;
 		ff::FixedInt _gruntMove;
+		ff::FixedInt _playerMove;
 		ff::FixedInt _playerShotMove;
 	};
 
@@ -64,6 +65,8 @@ namespace ReTron
 		static GameSpec Load(ff::IResourceAccess* resources);
 
 		bool _allowDebug;
+		ff::FixedInt _joystickMin;
+		ff::FixedInt _joystickMax;
 		ff::Map<ff::String, DifficultySpec> _difficulties;
 		ff::Map<ff::String, LevelSetSpec> _levelSets;
 		ff::Map<ff::String, LevelSpec> _levels;

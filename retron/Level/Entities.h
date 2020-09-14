@@ -6,8 +6,8 @@ namespace ReTron
 	enum class EntityType
 	{
 		None,
-		Player,
 		PlayerBullet,
+		Player,
 		BonusWoman,
 		BonusMan,
 		BonusChild,

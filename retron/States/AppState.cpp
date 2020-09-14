@@ -197,12 +197,7 @@ void ReTron::AppState::SetDefaultGameOptions(const GameOptions& options)
 
 ff::IPalette* ReTron::AppState::GetPalette()
 {
-	if (!_palette)
-	{
-		_palette = _paletteData->CreatePalette(::PALETTE_CYCLES_PER_SECOND);
-	}
-
-	return _palette;
+	return GetPlayerPalette(0);
 }
 
 ff::IPalette* ReTron::AppState::GetPlayerPalette(size_t player)
@@ -212,7 +207,7 @@ ff::IPalette* ReTron::AppState::GetPlayerPalette(size_t player)
 	ff::ComPtr<ff::IPalette>& playerPalette = _playerPalettes[player];
 	if (!playerPalette)
 	{
-		playerPalette = _playerPaletteDatas[player]->CreatePalette(::PALETTE_CYCLES_PER_SECOND);
+		playerPalette = _paletteData->CreatePalette(ff::String::format_new(L"player-%lu", player), ::PALETTE_CYCLES_PER_SECOND);
 	}
 
 	return playerPalette;
@@ -371,15 +366,12 @@ void ReTron::AppState::InitResources()
 {
 	_gameSpec = GameSpec::Load(GetResources());
 
-	_paletteData.Init(L"palette");
-	_palette = nullptr;
-
-	for (size_t i = 0; i < _playerPaletteDatas.size(); i++)
+	for (size_t i = 0; i < _playerPalettes.size(); i++)
 	{
-		_playerPaletteDatas[i].Init(L"palette");
 		_playerPalettes[i] = nullptr;
 	}
 
+	_paletteData.Init(L"palette-main");
 	_debugInput.Init(L"gameDebugControls");
 }
 

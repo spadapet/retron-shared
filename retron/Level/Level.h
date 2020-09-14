@@ -3,10 +3,12 @@
 #include "Core/GameSpec.h"
 #include "Level/Collision.h"
 #include "Level/Entities.h"
+#include "Level/Particles.h"
 #include "Level/Position.h"
 
 namespace ff
 {
+	class IAnimation;
 	class IRenderDepth;
 	class IRenderTarget;
 }
@@ -25,9 +27,11 @@ namespace ReTron
 		void Render(ff::IRenderTarget* target, ff::IRenderDepth* depth, ff::RectFixedInt targetRect, ff::RectFixedInt cameraRect);
 
 	private:
+		void InitResources();
+
 		entt::entity CreateEntity(EntityType type, const ff::PointFixedInt& pos);
 		entt::entity CreatePlayer(size_t indexInLevel);
-		entt::entity CreatePlayerBullet(ff::PointFixedInt shotPos, ff::PointFixedInt shotDir);
+		entt::entity CreatePlayerBullet(entt::entity player, ff::PointFixedInt shotPos, ff::PointFixedInt shotDir);
 		entt::entity CreateBounds(const ff::RectFixedInt& rect);
 		entt::entity CreateBox(const ff::RectFixedInt& rect);
 		void CreateObjects(size_t count, EntityType type, const ff::RectFixedInt& rect, const std::vector<ff::RectFixedInt>& avoidRects);
@@ -39,8 +43,10 @@ namespace ReTron
 
 		void HandleCollisions();
 		void HandleBoundsCollision(entt::entity entity1, entt::entity entity2);
+		void HandlePlayerBulletBoundsCollision(entt::entity entity);
 		void HandleEntityCollision(entt::entity entity1, entt::entity entity2);
 
+		void RenderParticles(ff::PixelRendererActive& render);
 		void RenderEntity(entt::entity entity, EntityType type, ff::PixelRendererActive& render);
 		void RenderPlayer(entt::entity entity, ff::PixelRendererActive& render);
 		void RenderPlayerBullet(entt::entity entity, ff::PixelRendererActive& render);
@@ -48,6 +54,7 @@ namespace ReTron
 		void RenderElectrode(entt::entity entity, ff::PixelRendererActive& render);
 		void RenderHulk(entt::entity entity, ff::PixelRendererActive& render);
 		void RenderGrunt(entt::entity entity, ff::PixelRendererActive& render);
+		void RenderAnimation(entt::entity entity, ff::PixelRendererActive& render, ff::IAnimation* anim, ff::FixedInt frame);
 		void RenderDebug(ff::PixelRendererActive& render);
 
 		size_t PickGruntMoveCounter();
@@ -57,10 +64,17 @@ namespace ReTron
 		void EnumEntities(entt::delegate<void(entt::entity, EntityType, Args&&...)> func, Args&&... args);
 
 		ILevelService* _levelService;
+		IGameService* _gameService;
+		IAppService* _appService;
+
+		const GameSpec& _gameSpec;
+		const LevelSpec& _levelSpec;
 		const DifficultySpec& _difficultySpec;
 		size_t _frames;
 
-		ff::TypedResource<ff::ISprite> _playerBulletSprite;
+		ff::TypedResource<ff::IAnimation> _playerSprite;
+		ff::TypedResource<ff::IAnimation> _playerBulletSprite;
+		ff::TypedResource<ff::ISprite> _playerParts[7];
 
 		entt::registry _registry;
 		entt::delegate<void(entt::entity, EntityType)> _advanceCallback;
@@ -72,5 +86,9 @@ namespace ReTron
 		Entities _entities;
 		Position _position;
 		Collision _collision;
+
+		Particles _particles;
+		Particles::Effect _playerBulletHitBoundsParticles;
+		Particles::Effect _playerEnterParticles;
 	};
 }

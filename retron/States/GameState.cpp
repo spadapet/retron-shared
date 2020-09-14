@@ -97,16 +97,16 @@ void ReTron::GameState::InitInput()
 	// Player-specific input
 	for (size_t i = 0; i < _playerInput.size(); i++)
 	{
-		_playerInput[i].Init((i == 0 || !_gameOptions.IsCoop()) ? L"playerControls" : L"secondaryPlayerControls");
+		_playerInput[i].Init(L"playerControls");
 	}
 
 	// Player-specific devices
 	for (size_t i = 0; i < _playerInputDevices.size(); i++)
 	{
-		if (i == 0 || !_gameOptions.IsCoop())
+		// In coop, the first player must be controlled by a joystick
+		if (!_gameOptions.IsCoop() || i == 1)
 		{
 			_playerInputDevices[i]._keys.Push(globals.GetKeys());
-			_playerInputDevices[i]._mice.Push(globals.GetPointer());
 		}
 	}
 

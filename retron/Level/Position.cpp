@@ -62,6 +62,18 @@ ff::PointFixedInt ReTron::Position::GetVelocity(entt::entity entity)
 	return c ? c->_velocity : ff::PointFixedInt::Zeros();
 }
 
+ff::FixedInt ReTron::Position::GetVelocityAsAngle(entt::entity entity)
+{
+	ff::PointFixedInt vel = GetVelocity(entity);
+	return std::atan2((float)vel.y, (float)vel.x) * ff::RAD_TO_DEG_F;
+}
+
+ff::FixedInt ReTron::Position::GetReverseVelocityAsAngle(entt::entity entity)
+{
+	ff::PointFixedInt vel = GetVelocity(entity);
+	return std::atan2((float)-vel.y, (float)-vel.x) * ff::RAD_TO_DEG_F;
+}
+
 void ReTron::Position::SetDirection(entt::entity entity, const ff::PointFixedInt& value)
 {
 	if (value != GetDirection(entity))

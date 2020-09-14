@@ -57,6 +57,9 @@
     <ClCompile Include="Level\Position.cpp">
       <Filter>Level</Filter>
     </ClCompile>
+    <ClCompile Include="Level\Particles.cpp">
+      <Filter>Level</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -124,6 +127,9 @@
       <Filter>Level</Filter>
     </ClInclude>
     <ClInclude Include="Level\Position.h">
+      <Filter>Level</Filter>
+    </ClInclude>
+    <ClInclude Include="Level\Particles.h">
       <Filter>Level</Filter>
     </ClInclude>
   </ItemGroup>

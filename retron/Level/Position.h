@@ -17,6 +17,8 @@ namespace ReTron
 
 		void SetVelocity(entt::entity entity, const ff::PointFixedInt& value);
 		ff::PointFixedInt GetVelocity(entt::entity entity);
+		ff::FixedInt GetVelocityAsAngle(entt::entity entity);
+		ff::FixedInt GetReverseVelocityAsAngle(entt::entity entity);
 
 		void SetDirection(entt::entity entity, const ff::PointFixedInt& value);
 		const ff::PointFixedInt GetDirection(entt::entity entity);
