@@ -22,14 +22,13 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\util</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\ui</AdditionalIncludeDirectories>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)core\noesis\Include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(FFCoreRoot)util</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(NoesisRoot)Include</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(DevRoot)vendor\box2d\include</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(DevRoot)vendor</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>$(FFCoreRoot)core\noesis\Lib\uwp-$(XPlatform)\Noesis.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(NoesisLib);%(AdditionalDependencies)</AdditionalDependencies>
       <DelayLoadDLLs>Noesis.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
@@ -100,7 +99,7 @@
     <ClInclude Include="UI\TitlePage.xaml.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="$(FFCoreRoot)core\util\util-metro.vcxproj">
+    <ProjectReference Include="$(FFCoreRoot)util\util-metro.vcxproj">
       <Project>{eff8144d-f91e-4bbd-b09b-d6db6b3a5512}</Project>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
       <LinkLibraryDependencies>true</LinkLibraryDependencies>
@@ -115,7 +114,7 @@
     <ResJson Include="Assets\Assets.Xaml.res.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(FFCoreRoot)core\noesis\Bin\uwp-$(XPlatform)\Noesis.dll">
+    <None Include="$(NoesisDll)">
       <DeploymentContent>true</DeploymentContent>
     </None>
     <ResJson Include="Assets\Assets.Graphics.res.json">

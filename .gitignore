@@ -1,5 +1,6 @@
 # root dirs
 /out/
+/packages/
 
 # sub dirs
 .vs/

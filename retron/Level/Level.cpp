@@ -160,9 +160,8 @@ entt::entity ReTron::Level::CreatePlayer(size_t indexInLevel)
 	entt::entity entity = CreateEntity(EntityType::Player, pos);
 	_registry.emplace<PlayerData>(entity, PlayerData{ indexInLevel, 0 });
 
-	ff::PointFixedInt effectOffset(0, -6);
-	int effectId = _playerEnterParticles.Add(_particles, pos + effectOffset);
-	_registry.emplace<ParticleEffectFollowsEntity>(entity, ParticleEffectFollowsEntity{ effectId, effectOffset });
+	int effectId = _playerEnterParticles.Add(_particles, pos);
+	_registry.emplace<ParticleEffectFollowsEntity>(entity, ParticleEffectFollowsEntity{ effectId, ff::PointFixedInt::Zeros() });
 
 	return entity;
 }
@@ -335,7 +334,7 @@ void ReTron::Level::AdvanceParticleEffectPositions()
 	{
 		if (_particles.IsEffectActive(data._effectId))
 		{
-			_particles.SetEffectPosition(data._effectId, _position.GetPosition(entity) + data._offset);
+			_particles.SetEffectPosition(data._effectId, _collision.GetBox(entity, CollisionBoxType::BoundsBox).Center() + data._offset);
 		}
 		else
 		{
@@ -430,8 +429,8 @@ void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity ent
 			case EntityType::Grunt:
 			{
 				Particles::EffectOptions options;
-				// options._angle
-				_destroyGruntParticles.Add(_particles, _position.GetPosition(entity1), &options);
+				options._rotate = _position.GetVelocityAsAngle(entity2);
+				_destroyGruntParticles.Add(_particles, _collision.GetBox(entity1, CollisionBoxType::BoundsBox).Center(), &options);
 			}
 			break;
 			}
@@ -519,6 +518,13 @@ void ReTron::Level::RenderEntity(entt::entity entity, EntityType type, ff::Pixel
 
 void ReTron::Level::RenderPlayer(entt::entity entity, ff::PixelRendererActive& render)
 {
+	// Don't render the player while particles are flying together
+	const ParticleEffectFollowsEntity* particleEffect = _registry.try_get<ParticleEffectFollowsEntity>(entity);
+	if (particleEffect && _particles.IsEffectActive(particleEffect->_effectId))
+	{
+		return;
+	}
+
 	PlayerData& playerData = _registry.get<PlayerData>(entity);
 	Player& player = _levelService->GetPlayer(playerData._indexInLevel);
 

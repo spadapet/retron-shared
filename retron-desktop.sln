@@ -15,7 +15,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ReTron", "retron\retron-des
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReTron.Designer", "retron.designer\ReTron.Designer.csproj", "{9D9345C4-576B-43F4-84C3-1F2FC4EB6483}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "vendor\ffcore\core\util\util.vcxproj", "{8877EF09-1CDD-4E67-95BA-58E3B251B7D8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util", "vendor\ffcore\util\util.vcxproj", "{8877EF09-1CDD-4E67-95BA-58E3B251B7D8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.box2d", "vendor\box2d-desktop.vcxproj", "{3DFEDC2B-4438-4CF7-8DA4-733623CB8F47}"
 EndProject
@@ -26,6 +26,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.zlib", "vendor\ffcore\vendor\zlib-desktop.vcxproj", "{13053A8D-3FA7-4E13-A0B0-21670F523076}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Vendor", "Vendor", "{BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "util.interactivity", "vendor\ffcore\vendor\noesis-interactivity.vcxproj", "{88455D87-AC7A-474C-875A-5F6DC86D1BDD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,14 @@ Global
 		{13053A8D-3FA7-4E13-A0B0-21670F523076}.Release|x64.Build.0 = Release|x64
 		{13053A8D-3FA7-4E13-A0B0-21670F523076}.Release|x86.ActiveCfg = Release|Win32
 		{13053A8D-3FA7-4E13-A0B0-21670F523076}.Release|x86.Build.0 = Release|Win32
+		{88455D87-AC7A-474C-875A-5F6DC86D1BDD}.Debug|x64.ActiveCfg = Debug|x64
+		{88455D87-AC7A-474C-875A-5F6DC86D1BDD}.Debug|x64.Build.0 = Debug|x64
+		{88455D87-AC7A-474C-875A-5F6DC86D1BDD}.Debug|x86.ActiveCfg = Debug|Win32
+		{88455D87-AC7A-474C-875A-5F6DC86D1BDD}.Debug|x86.Build.0 = Debug|Win32
+		{88455D87-AC7A-474C-875A-5F6DC86D1BDD}.Release|x64.ActiveCfg = Release|x64
+		{88455D87-AC7A-474C-875A-5F6DC86D1BDD}.Release|x64.Build.0 = Release|x64
+		{88455D87-AC7A-474C-875A-5F6DC86D1BDD}.Release|x86.ActiveCfg = Release|Win32
+		{88455D87-AC7A-474C-875A-5F6DC86D1BDD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +110,7 @@ Global
 		{0F70B91F-324B-4F6A-A527-BC5A86F3CC3C} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
 		{F031344C-BD29-4BD5-A9DF-B16824808768} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
 		{13053A8D-3FA7-4E13-A0B0-21670F523076} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
+		{88455D87-AC7A-474C-875A-5F6DC86D1BDD} = {BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C2C9693-764C-4050-BD33-0675E8192367}
