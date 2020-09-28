@@ -14,6 +14,7 @@
 #include "Resource/Resources.h"
 
 static ff::StaticString LEVEL_PARTICLES(L"LevelParticles");
+static ff::StaticString PARTICLES_DestroyGrunt(L"DestroyGrunt");
 static ff::StaticString PARTICLES_EnterPlayer(L"EnterPlayer");
 static ff::StaticString PARTICLES_PlayerBulletHitBounds(L"PlayerBulletHitBounds");
 
@@ -21,7 +22,6 @@ struct PlayerData
 {
 	size_t _indexInLevel;
 	size_t _shotCounter;
-	int _enterParticleEffect;
 };
 
 struct PlayerBulletData
@@ -34,6 +34,12 @@ struct GruntData
 	size_t _index;
 	size_t _moveCounter;
 	ff::PointFixedInt _destPos;
+};
+
+struct ParticleEffectFollowsEntity
+{
+	int _effectId;
+	ff::PointFixedInt _offset;
 };
 
 ReTron::Level::Level(ILevelService* levelService)
@@ -103,6 +109,7 @@ void ReTron::Level::Advance(ff::RectFixedInt cameraRect)
 	ff::AtScope particleScope = _particles.AdvanceAsync();
 	EnumEntities(_advanceCallback);
 	HandleCollisions();
+	AdvanceParticleEffectPositions();
 	_entities.FlushDelete();
 }
 
@@ -125,6 +132,7 @@ void ReTron::Level::InitResources()
 	ff::ValuePtrT<ff::DictValue> levelParticlesValue = levelParticlesRes.Flush();
 	ff::Dict levelParticlesDict = levelParticlesValue.GetValue();
 
+	_destroyGruntParticles = Particles::Effect(levelParticlesDict.GetValue(::PARTICLES_DestroyGrunt));
 	_playerBulletHitBoundsParticles = Particles::Effect(levelParticlesDict.GetValue(::PARTICLES_PlayerBulletHitBounds));
 	_playerEnterParticles = Particles::Effect(levelParticlesDict.GetValue(::PARTICLES_EnterPlayer));
 }
@@ -150,8 +158,11 @@ entt::entity ReTron::Level::CreatePlayer(size_t indexInLevel)
 	pos.x += indexInLevel * 16 - _levelService->GetPlayerCount() * 8 + 8;
 
 	entt::entity entity = CreateEntity(EntityType::Player, pos);
-	int effectId = _playerEnterParticles.Add(_particles, pos.Offset(0, -6));
-	_registry.emplace<PlayerData>(entity, PlayerData{ indexInLevel, 0, effectId });
+	_registry.emplace<PlayerData>(entity, PlayerData{ indexInLevel, 0 });
+
+	ff::PointFixedInt effectOffset(0, -6);
+	int effectId = _playerEnterParticles.Add(_particles, pos + effectOffset);
+	_registry.emplace<ParticleEffectFollowsEntity>(entity, ParticleEffectFollowsEntity{ effectId, effectOffset });
 
 	return entity;
 }
@@ -261,18 +272,6 @@ void ReTron::Level::AdvancePlayer(entt::entity entity)
 	pos = pos.Offset(dirPress.right - dirPress.left, dirPress.bottom - dirPress.top);
 	_position.SetPosition(entity, pos);
 
-	if (playerData._enterParticleEffect)
-	{
-		if (_particles.IsEffectActive(playerData._enterParticleEffect))
-		{
-			_particles.SetEffectPosition(playerData._enterParticleEffect, pos.Offset(0, -6));
-		}
-		else
-		{
-			playerData._enterParticleEffect = 0;
-		}
-	}
-
 	if (playerData._shotCounter)
 	{
 		playerData._shotCounter--;
@@ -327,6 +326,21 @@ void ReTron::Level::AdvanceGrunt(entt::entity entity)
 			std::copysign(_difficultySpec._gruntMove, delta.y ? delta.y : Random::Sign()));
 
 		_position.SetPosition(entity, gruntPos + vel);
+	}
+}
+
+void ReTron::Level::AdvanceParticleEffectPositions()
+{
+	for (auto [entity, data] : _registry.view<ParticleEffectFollowsEntity>().proxy())
+	{
+		if (_particles.IsEffectActive(data._effectId))
+		{
+			_particles.SetEffectPosition(data._effectId, _position.GetPosition(entity) + data._offset);
+		}
+		else
+		{
+			_registry.remove<ParticleEffectFollowsEntity>(entity);
+		}
 	}
 }
 
@@ -411,6 +425,17 @@ void ReTron::Level::HandleEntityCollision(entt::entity entity1, entt::entity ent
 		switch (type2)
 		{
 		case EntityBoxType::PlayerBullet:
+			switch (_entities.GetType(entity1))
+			{
+			case EntityType::Grunt:
+			{
+				Particles::EffectOptions options;
+				// options._angle
+				_destroyGruntParticles.Add(_particles, _position.GetPosition(entity1), &options);
+			}
+			break;
+			}
+
 			if (_entities.DelayDelete(entity2))
 			{
 				_entities.DelayDelete(entity1);

@@ -76,6 +76,7 @@ namespace ReTron
 			ff::PixelTransform _transform;
 			int _refs;
 			int _effectId;
+			std::vector<ff::ComPtr<ff::IAnimation>> _animations;
 		};
 
 		struct Particle
@@ -124,7 +125,7 @@ namespace ReTron
 		void AdvanceBlock();
 		void AdvanceNow();
 
-		unsigned short AddGroup(const ff::PixelTransform& transform, int effectId, int count);
+		unsigned short AddGroup(const ff::PixelTransform& transform, int effectId, int count, const std::vector<ff::ComPtr<ff::IAnimation>>& animations);
 		void ReleaseGroup(unsigned short groupId);
 		const DirectX::XMFLOAT4X4& GetMatrix(unsigned short groupId) const;
 

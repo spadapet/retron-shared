@@ -40,6 +40,7 @@ namespace ReTron
 		void AdvancePlayer(entt::entity entity);
 		void AdvancePlayerBullet(entt::entity entity);
 		void AdvanceGrunt(entt::entity entity);
+		void AdvanceParticleEffectPositions();
 
 		void HandleCollisions();
 		void HandleBoundsCollision(entt::entity entity1, entt::entity entity2);
@@ -88,6 +89,7 @@ namespace ReTron
 		Collision _collision;
 
 		Particles _particles;
+		Particles::Effect _destroyGruntParticles;
 		Particles::Effect _playerBulletHitBoundsParticles;
 		Particles::Effect _playerEnterParticles;
 	};

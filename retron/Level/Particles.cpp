@@ -54,6 +54,7 @@ void ReTron::Particles::AdvanceBlock()
 			// Allow reuse of this group
 			i._refs = -1;
 			i._effectId = 0;
+			i._animations.clear();
 		}
 	}
 }
@@ -88,24 +89,25 @@ void ReTron::Particles::AdvanceNow()
 	::SetEvent(_event);
 }
 
-unsigned short ReTron::Particles::AddGroup(const ff::PixelTransform& transform, int effectId, int count)
+unsigned short ReTron::Particles::AddGroup(const ff::PixelTransform& transform, int effectId, int count, const std::vector<ff::ComPtr<ff::IAnimation>>& animations)
 {
 	ParticleGroup group;
 	DirectX::XMStoreFloat4x4(&group._matrix, transform.GetMatrix());
 	group._transform = transform;
 	group._refs = count;
 	group._effectId = effectId;
+	group._animations = animations;
 
 	for (size_t i = 0; i < _groups.size(); i++)
 	{
 		if (_groups[i]._refs == -1)
 		{
-			_groups[i] = group;
+			_groups[i] = std::move(group);
 			return static_cast<unsigned short>(i);
 		}
 	}
 
-	_groups.push_back(group);
+	_groups.push_back(std::move(group));
 	return static_cast<unsigned short>(_groups.size() - 1);
 }
 
@@ -261,7 +263,7 @@ void ReTron::Particles::Spec::Add(Particles& particles, ff::PointFixedInt pos, i
 	const int count = Random::Range(_count);
 	noAssertRet(count > 0);
 
-	unsigned short groupId = particles.AddGroup(ff::PixelTransform::Create(pos, _scale * options._scale, _rotate + options._rotate), effectId, count);
+	unsigned short groupId = particles.AddGroup(ff::PixelTransform::Create(pos, _scale * options._scale, _rotate + options._rotate), effectId, count, _animations);
 
 	for (int i = 0; i < count; i++)
 	{

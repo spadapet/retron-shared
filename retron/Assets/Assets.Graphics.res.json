@@ -157,7 +157,35 @@
         "angleVelocity": [ 0.125, 1 ],
         "scale": [ 0.25, 1 ],
         "reverse": true
+      }
+    ],
+
+    "DestroyGrunt":
+    [
+      {
+        "life": [ 24, 40 ],
+        "delay": [ 0, 0 ],
+        "count": [ 32, 64 ],
+        "distance": [ 0, 8 ],
+        "velocity": [ 0.125, 1.5 ],
+        "colors": [ 232, 248 ],
+        "angle": [ 0, 360 ],
+        "angleVelocity": [ 0.125, 1 ],
+        "scale": [ 0.25, 1 ],
+        "size": [ 2, 2 ]
       },
+      {
+        "life": [ 32, 80 ],
+        "delay": [ 0, 0 ],
+        "count": [ 64, 128 ],
+        "distance": [ 0, 4 ],
+        "velocity": [ 0.5, 2 ],
+        "colors": [ 232, 232, 248, 248, 230, 246 ],
+        "angle": [ 0, 360 ],
+        "angleVelocity": [ 0.125, 0.5 ],
+        "scale": [ 0.25, 1 ],
+        "size": [ 1, 1 ]
+      }
     ]
   }
 }
