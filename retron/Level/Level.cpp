@@ -160,7 +160,11 @@ entt::entity ReTron::Level::CreatePlayer(size_t indexInLevel)
 	entt::entity entity = CreateEntity(EntityType::Player, pos);
 	_registry.emplace<PlayerData>(entity, PlayerData{ indexInLevel, 0 });
 
-	int effectId = _playerEnterParticles.Add(_particles, pos);
+	Player& player = _levelService->GetPlayer(indexInLevel);
+	Particles::EffectOptions options;
+	options._type = static_cast<uint8_t>(player._index);
+
+	int effectId = _playerEnterParticles.Add(_particles, pos, &options);
 	_registry.emplace<ParticleEffectFollowsEntity>(entity, ParticleEffectFollowsEntity{ effectId, ff::PointFixedInt::Zeros() });
 
 	return entity;
@@ -347,12 +351,18 @@ void ReTron::Level::HandleCollisions()
 {
 	for (auto& [entity1, entity2] : _collision.DetectCollisions(_collisions, CollisionBoxType::BoundsBox))
 	{
-		HandleBoundsCollision(entity1, entity2);
+		if (!_entities.IsDeleted(entity1) && !_entities.IsDeleted(entity2))
+		{
+			HandleBoundsCollision(entity1, entity2);
+		}
 	}
 
 	for (auto& [entity1, entity2] : _collision.DetectCollisions(_collisions, CollisionBoxType::HitBox))
 	{
-		HandleEntityCollision(entity1, entity2);
+		if (!_entities.IsDeleted(entity1) && !_entities.IsDeleted(entity2))
+		{
+			HandleEntityCollision(entity1, entity2);
+		}
 	}
 }
 
