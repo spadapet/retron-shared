@@ -32,15 +32,11 @@ ReTron::TitlePageViewModel::TitlePageViewModel(IAppService* appService)
 	, _fullScreenCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::FullScreenCommand)))
 	, _stateBackCommand(Noesis::MakePtr<ff::DelegateCommand>(Noesis::MakeDelegate(this, &ReTron::TitlePageViewModel::StateBackCommand)))
 {
-	_targetSizeChangedCookie = _target->SizeChanged().Add([this](ff::PointInt, double, int)
-		{
-			OnTargetSizeChanged();
-		});
+	_targetSizeChangedConnection = _target->SizeChangedSink().connect<&ReTron::TitlePageViewModel::OnTargetSizeChanged>(this);
 }
 
 ReTron::TitlePageViewModel::~TitlePageViewModel()
 {
-	_target->SizeChanged().Remove(_targetSizeChangedCookie);
 }
 
 void ReTron::TitlePageViewModel::SetVisualStateRoot(Noesis::FrameworkElement* value)
@@ -173,7 +169,7 @@ void ReTron::TitlePageViewModel::StateBackCommand(Noesis::BaseComponent* param)
 	}
 }
 
-void ReTron::TitlePageViewModel::OnTargetSizeChanged()
+void ReTron::TitlePageViewModel::OnTargetSizeChanged(ff::PointInt, double, int)
 {
 	OnPropertyChanged("FullScreenText");
 }

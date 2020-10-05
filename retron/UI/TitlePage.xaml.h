@@ -34,11 +34,11 @@ namespace ReTron
 		void SoundCommand(Noesis::BaseComponent* param);
 		void FullScreenCommand(Noesis::BaseComponent* param);
 		void StateBackCommand(Noesis::BaseComponent* param);
-		void OnTargetSizeChanged();
+		void OnTargetSizeChanged(ff::PointInt, double, int);
 
 		IAppService* _appService;
 		ff::ComPtr<ff::IRenderTargetWindow> _target;
-		ff::EventCookie _targetSizeChangedCookie;
+		entt::connection _targetSizeChangedConnection;
 		std::shared_ptr<ff::State> _pendingState;
 		Noesis::FrameworkElement* _visualStateRoot;
 		Noesis::Ptr<Noesis::ICommand> _startGameCommand;

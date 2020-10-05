@@ -83,6 +83,8 @@ namespace ReTron
 		void InitGameState();
 		void ApplySystemOptions();
 
+		void OnCustomDebug();
+		void OnResourceRebuilt(ff::Module*);
 		void OnRestartLevel();
 		void OnRestartGame();
 		void OnRebuildResources();
@@ -108,8 +110,6 @@ namespace ReTron
 		std::shared_ptr<ReTron::DebugState> _debugState;
 		ff::TypedResource<ff::IInputMapping> _debugInput;
 		ff::InputDevices _debugInputDevices;
-		ff::EventCookie _customDebugCookie;
-		ff::EventCookie _resourcesRebuiltEventCookie;
 		std::forward_list<entt::scoped_connection> _connections;
 		entt::sigh<void()> _reloadResourcesEvent;
 		double _debugTimeScale;

@@ -36,8 +36,6 @@ ReTron::AppState::AppState()
 	, _debugSteppingFrames(false)
 	, _debugStepOneFrame(false)
 	, _debugTimeScale(1.0)
-	, _customDebugCookie(nullptr)
-	, _resourcesRebuiltEventCookie(nullptr)
 	, _rebuildingResources(false)
 	, _renderDebug(false)
 {
@@ -296,14 +294,7 @@ void ReTron::AppState::OnGameThreadInitialized(ff::AppGlobals* globals)
 
 void ReTron::AppState::OnGameThreadShutdown(ff::AppGlobals* globals)
 {
-	if (_debugState)
-	{
-		_globals->GetDebugPageState()->CustomDebugEvent().Remove(_customDebugCookie);
-		ff::GetThisModule().GetResourceRebuiltEvent().Remove(_resourcesRebuiltEventCookie);
-
-		_connections.clear();
-	}
-
+	_connections.clear();
 	_gameState = nullptr;
 	_debugState = nullptr;
 	_xamlGlobals = nullptr;
@@ -379,29 +370,30 @@ void ReTron::AppState::InitDebugState()
 {
 	_debugState = std::make_shared<ReTron::DebugState>(this);
 
-	_customDebugCookie = _globals->GetDebugPageState()->CustomDebugEvent().Add(
-		[this]()
-		{
-			if (_debugState->GetVisible())
-			{
-				_debugState->Hide();
-			}
-			else if (_gameSpec._allowDebug || DEBUG)
-			{
-				_debugState->SetVisible(_gameState);
-			}
-		});
-
-	_resourcesRebuiltEventCookie = ff::GetThisModule().GetResourceRebuiltEvent().Add([this](ff::Module*)
-		{
-			_rebuildingResources = false;
-			InitResources();
-			_reloadResourcesEvent.publish();
-		});
-
+	_connections.emplace_front(_globals->GetDebugPageState()->CustomDebugSink().connect<&ReTron::AppState::OnCustomDebug>(this));
+	_connections.emplace_front(ff::GetThisModule().GetResourceRebuiltSink().connect<&ReTron::AppState::OnResourceRebuilt>(this));
 	_connections.emplace_front(_debugState->RestartLevelEvent().connect<&ReTron::AppState::OnRestartLevel>(this));
 	_connections.emplace_front(_debugState->RestartGameEvent().connect<&ReTron::AppState::OnRestartGame>(this));
 	_connections.emplace_front(_debugState->RebuildResourcesEvent().connect<&ReTron::AppState::OnRebuildResources>(this));
+}
+
+void ReTron::AppState::OnCustomDebug()
+{
+	if (_debugState->GetVisible())
+	{
+		_debugState->Hide();
+	}
+	else if (_gameSpec._allowDebug || DEBUG)
+	{
+		_debugState->SetVisible(_gameState);
+	}
+}
+
+void ReTron::AppState::OnResourceRebuilt(ff::Module*)
+{
+	_rebuildingResources = false;
+	InitResources();
+	_reloadResourcesEvent.publish();
 }
 
 void ReTron::AppState::OnRestartLevel()
