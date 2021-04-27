@@ -185,7 +185,7 @@
                         {
                          "name":"grunt",
                          "type":"int",
-                         "value":50
+                         "value":150
                         }, 
                         {
                          "name":"hulk",

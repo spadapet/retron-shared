@@ -527,6 +527,7 @@ void retron::level::render_particles(ff::dxgi::draw_base& draw)
 
 void retron::level::render_debug(ff::dxgi::draw_base& draw)
 {
+
     retron::render_debug_t render_debug = retron::app_service::get().render_debug();
 
     if (ff::flags::has(render_debug, retron::render_debug_t::controls))
