@@ -3,9 +3,9 @@
 // C++
 
 // Vendor
-#include <box2d/box2d.h>
+#include <box2d/include/box2d/box2d.h>
 #include <entt/src/entt/entity/registry.hpp>
-#include <ff/all_api.h>
+#include <ff.all.h>
 
 // Local
 #include "source/core/globals.h"

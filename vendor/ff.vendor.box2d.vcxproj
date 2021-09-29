@@ -2,16 +2,10 @@
 <Project DefaultTargets="Build" ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Label="Globals">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <ProjectName>vendor.box2d</ProjectName>
     <ProjectGuid>{3dfedc2b-4438-4cf7-8da4-733623cb8f47}</ProjectGuid>
   </PropertyGroup>
-  <Import Project="ff_game_library\build\cpp.props" />
-  <ItemDefinitionGroup>
-    <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
-      <AdditionalIncludeDirectories>box2d\include;box2d\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.default.props" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ItemGroup>
     <ClInclude Include="box2d\include\box2d\b2_block_allocator.h" />
     <ClInclude Include="box2d\include\box2d\b2_body.h" />
@@ -107,5 +101,11 @@
     <ClCompile Include="box2d\src\dynamics\b2_world_callbacks.cpp" />
     <ClCompile Include="box2d\src\rope\b2_rope.cpp" />
   </ItemGroup>
-  <Import Project="$(FFRoot)build\cpp.targets" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <AdditionalIncludeDirectories>box2d\include;box2d\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
 </Project>

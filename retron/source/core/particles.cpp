@@ -2,7 +2,7 @@
 #include "source/core/particles.h"
 
 retron::particles::particles()
-    : async_event(ff::create_event())
+    : async_event(ff::win_handle::create_event())
 {
     this->particles_new.reserve(256);
     this->particles_async.reserve(512);
