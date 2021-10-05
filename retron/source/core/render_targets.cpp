@@ -53,12 +53,12 @@ void retron::render_targets::clear()
 {
     if (ff::flags::has(this->used_targets, retron::render_target_types::palette_1) && this->target_palette_1)
     {
-        ff::graphics::dx11_device_state().clear_target(this->target_palette_1->view(), ff::color::none());
+        ff_dx::get_device_state().clear_target(this->target_palette_1->view(), ff::color::none());
     }
 
     if (ff::flags::has(this->used_targets, retron::render_target_types::rgb_pma_2) && this->target_rgb_pma_1)
     {
-        ff::graphics::dx11_device_state().clear_target(this->target_rgb_pma_1->view(), ff::color::none());
+        ff_dx::get_device_state().clear_target(this->target_rgb_pma_1->view(), ff::color::none());
     }
 
     this->used_targets = retron::render_target_types::none;
@@ -77,7 +77,7 @@ void retron::render_targets::render(ff::target_base& target)
             this->target_1080 = ::get_target_1080();
         }
 
-        ff::graphics::dx11_device_state().clear_target(this->target_1080->view(), ff::color::none());
+        ff_dx::get_device_state().clear_target(this->target_1080->view(), ff::color::none());
     }
 
     ff::draw_ptr draw = direct_to_target
@@ -104,7 +104,7 @@ void retron::render_targets::render(ff::target_base& target)
         draw = retron::app_service::get().draw_device().begin_draw(target, nullptr, target_rect, constants::RENDER_RECT_HIGH);
         if (draw)
         {
-            draw->push_texture_sampler(D3D11_FILTER_MIN_MAG_MIP_LINEAR);
+            draw->push_sampler_linear_filter(true);
             draw->draw_sprite(this->texture_1080->sprite_data(), ff::transform::identity());
         }
     }
@@ -143,7 +143,7 @@ const std::shared_ptr<ff::target_base>& retron::render_targets::target(retron::r
             if (!this->target_palette_1)
             {
                 this->target_palette_1 = std::make_shared<ff::target_texture>(this->texture(target));
-                ff::graphics::dx11_device_state().clear_target(this->target_palette_1->view(), ff::color::none());
+                ff_dx::get_device_state().clear_target(this->target_palette_1->view(), ff::color::none());
             }
             return this->target_palette_1;
 
@@ -152,7 +152,7 @@ const std::shared_ptr<ff::target_base>& retron::render_targets::target(retron::r
             if (!this->target_rgb_pma_1)
             {
                 this->target_rgb_pma_1 = std::make_shared<ff::target_texture>(this->texture(target));
-                ff::graphics::dx11_device_state().clear_target(this->target_rgb_pma_1->view(), ff::color::none());
+                ff_dx::get_device_state().clear_target(this->target_rgb_pma_1->view(), ff::color::none());
             }
             return this->target_rgb_pma_1;
     }

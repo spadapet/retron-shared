@@ -164,7 +164,7 @@ void retron::app_state::advance_input()
 
 void retron::app_state::render(ff::target_base& target, ff::depth& depth)
 {
-    ff::graphics::dx11_device_state().clear_target(this->target_1080->view(), ff::color::none());
+    ff_dx::get_device_state().clear_target(this->target_1080->view(), ff::color::none());
 
     this->push_render_targets(this->render_targets_);
     ff::state::render();
@@ -174,7 +174,7 @@ void retron::app_state::render(ff::target_base& target, ff::depth& depth)
     ff::draw_ptr draw = this->draw_device().begin_draw(target, nullptr, target_rect, retron::constants::RENDER_RECT_HIGH);
     if (draw)
     {
-        draw->push_texture_sampler(D3D11_FILTER_MIN_MAG_MIP_LINEAR);
+        draw->push_sampler_linear_filter(true);
         draw->draw_sprite(this->texture_1080->sprite_data(), ff::transform::identity());
     }
 }

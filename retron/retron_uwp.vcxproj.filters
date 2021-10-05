@@ -392,6 +392,7 @@
     <None Include="$(NoesisDll)" />
     <None Include="$(NoesisDll)" />
     <None Include="$(NoesisDll)" />
+    <None Include="$(NoesisDll)" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="source">
