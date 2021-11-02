@@ -4,16 +4,16 @@
 
 static const ff::point_int LOW_SIZE(retron::constants::RENDER_WIDTH, retron::constants::RENDER_HEIGHT);
 static const ff::point_int HIGH_SIZE = ::LOW_SIZE * retron::constants::RENDER_SCALE;
-static std::weak_ptr<ff::depth> weak_depth;
+static std::weak_ptr<ff_dx::depth> weak_depth;
 static std::weak_ptr<ff::texture> weak_texture_1080;
-static std::weak_ptr<ff::target_base> weak_target_1080;
+static std::weak_ptr<ff::dxgi::target_base> weak_target_1080;
 
-static std::shared_ptr<ff::depth> get_depth()
+static std::shared_ptr<ff_dx::depth> get_depth()
 {
-    std::shared_ptr<ff::depth> depth = ::weak_depth.lock();
+    std::shared_ptr<ff_dx::depth> depth = ::weak_depth.lock();
     if (!depth)
     {
-        depth = std::make_shared<ff::depth>(::LOW_SIZE);
+        depth = std::make_shared<ff_dx::depth>(::LOW_SIZE);
         ::weak_depth = depth;
     }
 
@@ -32,12 +32,12 @@ static std::shared_ptr<ff::texture> get_texture_1080()
     return texture;
 }
 
-static std::shared_ptr<ff::target_base> get_target_1080()
+static std::shared_ptr<ff::dxgi::target_base> get_target_1080()
 {
-    std::shared_ptr<ff::target_base> target = ::weak_target_1080.lock();
+    std::shared_ptr<ff::dxgi::target_base> target = ::weak_target_1080.lock();
     if (!target)
     {
-        target = std::make_shared<ff::target_texture>(::get_texture_1080());
+        target = std::make_shared<ff_dx::target_texture>(::get_texture_1080());
         ::weak_target_1080 = target;
     }
 
@@ -53,18 +53,18 @@ void retron::render_targets::clear()
 {
     if (ff::flags::has(this->used_targets, retron::render_target_types::palette_1) && this->target_palette_1)
     {
-        ff_dx::get_device_state().clear_target(this->target_palette_1->view(), ff::color::none());
+        ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_palette_1).dx11_target_view(), ff::dxgi::color_none());
     }
 
     if (ff::flags::has(this->used_targets, retron::render_target_types::rgb_pma_2) && this->target_rgb_pma_1)
     {
-        ff_dx::get_device_state().clear_target(this->target_rgb_pma_1->view(), ff::color::none());
+        ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_rgb_pma_1).dx11_target_view(), ff::dxgi::color_none());
     }
 
     this->used_targets = retron::render_target_types::none;
 }
 
-void retron::render_targets::render(ff::target_base& target)
+void retron::render_targets::render(ff::dxgi::target_base& target)
 {
     ff::point_int target_size = target.size().rotated_pixel_size();
     bool direct_to_target = (target_size == ::LOW_SIZE || target_size == ::HIGH_SIZE);
@@ -77,10 +77,10 @@ void retron::render_targets::render(ff::target_base& target)
             this->target_1080 = ::get_target_1080();
         }
 
-        ff_dx::get_device_state().clear_target(this->target_1080->view(), ff::color::none());
+        ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_1080).dx11_target_view(), ff::dxgi::color_none());
     }
 
-    ff::draw_ptr draw = direct_to_target
+    ff::dxgi::draw_ptr draw = direct_to_target
         ? retron::app_service::get().draw_device().begin_draw(target, nullptr, ff::rect_fixed(0, 0, target_size.x, target_size.y), constants::RENDER_RECT)
         : retron::app_service::get().draw_device().begin_draw(*this->target_1080, nullptr, constants::RENDER_RECT_HIGH, constants::RENDER_RECT);
     if (draw)
@@ -88,13 +88,13 @@ void retron::render_targets::render(ff::target_base& target)
         if (ff::flags::has(this->used_targets, retron::render_target_types::palette_1))
         {
             draw->push_palette(&retron::app_service::get().palette());
-            draw->draw_sprite(this->texture(retron::render_target_types::palette_1)->sprite_data(), ff::transform::identity());
+            draw->draw_sprite(this->texture(retron::render_target_types::palette_1)->sprite_data(), ff::dxgi::transform::identity());
         }
 
         if (ff::flags::has(this->used_targets, retron::render_target_types::rgb_pma_2))
         {
             draw->push_pre_multiplied_alpha();
-            draw->draw_sprite(this->texture(retron::render_target_types::rgb_pma_2)->sprite_data(), ff::transform::identity());
+            draw->draw_sprite(this->texture(retron::render_target_types::rgb_pma_2)->sprite_data(), ff::dxgi::transform::identity());
         }
     }
 
@@ -105,7 +105,7 @@ void retron::render_targets::render(ff::target_base& target)
         if (draw)
         {
             draw->push_sampler_linear_filter(true);
-            draw->draw_sprite(this->texture_1080->sprite_data(), ff::transform::identity());
+            draw->draw_sprite(this->texture_1080->sprite_data(), ff::dxgi::transform::identity());
         }
     }
 }
@@ -133,7 +133,7 @@ const std::shared_ptr<ff::texture>& retron::render_targets::texture(retron::rend
     }
 }
 
-const std::shared_ptr<ff::target_base>& retron::render_targets::target(retron::render_target_types target)
+const std::shared_ptr<ff::dxgi::target_base>& retron::render_targets::target(retron::render_target_types target)
 {
     this->used_targets = ff::flags::set(this->used_targets, target);
 
@@ -142,8 +142,8 @@ const std::shared_ptr<ff::target_base>& retron::render_targets::target(retron::r
         case retron::render_target_types::palette_1:
             if (!this->target_palette_1)
             {
-                this->target_palette_1 = std::make_shared<ff::target_texture>(this->texture(target));
-                ff_dx::get_device_state().clear_target(this->target_palette_1->view(), ff::color::none());
+                this->target_palette_1 = std::make_shared<ff_dx::target_texture>(this->texture(target));
+                ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_palette_1).dx11_target_view(), ff::dxgi::color_none());
             }
             return this->target_palette_1;
 
@@ -151,14 +151,14 @@ const std::shared_ptr<ff::target_base>& retron::render_targets::target(retron::r
         case retron::render_target_types::rgb_pma_2:
             if (!this->target_rgb_pma_1)
             {
-                this->target_rgb_pma_1 = std::make_shared<ff::target_texture>(this->texture(target));
-                ff_dx::get_device_state().clear_target(this->target_rgb_pma_1->view(), ff::color::none());
+                this->target_rgb_pma_1 = std::make_shared<ff_dx::target_texture>(this->texture(target));
+                ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_rgb_pma_1).dx11_target_view(), ff::dxgi::color_none());
             }
             return this->target_rgb_pma_1;
     }
 }
 
-const std::shared_ptr<ff::depth>& retron::render_targets::depth(retron::render_target_types target)
+const std::shared_ptr<ff_dx::depth>& retron::render_targets::depth(retron::render_target_types target)
 {
     if (!this->depth_)
     {

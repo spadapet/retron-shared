@@ -387,7 +387,7 @@ ff::rect_fixed retron::collision::box(entt::entity entity, retron::collision_box
     return pos ? ff::rect_fixed(pos->position, pos->position) : ff::rect_fixed{};
 }
 
-void retron::collision::render_debug(ff::draw_base& draw)
+void retron::collision::render_debug(ff::dxgi::draw_base& draw)
 {
     this->render_debug<retron::comp::grunt_avoid_box>(draw, retron::collision_box_type::grunt_avoid_box, 1, 245, 248);
     this->render_debug<retron::comp::bounds_box>(draw, retron::collision_box_type::bounds_box, 2, 245, 248);
@@ -395,7 +395,7 @@ void retron::collision::render_debug(ff::draw_base& draw)
 }
 
 template<typename BoxType>
-void retron::collision::render_debug(ff::draw_base& draw, retron::collision_box_type collision_type, int thickness, int color, int color_hit)
+void retron::collision::render_debug(ff::dxgi::draw_base& draw, retron::collision_box_type collision_type, int thickness, int color, int color_hit)
 {
     for (auto [entity, hb] : this->registry.view<BoxType>().each())
     {

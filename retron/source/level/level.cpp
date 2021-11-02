@@ -50,7 +50,7 @@ std::shared_ptr<ff::state> retron::level::advance_time()
 
 void retron::level::render()
 {
-    ff::draw_ptr draw = retron::app_service::begin_palette_draw();
+    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw();
     if (draw)
     {
         this->level_render.render(*draw);
@@ -507,7 +507,7 @@ void retron::level::handle_tracked_entity_deleted(entt::registry& registry, entt
     }
 }
 
-void retron::level::render_particles(ff::draw_base& draw)
+void retron::level::render_particles(ff::dxgi::draw_base& draw)
 {
     // Render particles for the default palette, which includes player 0
     this->particles.render(draw);
@@ -517,7 +517,7 @@ void retron::level::render_particles(ff::draw_base& draw)
     {
         if (data.player.get().index)
         {
-            ff::palette_base& palette = retron::app_service::get().player_palette(data.player.get().index);
+            ff::dxgi::palette_base& palette = retron::app_service::get().player_palette(data.player.get().index);
             draw.push_palette_remap(palette.index_remap(), palette.index_remap_hash());
 
             this->particles.render(draw, static_cast<uint8_t>(data.player.get().index));
@@ -527,7 +527,7 @@ void retron::level::render_particles(ff::draw_base& draw)
     }
 }
 
-void retron::level::render_debug(ff::draw_base& draw)
+void retron::level::render_debug(ff::dxgi::draw_base& draw)
 {
     retron::render_debug_t render_debug = retron::app_service::get().render_debug();
 
@@ -563,14 +563,14 @@ void retron::level::render_debug(ff::draw_base& draw)
     {
         for (auto [entity, comp, pos] : this->registry.view<const retron::comp::grunt, const retron::comp::position>().each())
         {
-            draw.draw_line(pos.position, comp.dest_pos, ff::palette_index_to_color(245), 1);
+            draw.draw_line(pos.position, comp.dest_pos, ff::dxgi::palette_index_to_color(245), 1);
         }
 
         for (auto [entity, comp, pos] : this->registry.view<const retron::comp::hulk, const retron::comp::position>().each())
         {
             if (this->registry.valid(comp.target_entity))
             {
-                draw.draw_line(pos.position, this->registry.get<const retron::comp::position>(comp.target_entity).position, ff::palette_index_to_color(245), 1);
+                draw.draw_line(pos.position, this->registry.get<const retron::comp::position>(comp.target_entity).position, ff::dxgi::palette_index_to_color(245), 1);
             }
         }
     }

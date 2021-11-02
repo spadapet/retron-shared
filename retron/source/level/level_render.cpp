@@ -14,7 +14,7 @@ retron::level_render::level_render(retron::level_render_host& host)
     this->init_resources();
 }
 
-void retron::level_render::render(ff::draw_base& draw)
+void retron::level_render::render(ff::dxgi::draw_base& draw)
 {
     const entt::registry& registry = this->host.host_registry();
     const retron::difficulty_spec& diff = this->host.host_difficulty_spec();
@@ -30,39 +30,39 @@ void retron::level_render::render(ff::draw_base& draw)
         const retron::comp::scale* scale = registry.try_get<const retron::comp::scale>(entity);
         const retron::comp::rotation* rot = registry.try_get<const retron::comp::rotation>(entity);
 
-        comp.anim->draw_animation(draw, ff::pixel_transform(pos.position, scale ? scale->scale : ff::point_fixed{ 1, 1 }, rot ? rot->rotation : 0_f));
+        comp.anim->draw_animation(draw, ff::dxgi::pixel_transform(pos.position, scale ? scale->scale : ff::point_fixed{ 1, 1 }, rot ? rot->rotation : 0_f));
     }
 
     for (auto [entity, pos, type] : registry.view<const retron::comp::electrode, const retron::comp::position, const retron::entity_type>().each())
     {
-        this->electrode_anims[retron::entity_util::index(type)]->draw_frame(draw, ff::pixel_transform(pos.position), 0);
+        this->electrode_anims[retron::entity_util::index(type)]->draw_frame(draw, ff::dxgi::pixel_transform(pos.position), 0);
     }
 
     for (auto [entity, comp, pos] : registry.view<const retron::comp::grunt, const retron::comp::position>(entt::exclude_t<retron::comp::showing_particle_effect>()).each())
     {
-        this->grunt_walk_anim->draw_frame(draw, ff::pixel_transform(pos.position), 0);
+        this->grunt_walk_anim->draw_frame(draw, ff::dxgi::pixel_transform(pos.position), 0);
     }
 
     for (auto [entity, comp, pos] : registry.view<const retron::comp::hulk, const retron::comp::position>(entt::exclude_t<retron::comp::showing_particle_effect>()).each())
     {
-        this->hulk_walk_anim->draw_frame(draw, ff::pixel_transform(pos.position), 0);
+        this->hulk_walk_anim->draw_frame(draw, ff::dxgi::pixel_transform(pos.position), 0);
     }
 
     for (auto [entity, comp, pos, type] : registry.view<const retron::comp::bonus, const retron::comp::position, const retron::entity_type>().each())
     {
-        this->bonus_anims[retron::entity_util::index(type)]->draw_frame(draw, ff::pixel_transform(pos.position), 0);
+        this->bonus_anims[retron::entity_util::index(type)]->draw_frame(draw, ff::dxgi::pixel_transform(pos.position), 0);
     }
 
     for (auto [entity, pos, rot] : registry.view<const retron::comp::bullet, const retron::comp::position, const retron::comp::rotation>().each())
     {
-        this->player_bullet_anim->draw_frame(draw, ff::pixel_transform(pos.position, { 1, 1 }, rot.rotation), 0);
+        this->player_bullet_anim->draw_frame(draw, ff::dxgi::pixel_transform(pos.position, { 1, 1 }, rot.rotation), 0);
     }
 
     for (auto [entity, comp, pos, dir, vel] : registry.view<const retron::comp::player, const retron::comp::position, const retron::comp::direction, const retron::comp::velocity>(entt::exclude_t<retron::comp::showing_particle_effect>()).each())
     {
         ff::animation_base* anim = this->player_walk_anims[retron::helpers::dir_to_index(dir.direction)].object().get();
         ff::fixed_int frame = vel.velocity ? ff::fixed_int(frame_count) / diff.player_move_frame_divisor : 0_f;
-        ff::palette_base& palette = retron::app_service::get().player_palette(comp.player.get().index);
+        ff::dxgi::palette_base& palette = retron::app_service::get().player_palette(comp.player.get().index);
         draw.push_palette_remap(palette.index_remap(), palette.index_remap_hash());
 
         switch (comp.state)
@@ -100,7 +100,7 @@ void retron::level_render::render(ff::draw_base& draw)
 
         if (anim)
         {
-            anim->draw_frame(draw, ff::pixel_transform(pos.position), frame);
+            anim->draw_frame(draw, ff::dxgi::pixel_transform(pos.position), frame);
         }
 
         draw.pop_palette_remap();
@@ -111,7 +111,7 @@ void retron::level_render::render(ff::draw_base& draw)
         const retron::comp::scale* scale = registry.try_get<const retron::comp::scale>(entity);
         const retron::comp::rotation* rot = registry.try_get<const retron::comp::rotation>(entity);
 
-        comp.anim->draw_animation(draw, ff::pixel_transform(pos.position, scale ? scale->scale : ff::point_fixed{ 1, 1 }, rot ? rot->rotation : 0_f));
+        comp.anim->draw_animation(draw, ff::dxgi::pixel_transform(pos.position, scale ? scale->scale : ff::point_fixed{ 1, 1 }, rot ? rot->rotation : 0_f));
     }
 }
 

@@ -5,15 +5,15 @@
 #include "source/game/score_state.h"
 
 static void render_points_and_lives(
-    ff::draw_base& draw,
+    ff::dxgi::draw_base& draw,
     const ff::sprite_font* font,
-    const ff::sprite_data& sprite_data,
+    const ff::dxgi::sprite_data& sprite_data,
     ff::point_float top_middle,
     const retron::player& player,
     bool active)
 {
     const float font_x = retron::constants::FONT_SIZE.cast<float>().x;
-    const DirectX::XMFLOAT4 color = ff::palette_index_to_color(active
+    const DirectX::XMFLOAT4 color = ff::dxgi::palette_index_to_color(active
         ? retron::colors::ACTIVE_STATUS
         : retron::colors::INACTIVE_STATUS);
 
@@ -22,8 +22,8 @@ static void render_points_and_lives(
         char points_str[_MAX_ITOSTR_BASE10_COUNT];
         ::_itoa_s(static_cast<int>(player.points), points_str, 10);
         size_t points_len = std::strlen(points_str);
-        ff::transform points_pos(ff::point_float(top_middle.x - font_x * points_len, top_middle.y), ff::point_float(1, 1), 0, color);
-        font->draw_text(&draw, std::string_view(points_str, points_len), points_pos, ff::color::none());
+        ff::dxgi::transform points_pos(ff::point_float(top_middle.x - font_x * points_len, top_middle.y), ff::point_float(1, 1), 0, color);
+        font->draw_text(&draw, std::string_view(points_str, points_len), points_pos, ff::dxgi::color_none());
     }
 
     // Lives
@@ -32,12 +32,12 @@ static void render_points_and_lives(
 
     for (size_t i = 0; i < retron::constants::MAX_RENDER_LIVES && i < render_lives; i++)
     {
-        draw.draw_sprite(sprite_data, ff::transform(ff::point_float(top_middle.x + font_x * i, top_middle.y)));
+        draw.draw_sprite(sprite_data, ff::dxgi::transform(ff::point_float(top_middle.x + font_x * i, top_middle.y)));
     }
 
     if (render_lives > retron::constants::MAX_RENDER_LIVES)
     {
-        font->draw_text(&draw, "+", ff::transform(ff::point_float(top_middle.x + font_x * retron::constants::MAX_RENDER_LIVES, top_middle.y), ff::point_float(1, 1), 0, color), ff::color::none());
+        font->draw_text(&draw, "+", ff::dxgi::transform(ff::point_float(top_middle.x + font_x * retron::constants::MAX_RENDER_LIVES, top_middle.y), ff::point_float(1, 1), 0, color), ff::dxgi::color_none());
     }
 }
 
@@ -72,12 +72,12 @@ retron::score_state::score_state(const std::vector<const retron::player*>& playe
 
 void retron::score_state::render()
 {
-    ff::draw_ptr draw = retron::app_service::begin_palette_draw();
+    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw();
     if (draw)
     {
         for (size_t i = 0; i < this->players.size(); i++)
         {
-            ff::palette_base& palette = retron::app_service::get().player_palette(this->players[i]->index);
+            ff::dxgi::palette_base& palette = retron::app_service::get().player_palette(this->players[i]->index);
             draw->push_palette_remap(palette.index_remap(), palette.index_remap_hash());
 
             ::render_points_and_lives(*draw, this->game_font.object().get(), this->player_sprite->sprite_data(),
@@ -90,7 +90,7 @@ void retron::score_state::render()
         if (this->level_text.size() && this->level_measure_text.size())
         {
             ff::point_float size = this->game_font_small->measure_text(this->level_measure_text, ff::point_float(1, 1));
-            this->game_font_small->draw_text(draw, this->level_text, ff::transform(ff::point_fixed(std::floor(240.0f - size.x / 2.0f), 263)), ff::color::none());
+            this->game_font_small->draw_text(draw, this->level_text, ff::dxgi::transform(ff::point_fixed(std::floor(240.0f - size.x / 2.0f), 263)), ff::dxgi::color_none());
         }
     }
 }

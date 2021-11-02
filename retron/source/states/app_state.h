@@ -19,8 +19,8 @@ namespace retron
         // ff::state
         virtual std::shared_ptr<ff::state> advance_time() override;
         virtual void advance_input() override;
-        virtual void render(ff::target_base& target, ff::depth& depth) override;
-        virtual void frame_rendered(ff::state::advance_t type, ff::target_base& target, ff::depth& depth) override;
+        virtual void render(ff::dxgi::target_base& target, ff::dxgi::depth_base& depth) override;
+        virtual void frame_rendered(ff::state::advance_t type, ff::dxgi::target_base& target, ff::dxgi::depth_base& depth) override;
         virtual size_t child_state_count() override;
         virtual ff::state* child_state(size_t index) override;
 
@@ -32,12 +32,12 @@ namespace retron
         virtual const retron::game_spec& game_spec() const override;
         virtual void system_options(const retron::system_options& options) override;
         virtual void default_game_options(const retron::game_options& options) override;
-        virtual ff::palette_base& palette() override;
-        virtual ff::palette_base& player_palette(size_t player) override;
-        virtual ff::draw_device& draw_device() const override;
+        virtual ff::dxgi::palette_base& palette() override;
+        virtual ff::dxgi::palette_base& player_palette(size_t player) override;
+        virtual ff_dx::draw_device& draw_device() const override;
         virtual retron::render_targets* render_targets() const override;
         virtual void push_render_targets(retron::render_targets& targets) override;
-        virtual void pop_render_targets(ff::target_base& final_target) override;
+        virtual void pop_render_targets(ff::dxgi::target_base& final_target) override;
         virtual ff::signal_sink<>& reload_resources_sink() override;
         virtual retron::render_debug_t render_debug() const override;
         virtual void render_debug(retron::render_debug_t flags) override;
@@ -68,8 +68,8 @@ namespace retron
         retron::render_targets render_targets_;
         std::vector<retron::render_targets*> render_targets_stack;
         std::shared_ptr<ff::texture> texture_1080;
-        std::shared_ptr<ff::target_base> target_1080;
-        std::unique_ptr<ff::draw_device> draw_device_;
+        std::shared_ptr<ff::dxgi::target_base> target_1080;
+        std::unique_ptr<ff_dx::draw_device> draw_device_;
         std::array<std::shared_ptr<ff::palette_cycle>, constants::MAX_PLAYERS> player_palettes;
         ff::auto_resource<ff::palette_data> palette_data;
         ff::viewport viewport;

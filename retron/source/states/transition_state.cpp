@@ -16,8 +16,8 @@ retron::transition_state::transition_state(std::shared_ptr<ff::state> old_state,
 
     this->texture = std::make_shared<ff::texture>(size, DXGI_FORMAT_R8G8B8A8_UNORM);
     this->texture2 = std::make_shared<ff::texture>(size, DXGI_FORMAT_R8G8B8A8_UNORM);
-    this->target = std::make_shared<ff::target_texture>(this->texture);
-    this->target2 = std::make_shared<ff::target_texture>(this->texture2);
+    this->target = std::make_shared<ff_dx::target_texture>(this->texture);
+    this->target2 = std::make_shared<ff_dx::target_texture>(this->texture2);
 }
 
 std::shared_ptr<ff::state> retron::transition_state::advance_time()
@@ -48,8 +48,8 @@ std::shared_ptr<ff::state> retron::transition_state::advance_time()
 
 void retron::transition_state::render()
 {
-    ff_dx::get_device_state().clear_target(this->target->view(), ff::color::black());
-    ff_dx::get_device_state().clear_target(this->target2->view(), ff::color::black());
+    ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target).dx11_target_view(), ff::dxgi::color_black());
+    ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target2).dx11_target_view(), ff::dxgi::color_black());
 
     ff::fixed_int half_height = constants::RENDER_HEIGHT / 2;
     retron::app_service& app = retron::app_service::get();
@@ -63,32 +63,32 @@ void retron::transition_state::render()
         ff::rect_fixed rect = constants::RENDER_RECT.right_edge();
         rect.left -= std::min(this->counter, constants::RENDER_WIDTH);
 
-        ff::draw_ptr draw = app.draw_device().begin_draw(*this->target, nullptr, rect, rect);
+        ff::dxgi::draw_ptr draw = app.draw_device().begin_draw(*this->target, nullptr, rect, rect);
         if (draw)
         {
-            draw->draw_filled_rectangle(rect.cast<float>(), ff::color::black());
+            draw->draw_filled_rectangle(rect.cast<float>(), ff::dxgi::color_black());
         }
     }
     else if (this->counter <= half_height)
     {
         ff::fixed_int offset = half_height - std::min(half_height, this->counter);
         ff::rect_fixed rect(offset, offset, constants::RENDER_WIDTH - offset, constants::RENDER_HEIGHT - offset);
-        ff::draw_ptr draw = app.draw_device().begin_draw(*this->target, nullptr, rect, rect);
+        ff::dxgi::draw_ptr draw = app.draw_device().begin_draw(*this->target, nullptr, rect, rect);
         if (draw)
         {
             draw->push_palette(&app.palette());
-            draw->draw_sprite(this->image->sprite_data(), ff::transform::identity());
+            draw->draw_sprite(this->image->sprite_data(), ff::dxgi::transform::identity());
         }
     }
     else
     {
         // Draw gradient image
         {
-            ff::draw_ptr draw = app.draw_device().begin_draw(*this->target, nullptr, constants::RENDER_RECT, constants::RENDER_RECT);
+            ff::dxgi::draw_ptr draw = app.draw_device().begin_draw(*this->target, nullptr, constants::RENDER_RECT, constants::RENDER_RECT);
             if (draw)
             {
                 draw->push_palette(&app.palette());
-                draw->draw_sprite(this->image->sprite_data(), ff::transform::identity());
+                draw->draw_sprite(this->image->sprite_data(), ff::dxgi::transform::identity());
             }
         }
 
@@ -100,21 +100,21 @@ void retron::transition_state::render()
         {
             ff::fixed_int offset = half_height - std::min(half_height, this->counter - half_height);
             ff::rect_fixed rect(offset, offset, constants::RENDER_WIDTH - offset, constants::RENDER_HEIGHT - offset);
-            ff::draw_ptr draw = app.draw_device().begin_draw(*this->target, nullptr, rect, rect);
+            ff::dxgi::draw_ptr draw = app.draw_device().begin_draw(*this->target, nullptr, rect, rect);
             if (draw)
             {
-                draw->draw_sprite(this->texture2->sprite_data(), ff::transform::identity());
+                draw->draw_sprite(this->texture2->sprite_data(), ff::dxgi::transform::identity());
             }
         }
     }
 
-    ff::draw_ptr draw = app.draw_device().begin_draw(
+    ff::dxgi::draw_ptr draw = app.draw_device().begin_draw(
         *app.render_targets()->target(retron::render_target_types::rgb_pma_2),
         app.render_targets()->depth(retron::render_target_types::rgb_pma_2).get(),
         constants::RENDER_RECT, constants::RENDER_RECT);
 
     if (draw)
     {
-        draw->draw_sprite(this->texture->sprite_data(), ff::transform::identity());
+        draw->draw_sprite(this->texture->sprite_data(), ff::dxgi::transform::identity());
     }
 }

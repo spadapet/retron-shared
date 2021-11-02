@@ -96,7 +96,7 @@ void retron::particles::advance_now()
     ::SetEvent(this->async_event);
 }
 
-uint16_t retron::particles::add_group(const ff::pixel_transform& transform, int effect_id, int count, const std::vector<std::shared_ptr<ff::animation_base>>& animations)
+uint16_t retron::particles::add_group(const ff::dxgi::pixel_transform& transform, int effect_id, int count, const std::vector<std::shared_ptr<ff::animation_base>>& animations)
 {
     retron::particles::group_t group;
     DirectX::XMStoreFloat4x4(&group.matrix, transform.matrix());
@@ -129,9 +129,9 @@ const DirectX::XMFLOAT4X4& retron::particles::matrix(uint16_t group_id) const
     return this->groups[group_id].matrix;
 }
 
-void retron::particles::render(ff::draw_base& draw, uint8_t type)
+void retron::particles::render(ff::dxgi::draw_base& draw, uint8_t type)
 {
-    ff::transform transform = ff::transform::identity();
+    ff::dxgi::transform transform = ff::dxgi::transform::identity();
 
     for (const retron::particles::particle_t& p : this->particles_async)
     {
@@ -279,7 +279,7 @@ size_t retron::particles::spec_t::add(particles& particles, ff::point_fixed pos,
         return max_life;
     }
 
-    uint16_t group_id = particles.add_group(ff::pixel_transform(pos, scale * options.scale, rotate + options.rotate), effect_id, count, this->animations);
+    uint16_t group_id = particles.add_group(ff::dxgi::pixel_transform(pos, scale * options.scale, rotate + options.rotate), effect_id, count, this->animations);
 
     for (int i = 0; i < count; i++)
     {

@@ -10,7 +10,7 @@ namespace retron
     public:
         level_render(retron::level_render_host& host);
 
-        virtual void render(ff::draw_base& draw) override;
+        virtual void render(ff::dxgi::draw_base& draw) override;
 
     private:
         void init_resources();

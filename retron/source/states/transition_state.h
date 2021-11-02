@@ -19,8 +19,8 @@ namespace retron
 		ff::auto_resource<ff::texture> image;
 		std::shared_ptr<ff::texture> texture;
 		std::shared_ptr<ff::texture> texture2;
-		std::shared_ptr<ff::target_base> target;
-		std::shared_ptr<ff::target_base> target2;
+		std::shared_ptr<ff::dxgi::target_base> target;
+		std::shared_ptr<ff::dxgi::target_base> target2;
 		ff::fixed_int counter;
 		ff::fixed_int speed;
 		ff::fixed_int offset_stop;

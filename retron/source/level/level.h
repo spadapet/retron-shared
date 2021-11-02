@@ -71,8 +71,8 @@ namespace retron
         void handle_entity_created(entt::registry& registry, entt::entity entity);
         void handle_tracked_entity_deleted(entt::registry& registry, entt::entity entity);
 
-        void render_particles(ff::draw_base& draw);
-        void render_debug(ff::draw_base& draw);
+        void render_particles(ff::dxgi::draw_base& draw);
+        void render_debug(ff::dxgi::draw_base& draw);
 
         bool player_active() const;
 

@@ -16,7 +16,7 @@ void retron::game_over_state::render()
 {
     this->under_state->render();
 
-    ff::draw_ptr draw = retron::app_service::begin_palette_draw();
+    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw();
     if (draw)
     {
         std::string_view text = "GAME OVER";
@@ -25,7 +25,7 @@ void retron::game_over_state::render()
         ff::point_float size = this->game_font->measure_text(text, scale);
 
         this->game_font->draw_text(draw, text,
-            ff::transform(retron::constants::RENDER_RECT.center().cast<float>() - size / 3.0f, scale, 0, ff::palette_index_to_color(retron::colors::ACTIVE_STATUS)),
-            ff::palette_index_to_color(224));
+            ff::dxgi::transform(retron::constants::RENDER_RECT.center().cast<float>() - size / 3.0f, scale, 0, ff::dxgi::palette_index_to_color(retron::colors::ACTIVE_STATUS)),
+            ff::dxgi::palette_index_to_color(224));
     }
 }

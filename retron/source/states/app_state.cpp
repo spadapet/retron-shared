@@ -19,18 +19,18 @@ retron::app_service& retron::app_service::get()
     return *::app_service;
 }
 
-ff::draw_ptr retron::app_service::begin_palette_draw()
+ff::dxgi::draw_ptr retron::app_service::begin_palette_draw()
 {
     retron::render_targets& targets = *retron::app_service::get().render_targets();
-    ff::target_base& target = *targets.target(retron::render_target_types::palette_1);
-    ff::depth& depth = *targets.depth(retron::render_target_types::palette_1);
+    ff::dxgi::target_base& target = *targets.target(retron::render_target_types::palette_1);
+    ff_dx::depth& depth = *targets.depth(retron::render_target_types::palette_1);
 
     return retron::app_service::get().draw_device().begin_draw(target, &depth, retron::constants::RENDER_RECT, retron::constants::RENDER_RECT);
 }
 
 retron::app_state::app_state()
     : viewport(ff::point_int(constants::RENDER_WIDTH, constants::RENDER_HEIGHT))
-    , draw_device_(ff::draw_device::create())
+    , draw_device_(ff_dx::draw_device::create())
     , debug_state(std::make_shared<retron::debug_state>())
     , debug_stepping_frames(false)
     , debug_step_one_frame(false)
@@ -40,7 +40,7 @@ retron::app_state::app_state()
     , render_debug_(retron::render_debug_t::none)
     , debug_cheats_(retron::debug_cheats_t::none)
     , texture_1080(std::make_shared<ff::texture>(retron::constants::RENDER_SIZE_HIGH.cast<int>(), DXGI_FORMAT_R8G8B8A8_UNORM))
-    , target_1080(std::make_shared<ff::target_texture>(this->texture_1080))
+    , target_1080(std::make_shared<ff_dx::target_texture>(this->texture_1080))
 {
     assert(!::app_service);
     ::app_service = this;
@@ -162,24 +162,24 @@ void retron::app_state::advance_input()
     ff::state::advance_input();
 }
 
-void retron::app_state::render(ff::target_base& target, ff::depth& depth)
+void retron::app_state::render(ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
 {
-    ff_dx::get_device_state().clear_target(this->target_1080->view(), ff::color::none());
+    ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_1080).dx11_target_view(), ff::dxgi::color_none());
 
     this->push_render_targets(this->render_targets_);
     ff::state::render();
     this->pop_render_targets(*this->target_1080);
 
     ff::rect_fixed target_rect = this->viewport.view(target.size().rotated_pixel_size()).cast<ff::fixed_int>();
-    ff::draw_ptr draw = this->draw_device().begin_draw(target, nullptr, target_rect, retron::constants::RENDER_RECT_HIGH);
+    ff::dxgi::draw_ptr draw = this->draw_device().begin_draw(target, nullptr, target_rect, retron::constants::RENDER_RECT_HIGH);
     if (draw)
     {
         draw->push_sampler_linear_filter(true);
-        draw->draw_sprite(this->texture_1080->sprite_data(), ff::transform::identity());
+        draw->draw_sprite(this->texture_1080->sprite_data(), ff::dxgi::transform::identity());
     }
 }
 
-void retron::app_state::frame_rendered(ff::state::advance_t type, ff::target_base& target, ff::depth& depth)
+void retron::app_state::frame_rendered(ff::state::advance_t type, ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
 {
     this->debug_step_one_frame = false;
 
@@ -255,17 +255,17 @@ void retron::app_state::default_game_options(const retron::game_options& options
     this->game_options_ = options;
 }
 
-ff::palette_base& retron::app_state::palette()
+ff::dxgi::palette_base& retron::app_state::palette()
 {
     return this->player_palette(0);
 }
 
-ff::palette_base& retron::app_state::player_palette(size_t player)
+ff::dxgi::palette_base& retron::app_state::player_palette(size_t player)
 {
     return *this->player_palettes[player];
 }
 
-ff::draw_device& retron::app_state::draw_device() const
+ff_dx::draw_device& retron::app_state::draw_device() const
 {
     return *this->draw_device_;
 }
@@ -282,7 +282,7 @@ void retron::app_state::push_render_targets(retron::render_targets& targets)
     return this->render_targets_stack.push_back(&targets);
 }
 
-void retron::app_state::pop_render_targets(ff::target_base& final_target)
+void retron::app_state::pop_render_targets(ff::dxgi::target_base& final_target)
 {
     assert(this->render_targets_stack.size() > 1);
     this->render_targets_stack.back()->render(final_target);

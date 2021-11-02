@@ -35,7 +35,7 @@ namespace retron
         virtual ~app_service() = default;
 
         static app_service& get();
-        static ff::draw_ptr begin_palette_draw();
+        static ff::dxgi::draw_ptr begin_palette_draw();
 
         // Globals
         virtual retron::audio& audio() = 0;
@@ -49,12 +49,12 @@ namespace retron
         virtual void default_game_options(const retron::game_options& options) = 0;
 
         // Rendering
-        virtual ff::palette_base& palette() = 0;
-        virtual ff::palette_base& player_palette(size_t player) = 0;
-        virtual ff::draw_device& draw_device() const = 0;
+        virtual ff::dxgi::palette_base& palette() = 0;
+        virtual ff::dxgi::palette_base& player_palette(size_t player) = 0;
+        virtual ff_dx::draw_device& draw_device() const = 0;
         virtual retron::render_targets* render_targets() const = 0;
         virtual void push_render_targets(retron::render_targets& targets) = 0;
-        virtual void pop_render_targets(ff::target_base& final_target) = 0;
+        virtual void pop_render_targets(ff::dxgi::target_base& final_target) = 0;
 
         // Debug
         virtual ff::signal_sink<>& reload_resources_sink() = 0;

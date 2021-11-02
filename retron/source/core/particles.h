@@ -30,7 +30,7 @@ namespace retron
         particles();
 
         ff::end_scope_action advance_async();
-        void render(ff::draw_base& draw, uint8_t type = 0);
+        void render(ff::dxgi::draw_base& draw, uint8_t type = 0);
 
         bool effect_active(int effect_id) const;
         void effect_position(int effect_id, ff::point_fixed pos);
@@ -76,7 +76,7 @@ namespace retron
         struct group_t
         {
             DirectX::XMFLOAT4X4 matrix;
-            ff::pixel_transform transform;
+            ff::dxgi::pixel_transform transform;
             int refs;
             int effect_id;
             std::vector<std::shared_ptr<ff::animation_base>> animations;
@@ -128,7 +128,7 @@ namespace retron
         void advance_block();
         void advance_now();
 
-        uint16_t add_group(const ff::pixel_transform& transform, int effect_id, int count, const std::vector<std::shared_ptr<ff::animation_base>>& animations);
+        uint16_t add_group(const ff::dxgi::pixel_transform& transform, int effect_id, int count, const std::vector<std::shared_ptr<ff::animation_base>>& animations);
         void release_group(uint16_t group_id);
         const DirectX::XMFLOAT4X4& matrix(uint16_t group_id) const;
 

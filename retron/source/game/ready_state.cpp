@@ -35,7 +35,7 @@ void retron::ready_state::render()
 {
     this->under_state->render();
 
-    ff::draw_ptr draw = retron::app_service::begin_palette_draw();
+    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw();
     if (draw)
     {
         const retron::player& player = this->level->players().front()->self_or_coop();
@@ -67,11 +67,11 @@ void retron::ready_state::render()
 
         if (player_text.size() || level_text.size())
         {
-            ff::palette_base& palette = retron::app_service::get().player_palette(player.index);
+            ff::dxgi::palette_base& palette = retron::app_service::get().player_palette(player.index);
             draw->push_palette_remap(palette.index_remap(), palette.index_remap_hash());
 
             const ff::point_float scale(2, 2);
-            DirectX::XMFLOAT4 color = ff::palette_index_to_color(retron::colors::ACTIVE_STATUS);
+            DirectX::XMFLOAT4 color = ff::dxgi::palette_index_to_color(retron::colors::ACTIVE_STATUS);
 
             if (this->counter >= ::ADVANCE_UNDER_START)
             {
@@ -82,14 +82,14 @@ void retron::ready_state::render()
             {
                 ff::point_float size = this->game_font->measure_text(player_text, scale);
                 ff::point_float top_left = retron::constants::RENDER_RECT.center().cast<float>() - ff::point_float(size.x / 2.0f, size.y);
-                this->game_font->draw_text(draw, player_text, ff::transform(top_left, scale, 0, color), ff::palette_index_to_color(224));
+                this->game_font->draw_text(draw, player_text, ff::dxgi::transform(top_left, scale, 0, color), ff::dxgi::palette_index_to_color(224));
             }
 
             if (level_text.size())
             {
                 ff::point_float size = this->game_font->measure_text(level_text, scale);
                 ff::point_float top_left = retron::constants::RENDER_RECT.center().cast<float>() - ff::point_float(size.x / 2.0f, -size.y);
-                this->game_font->draw_text(draw, level_text, ff::transform(top_left, scale, 0, color), ff::palette_index_to_color(224));
+                this->game_font->draw_text(draw, level_text, ff::dxgi::transform(top_left, scale, 0, color), ff::dxgi::palette_index_to_color(224));
             }
 
             draw->pop_palette_remap();

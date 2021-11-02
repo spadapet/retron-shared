@@ -65,7 +65,7 @@ namespace retron
     public:
         virtual ~level_render_base() = default;
 
-        virtual void render(ff::draw_base& draw) = 0;
+        virtual void render(ff::dxgi::draw_base& draw) = 0;
     };
 
     class level_render_host

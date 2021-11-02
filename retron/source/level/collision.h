@@ -28,7 +28,7 @@ namespace retron
         ff::rect_fixed box_spec(entt::entity entity, retron::collision_box_type collision_type);
         ff::rect_fixed box(entt::entity entity, retron::collision_box_type collision_type);
 
-        void render_debug(ff::draw_base& draw);
+        void render_debug(ff::dxgi::draw_base& draw);
 
     private:
         class hit_filter : public ::b2ContactFilter
@@ -70,7 +70,7 @@ namespace retron
         void scale_changed(entt::registry& registry, entt::entity entity);
 
         template<typename BoxType, typename DirtyType> ::b2Body* update_box(entt::entity entity, retron::collision_box_type collision_type);
-        template<typename BoxType> void render_debug(ff::draw_base& draw, retron::collision_box_type collision_type, int thickness, int color, int color_hit);
+        template<typename BoxType> void render_debug(ff::dxgi::draw_base& draw, retron::collision_box_type collision_type, int thickness, int color, int color_hit);
         template<typename T> void box_removed(entt::registry& registry, entt::entity entity);
         template<retron::collision_box_type T> void box_spec_changed(entt::registry& registry, entt::entity entity);
 

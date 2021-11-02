@@ -56,7 +56,7 @@ static std::shared_ptr<ff::state> create_app_state()
     return app_state;
 }
 
-static const ff::palette_base* get_ui_palette()
+static const ff::dxgi::palette_base* get_ui_palette()
 {
     auto app_state = ::weak_app_state.lock();
     return app_state ? &app_state->palette() : nullptr;
