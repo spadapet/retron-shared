@@ -23,7 +23,7 @@ ff::dxgi::draw_ptr retron::app_service::begin_palette_draw()
 {
     retron::render_targets& targets = *retron::app_service::get().render_targets();
     ff::dxgi::target_base& target = *targets.target(retron::render_target_types::palette_1);
-    ff_dx::depth& depth = *targets.depth(retron::render_target_types::palette_1);
+    ff::dxgi::depth_base& depth = *targets.depth(retron::render_target_types::palette_1);
 
     return retron::app_service::get().draw_device().begin_draw(target, &depth, retron::constants::RENDER_RECT, retron::constants::RENDER_RECT);
 }
@@ -164,7 +164,7 @@ void retron::app_state::advance_input()
 
 void retron::app_state::render(ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
 {
-    ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_1080).dx11_target_view(), ff::dxgi::color_none());
+    this->target_1080->clear(ff_dx::get_device_state(), ff::dxgi::color_none());
 
     this->push_render_targets(this->render_targets_);
     ff::state::render();

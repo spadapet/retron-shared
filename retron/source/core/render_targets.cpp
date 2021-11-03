@@ -4,13 +4,13 @@
 
 static const ff::point_int LOW_SIZE(retron::constants::RENDER_WIDTH, retron::constants::RENDER_HEIGHT);
 static const ff::point_int HIGH_SIZE = ::LOW_SIZE * retron::constants::RENDER_SCALE;
-static std::weak_ptr<ff_dx::depth> weak_depth;
+static std::weak_ptr<ff::dxgi::depth_base> weak_depth;
 static std::weak_ptr<ff::texture> weak_texture_1080;
 static std::weak_ptr<ff::dxgi::target_base> weak_target_1080;
 
-static std::shared_ptr<ff_dx::depth> get_depth()
+static std::shared_ptr<ff::dxgi::depth_base> get_depth()
 {
-    std::shared_ptr<ff_dx::depth> depth = ::weak_depth.lock();
+    std::shared_ptr<ff::dxgi::depth_base> depth = ::weak_depth.lock();
     if (!depth)
     {
         depth = std::make_shared<ff_dx::depth>(::LOW_SIZE);
@@ -53,12 +53,12 @@ void retron::render_targets::clear()
 {
     if (ff::flags::has(this->used_targets, retron::render_target_types::palette_1) && this->target_palette_1)
     {
-        ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_palette_1).dx11_target_view(), ff::dxgi::color_none());
+        this->target_palette_1->clear(ff_dx::get_device_state(), ff::dxgi::color_none());
     }
 
     if (ff::flags::has(this->used_targets, retron::render_target_types::rgb_pma_2) && this->target_rgb_pma_1)
     {
-        ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_rgb_pma_1).dx11_target_view(), ff::dxgi::color_none());
+        this->target_rgb_pma_1->clear(ff_dx::get_device_state(), ff::dxgi::color_none());
     }
 
     this->used_targets = retron::render_target_types::none;
@@ -77,7 +77,7 @@ void retron::render_targets::render(ff::dxgi::target_base& target)
             this->target_1080 = ::get_target_1080();
         }
 
-        ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_1080).dx11_target_view(), ff::dxgi::color_none());
+        this->target_1080->clear(ff_dx::get_device_state(), ff::dxgi::color_none());
     }
 
     ff::dxgi::draw_ptr draw = direct_to_target
@@ -143,7 +143,7 @@ const std::shared_ptr<ff::dxgi::target_base>& retron::render_targets::target(ret
             if (!this->target_palette_1)
             {
                 this->target_palette_1 = std::make_shared<ff_dx::target_texture>(this->texture(target));
-                ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_palette_1).dx11_target_view(), ff::dxgi::color_none());
+                this->target_palette_1->clear(ff_dx::get_device_state(), ff::dxgi::color_none());
             }
             return this->target_palette_1;
 
@@ -152,13 +152,13 @@ const std::shared_ptr<ff::dxgi::target_base>& retron::render_targets::target(ret
             if (!this->target_rgb_pma_1)
             {
                 this->target_rgb_pma_1 = std::make_shared<ff_dx::target_texture>(this->texture(target));
-                ff_dx::get_device_state().clear_target(ff_dx::target_access::get(*this->target_rgb_pma_1).dx11_target_view(), ff::dxgi::color_none());
+                this->target_rgb_pma_1->clear(ff_dx::get_device_state(), ff::dxgi::color_none());
             }
             return this->target_rgb_pma_1;
     }
 }
 
-const std::shared_ptr<ff_dx::depth>& retron::render_targets::depth(retron::render_target_types target)
+const std::shared_ptr<ff::dxgi::depth_base>& retron::render_targets::depth(retron::render_target_types target)
 {
     if (!this->depth_)
     {

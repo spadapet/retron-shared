@@ -18,12 +18,12 @@ namespace retron
         void render(ff::dxgi::target_base& target);
         const std::shared_ptr<ff::texture>& texture(render_target_types target);
         const std::shared_ptr<ff::dxgi::target_base>& target(render_target_types target);
-        const std::shared_ptr<ff_dx::depth>& depth(render_target_types target);
+        const std::shared_ptr<ff::dxgi::depth_base>& depth(render_target_types target);
 
     private:
         render_target_types used_targets;
         ff::viewport viewport;
-        std::shared_ptr<ff_dx::depth> depth_;
+        std::shared_ptr<ff::dxgi::depth_base> depth_;
         std::shared_ptr<ff::texture> texture_rgb_pma_1;
         std::shared_ptr<ff::dxgi::target_base> target_rgb_pma_1;
         std::shared_ptr<ff::texture> texture_palette_1;
