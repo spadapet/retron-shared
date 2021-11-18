@@ -29,7 +29,7 @@ ff::dxgi::draw_ptr retron::app_service::begin_palette_draw()
 }
 
 retron::app_state::app_state()
-    : viewport(ff::point_int(constants::RENDER_WIDTH, constants::RENDER_HEIGHT))
+    : viewport(ff::point_size(constants::RENDER_WIDTH, constants::RENDER_HEIGHT))
     , draw_device_(ff_dx::draw_device::create())
     , debug_state(std::make_shared<retron::debug_state>())
     , debug_stepping_frames(false)
@@ -39,7 +39,7 @@ retron::app_state::app_state()
     , pending_hide_debug_state(false)
     , render_debug_(retron::render_debug_t::none)
     , debug_cheats_(retron::debug_cheats_t::none)
-    , texture_1080(std::make_shared<ff::texture>(retron::constants::RENDER_SIZE_HIGH.cast<int>(), DXGI_FORMAT_R8G8B8A8_UNORM))
+    , texture_1080(std::make_shared<ff::texture>(retron::constants::RENDER_SIZE_HIGH.cast<size_t>(), DXGI_FORMAT_R8G8B8A8_UNORM))
     , target_1080(std::make_shared<ff_dx::target_texture>(this->texture_1080))
 {
     assert(!::app_service);

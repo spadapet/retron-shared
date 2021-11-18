@@ -6,7 +6,7 @@
 retron::ui_view_state::ui_view_state(std::shared_ptr<ff::ui_view> view)
     : ff::ui_view_state(view, nullptr, nullptr)
 {
-    view->size(ff::window_size{ retron::constants::RENDER_SIZE.cast<int>(), 1.0, DMDO_DEFAULT, DMDO_DEFAULT });
+    view->size(ff::window_size{ retron::constants::RENDER_SIZE.cast<size_t>(), 1.0, DMDO_DEFAULT, DMDO_DEFAULT });
 }
 
 void retron::ui_view_state::render()

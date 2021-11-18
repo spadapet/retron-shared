@@ -2,8 +2,8 @@
 #include "source/core/app_service.h"
 #include "source/core/render_targets.h"
 
-static const ff::point_int LOW_SIZE(retron::constants::RENDER_WIDTH, retron::constants::RENDER_HEIGHT);
-static const ff::point_int HIGH_SIZE = ::LOW_SIZE * retron::constants::RENDER_SCALE;
+static const ff::point_size LOW_SIZE(retron::constants::RENDER_WIDTH, retron::constants::RENDER_HEIGHT);
+static const ff::point_size HIGH_SIZE = ::LOW_SIZE * retron::constants::RENDER_SCALE;
 static std::weak_ptr<ff::dxgi::depth_base> weak_depth;
 static std::weak_ptr<ff::texture> weak_texture_1080;
 static std::weak_ptr<ff::dxgi::target_base> weak_target_1080;
@@ -66,7 +66,7 @@ void retron::render_targets::clear()
 
 void retron::render_targets::render(ff::dxgi::target_base& target)
 {
-    ff::point_int target_size = target.size().rotated_pixel_size();
+    ff::point_size target_size = target.size().rotated_pixel_size();
     bool direct_to_target = (target_size == ::LOW_SIZE || target_size == ::HIGH_SIZE);
 
     if (!direct_to_target)

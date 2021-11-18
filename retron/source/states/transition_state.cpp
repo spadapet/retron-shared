@@ -12,7 +12,7 @@ retron::transition_state::transition_state(std::shared_ptr<ff::state> old_state,
 {
     assert(this->new_state);
 
-    ff::point_int size = constants::RENDER_SIZE.cast<int>();
+    ff::point_size size = constants::RENDER_SIZE.cast<size_t>();
 
     this->texture = std::make_shared<ff::texture>(size, DXGI_FORMAT_R8G8B8A8_UNORM);
     this->texture2 = std::make_shared<ff::texture>(size, DXGI_FORMAT_R8G8B8A8_UNORM);
