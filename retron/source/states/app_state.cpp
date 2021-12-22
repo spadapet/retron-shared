@@ -39,7 +39,7 @@ retron::app_state::app_state()
     , pending_hide_debug_state(false)
     , render_debug_(retron::render_debug_t::none)
     , debug_cheats_(retron::debug_cheats_t::none)
-    , texture_1080(std::make_shared<ff::texture>(retron::constants::RENDER_SIZE_HIGH.cast<size_t>(), DXGI_FORMAT_R8G8B8A8_UNORM))
+    , texture_1080(std::make_shared<ff::texture>(retron::constants::RENDER_SIZE_HIGH.cast<size_t>(), DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_none()))
     , target_1080(std::make_shared<ff_dx::target_texture>(this->texture_1080))
 {
     assert(!::app_service);
