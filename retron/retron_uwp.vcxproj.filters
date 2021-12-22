@@ -366,32 +366,9 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
     <None Include="retron_TemporaryKey.pfx">
       <Filter>uwp</Filter>
     </None>
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
     <None Include="$(NoesisDll)" />
   </ItemGroup>
   <ItemGroup>

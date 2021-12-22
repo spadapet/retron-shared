@@ -48,8 +48,12 @@ std::shared_ptr<ff::state> retron::transition_state::advance_time()
 
 void retron::transition_state::render()
 {
-    this->target->clear(ff_dx::get_device_state(), ff::dxgi::color_black());
-    this->target2->clear(ff_dx::get_device_state(), ff::dxgi::color_black());
+    // Clear
+    {
+        ff_dx::commands commands = ff_dx::direct_queue().new_commands();
+        this->target->clear(commands, ff::dxgi::color_black());
+        this->target2->clear(commands, ff::dxgi::color_black());
+    }
 
     ff::fixed_int half_height = constants::RENDER_HEIGHT / 2;
     retron::app_service& app = retron::app_service::get();

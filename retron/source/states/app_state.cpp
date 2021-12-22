@@ -164,7 +164,7 @@ void retron::app_state::advance_input()
 
 void retron::app_state::render(ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
 {
-    this->target_1080->clear(ff_dx::get_device_state(), ff::dxgi::color_none());
+    this->target_1080->clear(ff_dx::direct_queue().new_commands(), ff::dxgi::color_none());
 
     this->push_render_targets(this->render_targets_);
     ff::state::render();
