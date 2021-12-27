@@ -50,9 +50,13 @@ void retron::transition_state::render()
 {
     // Clear
     {
-        ff_dx::commands commands = ff_dx::direct_queue().new_commands();
-        this->target->clear(commands, ff::dxgi::color_black());
-        this->target2->clear(commands, ff::dxgi::color_black());
+#if DXVER == 11
+        ff_dx::device_state& context = ff_dx::get_device_state();
+#else
+        ff_dx::commands context = ff_dx::direct_queue().new_commands();
+#endif
+        this->target->clear(context, ff::dxgi::color_black());
+        this->target2->clear(context, ff::dxgi::color_black());
     }
 
     ff::fixed_int half_height = constants::RENDER_HEIGHT / 2;
