@@ -224,11 +224,7 @@ void retron::level::init_entities()
             hulk_group += (object_spec.hulk > 0);
         }
 
-#ifdef _DEBUG
-        std::ostringstream str;
-        str << "retron::level::create_objects time: " << std::fixed << std::setprecision(2) << timer.tick() * 1000.0 << "ms";
-        ff::log::write_debug(str);
-#endif
+        ff::log::write(ff::log::type::normal, "retron::level::create_objects time: ", &std::fixed, std::setprecision(2), timer.tick() * 1000.0, "ms");
     }
     else if (this->phase_ == internal_phase_t::show_players)
     {
