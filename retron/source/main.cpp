@@ -74,12 +74,18 @@ static ff::state::advance_t get_advance_type()
     return app_state ? app_state->advance_type() : ff::state::advance_t::running;
 }
 
+static bool get_clear_color(DirectX::XMFLOAT4&)
+{
+    return false;
+}
+
 static ff::init_app_params get_app_params()
 {
     ff::init_app_params params{};
     params.create_initial_state_func = ::create_app_state;
     params.get_time_scale_func = ::get_time_scale;
     params.get_advance_type_func = ::get_advance_type;
+    params.get_clear_color_func = ::get_clear_color;
 
     return params;
 }

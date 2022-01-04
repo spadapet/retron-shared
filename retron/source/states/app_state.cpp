@@ -39,7 +39,7 @@ retron::app_state::app_state()
     , pending_hide_debug_state(false)
     , render_debug_(retron::render_debug_t::none)
     , debug_cheats_(retron::debug_cheats_t::none)
-    , texture_1080(std::make_shared<ff::texture>(retron::constants::RENDER_SIZE_HIGH.cast<size_t>(), DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_none()))
+    , texture_1080(std::make_shared<ff::texture>(retron::constants::RENDER_SIZE_HIGH.cast<size_t>(), DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_black()))
     , target_1080(std::make_shared<ff_dx::target_texture>(this->texture_1080))
 {
     assert(!::app_service);
@@ -164,18 +164,37 @@ void retron::app_state::advance_input()
 
 void retron::app_state::render(ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
 {
-    this->target_1080->clear(ff_dx::frame_commands(), ff::dxgi::color_none());
+    this->target_1080->clear(ff_dx::frame_commands(), ff::dxgi::color_black());
 
     this->push_render_targets(this->render_targets_);
     ff::state::render();
     this->pop_render_targets(*this->target_1080);
 
-    ff::rect_fixed target_rect = this->viewport.view(target.size().rotated_pixel_size()).cast<ff::fixed_int>();
-    ff::dxgi::draw_ptr draw = this->draw_device().begin_draw(target, nullptr, target_rect, retron::constants::RENDER_RECT_HIGH);
-    if (draw)
+    // Draw to final target, with black bars
     {
-        draw->push_sampler_linear_filter(true);
-        draw->draw_sprite(this->texture_1080->sprite_data(), ff::dxgi::transform::identity());
+        ff::point_size target_size = target.size().rotated_pixel_size();
+        ff::rect_float target_rect = this->viewport.view(target_size).cast<float>();
+        ff::point_float target_scale = target_rect.size() / retron::constants::RENDER_SIZE_HIGH.cast<float>();
+        ff::rect_float full_target({}, target_size.cast<float>());
+
+        ff::dxgi::draw_ptr draw = this->draw_device().begin_draw(target, nullptr, full_target, full_target);
+        if (draw)
+        {
+            draw->push_sampler_linear_filter(true);
+
+            if (target_rect.left > 0)
+            {
+                draw->draw_filled_rectangle(ff::rect_float(full_target.top_left(), target_rect.bottom_left()), ff::dxgi::color_black());
+                draw->draw_filled_rectangle(ff::rect_float(target_rect.top_right(), full_target.bottom_right()), ff::dxgi::color_black());
+            }
+            else
+            {
+                draw->draw_filled_rectangle(ff::rect_float(full_target.top_left(), target_rect.top_right()), ff::dxgi::color_black());
+                draw->draw_filled_rectangle(ff::rect_float(target_rect.bottom_left(), full_target.bottom_right()), ff::dxgi::color_black());
+            }
+
+            draw->draw_sprite(this->texture_1080->sprite_data(), ff::dxgi::transform(target_rect.top_left(), target_scale));
+        }
     }
 }
 
