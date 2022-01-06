@@ -34,7 +34,7 @@ namespace retron
         virtual void default_game_options(const retron::game_options& options) override;
         virtual ff::dxgi::palette_base& palette() override;
         virtual ff::dxgi::palette_base& player_palette(size_t player) override;
-        virtual ff_dx::draw_device& draw_device() const override;
+        virtual ff::dx12::draw_device& draw_device() const override;
         virtual retron::render_targets* render_targets() const override;
         virtual void push_render_targets(retron::render_targets& targets) override;
         virtual void pop_render_targets(ff::dxgi::target_base& final_target) override;
@@ -69,7 +69,7 @@ namespace retron
         std::vector<retron::render_targets*> render_targets_stack;
         std::shared_ptr<ff::texture> texture_1080;
         std::shared_ptr<ff::dxgi::target_base> target_1080;
-        std::unique_ptr<ff_dx::draw_device> draw_device_;
+        std::unique_ptr<ff::dx12::draw_device> draw_device_;
         std::array<std::shared_ptr<ff::palette_cycle>, constants::MAX_PLAYERS> player_palettes;
         ff::auto_resource<ff::palette_data> palette_data;
         ff::viewport viewport;

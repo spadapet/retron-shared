@@ -16,8 +16,8 @@ retron::transition_state::transition_state(std::shared_ptr<ff::state> old_state,
 
     this->texture = std::make_shared<ff::texture>(size, DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_black());
     this->texture2 = std::make_shared<ff::texture>(size, DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_black());
-    this->target = std::make_shared<ff_dx::target_texture>(this->texture);
-    this->target2 = std::make_shared<ff_dx::target_texture>(this->texture2);
+    this->target = std::make_shared<ff::dx12::target_texture>(this->texture);
+    this->target2 = std::make_shared<ff::dx12::target_texture>(this->texture2);
 }
 
 std::shared_ptr<ff::state> retron::transition_state::advance_time()
@@ -48,8 +48,8 @@ std::shared_ptr<ff::state> retron::transition_state::advance_time()
 
 void retron::transition_state::render()
 {
-    this->target->clear(ff_dx::frame_commands(), ff::dxgi::color_black());
-    this->target2->clear(ff_dx::frame_commands(), ff::dxgi::color_black());
+    this->target->clear(ff::dx12::frame_commands(), ff::dxgi::color_black());
+    this->target2->clear(ff::dx12::frame_commands(), ff::dxgi::color_black());
 
     ff::fixed_int half_height = constants::RENDER_HEIGHT / 2;
     retron::app_service& app = retron::app_service::get();

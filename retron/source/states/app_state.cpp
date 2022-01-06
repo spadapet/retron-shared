@@ -30,7 +30,7 @@ ff::dxgi::draw_ptr retron::app_service::begin_palette_draw()
 
 retron::app_state::app_state()
     : viewport(ff::point_size(constants::RENDER_WIDTH, constants::RENDER_HEIGHT))
-    , draw_device_(ff_dx::draw_device::create())
+    , draw_device_(ff::dx12::draw_device::create())
     , debug_state(std::make_shared<retron::debug_state>())
     , debug_stepping_frames(false)
     , debug_step_one_frame(false)
@@ -40,7 +40,7 @@ retron::app_state::app_state()
     , render_debug_(retron::render_debug_t::none)
     , debug_cheats_(retron::debug_cheats_t::none)
     , texture_1080(std::make_shared<ff::texture>(retron::constants::RENDER_SIZE_HIGH.cast<size_t>(), DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_black()))
-    , target_1080(std::make_shared<ff_dx::target_texture>(this->texture_1080))
+    , target_1080(std::make_shared<ff::dx12::target_texture>(this->texture_1080))
 {
     assert(!::app_service);
     ::app_service = this;
@@ -164,7 +164,7 @@ void retron::app_state::advance_input()
 
 void retron::app_state::render(ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
 {
-    this->target_1080->clear(ff_dx::frame_commands(), ff::dxgi::color_black());
+    this->target_1080->clear(ff::dx12::frame_commands(), ff::dxgi::color_black());
 
     this->push_render_targets(this->render_targets_);
     ff::state::render();
@@ -284,7 +284,7 @@ ff::dxgi::palette_base& retron::app_state::player_palette(size_t player)
     return *this->player_palettes[player];
 }
 
-ff_dx::draw_device& retron::app_state::draw_device() const
+ff::dx12::draw_device& retron::app_state::draw_device() const
 {
     return *this->draw_device_;
 }
