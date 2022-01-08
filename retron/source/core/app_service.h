@@ -51,7 +51,7 @@ namespace retron
         // Rendering
         virtual ff::dxgi::palette_base& palette() = 0;
         virtual ff::dxgi::palette_base& player_palette(size_t player) = 0;
-        virtual ff::dx12::draw_device& draw_device() const = 0;
+        virtual ff::dxgi::draw_device_base& draw_device() const = 0;
         virtual retron::render_targets* render_targets() const = 0;
         virtual void push_render_targets(retron::render_targets& targets) = 0;
         virtual void pop_render_targets(ff::dxgi::target_base& final_target) = 0;

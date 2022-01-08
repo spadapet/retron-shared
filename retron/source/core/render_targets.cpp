@@ -5,7 +5,7 @@
 static const ff::point_size LOW_SIZE(retron::constants::RENDER_WIDTH, retron::constants::RENDER_HEIGHT);
 static const ff::point_size HIGH_SIZE = ::LOW_SIZE * retron::constants::RENDER_SCALE;
 static std::weak_ptr<ff::dxgi::depth_base> weak_depth;
-static std::weak_ptr<ff::texture> weak_texture_1080;
+static std::weak_ptr<ff::dxgi::texture_base> weak_texture_1080;
 static std::weak_ptr<ff::dxgi::target_base> weak_target_1080;
 
 static std::shared_ptr<ff::dxgi::depth_base> get_depth()
@@ -13,19 +13,19 @@ static std::shared_ptr<ff::dxgi::depth_base> get_depth()
     std::shared_ptr<ff::dxgi::depth_base> depth = ::weak_depth.lock();
     if (!depth)
     {
-        depth = std::make_shared<ff::dx12::depth>(::LOW_SIZE);
+        depth = ff::dxgi_client().create_depth(::LOW_SIZE, 0);
         ::weak_depth = depth;
     }
 
     return depth;
 }
 
-static std::shared_ptr<ff::texture> get_texture_1080()
+static std::shared_ptr<ff::dxgi::texture_base> get_texture_1080()
 {
-    std::shared_ptr<ff::texture> texture = ::weak_texture_1080.lock();
+    std::shared_ptr<ff::dxgi::texture_base> texture = ::weak_texture_1080.lock();
     if (!texture)
     {
-        texture = std::make_shared<ff::texture>(::HIGH_SIZE, DXGI_FORMAT_R8G8B8A8_UNORM);
+        texture = ff::dxgi_client().create_render_texture(::HIGH_SIZE, DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_none());
         ::weak_texture_1080 = texture;
     }
 
@@ -37,7 +37,7 @@ static std::shared_ptr<ff::dxgi::target_base> get_target_1080()
     std::shared_ptr<ff::dxgi::target_base> target = ::weak_target_1080.lock();
     if (!target)
     {
-        target = std::make_shared<ff::dx12::target_texture>(::get_texture_1080());
+        target = ff::dxgi_client().create_target_for_texture(::get_texture_1080(), 0, 0, 0);
         ::weak_target_1080 = target;
     }
 
@@ -53,12 +53,12 @@ void retron::render_targets::clear()
 {
     if (ff::flags::has(this->used_targets, retron::render_target_types::palette_1) && this->target_palette_1)
     {
-        this->target_palette_1->clear(ff::dx12::frame_commands(), ff::dxgi::color_none());
+        this->target_palette_1->clear(ff::dxgi_client().frame_context(), ff::dxgi::color_none());
     }
 
     if (ff::flags::has(this->used_targets, retron::render_target_types::rgb_pma_2) && this->target_rgb_pma_1)
     {
-        this->target_rgb_pma_1->clear(ff::dx12::frame_commands(), ff::dxgi::color_none());
+        this->target_rgb_pma_1->clear(ff::dxgi_client().frame_context(), ff::dxgi::color_none());
     }
 
     this->used_targets = retron::render_target_types::none;
@@ -73,11 +73,11 @@ void retron::render_targets::render(ff::dxgi::target_base& target)
     {
         if (!this->texture_1080)
         {
-            this->texture_1080 = ::get_texture_1080();
+            this->texture_1080 = std::make_shared<ff::texture>(::get_texture_1080());
             this->target_1080 = ::get_target_1080();
         }
 
-        this->target_1080->clear(ff::dx12::frame_commands(), ff::dxgi::color_none());
+        this->target_1080->clear(ff::dxgi_client().frame_context(), ff::dxgi::color_none());
     }
 
     ff::dxgi::draw_ptr draw = direct_to_target
@@ -142,8 +142,8 @@ const std::shared_ptr<ff::dxgi::target_base>& retron::render_targets::target(ret
         case retron::render_target_types::palette_1:
             if (!this->target_palette_1)
             {
-                this->target_palette_1 = std::make_shared<ff::dx12::target_texture>(this->texture(target));
-                this->target_palette_1->clear(ff::dx12::frame_commands(), ff::dxgi::color_none());
+                this->target_palette_1 = ff::dxgi_client().create_target_for_texture(this->texture(target)->dxgi_texture(), 0, 0, 0);
+                this->target_palette_1->clear(ff::dxgi_client().frame_context(), ff::dxgi::color_none());
             }
             return this->target_palette_1;
 
@@ -151,8 +151,8 @@ const std::shared_ptr<ff::dxgi::target_base>& retron::render_targets::target(ret
         case retron::render_target_types::rgb_pma_2:
             if (!this->target_rgb_pma_1)
             {
-                this->target_rgb_pma_1 = std::make_shared<ff::dx12::target_texture>(this->texture(target));
-                this->target_rgb_pma_1->clear(ff::dx12::frame_commands(), ff::dxgi::color_none());
+                this->target_rgb_pma_1 = ff::dxgi_client().create_target_for_texture(this->texture(target)->dxgi_texture(), 0, 0, 0);
+                this->target_rgb_pma_1->clear(ff::dxgi_client().frame_context(), ff::dxgi::color_none());
             }
             return this->target_rgb_pma_1;
     }
