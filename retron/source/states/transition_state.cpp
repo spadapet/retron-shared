@@ -14,8 +14,11 @@ retron::transition_state::transition_state(std::shared_ptr<ff::state> old_state,
 
     ff::point_size size = constants::RENDER_SIZE.cast<size_t>();
 
-    this->texture = std::make_shared<ff::texture>(size, DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_black());
-    this->texture2 = std::make_shared<ff::texture>(size, DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_black());
+    auto dxgi_texture = ff::dxgi_client().create_render_texture(size, DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_black());
+    auto dxgi_texture2 = ff::dxgi_client().create_render_texture(size, DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_black());
+
+    this->texture = std::make_shared<ff::texture>(dxgi_texture);
+    this->texture2 = std::make_shared<ff::texture>(dxgi_texture2);
     this->target = ff::dxgi_client().create_target_for_texture(this->texture->dxgi_texture(), 0, 0, 0);
     this->target2 = ff::dxgi_client().create_target_for_texture(this->texture2->dxgi_texture(), 0, 0, 0);
 }

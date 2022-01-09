@@ -119,7 +119,8 @@ const std::shared_ptr<ff::texture>& retron::render_targets::texture(retron::rend
         case retron::render_target_types::palette_1:
             if (!this->texture_palette_1)
             {
-                this->texture_palette_1 = std::make_shared<ff::texture>(::LOW_SIZE, DXGI_FORMAT_R8_UINT);
+                auto dxgi_texture = ff::dxgi_client().create_render_texture(::LOW_SIZE, DXGI_FORMAT_R8_UINT, 1, 1, 1, nullptr);
+                this->texture_palette_1 = std::make_shared<ff::texture>(dxgi_texture);
             }
             return this->texture_palette_1;
 
@@ -127,7 +128,8 @@ const std::shared_ptr<ff::texture>& retron::render_targets::texture(retron::rend
         case retron::render_target_types::rgb_pma_2:
             if (!this->texture_rgb_pma_1)
             {
-                this->texture_rgb_pma_1 = std::make_shared<ff::texture>(::LOW_SIZE, DXGI_FORMAT_R8G8B8A8_UNORM);
+                auto dxgi_texture = ff::dxgi_client().create_render_texture(::LOW_SIZE, DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, nullptr);
+                this->texture_rgb_pma_1 = std::make_shared<ff::texture>(dxgi_texture);
             }
             return this->texture_rgb_pma_1;
     }

@@ -20,7 +20,7 @@ namespace res
 }
 
 static const std::string_view NOESIS_NAME = "d704047b-5bd2-4757-9858-6a7d86cdd006";
-static const std::string_view NOESIS_KEY = "wnOitvo5oraIFxZLp7b1Dc+REHfCEXMdUqnUJUADv/hapPH/";
+static const std::string_view NOESIS_KEY = "rl9dmPcVXZhzCS6KAX6FhQC3A7UT/jOt7AJ5uB+5MkgTRvl0";
 static std::weak_ptr<retron::app_state> weak_app_state;
 
 static void register_components()
