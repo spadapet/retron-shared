@@ -78,14 +78,14 @@ entt::entity retron::entities::create_electrode(retron::entity_type type, const 
 entt::entity retron::entities::create_grunt(retron::entity_type type, const ff::point_fixed& pos)
 {
     entt::entity entity = this->create(type, pos);
-    this->registry.emplace<retron::comp::grunt>(entity, this->registry.size<retron::comp::grunt>(), 0u, pos);
+    this->registry.emplace<retron::comp::grunt>(entity, this->registry.view<retron::comp::grunt>().size(), 0u, pos);
     return entity;
 }
 
 entt::entity retron::entities::create_hulk(retron::entity_type type, const ff::point_fixed& pos, size_t group)
 {
     entt::entity entity = this->create(type, pos);
-    this->registry.emplace<retron::comp::hulk>(entity, this->registry.size<retron::comp::hulk>(), group, entt::null, ff::point_fixed{}, false);
+    this->registry.emplace<retron::comp::hulk>(entity, this->registry.view<retron::comp::hulk>().size(), group, entt::null, ff::point_fixed{}, false);
     this->registry.emplace<retron::comp::velocity>(entity, ff::point_fixed{});
     return entity;
 }

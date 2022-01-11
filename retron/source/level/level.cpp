@@ -354,7 +354,7 @@ void retron::level::create_start_particles(entt::entity entity)
         }
         else
         {
-            options.delay = static_cast<int>(this->registry.size<retron::comp::showing_particle_effect>() % ::MAX_DELAY_PARTICLES);
+            options.delay = static_cast<int>(this->registry.view<retron::comp::showing_particle_effect>().size() % ::MAX_DELAY_PARTICLES);
         }
 
         bool vertical = ff::math::random_range(1, 10) > 2 ? true : false;
@@ -431,14 +431,14 @@ void retron::level::advance_phase()
             break;
 
         case internal_phase_t::show_enemies:
-            if (this->registry.empty<retron::comp::showing_particle_effect>())
+            if (this->registry.view<retron::comp::showing_particle_effect>().empty())
             {
                 this->internal_phase(internal_phase_t::show_players);
             }
             break;
 
         case internal_phase_t::show_players:
-            if (this->registry.empty<retron::comp::showing_particle_effect>())
+            if (this->registry.view<retron::comp::showing_particle_effect>().empty())
             {
                 this->internal_phase(internal_phase_t::playing);
             }
@@ -454,7 +454,7 @@ void retron::level::advance_phase()
 
     if (this->phase() == retron::level_phase::playing)
     {
-        bool winning = this->registry.empty<retron::comp::flag::clear_to_win>();
+        bool winning = this->registry.view<retron::comp::flag::clear_to_win>().empty();
 
         if (ff::flags::has(retron::app_service::get().debug_cheats(), retron::debug_cheats_t::complete_level))
         {

@@ -308,7 +308,7 @@ entt::entity retron::level_logic::pick_grunt_player_target(size_t enemy_index) c
     auto view = registry.view<const retron::comp::player>();
     for (size_t i = enemy_index; i < enemy_index + view.size(); i++)
     {
-        entt::entity entity = view.data()[i % view.size()];
+        entt::entity entity = view.storage().data()[i % view.size()];
         const retron::comp::player& player_data = registry.get<const retron::comp::player>(entity);
 
         if (player_data.state == retron::comp::player::player_state::alive)
