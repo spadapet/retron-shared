@@ -99,9 +99,6 @@
     <ClInclude Include="source\ui\title_page.xaml.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(NoesisDll)">
-      <DeploymentContent>true</DeploymentContent>
-    </None>
     <ResJson Include="assets\controls.res.json">
       <FileType>Document</FileType>
     </ResJson>
@@ -218,10 +215,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(NoesisRoot)Include;$(NoesisRoot)Src\Packages\App\Interactivity\Include;$(DevRoot)vendor;$(FFRoot)vendor\libpng_inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(DevRoot)vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>$(NoesisLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
   </ItemDefinitionGroup>
 </Project>

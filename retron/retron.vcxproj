@@ -163,14 +163,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(NoesisRoot)Include;$(NoesisRoot)Src\Packages\App\Interactivity\Include;$(DevRoot)vendor;$(FFRoot)vendor\libpng_inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <SupportJustMyCode Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</SupportJustMyCode>
+      <AdditionalIncludeDirectories>$(DevRoot)vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
-    <Link>
-      <AdditionalLibraryDirectories>$(NoesisLibDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
   </ItemDefinitionGroup>
-  <Target Name="AfterBuild">
-    <Copy SourceFiles="$(NoesisDll)" DestinationFolder="$(OutDir)" SkipUnchangedFiles="True" />
-  </Target>
 </Project>
