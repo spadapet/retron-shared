@@ -40,7 +40,7 @@ retron::app_state::app_state()
     , render_debug_(retron::render_debug_t::none)
     , debug_cheats_(retron::debug_cheats_t::none)
     , texture_1080(std::make_shared<ff::texture>(ff::dxgi_client().create_render_texture(retron::constants::RENDER_SIZE_HIGH.cast<size_t>(), DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_black())))
-    , target_1080(ff::dxgi_client().create_target_for_texture(this->texture_1080->dxgi_texture(), 0, 0, 0))
+    , target_1080(ff::dxgi_client().create_target_for_texture(this->texture_1080->dxgi_texture(), 0, 0, 0, 0))
 {
     assert(!::app_service);
     ::app_service = this;
@@ -172,7 +172,7 @@ void retron::app_state::render(ff::dxgi::target_base& target, ff::dxgi::depth_ba
 
     // Draw to final target, with black bars
     {
-        ff::point_size target_size = target.size().rotated_pixel_size();
+        ff::point_size target_size = target.size().physical_pixel_size();
         ff::rect_float target_rect = this->viewport.view(target_size).cast<float>();
         ff::point_float target_scale = target_rect.size() / retron::constants::RENDER_SIZE_HIGH.cast<float>();
         ff::rect_float full_target({}, target_size.cast<float>());
@@ -202,13 +202,11 @@ void retron::app_state::frame_rendered(ff::state::advance_t type, ff::dxgi::targ
 {
     this->debug_step_one_frame = false;
 
-    ff::rect_fixed target_rect = this->viewport.view(target.size().rotated_pixel_size()).cast<ff::fixed_int>();
-    ff::point_fixed target_scale = target_rect.size() / constants::RENDER_SIZE;
-    ff::point_fixed target_pos = target_rect.top_left();
+    ff::rect_float viewport = this->viewport.view(target.size().physical_pixel_size()).cast<float>();
 
     for (ff::ui_view* view : ff::ui::rendered_views())
     {
-        view->set_view_to_screen_transform(target_pos.cast<float>(), target_scale.cast<float>());
+        view->viewport(viewport);
     }
 
     ff::state::frame_rendered(type, target, depth);

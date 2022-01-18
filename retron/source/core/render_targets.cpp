@@ -37,7 +37,7 @@ static std::shared_ptr<ff::dxgi::target_base> get_target_1080()
     std::shared_ptr<ff::dxgi::target_base> target = ::weak_target_1080.lock();
     if (!target)
     {
-        target = ff::dxgi_client().create_target_for_texture(::get_texture_1080(), 0, 0, 0);
+        target = ff::dxgi_client().create_target_for_texture(::get_texture_1080(), 0, 0, 0, 0);
         ::weak_target_1080 = target;
     }
 
@@ -66,7 +66,7 @@ void retron::render_targets::clear()
 
 void retron::render_targets::render(ff::dxgi::target_base& target)
 {
-    ff::point_size target_size = target.size().rotated_pixel_size();
+    ff::point_size target_size = target.size().physical_pixel_size();
     bool direct_to_target = (target_size == ::LOW_SIZE || target_size == ::HIGH_SIZE);
 
     if (!direct_to_target)
@@ -100,7 +100,7 @@ void retron::render_targets::render(ff::dxgi::target_base& target)
 
     if (!direct_to_target)
     {
-        ff::rect_fixed target_rect = this->viewport.view(target.size().rotated_pixel_size()).cast<ff::fixed_int>();
+        ff::rect_fixed target_rect = this->viewport.view(target.size().physical_pixel_size()).cast<ff::fixed_int>();
         draw = retron::app_service::get().draw_device().begin_draw(target, nullptr, target_rect, constants::RENDER_RECT_HIGH);
         if (draw)
         {
@@ -144,7 +144,7 @@ const std::shared_ptr<ff::dxgi::target_base>& retron::render_targets::target(ret
         case retron::render_target_types::palette_1:
             if (!this->target_palette_1)
             {
-                this->target_palette_1 = ff::dxgi_client().create_target_for_texture(this->texture(target)->dxgi_texture(), 0, 0, 0);
+                this->target_palette_1 = ff::dxgi_client().create_target_for_texture(this->texture(target)->dxgi_texture(), 0, 0, 0, 0);
                 this->target_palette_1->clear(ff::dxgi_client().frame_context(), ff::dxgi::color_none());
             }
             return this->target_palette_1;
@@ -153,7 +153,7 @@ const std::shared_ptr<ff::dxgi::target_base>& retron::render_targets::target(ret
         case retron::render_target_types::rgb_pma_2:
             if (!this->target_rgb_pma_1)
             {
-                this->target_rgb_pma_1 = ff::dxgi_client().create_target_for_texture(this->texture(target)->dxgi_texture(), 0, 0, 0);
+                this->target_rgb_pma_1 = ff::dxgi_client().create_target_for_texture(this->texture(target)->dxgi_texture(), 0, 0, 0, 0);
                 this->target_rgb_pma_1->clear(ff::dxgi_client().frame_context(), ff::dxgi::color_none());
             }
             return this->target_rgb_pma_1;
