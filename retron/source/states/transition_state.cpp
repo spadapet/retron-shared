@@ -19,8 +19,8 @@ retron::transition_state::transition_state(std::shared_ptr<ff::state> old_state,
 
     this->texture = std::make_shared<ff::texture>(dxgi_texture);
     this->texture2 = std::make_shared<ff::texture>(dxgi_texture2);
-    this->target = ff::dxgi_client().create_target_for_texture(this->texture->dxgi_texture(), 0, 0, 0, 0);
-    this->target2 = ff::dxgi_client().create_target_for_texture(this->texture2->dxgi_texture(), 0, 0, 0, 0);
+    this->target = ff::dxgi_client().create_target_for_texture(this->texture->dxgi_texture());
+    this->target2 = ff::dxgi_client().create_target_for_texture(this->texture2->dxgi_texture());
 }
 
 std::shared_ptr<ff::state> retron::transition_state::advance_time()
