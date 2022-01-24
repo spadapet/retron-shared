@@ -50,7 +50,7 @@ retron::app_state::app_state()
     this->connections.emplace_front(ff::request_save_settings_sink().connect(std::bind(&retron::app_state::save_settings, this)));
     this->render_targets_stack.push_back(nullptr);
 
-    this->init_options();
+    this->init_settings();
     this->init_resources();
     this->init_game_state();
     this->apply_system_options();
@@ -396,7 +396,7 @@ ff::state::advance_t retron::app_state::advance_type() const
     return ff::state::advance_t::running;
 }
 
-void retron::app_state::init_options()
+void retron::app_state::init_settings()
 {
     ff::dict dict = ff::settings(strings::ID_APP_STATE);
 

@@ -49,7 +49,7 @@ namespace retron
         ff::state::advance_t advance_type() const;
 
     private:
-        void init_options();
+        void init_settings();
         void init_resources();
         void init_game_state();
         void apply_system_options();

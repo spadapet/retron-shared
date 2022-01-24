@@ -132,32 +132,11 @@
     <ProjectReference Include="..\vendor\ff.vendor.box2d.vcxproj">
       <Project>{3dfedc2b-4438-4cf7-8da4-733623cb8f47}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.application\ff.application.vcxproj">
-      <Project>{376073e9-ea4d-4513-941c-906ca968c6c3}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\vendor\ff_game_library\source\ff.audio\ff.audio.vcxproj">
       <Project>{7b04eb5d-8ac9-47cc-80cb-5192cb41057a}</Project>
     </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.base\ff.base.vcxproj">
-      <Project>{dfdbd2c1-61cb-4606-8e52-85b65c9aaef2}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.data\ff.data.vcxproj">
-      <Project>{76418cad-574e-4d62-81bd-41321411fd63}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.dxgi\ff.dxgi.vcxproj">
-      <Project>{a4ea1e4f-874e-4d9a-8ce1-5483c5c8c33e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.graphics\ff.graphics.vcxproj">
-      <Project>{2464cde6-763f-48fc-a587-4bb84b4b5d64}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.input\ff.input.vcxproj">
-      <Project>{475230fd-c110-4b27-9c6a-8ef1c11b5a2e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.resource\ff.resource.vcxproj">
-      <Project>{e684fb9b-d6e4-41c4-90c8-414abf1e6006}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.ui\ff.ui.vcxproj">
-      <Project>{8147a742-08ac-49fd-8c51-3956e1a65e16}</Project>
+    <ProjectReference Include="..\vendor\ff_game_library\source\ff.game\ff.game.vcxproj">
+      <Project>{e7ca35d9-8fc1-46b0-bac0-3ecac00865b4}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

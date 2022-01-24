@@ -196,9 +196,9 @@ static void handle_window_message(ff::window_message& msg)
     {
         case WM_GETMINMAXINFO:
             {
-                RECT rect{ 0, 0, static_cast<int>(retron::constants::RENDER_WIDTH), static_cast<int>(retron::constants::RENDER_HEIGHT) };
-                const DWORD style = static_cast<DWORD>(GetWindowLong(msg.hwnd, GWL_STYLE));
-                const DWORD exStyle = static_cast<DWORD>(GetWindowLong(msg.hwnd, GWL_EXSTYLE));
+                RECT rect{ 0, 0, retron::constants::RENDER_WIDTH, retron::constants::RENDER_HEIGHT };
+                const DWORD style = static_cast<DWORD>(::GetWindowLong(msg.hwnd, GWL_STYLE));
+                const DWORD exStyle = static_cast<DWORD>(::GetWindowLong(msg.hwnd, GWL_EXSTYLE));
                 if (::AdjustWindowRectExForDpi(&rect, style, FALSE, exStyle, ::GetDpiForWindow(msg.hwnd)))
                 {
                     MINMAXINFO& mm = *reinterpret_cast<MINMAXINFO*>(msg.lp);
