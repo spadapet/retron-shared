@@ -20,20 +20,13 @@ const size_t retron::input_events::ID_CANCEL = ff::stable_hash_func("cancel"sv);
 const size_t retron::input_events::ID_PAUSE = ff::stable_hash_func("pause"sv);
 const size_t retron::input_events::ID_START = ff::stable_hash_func("start"sv);
 
-const size_t retron::input_events::ID_DEBUG_STEP_ONE_FRAME = ff::stable_hash_func("step_one_frame"sv);
-const size_t retron::input_events::ID_DEBUG_CANCEL_STEP_ONE_FRAME = ff::stable_hash_func("cancel_step_one_frame"sv);
-const size_t retron::input_events::ID_DEBUG_SPEED_SLOW = ff::stable_hash_func("speed_slow"sv);
-const size_t retron::input_events::ID_DEBUG_SPEED_FAST = ff::stable_hash_func("speed_fast"sv);
 const size_t retron::input_events::ID_DEBUG_RENDER_TOGGLE = ff::stable_hash_func("debug_render_toggle"sv);
 const size_t retron::input_events::ID_DEBUG_INVINCIBLE_TOGGLE = ff::stable_hash_func("invincible_toggle"sv);
 const size_t retron::input_events::ID_DEBUG_COMPLETE_LEVEL = ff::stable_hash_func("complete_level"sv);
 const size_t retron::input_events::ID_SHOW_CUSTOM_DEBUG = ff::stable_hash_func("show_custom_debug"sv);
 
-const size_t retron::commands::ID_DEBUG_HIDE_UI = ff::stable_hash_func("debug_hide_ui"sv);
 const size_t retron::commands::ID_DEBUG_PARTICLE_LAB = ff::stable_hash_func("debug_particle_lab"sv);
-const size_t retron::commands::ID_DEBUG_RESTART_GAME = ff::stable_hash_func("debug_restart_game"sv);
 const size_t retron::commands::ID_DEBUG_RESTART_LEVEL = ff::stable_hash_func("debug_restart_level"sv);
-const size_t retron::commands::ID_DEBUG_REBUILD_RESOURCES = ff::stable_hash_func("debug_rebuild_resources"sv);
 
 ff::fixed_int retron::helpers::dir_to_degrees(ff::point_fixed dir)
 {

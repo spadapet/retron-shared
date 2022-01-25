@@ -45,20 +45,6 @@ namespace retron
         game_players players;
         game_difficulty difficulty;
     };
-
-    struct system_options
-    {
-        system_options();
-
-        static const int CURRENT_VERSION = 1;
-
-        int version;
-        bool full_screen;
-        bool sound;
-        bool music;
-        ff::fixed_int sound_volume;
-        ff::fixed_int music_volume;
-    };
 }
 
 NS_DECLARE_REFLECTION_ENUM(retron::game_flags)

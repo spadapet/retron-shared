@@ -128,7 +128,7 @@ void retron::title_page_view_model::difficulty_command(Noesis::BaseComponent* pa
 
 void retron::title_page_view_model::sound_command(Noesis::BaseComponent* param)
 {
-    retron::system_options options = retron::app_service::get().system_options();
+    ff::game::system_options options = retron::app_service::get().system_options();
     options.sound = !options.sound;
     retron::app_service::get().system_options(options);
     this->property_changed("sound_text");

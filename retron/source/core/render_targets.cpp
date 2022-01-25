@@ -81,13 +81,13 @@ void retron::render_targets::render(ff::dxgi::target_base& target)
     }
 
     ff::dxgi::draw_ptr draw = direct_to_target
-        ? retron::app_service::get().draw_device().begin_draw(target, nullptr, ff::rect_fixed(0, 0, target_logical_size.x, target_logical_size.y), constants::RENDER_RECT)
-        : retron::app_service::get().draw_device().begin_draw(*this->target_1080, nullptr, constants::RENDER_RECT_HIGH, constants::RENDER_RECT);
+        ? ff::dxgi_client().global_draw_device().begin_draw(target, nullptr, ff::rect_fixed(0, 0, target_logical_size.x, target_logical_size.y), constants::RENDER_RECT)
+        : ff::dxgi_client().global_draw_device().begin_draw(*this->target_1080, nullptr, constants::RENDER_RECT_HIGH, constants::RENDER_RECT);
     if (draw)
     {
         if (ff::flags::has(this->used_targets, retron::render_target_types::palette_1))
         {
-            draw->push_palette(&retron::app_service::get().palette());
+            draw->push_palette(retron::app_service::get().palette());
             draw->draw_sprite(this->texture(retron::render_target_types::palette_1)->sprite_data(), ff::dxgi::transform::identity());
         }
 
@@ -101,7 +101,7 @@ void retron::render_targets::render(ff::dxgi::target_base& target)
     if (!direct_to_target)
     {
         ff::rect_fixed target_rect = this->viewport.view(target.size().logical_pixel_size).cast<ff::fixed_int>();
-        draw = retron::app_service::get().draw_device().begin_draw(target, nullptr, target_rect, constants::RENDER_RECT_HIGH);
+        draw = ff::dxgi_client().global_draw_device().begin_draw(target, nullptr, target_rect, constants::RENDER_RECT_HIGH);
         if (draw)
         {
             draw->push_sampler_linear_filter(true);

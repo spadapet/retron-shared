@@ -11,8 +11,8 @@ NS_IMPLEMENT_REFLECTION(retron::particle_lab_page_view_model, "retron.particle_l
 }
 
 retron::particle_lab_page_view_model::particle_lab_page_view_model()
-    : close_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::particle_lab_page_view_model::debug_command, this, commands::ID_DEBUG_HIDE_UI)))
-    , rebuild_resources_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::particle_lab_page_view_model::debug_command, this, commands::ID_DEBUG_REBUILD_RESOURCES)))
+    : close_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::particle_lab_page_view_model::debug_command, this, ff::game::app_state_base::ID_DEBUG_HIDE_UI)))
+    , rebuild_resources_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::particle_lab_page_view_model::debug_command, this, ff::game::app_state_base::ID_DEBUG_REBUILD_RESOURCES)))
     , particle_effects(*new Noesis::ObservableCollection<Noesis::BaseComponent>())
 {
     this->connections.emplace_front(retron::app_service::get().reload_resources_sink().connect(std::bind(&retron::particle_lab_page_view_model::init_particle_effects, this)));

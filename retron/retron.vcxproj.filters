@@ -29,9 +29,6 @@
     <ClCompile Include="source\ui\title_page.xaml.cpp">
       <Filter>source\ui</Filter>
     </ClCompile>
-    <ClCompile Include="source\states\debug_state.cpp">
-      <Filter>source\states</Filter>
-    </ClCompile>
     <ClCompile Include="source\states\title_state.cpp">
       <Filter>source\states</Filter>
     </ClCompile>
@@ -145,9 +142,6 @@
     </ClInclude>
     <ClInclude Include="source\ui\title_page.xaml.h">
       <Filter>source\ui</Filter>
-    </ClInclude>
-    <ClInclude Include="source\states\debug_state.h">
-      <Filter>source\states</Filter>
     </ClInclude>
     <ClInclude Include="source\states\title_state.h">
       <Filter>source\states</Filter>

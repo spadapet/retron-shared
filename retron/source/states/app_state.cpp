@@ -2,7 +2,6 @@
 #include "source/core/audio.h"
 #include "source/game/game_state.h"
 #include "source/states/app_state.h"
-#include "source/states/debug_state.h"
 #include "source/states/particle_lab_state.h"
 #include "source/states/title_state.h"
 #include "source/states/transition_state.h"
@@ -25,18 +24,11 @@ ff::dxgi::draw_ptr retron::app_service::begin_palette_draw()
     ff::dxgi::target_base& target = *targets.target(retron::render_target_types::palette_1);
     ff::dxgi::depth_base& depth = *targets.depth(retron::render_target_types::palette_1);
 
-    return retron::app_service::get().draw_device().begin_draw(target, &depth, retron::constants::RENDER_RECT, retron::constants::RENDER_RECT);
+    return ff::dxgi_client().global_draw_device().begin_draw(target, &depth, retron::constants::RENDER_RECT, retron::constants::RENDER_RECT);
 }
 
 retron::app_state::app_state()
     : viewport(ff::point_size(constants::RENDER_WIDTH, constants::RENDER_HEIGHT))
-    , draw_device_(ff::dxgi_client().create_draw_device())
-    , debug_state(std::make_shared<retron::debug_state>())
-    , debug_stepping_frames(false)
-    , debug_step_one_frame(false)
-    , debug_time_scale(1.0)
-    , rebuilding_resources_(false)
-    , pending_hide_debug_state(false)
     , render_debug_(retron::render_debug_t::none)
     , debug_cheats_(retron::debug_cheats_t::none)
     , texture_1080(std::make_shared<ff::texture>(ff::dxgi_client().create_render_texture(retron::constants::RENDER_SIZE_HIGH.cast<size_t>(), DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_black())))
@@ -45,15 +37,7 @@ retron::app_state::app_state()
     assert(!::app_service);
     ::app_service = this;
 
-    this->connections.emplace_front(ff::custom_debug_sink().connect(std::bind(&retron::app_state::on_custom_debug, this)));
-    this->connections.emplace_front(ff::global_resources::rebuilt_sink().connect(std::bind(&retron::app_state::on_resources_rebuilt, this)));
-    this->connections.emplace_front(ff::request_save_settings_sink().connect(std::bind(&retron::app_state::save_settings, this)));
     this->render_targets_stack.push_back(nullptr);
-
-    this->init_settings();
-    this->init_resources();
-    this->init_game_state();
-    this->apply_system_options();
 }
 
 retron::app_state::~app_state()
@@ -62,14 +46,50 @@ retron::app_state::~app_state()
     ::app_service = nullptr;
 }
 
+ff::dxgi::palette_base* retron::app_state::palette()
+{
+    return &this->player_palette(0);
+}
+
+bool retron::app_state::allow_debug()
+{
+    return this->game_spec_.allow_debug();
+}
+
+void retron::app_state::debug_command(size_t command_id)
+{
+    if (this->allow_debug())
+    {
+        if (command_id == commands::ID_DEBUG_PARTICLE_LAB)
+        {
+            auto view = std::make_shared<ff::ui_view>(Noesis::MakePtr<retron::particle_lab_page>());
+            auto view_state = std::make_shared<retron::ui_view_state>(view);
+            auto particle_lab = std::make_shared<retron::particle_lab_state>(view);
+            auto top_states = std::make_shared<ff::state_list>(std::vector<std::shared_ptr<ff::state>>{ particle_lab, view_state });
+            this->show_debug_state(top_states);
+            view->focused(true);
+        }
+        else if (command_id == commands::ID_DEBUG_RESTART_LEVEL)
+        {
+            std::shared_ptr<retron::game_state> game_state = std::dynamic_pointer_cast<retron::game_state>(this->game_state()->unwrap());
+            if (game_state)
+            {
+                game_state->debug_restart_level();
+            }
+            else
+            {
+                this->debug_command(ff::game::app_state_base::ID_DEBUG_RESTART_GAME);
+            }
+        }
+        else
+        {
+            ff::game::app_state_base::debug_command(command_id);
+        }
+    }
+}
+
 std::shared_ptr<ff::state> retron::app_state::advance_time()
 {
-    if (this->pending_hide_debug_state)
-    {
-        this->pending_hide_debug_state = false;
-        this->debug_state->hide();
-    }
-
     for (auto& i : this->player_palettes)
     {
         if (i)
@@ -78,27 +98,21 @@ std::shared_ptr<ff::state> retron::app_state::advance_time()
         }
     }
 
-    return ff::state::advance_time();
+    return ff::game::app_state_base::advance_time();
 }
 
 void retron::app_state::advance_input()
 {
-    if (this->game_spec_.allow_debug())
+    if (this->allow_debug())
     {
+        if (!this->debug_input_events)
+        {
+            this->debug_input_events = std::make_unique<ff::input_event_provider>(*this->debug_input_mapping.object(),
+                std::vector<const ff::input_vk*>{ &ff::input::keyboard(), & ff::input::pointer() });
+        }
+
         if (this->debug_input_events->advance())
         {
-            if (this->debug_input_events->event_hit(input_events::ID_DEBUG_CANCEL_STEP_ONE_FRAME))
-            {
-                this->debug_step_one_frame = false;
-                this->debug_stepping_frames = false;
-            }
-
-            if (this->debug_input_events->event_hit(input_events::ID_DEBUG_STEP_ONE_FRAME))
-            {
-                this->debug_step_one_frame = this->debug_stepping_frames;
-                this->debug_stepping_frames = true;
-            }
-
             if (this->debug_input_events->event_hit(input_events::ID_DEBUG_RENDER_TOGGLE))
             {
                 switch (this->render_debug_)
@@ -128,38 +142,14 @@ void retron::app_state::advance_input()
                 this->debug_cheats_ = ff::flags::set(this->debug_cheats_, retron::debug_cheats_t::complete_level);
             }
 
-#ifdef _DEBUG
             if (this->debug_input_events->event_hit(input_events::ID_SHOW_CUSTOM_DEBUG))
             {
-                if (!this->debug_state->visible())
-                {
-                    this->on_custom_debug();
-                }
+                this->debug_command(ff::game::app_state_base::ID_DEBUG_SHOW_UI);
             }
-#endif
-        }
-
-        if (this->debug_input_events->digital_value(input_events::ID_DEBUG_SPEED_FAST))
-        {
-            this->debug_time_scale = 4.0;
-        }
-        else if (this->debug_input_events->digital_value(input_events::ID_DEBUG_SPEED_SLOW))
-        {
-            this->debug_time_scale = 0.25;
-        }
-        else
-        {
-            this->debug_time_scale = 1.0;
         }
     }
-    else
-    {
-        this->debug_step_one_frame = false;
-        this->debug_stepping_frames = false;
-        this->debug_time_scale = 1.0;
-    }
 
-    ff::state::advance_input();
+    ff::game::app_state_base::advance_input();
 }
 
 void retron::app_state::render(ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
@@ -177,7 +167,7 @@ void retron::app_state::render(ff::dxgi::target_base& target, ff::dxgi::depth_ba
         ff::point_float target_scale = target_rect.size() / retron::constants::RENDER_SIZE_HIGH.cast<float>();
         ff::rect_float full_target({}, target_size.cast<float>());
 
-        ff::dxgi::draw_ptr draw = this->draw_device().begin_draw(target, nullptr, full_target, full_target);
+        ff::dxgi::draw_ptr draw = ff::dxgi_client().global_draw_device().begin_draw(target, nullptr, full_target, full_target);
         if (draw)
         {
             draw->push_sampler_linear_filter(true);
@@ -200,8 +190,6 @@ void retron::app_state::render(ff::dxgi::target_base& target, ff::dxgi::depth_ba
 
 void retron::app_state::frame_rendered(ff::state::advance_t type, ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
 {
-    this->debug_step_one_frame = false;
-
     ff::rect_float viewport = this->viewport.last_view().cast<float>();
 
     for (ff::ui_view* view : ff::ui::rendered_views())
@@ -210,18 +198,6 @@ void retron::app_state::frame_rendered(ff::state::advance_t type, ff::dxgi::targ
     }
 
     ff::state::frame_rendered(type, target, depth);
-}
-
-size_t retron::app_state::child_state_count()
-{
-    return 1;
-}
-
-ff::state* retron::app_state::child_state(size_t index)
-{
-    return this->debug_state->visible()
-        ? static_cast<ff::state*>(this->debug_state.get())
-        : static_cast<ff::state*>(this->game_state.get());
 }
 
 retron::audio& retron::app_state::audio()
@@ -246,11 +222,6 @@ const retron::particle_effect_base* retron::app_state::level_particle_effect(std
     return (i != this->level_particle_effects.cend()) ? &i->second : nullptr;
 }
 
-const retron::system_options& retron::app_state::system_options() const
-{
-    return this->system_options_;
-}
-
 const retron::game_options& retron::app_state::default_game_options() const
 {
     return this->game_options_;
@@ -261,10 +232,14 @@ const retron::game_spec& retron::app_state::game_spec() const
     return this->game_spec_;
 }
 
-void retron::app_state::system_options(const retron::system_options& options)
+const ff::game::system_options& retron::app_state::system_options() const
 {
-    this->system_options_ = options;
-    this->apply_system_options();
+    return ff::game::app_state_base::system_options();
+}
+
+void retron::app_state::system_options(const ff::game::system_options& options)
+{
+    ff::game::app_state_base::system_options(options);
 }
 
 void retron::app_state::default_game_options(const retron::game_options& options)
@@ -272,19 +247,9 @@ void retron::app_state::default_game_options(const retron::game_options& options
     this->game_options_ = options;
 }
 
-ff::dxgi::palette_base& retron::app_state::palette()
-{
-    return this->player_palette(0);
-}
-
 ff::dxgi::palette_base& retron::app_state::player_palette(size_t player)
 {
     return *this->player_palettes[player];
-}
-
-ff::dxgi::draw_device_base& retron::app_state::draw_device() const
-{
-    return *this->draw_device_;
 }
 
 retron::render_targets* retron::app_state::render_targets() const
@@ -308,7 +273,7 @@ void retron::app_state::pop_render_targets(ff::dxgi::target_base& final_target)
 
 ff::signal_sink<>& retron::app_state::reload_resources_sink()
 {
-    return this->reload_resources_signal;
+    return ff::game::app_state_base::reload_resources_sink();
 }
 
 retron::render_debug_t retron::app_state::render_debug() const
@@ -331,80 +296,27 @@ void retron::app_state::debug_cheats(retron::debug_cheats_t flags)
     this->debug_cheats_ = flags;
 }
 
-void retron::app_state::debug_command(size_t command_id)
+std::shared_ptr<ff::state> retron::app_state::create_initial_game_state()
 {
-    if (command_id == commands::ID_DEBUG_HIDE_UI)
-    {
-        this->pending_hide_debug_state = true;
-    }
-    else if (command_id == commands::ID_DEBUG_PARTICLE_LAB)
-    {
-        auto view = std::make_shared<ff::ui_view>(Noesis::MakePtr<retron::particle_lab_page>());
-        auto view_state = std::make_shared<retron::ui_view_state>(view);
-        auto particle_lab = std::make_shared<retron::particle_lab_state>(view);
-        auto top_states = std::make_shared<ff::state_list>(std::vector<std::shared_ptr<ff::state>>{ particle_lab, view_state });
-
-        this->pending_hide_debug_state = false;
-        this->debug_state->visible(top_states);
-
-        view->focused(true);
-
-    }
-    else if (command_id == commands::ID_DEBUG_REBUILD_RESOURCES)
-    {
-        if (!this->rebuilding_resources_)
-        {
-            this->rebuilding_resources_ = true;
-            ff::global_resources::rebuild_async();
-        }
-    }
-    else if (command_id == commands::ID_DEBUG_RESTART_GAME)
-    {
-        this->init_game_state();
-    }
-    else if (command_id == commands::ID_DEBUG_RESTART_LEVEL)
-    {
-        std::shared_ptr<retron::game_state> game_state = std::dynamic_pointer_cast<retron::game_state>(this->game_state->unwrap());
-        if (game_state)
-        {
-            game_state->debug_restart_level();
-        }
-        else
-        {
-            this->init_game_state();
-        }
-    }
+    auto title_state = std::make_shared<retron::title_state>();
+    return std::make_shared<retron::transition_state>(nullptr, title_state, "transition_bg_1.png", 4, 24);
 }
 
-double retron::app_state::time_scale() const
+std::shared_ptr<ff::state> retron::app_state::create_debug_overlay_state()
 {
-    return this->debug_time_scale;
+    auto view = std::make_shared<ff::ui_view>(Noesis::MakePtr<retron::debug_page>());
+    auto view_state = std::make_shared<retron::ui_view_state>(view);
+    view->focused(true);
+    return view_state;
 }
 
-ff::state::advance_t retron::app_state::advance_type() const
+void retron::app_state::save_settings(ff::dict& dict)
 {
-    if (this->debug_step_one_frame)
-    {
-        return ff::state::advance_t::single_step;
-    }
-
-    if (this->debug_stepping_frames || this->rebuilding_resources_)
-    {
-        return ff::state::advance_t::stopped;
-    }
-
-    return ff::state::advance_t::running;
+    dict.set_struct(strings::ID_GAME_OPTIONS, this->game_options_);
 }
 
-void retron::app_state::init_settings()
+void retron::app_state::load_settings(const ff::dict& dict)
 {
-    ff::dict dict = ff::settings(strings::ID_APP_STATE);
-
-    if (!dict.get_struct(strings::ID_SYSTEM_OPTIONS, this->system_options_) || this->system_options_.version != retron::system_options::CURRENT_VERSION)
-    {
-        this->system_options_ = retron::system_options();
-    }
-
     if (!dict.get_struct(strings::ID_GAME_OPTIONS, this->game_options_) || this->game_options_.version != retron::game_options::CURRENT_VERSION)
     {
         this->game_options_ = retron::game_options();
@@ -412,14 +324,12 @@ void retron::app_state::init_settings()
 }
 
 // Must be able to be called multiple times (whenever resources are hot reloaded)
-void retron::app_state::init_resources()
+void retron::app_state::load_resources()
 {
-    std::vector<const ff::input_vk*> debug_input_devices{ &ff::input::keyboard(), &ff::input::pointer() };
-
     this->audio_ = std::make_unique<retron::audio>();
     this->game_spec_ = retron::game_spec::load();
+    this->debug_input_events.reset();
     this->debug_input_mapping = "game_debug_controls";
-    this->debug_input_events = std::make_unique<ff::input_event_provider>(*this->debug_input_mapping.object(), std::move(debug_input_devices));
     this->palette_data = "palette_main";
     this->level_particle_value = ff::auto_resource_value("level_particles");
     this->level_particle_effects.clear();
@@ -431,53 +341,3 @@ void retron::app_state::init_resources()
         this->player_palettes[i] = std::make_shared<ff::palette_cycle>(this->palette_data.object(), str.str().c_str(), ::PALETTE_CYCLES_PER_SECOND);
     }
 }
-
-void retron::app_state::on_custom_debug()
-{
-    if (this->debug_state->visible())
-    {
-        this->pending_hide_debug_state = true;
-    }
-    else if (this->game_spec_.allow_debug())
-    {
-        auto view = std::make_shared<ff::ui_view>(Noesis::MakePtr<retron::debug_page>());
-        auto view_state = std::make_shared<retron::ui_view_state>(view);
-
-        this->pending_hide_debug_state = false;
-        this->debug_state->visible(view_state, this->game_state);
-
-        view->focused(true);
-    }
-}
-
-void retron::app_state::on_resources_rebuilt()
-{
-    this->rebuilding_resources_ = false;
-    this->init_resources();
-    this->reload_resources_signal.notify();
-}
-
-void retron::app_state::init_game_state()
-{
-    std::shared_ptr<ff::state> title_state = std::make_shared<retron::title_state>();
-    std::shared_ptr<retron::transition_state> transition_state = std::make_shared<retron::transition_state>(nullptr, title_state, "transition_bg_1.png", 4, 24);
-
-    this->game_state = transition_state->wrap();
-}
-
-void retron::app_state::apply_system_options()
-{
-    ff::app_render_target().full_screen(this->system_options_.full_screen);
-}
-
-void retron::app_state::save_settings()
-{
-    this->system_options_.full_screen = ff::app_render_target().full_screen();
-
-    ff::dict dict = ff::settings(strings::ID_APP_STATE);
-    dict.set_struct(strings::ID_SYSTEM_OPTIONS, this->system_options_);
-    dict.set_struct(strings::ID_GAME_OPTIONS, this->game_options_);
-
-    ff::settings(strings::ID_APP_STATE, dict);
-}
-

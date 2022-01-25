@@ -13,17 +13,17 @@ NS_IMPLEMENT_REFLECTION(retron::debug_page_view_model, "retron.debug_page_view_m
 
 retron::debug_page_view_model::debug_page_view_model()
     : restart_level_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::debug_page_view_model::debug_command, this, commands::ID_DEBUG_RESTART_LEVEL)))
-    , restart_game_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::debug_page_view_model::debug_command, this, commands::ID_DEBUG_RESTART_GAME)))
-    , rebuild_resources_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::debug_page_view_model::debug_command, this, commands::ID_DEBUG_REBUILD_RESOURCES)))
+    , restart_game_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::debug_page_view_model::debug_command, this, ff::game::app_state_base::ID_DEBUG_RESTART_GAME)))
+    , rebuild_resources_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::debug_page_view_model::debug_command, this, ff::game::app_state_base::ID_DEBUG_REBUILD_RESOURCES)))
     , particle_lab_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::debug_page_view_model::debug_command, this, commands::ID_DEBUG_PARTICLE_LAB)))
-    , close_debug_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::debug_page_view_model::debug_command, this, commands::ID_DEBUG_HIDE_UI)))
+    , close_debug_command(Noesis::MakePtr<ff::ui::delegate_command>(std::bind(&retron::debug_page_view_model::debug_command, this, ff::game::app_state_base::ID_DEBUG_HIDE_UI)))
 {}
 
 void retron::debug_page_view_model::debug_command(size_t command_id)
 {
-    if (command_id != commands::ID_DEBUG_HIDE_UI)
+    if (command_id != ff::game::app_state_base::ID_DEBUG_HIDE_UI)
     {
-        retron::app_service::get().debug_command(commands::ID_DEBUG_HIDE_UI);
+        retron::app_service::get().debug_command(ff::game::app_state_base::ID_DEBUG_HIDE_UI);
     }
 
     retron::app_service::get().debug_command(command_id);

@@ -66,12 +66,3 @@ bool retron::game_options::coop() const
 {
     return this->players == retron::game_players::two_coop;
 }
-
-retron::system_options::system_options()
-    : version(retron::system_options::CURRENT_VERSION)
-    , full_screen(false)
-    , sound(true)
-    , music(true)
-    , sound_volume(1)
-    , music_volume(1)
-{}

@@ -484,31 +484,6 @@
     "res:type": "input",
     "events":
     {
-      "cancel_step_one_frame":
-      [
-        {
-          "action":
-          [
-            "escape"
-          ]
-        },
-        {
-          "action":
-          [
-            "tilde"
-          ]
-        }
-      ],
-      "step_one_frame":
-      [
-        {
-          "action":
-          [
-            "1"
-          ],
-          "repeat": 0.25
-        }
-      ],
       "debug_render_toggle":
       [
         {
@@ -543,21 +518,6 @@
           [
             "mouse_right"
           ]
-        }
-      ]
-    },
-    "values":
-    {
-      "speed_slow":
-      [
-        {
-          "action": "2"
-        }
-      ],
-      "speed_fast":
-      [
-        {
-          "action": "3"
         }
       ]
     }

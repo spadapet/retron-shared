@@ -23,9 +23,6 @@
     <ClCompile Include="source\states\app_state.cpp">
       <Filter>source\states</Filter>
     </ClCompile>
-    <ClCompile Include="source\states\debug_state.cpp">
-      <Filter>source\states</Filter>
-    </ClCompile>
     <ClCompile Include="source\states\title_state.cpp">
       <Filter>source\states</Filter>
     </ClCompile>
@@ -138,9 +135,6 @@
       <Filter>source\core</Filter>
     </ClInclude>
     <ClInclude Include="source\states\app_state.h">
-      <Filter>source\states</Filter>
-    </ClInclude>
-    <ClInclude Include="source\states\debug_state.h">
       <Filter>source\states</Filter>
     </ClInclude>
     <ClInclude Include="source\states\title_state.h">
@@ -371,6 +365,8 @@
     </None>
     <None Include="$(NoesisDll)" />
     <None Include="$(NoesisDll)" />
+    <None Include="$(NoesisDll)" />
+    <None Include="$(WinPixDll)" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="source">

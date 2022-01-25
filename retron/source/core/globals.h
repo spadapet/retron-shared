@@ -31,10 +31,6 @@ namespace retron::input_events
     extern const size_t ID_PAUSE;
     extern const size_t ID_START;
 
-    extern const size_t ID_DEBUG_STEP_ONE_FRAME;
-    extern const size_t ID_DEBUG_CANCEL_STEP_ONE_FRAME;
-    extern const size_t ID_DEBUG_SPEED_SLOW;
-    extern const size_t ID_DEBUG_SPEED_FAST;
     extern const size_t ID_DEBUG_RENDER_TOGGLE;
     extern const size_t ID_DEBUG_INVINCIBLE_TOGGLE;
     extern const size_t ID_DEBUG_COMPLETE_LEVEL;
@@ -43,11 +39,8 @@ namespace retron::input_events
 
 namespace retron::commands
 {
-    extern const size_t ID_DEBUG_HIDE_UI;
     extern const size_t ID_DEBUG_PARTICLE_LAB;
-    extern const size_t ID_DEBUG_RESTART_GAME;
     extern const size_t ID_DEBUG_RESTART_LEVEL;
-    extern const size_t ID_DEBUG_REBUILD_RESOURCES;
 }
 
 namespace retron::constants
