@@ -18,26 +18,21 @@ retron::app_service& retron::app_service::get()
     return *::app_service;
 }
 
-ff::dxgi::draw_ptr retron::app_service::begin_palette_draw()
+ff::dxgi::draw_ptr retron::app_service::begin_palette_draw(ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
-    retron::render_targets& targets = *retron::app_service::get().render_targets();
-    ff::dxgi::target_base& target = *targets.target(retron::render_target_types::palette_1);
-    ff::dxgi::depth_base& depth = *targets.depth(retron::render_target_types::palette_1);
+    ff::dxgi::target_base& target = targets.target(context, ff::render_target_type::palette);
+    ff::dxgi::depth_base& depth = targets.depth(context);
 
-    return ff::dxgi_client().global_draw_device().begin_draw(target, &depth, retron::constants::RENDER_RECT, retron::constants::RENDER_RECT);
+    return ff::dxgi_client().global_draw_device().begin_draw(context, target, &depth, retron::constants::RENDER_RECT, retron::constants::RENDER_RECT);
 }
 
 retron::app_state::app_state()
-    : viewport(ff::point_size(constants::RENDER_WIDTH, constants::RENDER_HEIGHT))
-    , render_debug_(retron::render_debug_t::none)
+    : render_debug_(retron::render_debug_t::none)
     , debug_cheats_(retron::debug_cheats_t::none)
-    , texture_1080(std::make_shared<ff::texture>(ff::dxgi_client().create_render_texture(retron::constants::RENDER_SIZE_HIGH.cast<size_t>(), DXGI_FORMAT_R8G8B8A8_UNORM, 1, 1, 1, &ff::dxgi::color_black())))
-    , target_1080(ff::dxgi_client().create_target_for_texture(this->texture_1080->dxgi_texture()))
+    , render_target(retron::constants::RENDER_SIZE.cast<size_t>(), &ff::dxgi::color_black(), 224)
 {
     assert(!::app_service);
     ::app_service = this;
-
-    this->render_targets_stack.push_back(nullptr);
 }
 
 retron::app_state::~app_state()
@@ -51,14 +46,14 @@ ff::dxgi::palette_base* retron::app_state::palette()
     return &this->player_palette(0);
 }
 
-bool retron::app_state::allow_debug()
+bool retron::app_state::allow_debug_commands()
 {
-    return this->game_spec_.allow_debug();
+    return ff::game::app_state_base::allow_debug_commands() || this->game_spec_.allow_debug();
 }
 
 void retron::app_state::debug_command(size_t command_id)
 {
-    if (this->allow_debug())
+    if (this->allow_debug_commands())
     {
         if (command_id == commands::ID_DEBUG_PARTICLE_LAB)
         {
@@ -103,7 +98,7 @@ std::shared_ptr<ff::state> retron::app_state::advance_time()
 
 void retron::app_state::advance_input()
 {
-    if (this->allow_debug())
+    if (this->allow_debug_commands())
     {
         if (!this->debug_input_events)
         {
@@ -152,52 +147,35 @@ void retron::app_state::advance_input()
     ff::game::app_state_base::advance_input();
 }
 
-void retron::app_state::render(ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
+void retron::app_state::render(ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
-    this->target_1080->clear(ff::dxgi_client().frame_context(), ff::dxgi::color_black());
+    targets.push(this->render_target);
+    ff::game::app_state_base::render(context, targets);
+    this->target_rect = targets.pop(context, nullptr, this->palette());
 
-    this->push_render_targets(this->render_targets_);
-    ff::state::render();
-    this->pop_render_targets(*this->target_1080);
-
-    // Draw to final target, with black bars
+    ff::dxgi::target_base& target = targets.target(context);
+    ff::rect_float full_target_rect({}, target.size().logical_pixel_size.cast<float>());
+    auto draw = ff::dxgi_client().global_draw_device().begin_draw(context, target, nullptr, full_target_rect, full_target_rect);
+    if (draw && this->target_rect.left >= 0.5)
     {
-        ff::point_size target_size = target.size().logical_pixel_size;
-        ff::rect_float target_rect = this->viewport.view(target_size).cast<float>();
-        ff::point_float target_scale = target_rect.size() / retron::constants::RENDER_SIZE_HIGH.cast<float>();
-        ff::rect_float full_target({}, target_size.cast<float>());
-
-        ff::dxgi::draw_ptr draw = ff::dxgi_client().global_draw_device().begin_draw(target, nullptr, full_target, full_target);
-        if (draw)
-        {
-            draw->push_sampler_linear_filter(true);
-
-            if (target_rect.left > 0)
-            {
-                draw->draw_filled_rectangle(ff::rect_float(full_target.top_left(), target_rect.bottom_left()), ff::dxgi::color_black());
-                draw->draw_filled_rectangle(ff::rect_float(target_rect.top_right(), full_target.bottom_right()), ff::dxgi::color_black());
-            }
-            else
-            {
-                draw->draw_filled_rectangle(ff::rect_float(full_target.top_left(), target_rect.top_right()), ff::dxgi::color_black());
-                draw->draw_filled_rectangle(ff::rect_float(target_rect.bottom_left(), full_target.bottom_right()), ff::dxgi::color_black());
-            }
-
-            draw->draw_sprite(this->texture_1080->sprite_data(), ff::dxgi::transform(target_rect.top_left(), target_scale));
-        }
+        draw->draw_filled_rectangle(ff::rect_float(full_target_rect.top_left(), this->target_rect.bottom_left()), ff::dxgi::color_black());
+        draw->draw_filled_rectangle(ff::rect_float(this->target_rect.top_right(), full_target_rect.bottom_right()), ff::dxgi::color_black());
+    }
+    else if (draw)
+    {
+        draw->draw_filled_rectangle(ff::rect_float(full_target_rect.top_left(), this->target_rect.top_right()), ff::dxgi::color_black());
+        draw->draw_filled_rectangle(ff::rect_float(this->target_rect.bottom_left(), full_target_rect.bottom_right()), ff::dxgi::color_black());
     }
 }
 
-void retron::app_state::frame_rendered(ff::state::advance_t type, ff::dxgi::target_base& target, ff::dxgi::depth_base& depth)
+void retron::app_state::frame_rendered(ff::state::advance_t type, ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
-    ff::rect_float viewport = this->viewport.last_view().cast<float>();
-
     for (ff::ui_view* view : ff::ui::rendered_views())
     {
-        view->viewport(viewport);
+        view->viewport(this->target_rect);
     }
 
-    ff::state::frame_rendered(type, target, depth);
+    ff::game::app_state_base::frame_rendered(type, context, targets);
 }
 
 retron::audio& retron::app_state::audio()
@@ -250,25 +228,6 @@ void retron::app_state::default_game_options(const retron::game_options& options
 ff::dxgi::palette_base& retron::app_state::player_palette(size_t player)
 {
     return *this->player_palettes[player];
-}
-
-retron::render_targets* retron::app_state::render_targets() const
-{
-    assert(this->render_targets_stack.size() > 1);
-    return this->render_targets_stack.back();
-}
-
-void retron::app_state::push_render_targets(retron::render_targets& targets)
-{
-    targets.clear();
-    return this->render_targets_stack.push_back(&targets);
-}
-
-void retron::app_state::pop_render_targets(ff::dxgi::target_base& final_target)
-{
-    assert(this->render_targets_stack.size() > 1);
-    this->render_targets_stack.back()->render(final_target);
-    this->render_targets_stack.pop_back();
 }
 
 ff::signal_sink<>& retron::app_state::reload_resources_sink()

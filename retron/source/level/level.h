@@ -36,7 +36,7 @@ namespace retron
 
         // ff::state
         virtual std::shared_ptr<ff::state> advance_time() override;
-        virtual void render() override;
+        virtual void render(ff::dxgi::command_context_base& context, ff::render_targets& targets) override;
 
         // retron::level_base
         virtual retron::level_phase phase() const override;

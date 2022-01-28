@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "source/core/app_service.h"
-#include "source/core/render_targets.h"
 #include "source/states/particle_lab_state.h"
 #include "source/ui/particle_lab_page.xaml.h"
 
@@ -22,9 +21,9 @@ std::shared_ptr<ff::state> retron::particle_lab_state::advance_time()
     return nullptr;
 }
 
-void retron::particle_lab_state::render()
+void retron::particle_lab_state::render(ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
-    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw();
+    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw(context, targets);
     if (draw)
     {
         this->particles.render(*draw);

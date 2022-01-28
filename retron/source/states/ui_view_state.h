@@ -6,7 +6,5 @@ namespace retron
     {
     public:
         ui_view_state(std::shared_ptr<ff::ui_view> view);
-
-        virtual void render() override;
     };
 }

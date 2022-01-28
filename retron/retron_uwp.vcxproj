@@ -11,14 +11,14 @@
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
-    <PackageCertificateKeyFile>retron_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+    <PackageCertificateKeyFile>retron_uwp_TemporaryKey.pfx</PackageCertificateKeyFile>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.default.props" />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <PropertyGroup>
     <AdditionalResJsonInputs>$(DevRoot)retron_designer\**\*.xaml;$(DevRoot)retron_designer\**\*.ttf;$(DevRoot)retron_designer\**\*.png</AdditionalResJsonInputs>
-    <PackageCertificateThumbprint>7ED54E5C319AA90F864033A2FE8B31994B05A678</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>41FBC6F2CF9A68DB53B0543A8F41A3D56443BA99</PackageCertificateThumbprint>
   </PropertyGroup>
   <ItemGroup>
     <ClCompile Include="source\assets\bonus.res.cpp" />
@@ -56,7 +56,6 @@
     <ClCompile Include="source\core\game_spec.cpp" />
     <ClCompile Include="source\core\globals.cpp" />
     <ClCompile Include="source\core\options.cpp" />
-    <ClCompile Include="source\core\render_targets.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
@@ -72,7 +71,6 @@
     <ClInclude Include="source\core\level_base.h" />
     <ClInclude Include="source\core\options.h" />
     <ClInclude Include="source\core\particles.h" />
-    <ClInclude Include="source\core\render_targets.h" />
     <ClInclude Include="source\game\game_over_state.h" />
     <ClInclude Include="source\game\game_state.h" />
     <ClInclude Include="source\game\high_score_state.h" />
@@ -97,6 +95,7 @@
     <ClInclude Include="source\ui\title_page.xaml.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="retron_uwp_TemporaryKey.pfx" />
     <ResJson Include="assets\controls.res.json">
       <FileType>Document</FileType>
     </ResJson>
@@ -124,7 +123,6 @@
     <ResJson Include="assets\bonus.res.json">
       <FileType>Document</FileType>
     </ResJson>
-    <None Include="retron_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\logo\SplashScreen.scale-100.png" />
@@ -182,11 +180,11 @@
     <ProjectReference Include="..\vendor\ff.vendor.box2d_uwp.vcxproj">
       <Project>{254aaf2e-8ffd-43b2-b00b-8e351d2c1012}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\vendor\ff_game_library\source\ff.application\ff.application_uwp.vcxproj">
+      <Project>{513b0ebc-4a6b-455f-b190-7864f3092778}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\vendor\ff_game_library\source\ff.audio\ff.audio_uwp.vcxproj">
       <Project>{e3bf3073-8da5-4d8a-954b-9ce0bfc04a16}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.game\ff.game_uwp.vcxproj">
-      <Project>{0eb09503-be90-4bbd-8ab2-3713b1ee46dd}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

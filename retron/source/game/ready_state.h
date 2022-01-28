@@ -12,7 +12,7 @@ namespace retron
 
         // state
         virtual std::shared_ptr<ff::state> advance_time() override;
-        virtual void render() override;
+        virtual void render(ff::dxgi::command_context_base& context, ff::render_targets& targets) override;
 
     private:
         const retron::game_service& game_service;

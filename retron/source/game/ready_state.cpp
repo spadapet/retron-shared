@@ -31,11 +31,11 @@ std::shared_ptr<ff::state> retron::ready_state::advance_time()
     return (this->counter >= ::READY_END_ALL) ? this->under_state : nullptr;
 }
 
-void retron::ready_state::render()
+void retron::ready_state::render(ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
-    this->under_state->render();
+    this->under_state->render(context, targets);
 
-    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw();
+    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw(context, targets);
     if (draw)
     {
         const retron::player& player = this->level->players().front()->self_or_coop();

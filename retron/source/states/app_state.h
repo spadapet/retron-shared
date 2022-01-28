@@ -2,7 +2,6 @@
 
 #include "source/core/app_service.h"
 #include "source/core/game_spec.h"
-#include "source/core/render_targets.h"
 #include "source/core/options.h"
 #include "source/core/particles.h"
 
@@ -16,14 +15,14 @@ namespace retron
 
         // ff::game::app_state_base
         virtual ff::dxgi::palette_base* palette() override;
-        virtual bool allow_debug();
+        virtual bool allow_debug_commands();
         virtual void debug_command(size_t command_id) override;
 
         // ff::state
         virtual std::shared_ptr<ff::state> advance_time() override;
         virtual void advance_input() override;
-        virtual void render(ff::dxgi::target_base& target, ff::dxgi::depth_base& depth) override;
-        virtual void frame_rendered(ff::state::advance_t type, ff::dxgi::target_base& target, ff::dxgi::depth_base& depth) override;
+        virtual void render(ff::dxgi::command_context_base& context, ff::render_targets& targets) override;
+        virtual void frame_rendered(ff::state::advance_t type, ff::dxgi::command_context_base& context, ff::render_targets& targets) override;
 
         // retron::app_service
         virtual retron::audio& audio() override;
@@ -34,9 +33,6 @@ namespace retron
         virtual void system_options(const ff::game::system_options& options) override;
         virtual void default_game_options(const retron::game_options& options) override;
         virtual ff::dxgi::palette_base& player_palette(size_t player) override;
-        virtual retron::render_targets* render_targets() const override;
-        virtual void push_render_targets(retron::render_targets& targets) override;
-        virtual void pop_render_targets(ff::dxgi::target_base& final_target) override;
         virtual ff::signal_sink<>& reload_resources_sink() override;
         virtual retron::render_debug_t render_debug() const override;
         virtual void render_debug(retron::render_debug_t flags) override;
@@ -56,13 +52,10 @@ namespace retron
         retron::game_spec game_spec_;
 
         // Rendering
-        retron::render_targets render_targets_;
-        std::vector<retron::render_targets*> render_targets_stack;
-        std::shared_ptr<ff::texture> texture_1080;
-        std::shared_ptr<ff::dxgi::target_base> target_1080;
         std::array<std::shared_ptr<ff::palette_cycle>, constants::MAX_PLAYERS> player_palettes;
         ff::auto_resource<ff::palette_data> palette_data;
-        ff::viewport viewport;
+        ff::render_target render_target;
+        ff::rect_float target_rect{};
 
         // Resources
         std::unique_ptr<retron::audio> audio_;

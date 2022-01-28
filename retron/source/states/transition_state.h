@@ -1,7 +1,5 @@
 #pragma once
 
-#include "source/core/render_targets.h"
-
 namespace retron
 {
 	class transition_state : public ff::state
@@ -10,10 +8,10 @@ namespace retron
 		transition_state(std::shared_ptr<ff::state> old_state, std::shared_ptr<ff::state> new_state, std::string_view image_resource, size_t speed = 4, size_t vertical_pixel_stop = 0);
 
         virtual std::shared_ptr<ff::state> advance_time() override;
-        virtual void render() override;
+        virtual void render(ff::dxgi::command_context_base& context, ff::render_targets& targets) override;
 
 	private:
-        retron::render_targets temp_targets;
+        ff::render_target temp_target;
 		std::shared_ptr<ff::state> old_state;
 		std::shared_ptr<ff::state> new_state;
 		ff::auto_resource<ff::texture> image;

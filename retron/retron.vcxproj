@@ -24,7 +24,6 @@
     <ClCompile Include="source\core\globals.cpp" />
     <ClCompile Include="source\core\options.cpp" />
     <ClCompile Include="source\core\particles.cpp" />
-    <ClCompile Include="source\core\render_targets.cpp" />
     <ClCompile Include="source\game\game_over_state.cpp" />
     <ClCompile Include="source\game\game_state.cpp" />
     <ClCompile Include="source\game\high_score_state.cpp" />
@@ -58,7 +57,6 @@
     <ClInclude Include="source\core\level_base.h" />
     <ClInclude Include="source\core\options.h" />
     <ClInclude Include="source\core\particles.h" />
-    <ClInclude Include="source\core\render_targets.h" />
     <ClInclude Include="source\game\game_over_state.h" />
     <ClInclude Include="source\game\game_state.h" />
     <ClInclude Include="source\game\high_score_state.h" />
@@ -130,11 +128,11 @@
     <ProjectReference Include="..\vendor\ff.vendor.box2d.vcxproj">
       <Project>{3dfedc2b-4438-4cf7-8da4-733623cb8f47}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\vendor\ff_game_library\source\ff.application\ff.application.vcxproj">
+      <Project>{376073e9-ea4d-4513-941c-906ca968c6c3}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\vendor\ff_game_library\source\ff.audio\ff.audio.vcxproj">
       <Project>{7b04eb5d-8ac9-47cc-80cb-5192cb41057a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.game\ff.game.vcxproj">
-      <Project>{e7ca35d9-8fc1-46b0-bac0-3ecac00865b4}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

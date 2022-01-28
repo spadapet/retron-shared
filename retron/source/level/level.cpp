@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "source/core/app_service.h"
 #include "source/core/game_service.h"
-#include "source/core/render_targets.h"
 #include "source/level/components.h"
 #include "source/level/entity_type.h"
 #include "source/level/entity_util.h"
@@ -48,9 +47,9 @@ std::shared_ptr<ff::state> retron::level::advance_time()
     return nullptr;
 }
 
-void retron::level::render()
+void retron::level::render(ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
-    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw();
+    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw(context, targets);
     if (draw)
     {
         this->level_render.render(*draw);

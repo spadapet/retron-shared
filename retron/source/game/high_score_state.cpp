@@ -12,7 +12,7 @@ std::shared_ptr<ff::state> retron::high_score_state::advance_time()
     return this->next_state;
 }
 
-void retron::high_score_state::render()
+void retron::high_score_state::render(ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
-    this->next_state->render();
+    this->next_state->render(context, targets);
 }

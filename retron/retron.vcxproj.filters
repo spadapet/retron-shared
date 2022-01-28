@@ -20,9 +20,6 @@
     <ClCompile Include="source\core\options.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\render_targets.cpp">
-      <Filter>source\core</Filter>
-    </ClCompile>
     <ClCompile Include="source\ui\debug_page.xaml.cpp">
       <Filter>source\ui</Filter>
     </ClCompile>
@@ -132,9 +129,6 @@
       <Filter>source\core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\options.h">
-      <Filter>source\core</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\render_targets.h">
       <Filter>source\core</Filter>
     </ClInclude>
     <ClInclude Include="source\ui\debug_page.xaml.h">

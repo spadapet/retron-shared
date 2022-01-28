@@ -17,9 +17,6 @@
     <ClCompile Include="source\core\options.cpp">
       <Filter>source\core</Filter>
     </ClCompile>
-    <ClCompile Include="source\core\render_targets.cpp">
-      <Filter>source\core</Filter>
-    </ClCompile>
     <ClCompile Include="source\states\app_state.cpp">
       <Filter>source\states</Filter>
     </ClCompile>
@@ -129,9 +126,6 @@
       <Filter>source\core</Filter>
     </ClInclude>
     <ClInclude Include="source\core\options.h">
-      <Filter>source\core</Filter>
-    </ClInclude>
-    <ClInclude Include="source\core\render_targets.h">
       <Filter>source\core</Filter>
     </ClInclude>
     <ClInclude Include="source\states\app_state.h">
@@ -360,11 +354,11 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <None Include="retron_TemporaryKey.pfx">
+    <None Include="$(NoesisDll)" />
+    <None Include="$(WinPixDll)" />
+    <None Include="retron_uwp_TemporaryKey.pfx">
       <Filter>uwp</Filter>
     </None>
-    <None Include="$(NoesisDll)" />
-    <None Include="$(NoesisDll)" />
     <None Include="$(NoesisDll)" />
     <None Include="$(WinPixDll)" />
   </ItemGroup>

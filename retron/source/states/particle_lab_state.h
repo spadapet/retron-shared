@@ -11,7 +11,7 @@ namespace retron
 
         // state
         virtual std::shared_ptr<ff::state> advance_time() override;
-        virtual void render() override;
+        virtual void render(ff::dxgi::command_context_base& context, ff::render_targets& targets) override;
 
     private:
         void on_mouse_click(int button, ff::point_float pos, std::string_view name, retron::particles::effect_t& effect);

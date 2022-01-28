@@ -8,7 +8,7 @@ namespace retron
         score_state(const std::vector<const retron::player*>& players, size_t active_player);
 
         // state
-        virtual void render() override;
+        virtual void render(ff::dxgi::command_context_base& context, ff::render_targets& targets) override;
 
     private:
         void init_resources();

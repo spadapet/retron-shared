@@ -1,7 +1,6 @@
 ﻿#include "pch.h"
 #include "source/core/app_service.h"
 #include "source/core/game_spec.h"
-#include "source/core/render_targets.h"
 #include "source/game/score_state.h"
 
 static void render_points_and_lives(
@@ -70,9 +69,9 @@ retron::score_state::score_state(const std::vector<const retron::player*>& playe
     }
 }
 
-void retron::score_state::render()
+void retron::score_state::render(ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
-    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw();
+    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw(context, targets);
     if (draw)
     {
         for (size_t i = 0; i < this->players.size(); i++)

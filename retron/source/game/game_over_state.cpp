@@ -12,11 +12,11 @@ std::shared_ptr<ff::state> retron::game_over_state::advance_time()
     return nullptr;
 }
 
-void retron::game_over_state::render()
+void retron::game_over_state::render(ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
-    this->under_state->render();
+    this->under_state->render(context, targets);
 
-    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw();
+    ff::dxgi::draw_ptr draw = retron::app_service::begin_palette_draw(context, targets);
     if (draw)
     {
         std::string_view text = "GAME OVER";
