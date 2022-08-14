@@ -7,7 +7,13 @@
 #include "source/ui/title_page.xaml.h"
 
 static const std::string_view NOESIS_NAME = "d704047b-5bd2-4757-9858-6a7d86cdd006";
-static const std::string_view NOESIS_KEY = "rl9dmPcVXZhzCS6KAX6FhQC3A7UT/jOt7AJ5uB+5MkgTRvl0";
+static const std::string_view NOESIS_KEY = "KV70MhkV9DKBw4+5Omj00gEwRuYWtrasbjIla0D7c13klQo1";
+
+extern "C"
+{
+    __declspec(dllexport) DWORD NvOptimusEnablement = 1;
+    __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
+}
 
 namespace res
 {
