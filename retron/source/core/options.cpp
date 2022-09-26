@@ -25,9 +25,9 @@ NS_IMPLEMENT_REFLECTION_ENUM(retron::game_difficulty, "retron.game_difficulty")
 
 retron::game_options::game_options()
     : version(retron::game_options::CURRENT_VERSION)
-    , flags(game_flags::default)
-    , players(game_players::default)
-    , difficulty(game_difficulty::default)
+    , flags(game_flags::default_)
+    , players(game_players::default_)
+    , difficulty(game_difficulty::default_)
 {}
 
 std::string_view retron::game_options::difficulty_id() const

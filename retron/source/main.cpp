@@ -75,11 +75,8 @@ static ff::game::init_params get_game_init_params()
     return params;
 }
 
-#if UWP_APP
-int main(Platform::Array<Platform::String^>^)
-#else
 int WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
-#endif
 {
-    return ff::game::run(::get_game_init_params());
+    ff::game::init_params init_params = ::get_game_init_params();
+    return ff::game::run(init_params);
 }

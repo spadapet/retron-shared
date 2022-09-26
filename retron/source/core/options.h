@@ -8,7 +8,7 @@ namespace retron
         infinite_lives = 0x01,
         no_bosses = 0x02,
 
-        default = normal
+        default_ = normal
     };
 
     enum class game_players
@@ -17,7 +17,7 @@ namespace retron
         two_take_turns = 1,
         two_coop = 2,
 
-        default = one
+        default_ = one
     };
 
     enum class game_difficulty
@@ -27,7 +27,7 @@ namespace retron
         normal = 2,
         hard = 3,
 
-        default = normal
+        default_ = normal
     };
 
     struct game_options

@@ -215,7 +215,7 @@ void retron::level_collision_logic::destroy_bullet(entt::entity bullet_entity, e
             ff::point_fixed vel = this->entities.velocity(bullet_entity);
             ff::fixed_int angle = ff::math::radians_to_degrees(std::atan2(-vel));
             ff::point_fixed pos = this->entities.position(bullet_entity);
-            ff::point_fixed pos2(pos.x + (vel.x ? std::copysign(1_f, vel.x) : 0), pos.y + (vel.y ? std::copysign(1_f, vel.y) : 0));
+            ff::point_fixed pos2(pos.x + (vel.x ? std::copysign(1_f, vel.x) : ff::fixed_int(0)), pos.y + (vel.y ? std::copysign(1_f, vel.y) : ff::fixed_int(0)));
 
             retron::particle_effect_options options;
             options.angle = std::make_pair(angle - 60_f, angle + 60_f);

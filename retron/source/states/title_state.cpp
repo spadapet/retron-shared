@@ -2,7 +2,6 @@
 #include "source/states/title_state.h"
 #include "source/states/transition_state.h"
 #include "source/states/ui_view_state.h"
-#include "source/ui/title_page.xaml.h"
 
 retron::title_state::title_state()
 {

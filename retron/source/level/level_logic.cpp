@@ -151,8 +151,8 @@ void retron::level_logic::advance_grunt(entt::entity entity, retron::comp::grunt
 
         ff::point_fixed delta = comp.dest_pos - pos.position;
         ff::point_fixed vel(
-            std::copysign(diff.grunt_move.x, delta.x ? delta.x : (ff::math::random_bool() ? 1 : -1)),
-            std::copysign(diff.grunt_move.y, delta.y ? delta.y : (ff::math::random_bool() ? 1 : -1)));
+            std::copysign(diff.grunt_move.x, delta.x ? delta.x : ff::fixed_int(ff::math::random_bool() ? 1 : -1)),
+            std::copysign(diff.grunt_move.y, delta.y ? delta.y : ff::fixed_int(ff::math::random_bool() ? 1 : -1)));
 
         registry.replace<retron::comp::position>(entity, pos.position + vel);
     }
@@ -230,7 +230,10 @@ void retron::level_logic::advance_animation(entt::entity entity, retron::comp::a
     entt::registry& registry = this->host.host_registry();
 
     ff::stack_vector<ff::animation_event, 8> events;
-    comp.anim->advance_animation(&ff::push_back_collection(events));
+    {
+        ff::push_back_collection events_push_back(events);
+        comp.anim->advance_animation(&events_push_back);
+    }
 
     for (const ff::animation_event& event : events)
     {
@@ -266,7 +269,10 @@ ff::point_fixed retron::level_logic::pick_grunt_move_destination(entt::entity en
     // (since the player's bounding box could be smaller than a grunt)
     {
         ff::stack_vector<entt::entity, 8> box_hits;
-        this->collision.hit_test(ff::rect_fixed(dest_pos, dest_pos), ff::push_back_collection(box_hits), retron::entity_category::level, retron::collision_box_type::grunt_avoid_box);
+        {
+            ff::push_back_collection box_hits_push_back(box_hits);
+            this->collision.hit_test(ff::rect_fixed(dest_pos, dest_pos), box_hits_push_back, retron::entity_category::level, retron::collision_box_type::grunt_avoid_box);
+        }
 
         for (entt::entity box_hit : box_hits)
         {

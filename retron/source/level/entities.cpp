@@ -204,5 +204,5 @@ void retron::entities::rotation(entt::entity entity, ff::fixed_int value)
 ff::fixed_int retron::entities::rotation(entt::entity entity)
 {
     retron::comp::rotation* c = this->registry.try_get<retron::comp::rotation>(entity);
-    return c ? c->rotation : 0;
+    return c ? c->rotation : ff::fixed_int(0);
 }

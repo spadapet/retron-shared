@@ -163,7 +163,7 @@ void retron::level::host_create_bullet(entt::entity player_entity, ff::point_fix
     this->entities.create_bullet(player_entity, pos, vel);
 }
 
-void retron::level::host_handle_dead_player(entt::entity entity, const retron::player & player)
+void retron::level::host_handle_dead_player(entt::entity entity, const retron::player& player)
 {
     if (this->game_service.coop_take_life(player))
     {
@@ -254,7 +254,10 @@ static bool place_random_y(ff::point_fixed& corner, const ff::point_fixed& size,
     cache.gaps.clear();
 
     ff::rect_fixed check_rect(corner.x, corner_bounds.top, corner.x + size.x, corner_bounds.bottom);
-    cache.collision.hit_test(check_rect, ff::push_back_collection(cache.hit_entities), retron::entity_category::none, retron::collision_box_type::bounds_box);
+    {
+        ff::push_back_collection hit_entities_push_back(cache.hit_entities);
+        cache.collision.hit_test(check_rect, hit_entities_push_back, retron::entity_category::none, retron::collision_box_type::bounds_box);
+    }
 
     for (entt::entity entity : cache.hit_entities)
     {

@@ -1,8 +1,9 @@
 #pragma once
 
+#include "source/ui/title_page.xaml.h"
+
 namespace retron
 {
-    class title_page;
     class ui_view_state;
 
     class title_state : public ff::state

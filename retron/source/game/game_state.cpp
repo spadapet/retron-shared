@@ -126,8 +126,12 @@ void retron::game_state::debug_restart_level()
 
 void retron::game_state::init_input()
 {
-    ff::auto_resource<ff::input_mapping> game_input_mapping = "game_controls";
-    std::array<ff::auto_resource<ff::input_mapping>, constants::MAX_PLAYERS> player_input_mappings{ "player_controls", "player_controls" };
+    ff::auto_resource<ff::input_mapping> game_input_mapping("game_controls");
+    std::array<ff::auto_resource<ff::input_mapping>, constants::MAX_PLAYERS> player_input_mappings
+    {
+        ff::auto_resource<ff::input_mapping>("player_controls"),
+        ff::auto_resource<ff::input_mapping>("player_controls")
+    };
     std::vector<const ff::input_vk*> game_input_devices{ &ff::input::keyboard(), &ff::input::pointer() };
     std::array<std::vector<const ff::input_vk*>, constants::MAX_PLAYERS> player_input_devices;
 
