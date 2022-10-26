@@ -11,7 +11,7 @@ retron::particles::particles()
 
 ff::end_scope_action retron::particles::advance_async()
 {
-    ff::thread_pool::get()->add_task(std::bind(&particles::advance_now, this));
+    ff::thread_pool::add_task(std::bind(&particles::advance_now, this));
     return ff::end_scope_action(std::bind(&particles::advance_block, this));
 }
 
