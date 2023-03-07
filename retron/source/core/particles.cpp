@@ -9,16 +9,15 @@ retron::particles::particles()
     this->groups.reserve(64);
 }
 
-ff::end_scope_action retron::particles::advance_async()
+ff::scope_exit retron::particles::advance_async()
 {
     ff::thread_pool::add_task(std::bind(&particles::advance_now, this));
-    return ff::end_scope_action(std::bind(&particles::advance_block, this));
+    return ff::scope_exit(std::bind(&particles::advance_block, this));
 }
 
 void retron::particles::advance_block()
 {
-    // Don't use ff::wait_for_handle since it is alertable and might allow unexpected tasks to run
-    ::WaitForSingleObject(this->async_event, INFINITE);
+    this->async_event.wait();
     ::ResetEvent(this->async_event);
 
     if (this->particles_new.size())

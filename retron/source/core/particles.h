@@ -29,7 +29,7 @@ namespace retron
     public:
         particles();
 
-        ff::end_scope_action advance_async();
+        ff::scope_exit advance_async();
         void render(ff::dxgi::draw_base& draw, uint8_t type = 0);
 
         bool effect_active(int effect_id) const;

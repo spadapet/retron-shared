@@ -34,7 +34,7 @@ std::shared_ptr<ff::state> retron::level::advance_time()
 {
     if (this->phase() == retron::level_phase::playing)
     {
-        ff::end_scope_action particle_scope = this->particles.advance_async();
+        ff::scope_exit particle_scope = this->particles.advance_async();
         this->advance_entities();
         this->level_collision_logic.handle_collisions();
         this->frame_count++;

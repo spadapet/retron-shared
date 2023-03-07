@@ -17,7 +17,7 @@ retron::particle_lab_state::particle_lab_state(std::shared_ptr<ff::ui_view> view
 
 std::shared_ptr<ff::state> retron::particle_lab_state::advance_time()
 {
-    ff::end_scope_action end_action = this->particles.advance_async();
+    ff::scope_exit end_action = this->particles.advance_async();
     return nullptr;
 }
 
