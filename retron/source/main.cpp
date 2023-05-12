@@ -9,12 +9,6 @@
 static const std::string_view NOESIS_NAME = "d704047b-5bd2-4757-9858-6a7d86cdd006";
 static const std::string_view NOESIS_KEY = "sWy7WSQnu1m9NU/0Sz4+4Bsr8lwNbt8IaFr80uQcxLMaZRVZ";
 
-extern "C"
-{
-    __declspec(dllexport) DWORD NvOptimusEnablement = 1;
-    __declspec(dllexport) int AmdPowerXpressRequestHighPerformance = 1;
-}
-
 namespace res
 {
     void register_bonus();
