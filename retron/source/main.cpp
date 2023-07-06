@@ -7,7 +7,7 @@
 #include "source/ui/title_page.xaml.h"
 
 static const std::string_view NOESIS_NAME = "d704047b-5bd2-4757-9858-6a7d86cdd006";
-static const std::string_view NOESIS_KEY = "sWy7WSQnu1m9NU/0Sz4+4Bsr8lwNbt8IaFr80uQcxLMaZRVZ";
+static const std::string_view NOESIS_KEY = "K0fnh10L54cCplZ3o9w7SYCmu8dvU0c0chgorADQZBK8L1z9";
 
 namespace res
 {

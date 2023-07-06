@@ -144,10 +144,11 @@ void retron::entities::flush_delete()
 
 void retron::entities::delete_all()
 {
-    this->registry.each([this](entt::entity entity)
-        {
-            this->registry.emplace_or_replace<retron::comp::flag::pending_delete>(entity);
-        });
+    for (auto i : this->registry.storage<entt::entity>().each())
+    {
+        entt::entity id = std::get<entt::entity>(i);
+        this->registry.emplace_or_replace<retron::comp::flag::pending_delete>(id);
+    }
 
     this->flush_delete();
 }
