@@ -46,6 +46,12 @@ ff::dxgi::palette_base* retron::app_state::palette()
     return &this->player_palette(0);
 }
 
+bool retron::app_state::clear_color(DirectX::XMFLOAT4& color)
+{
+    color = ff::dxgi::color_black();
+    return true;
+}
+
 bool retron::app_state::allow_debug_commands()
 {
     return ff::game::app_state_base::allow_debug_commands() || this->game_spec_.allow_debug();
@@ -152,20 +158,6 @@ void retron::app_state::render(ff::dxgi::command_context_base& context, ff::rend
     targets.push(this->render_target);
     ff::game::app_state_base::render(context, targets);
     this->target_rect = targets.pop(context, nullptr, this->palette());
-
-    ff::dxgi::target_base& target = targets.target(context);
-    ff::rect_float full_target_rect({}, target.size().logical_pixel_size.cast<float>());
-    auto draw = ff::dxgi_client().global_draw_device().begin_draw(context, target, nullptr, full_target_rect, full_target_rect);
-    if (draw && this->target_rect.left >= 0.5)
-    {
-        draw->draw_filled_rectangle(ff::rect_float(full_target_rect.top_left(), this->target_rect.bottom_left()), ff::dxgi::color_black());
-        draw->draw_filled_rectangle(ff::rect_float(this->target_rect.top_right(), full_target_rect.bottom_right()), ff::dxgi::color_black());
-    }
-    else if (draw)
-    {
-        draw->draw_filled_rectangle(ff::rect_float(full_target_rect.top_left(), this->target_rect.top_right()), ff::dxgi::color_black());
-        draw->draw_filled_rectangle(ff::rect_float(this->target_rect.bottom_left(), full_target_rect.bottom_right()), ff::dxgi::color_black());
-    }
 }
 
 void retron::app_state::frame_rendered(ff::state::advance_t type, ff::dxgi::command_context_base& context, ff::render_targets& targets)

@@ -15,6 +15,7 @@ namespace retron
 
         // ff::game::app_state_base
         virtual ff::dxgi::palette_base* palette() override;
+        virtual bool clear_color(DirectX::XMFLOAT4& color) override;
         virtual bool allow_debug_commands();
         virtual void debug_command(size_t command_id) override;
 
