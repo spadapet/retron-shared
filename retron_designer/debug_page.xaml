@@ -13,10 +13,10 @@
     d:DesignHeight="270"
     d:Foreground="Black"
     d:Background="Black"
-    d:FontFamily="{StaticResource Font.Family.Default}"
-    d:FontSize="{StaticResource Font.Size.Normal}"
     d:DataContext="{d:DesignInstance local:debug_page_view_model, IsDesignTimeCreatable=True}"
     DataContext="{Binding view_model, RelativeSource={RelativeSource Mode=Self}}"
+    FontFamily="{StaticResource Font.Family.Default}"
+    FontSize="{StaticResource Font.Size.Normal}"
     UseLayoutRounding="True"
     Background="#A0000000">
 

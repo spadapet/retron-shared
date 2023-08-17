@@ -7,7 +7,7 @@
 #include "source/ui/title_page.xaml.h"
 
 static const std::string_view NOESIS_NAME = "d704047b-5bd2-4757-9858-6a7d86cdd006";
-static const std::string_view NOESIS_KEY = "K0fnh10L54cCplZ3o9w7SYCmu8dvU0c0chgorADQZBK8L1z9";
+static const std::string_view NOESIS_KEY = "Dkpz5K4Gc+RCr+UyeqnA2MuDFIA7HzAWsAv2vEG1dl4vQ2Ob";
 
 namespace res
 {
@@ -38,10 +38,7 @@ static void register_global_resources()
     ::res::register_player();
     ::res::register_sprites();
     ::res::register_xaml();
-}
 
-static void register_noesis_components()
-{
     Noesis::RegisterComponent<Noesis::EnumConverter<retron::game_flags>>();
     Noesis::RegisterComponent<Noesis::EnumConverter<retron::game_players>>();
     Noesis::RegisterComponent<Noesis::EnumConverter<retron::game_difficulty>>();
@@ -59,12 +56,9 @@ static ff::game::init_params get_game_init_params()
     ff::game::init_params params{};
     params.create_initial_state = ::create_app_state;
     params.noesis_application_resources_name = "application_resources.xaml";
-    params.noesis_default_font = "fonts/#Robotron 2084";
-    params.noesis_default_font_size = 8;
     params.noesis_license_key = ::NOESIS_KEY;
     params.noesis_license_name = ::NOESIS_NAME;
     params.register_global_resources = ::register_global_resources;
-    params.register_noesis_components = ::register_noesis_components;
 
     return params;
 }
