@@ -155,19 +155,16 @@ void retron::app_state::advance_input()
 
 void retron::app_state::render(ff::dxgi::command_context_base& context, ff::render_targets& targets)
 {
+    size_t old_ui_view_count = ff::ui::rendered_views().size();
+
     targets.push(this->render_target);
     ff::game::app_state_base::render(context, targets);
-    this->target_rect = targets.pop(context, nullptr, this->palette());
-}
+    ff::rect_float target_rect = targets.pop(context, nullptr, this->palette());
 
-void retron::app_state::frame_rendered(ff::state::advance_t type, ff::dxgi::command_context_base& context, ff::render_targets& targets)
-{
-    for (ff::ui_view* view : ff::ui::rendered_views())
+    for (auto i = ff::ui::rendered_views().cbegin() + old_ui_view_count; i != ff::ui::rendered_views().end(); i++)
     {
-        view->viewport(this->target_rect);
+        (*i)->viewport(target_rect);
     }
-
-    ff::game::app_state_base::frame_rendered(type, context, targets);
 }
 
 retron::audio& retron::app_state::audio()

@@ -23,7 +23,6 @@ namespace retron
         virtual std::shared_ptr<ff::state> advance_time() override;
         virtual void advance_input() override;
         virtual void render(ff::dxgi::command_context_base& context, ff::render_targets& targets) override;
-        virtual void frame_rendered(ff::state::advance_t type, ff::dxgi::command_context_base& context, ff::render_targets& targets) override;
 
         // retron::app_service
         virtual retron::audio& audio() override;
@@ -56,7 +55,6 @@ namespace retron
         std::array<std::shared_ptr<ff::palette_cycle>, constants::MAX_PLAYERS> player_palettes;
         ff::auto_resource<ff::palette_data> palette_data;
         ff::render_target render_target;
-        ff::rect_float target_rect{};
 
         // Resources
         std::unique_ptr<retron::audio> audio_;
