@@ -1,5 +1,4 @@
 #include "pch.h"
-#include "source/core/app_service.h"
 #include "source/core/options.h"
 #include "source/states/app_state.h"
 #include "source/ui/debug_page.xaml.h"
@@ -7,7 +6,7 @@
 #include "source/ui/title_page.xaml.h"
 
 static const std::string_view NOESIS_NAME = "d704047b-5bd2-4757-9858-6a7d86cdd006";
-static const std::string_view NOESIS_KEY = "Dkpz5K4Gc+RCr+UyeqnA2MuDFIA7HzAWsAv2vEG1dl4vQ2Ob";
+static const std::string_view NOESIS_KEY = "FxryrqhW8q66FB/sdVqNzMg1gGz5sxkcwv2RTHBdbagt4jet";
 
 namespace res
 {
