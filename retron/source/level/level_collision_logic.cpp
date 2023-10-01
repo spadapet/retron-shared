@@ -250,7 +250,7 @@ void retron::level_collision_logic::destroy_enemy(entt::entity entity, entt::ent
 
             std::string_view name;
             ff::point_fixed center = this->bounds_box(entity).center();
-            bool by_bullet = this->entities.category(by_entity) == retron::entity_category::bullet;
+            bool by_bullet = ff::flags::has(this->entities.category(by_entity), retron::entity_category::bullet);
 
             switch (retron::helpers::dir_to_index(this->entities.velocity(by_bullet ? by_entity : entity)))
             {

@@ -52,6 +52,7 @@ namespace retron
         bonus_dog = category_bonus | (1 << 4),
         enemy_grunt = category_enemy | (1 << 0),
         enemy_hulk = category_enemy | (1 << 1),
+        enemy_flipper = category_enemy | (1 << 2),
         electrode_0 = category_electrode | (1 << 0),
         electrode_1 = category_electrode | (1 << 1),
         electrode_2 = category_electrode | (1 << 2),

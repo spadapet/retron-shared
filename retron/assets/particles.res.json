@@ -58,10 +58,8 @@
     ]
   },
 
-  "level_particles":
-  {
-    "electrode_die":
-    [
+  "level_particles": {
+    "electrode_die": [
       {
         "life": [ 16, 24 ],
         "count": [ 32, 48 ],
@@ -72,8 +70,7 @@
       }
     ],
 
-    "player_bullet_explode":
-    [
+    "player_bullet_explode": [
       {
         "life": [ 8, 32 ],
         "count": [ 32, 64 ],
@@ -83,8 +80,7 @@
       }
     ],
 
-    "player_bullet_smoke":
-    [
+    "player_bullet_smoke": [
       {
         "life": [ 16, 24 ],
         "count": [ 24, 32 ],
@@ -95,8 +91,7 @@
       }
     ],
 
-    "player_start":
-    [
+    "player_start": [
       {
         "res:template": "player_start_particles",
         "animations": [ "ref:sprites.player_part_right[0]", "ref:sprites.player_part_right[1]", "ref:sprites.player_part_right[2]", "ref:sprites.player_part_right[3]", "ref:sprites.player_part_right[4]" ],
@@ -147,11 +142,9 @@
       }
     ],
 
-    "grunt_start_0":
-    {
+    "grunt_start_0": {
       "res:template": "enemy_start_particles",
-      "res:values":
-      {
+      "res:values": {
         "anims_0": [ "ref:sprites.grunt_part_right[0]", "ref:sprites.grunt_part_right[1]", "ref:sprites.grunt_part_right[2]", "ref:sprites.grunt_part_right[3]", "ref:sprites.grunt_part_right[4]", "ref:sprites.grunt_part_right[5]" ],
         "angle_0": 0,
         "anims_1": [ "ref:sprites.grunt_part_left[0]", "ref:sprites.grunt_part_left[1]", "ref:sprites.grunt_part_left[2]", "ref:sprites.grunt_part_left[3]", "ref:sprites.grunt_part_left[4]", "ref:sprites.grunt_part_left[5]" ],
@@ -160,11 +153,9 @@
       }
     },
 
-    "grunt_start_90":
-    {
+    "grunt_start_90": {
       "res:template": "enemy_start_particles",
-      "res:values":
-      {
+      "res:values": {
         "anims_0": [ "ref:sprites.grunt_part_bottom[0]", "ref:sprites.grunt_part_bottom[1]", "ref:sprites.grunt_part_bottom[2]", "ref:sprites.grunt_part_bottom[3]", "ref:sprites.grunt_part_bottom[4]", "ref:sprites.grunt_part_bottom[5]", "ref:sprites.grunt_part_bottom[6]", "ref:sprites.grunt_part_bottom[7]" ],
         "angle_0": 270,
         "anims_1": [ "ref:sprites.grunt_part_top[0]", "ref:sprites.grunt_part_top[1]", "ref:sprites.grunt_part_top[2]", "ref:sprites.grunt_part_top[3]", "ref:sprites.grunt_part_top[4]", "ref:sprites.grunt_part_top[5]", "ref:sprites.grunt_part_top[6]", "ref:sprites.grunt_part_top[7]" ],
@@ -173,11 +164,9 @@
       }
     },
 
-    "hulk_start_0":
-    {
+    "hulk_start_0": {
       "res:template": "enemy_start_particles",
-      "res:values":
-      {
+      "res:values": {
         "anims_0": [ "ref:sprites.hulk_part_right[0]", "ref:sprites.hulk_part_right[1]", "ref:sprites.hulk_part_right[2]", "ref:sprites.hulk_part_right[3]", "ref:sprites.hulk_part_right[4]" ],
         "angle_0": 0,
         "anims_1": [ "ref:sprites.hulk_part_left[0]", "ref:sprites.hulk_part_left[1]", "ref:sprites.hulk_part_left[2]", "ref:sprites.hulk_part_left[3]", "ref:sprites.hulk_part_left[4]" ],
@@ -186,16 +175,36 @@
       }
     },
 
-    "hulk_start_90":
-    {
+    "hulk_start_90": {
       "res:template": "enemy_start_particles",
-      "res:values":
-      {
+      "res:values": {
         "anims_0": [ "ref:sprites.hulk_part_bottom[0]", "ref:sprites.hulk_part_bottom[1]", "ref:sprites.hulk_part_bottom[2]", "ref:sprites.hulk_part_bottom[3]", "ref:sprites.hulk_part_bottom[4]" ],
         "angle_0": 270,
         "anims_1": [ "ref:sprites.hulk_part_top[0]", "ref:sprites.hulk_part_top[1]", "ref:sprites.hulk_part_top[2]", "ref:sprites.hulk_part_top[3]", "ref:sprites.hulk_part_top[4]" ],
         "angle_1": 90,
         "dither": [ "ref:sprites.hulk_dither" ]
+      }
+    },
+
+    "flipper_start_0": {
+      "res:template": "enemy_start_particles",
+      "res:values": {
+        "anims_0": [ "ref:sprites.flipper_dither" ],
+        "angle_0": 0,
+        "anims_1": [ "ref:sprites.flipper_dither" ],
+        "angle_1": 180,
+        "dither": [ "ref:sprites.flipper_dither" ]
+      }
+    },
+
+    "flipper_start_90": {
+      "res:template": "enemy_start_particles",
+      "res:values": {
+        "anims_0": [ "ref:sprites.flipper_dither" ],
+        "angle_0": 270,
+        "anims_1": [ "ref:sprites.flipper_dither" ],
+        "angle_1": 90,
+        "dither": [ "ref:sprites.flipper_dither" ]
       }
     }
   }

@@ -49,6 +49,7 @@ namespace retron
         size_t electrode_type;
         size_t grunt;
         size_t hulk;
+        size_t flipper;
         size_t bonus;
         retron::bonus_type bonus_type;
     };

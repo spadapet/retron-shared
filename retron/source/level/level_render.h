@@ -24,5 +24,6 @@ namespace retron
         ff::auto_resource<ff::animation_base> player_bullet_anim;
         ff::auto_resource<ff::animation_base> grunt_walk_anim;
         ff::auto_resource<ff::animation_base> hulk_walk_anim;
+        ff::auto_resource<ff::animation_base> flipper_walk_anim;
     };
 }
