@@ -123,6 +123,10 @@ static retron::level_objects_spec load_level_objects_spec(ff::rect_fixed rect, c
         {
             objects_spec.hulk = property_value;
         }
+        else if (property_name == "flipper")
+        {
+            objects_spec.flipper = property_value;
+        }
         else
         {
             assert(false);

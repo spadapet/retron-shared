@@ -35,6 +35,9 @@ ff::rect_fixed retron::entity_util::hit_box_spec(retron::entity_type type)
 
         case retron::entity_type::enemy_hulk:
             return { -7, -16, 8, 0 };
+
+        case retron::entity_type::enemy_flipper:
+            return { -6, -6, 7, 7 };
     }
 
     return {};
@@ -66,6 +69,9 @@ ff::rect_fixed retron::entity_util::bounds_box_spec(retron::entity_type type)
 
         case retron::entity_type::enemy_hulk:
             return { -9, -18, 10, 0 };
+
+        case retron::entity_type::enemy_flipper:
+            return { -6, -6, 7, 7 };
     }
 
     return retron::entity_util::hit_box_spec(type);
@@ -182,6 +188,9 @@ std::pair<std::string_view, std::string_view> retron::entity_util::start_particl
 
         case retron::entity_type::enemy_hulk:
             return std::make_pair("hulk_start_0"sv, "hulk_start_90"sv);
+
+        case retron::entity_type::enemy_flipper:
+            return std::make_pair("flipper_start_0"sv, "flipper_start_90"sv);
     }
 
     return {};

@@ -219,6 +219,7 @@ void retron::level::init_entities()
             this->create_objects(object_spec.electrode, retron::entity_util::electrode(object_spec.electrode_type), object_spec.rect, std::bind(&retron::entities::create_electrode, &this->entities, std::placeholders::_1, std::placeholders::_2));
             this->create_objects(object_spec.grunt, retron::entity_type::enemy_grunt, object_spec.rect, std::bind(&retron::entities::create_grunt, &this->entities, std::placeholders::_1, std::placeholders::_2));
             this->create_objects(object_spec.hulk, retron::entity_type::enemy_hulk, object_spec.rect, std::bind(&retron::entities::create_hulk, &this->entities, std::placeholders::_1, std::placeholders::_2, hulk_group));
+            this->create_objects(object_spec.flipper, retron::entity_type::enemy_flipper, object_spec.rect, std::bind(&retron::entities::create_flipper, &this->entities, std::placeholders::_1, std::placeholders::_2));
 
             hulk_group += (object_spec.hulk > 0);
         }

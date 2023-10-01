@@ -21,6 +21,7 @@ namespace retron
         entt::entity create_electrode(retron::entity_type type, const ff::point_fixed& pos);
         entt::entity create_grunt(retron::entity_type type, const ff::point_fixed& pos);
         entt::entity create_hulk(retron::entity_type type, const ff::point_fixed& pos, size_t group);
+        entt::entity create_flipper(retron::entity_type type, const ff::point_fixed& pos);
         entt::entity create_bullet(entt::entity player, ff::point_fixed pos, ff::point_fixed vel);
         entt::entity create_bounds(const ff::rect_fixed& rect);
         entt::entity create_box(const ff::rect_fixed& rect);

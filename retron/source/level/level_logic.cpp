@@ -39,6 +39,11 @@ void retron::level_logic::advance_time(retron::entity_category categories)
             this->advance_grunt(entity, comp, pos);
         }
 
+        for (auto [entity, comp, pos, vel] : registry.view<retron::comp::flipper, const retron::comp::position, const retron::comp::velocity>().each())
+        {
+            this->advance_flipper(entity, comp, pos, vel);
+        }
+
         for (auto [entity, comp, pos, vel] : registry.view<retron::comp::hulk, const retron::comp::position, const retron::comp::velocity>().each())
         {
             this->advance_hulk(entity, comp, pos, vel);
@@ -155,6 +160,24 @@ void retron::level_logic::advance_grunt(entt::entity entity, retron::comp::grunt
             std::copysign(diff.grunt_move.y, delta.y ? delta.y : ff::fixed_int(ff::math::random_bool() ? 1 : -1)));
 
         registry.replace<retron::comp::position>(entity, pos.position + vel);
+    }
+}
+
+void retron::level_logic::advance_flipper(entt::entity entity, retron::comp::grunt& comp, const retron::comp::position& pos, const retron::comp::velocity& vel)
+{
+    entt::registry& registry = this->host.host_registry();
+
+    if (!comp.move_frame)
+    {
+        entt::entity dest_entity = this->pick_grunt_player_target(comp.index);
+        ff::point_fixed dest_pos = registry.get<retron::comp::position>(dest_entity).position;
+
+        retron::helpers::dir_to_degrees(dest_pos - pos.position) + ff::math::random_range();
+    }
+    else
+    {
+        comp.move_frame--;
+        registry.replace<retron::comp::position>(entity, pos.position + vel.velocity);
     }
 }
 

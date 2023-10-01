@@ -6,17 +6,14 @@
     "res:type": "sprites",
     "format": "pal",
     "mips": 1,
-    "sprites":
-    {
-      "player":
-      {
+    "sprites": {
+      "player": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 0 ],
         "size": [ 9, 15 ],
         "handle": [ 4, 15 ]
       },
-      "player_dither":
-      {
+      "player_dither": {
         "file": "file:graphics/player.png",
         "pos": [ 10, 0 ],
         "size": [ 9, 15 ],
@@ -24,14 +21,12 @@
         "offset": [ 10, 0 ],
         "repeat": 3
       },
-      "player_life":
-      {
+      "player_life": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 100 ],
         "size": [ 8, 8 ]
       },
-      "player_part_left":
-      {
+      "player_part_left": {
         "file": "file:graphics/player.png",
         "pos": [ 4, 0 ],
         "size": [ 1, 15 ],
@@ -39,8 +34,7 @@
         "offset": [ -1, 0 ],
         "repeat": 5
       },
-      "player_part_right":
-      {
+      "player_part_right": {
         "file": "file:graphics/player.png",
         "pos": [ 4, 0 ],
         "size": [ 1, 15 ],
@@ -48,8 +42,7 @@
         "offset": [ 1, 0 ],
         "repeat": 5
       },
-      "player_part_top":
-      {
+      "player_part_top": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 7 ],
         "size": [ 9, 1 ],
@@ -57,8 +50,7 @@
         "offset": [ 0, -1 ],
         "repeat": 8
       },
-      "player_part_bottom":
-      {
+      "player_part_bottom": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 7 ],
         "size": [ 9, 1 ],
@@ -66,8 +58,7 @@
         "offset": [ 0, 1 ],
         "repeat": 8
       },
-      "player_walk_down":
-      {
+      "player_walk_down": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 16 ],
         "size": [ 9, 17 ],
@@ -75,8 +66,7 @@
         "offset": [ 10, 0 ],
         "repeat": 6
       },
-      "player_walk_up":
-      {
+      "player_walk_up": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 34 ],
         "size": [ 9, 17 ],
@@ -84,8 +74,7 @@
         "offset": [ 10, 0 ],
         "repeat": 6
       },
-      "player_walk_right":
-      {
+      "player_walk_right": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 52 ],
         "size": [ 9, 15 ],
@@ -93,8 +82,7 @@
         "offset": [ 10, 0 ],
         "repeat": 6
       },
-      "player_walk_left":
-      {
+      "player_walk_left": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 52 ],
         "size": [ 9, 15 ],
@@ -103,8 +91,7 @@
         "offset": [ 10, 0 ],
         "repeat": 6
       },
-      "player_walk_right_up":
-      {
+      "player_walk_right_up": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 68 ],
         "size": [ 9, 15 ],
@@ -113,8 +100,7 @@
         "offset": [ 10, 0 ],
         "repeat": 6
       },
-      "player_walk_left_up":
-      {
+      "player_walk_left_up": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 68 ],
         "size": [ 9, 15 ],
@@ -123,8 +109,7 @@
         "offset": [ 10, 0 ],
         "repeat": 6
       },
-      "player_walk_right_down":
-      {
+      "player_walk_right_down": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 84 ],
         "size": [ 9, 15 ],
@@ -133,8 +118,7 @@
         "offset": [ 10, 0 ],
         "repeat": 6
       },
-      "player_walk_left_down":
-      {
+      "player_walk_left_down": {
         "file": "file:graphics/player.png",
         "pos": [ 0, 84 ],
         "size": [ 9, 15 ],
@@ -143,29 +127,25 @@
         "offset": [ 10, 0 ],
         "repeat": 6
       },
-      "player_bullet":
-      {
+      "player_bullet": {
         "file": "file:graphics/player_bullet.png",
         "size": [ 8, 2 ],
         "handle": [ 8, 1 ]
       },
 
-      "grunt":
-      {
+      "grunt": {
         "file": "file:graphics/grunt.png",
         "pos": [ 0, 0 ],
         "size": [ 13, 16 ],
         "handle": [ 6, 16 ]
       },
-      "grunt_dither":
-      {
+      "grunt_dither": {
         "file": "file:graphics/grunt.png",
         "pos": [ 14, 0 ],
         "size": [ 13, 16 ],
         "handle": [ 6, 8 ]
       },
-      "grunt_part_left":
-      {
+      "grunt_part_left": {
         "file": "file:graphics/grunt.png",
         "pos": [ 20, 0 ],
         "size": [ 1, 16 ],
@@ -173,8 +153,7 @@
         "offset": [ -1, 0 ],
         "repeat": 6
       },
-      "grunt_part_right":
-      {
+      "grunt_part_right": {
         "file": "file:graphics/grunt.png",
         "pos": [ 20, 0 ],
         "size": [ 1, 16 ],
@@ -182,8 +161,7 @@
         "offset": [ 1, 0 ],
         "repeat": 6
       },
-      "grunt_part_top":
-      {
+      "grunt_part_top": {
         "file": "file:graphics/grunt.png",
         "pos": [ 14, 8 ],
         "size": [ 13, 1 ],
@@ -191,8 +169,7 @@
         "offset": [ 0, -1 ],
         "repeat": 8
       },
-      "grunt_part_bottom":
-      {
+      "grunt_part_bottom": {
         "file": "file:graphics/grunt.png",
         "pos": [ 14, 8 ],
         "size": [ 13, 1 ],
@@ -201,22 +178,19 @@
         "repeat": 8
       },
 
-      "hulk":
-      {
+      "hulk": {
         "file": "file:graphics/hulk.png",
         "pos": [ 0, 0 ],
         "size": [ 19, 18 ],
         "handle": [ 9, 18 ]
       },
-      "hulk_dither":
-      {
+      "hulk_dither": {
         "file": "file:graphics/hulk.png",
         "pos": [ 20, 0 ],
         "size": [ 19, 18 ],
         "handle": [ 9, 8 ]
       },
-      "hulk_part_left":
-      {
+      "hulk_part_left": {
         "file": "file:graphics/hulk.png",
         "pos": [ 29, 0 ],
         "size": [ 1, 18 ],
@@ -224,8 +198,7 @@
         "offset": [ -2, 0 ],
         "repeat": 5
       },
-      "hulk_part_right":
-      {
+      "hulk_part_right": {
         "file": "file:graphics/hulk.png",
         "pos": [ 29, 0 ],
         "size": [ 1, 18 ],
@@ -233,8 +206,7 @@
         "offset": [ 2, 0 ],
         "repeat": 5
       },
-      "hulk_part_top":
-      {
+      "hulk_part_top": {
         "file": "file:graphics/hulk.png",
         "pos": [ 20, 8 ],
         "size": [ 19, 1 ],
@@ -242,8 +214,7 @@
         "offset": [ 0, -2 ],
         "repeat": 5
       },
-      "hulk_part_bottom":
-      {
+      "hulk_part_bottom": {
         "file": "file:graphics/hulk.png",
         "pos": [ 20, 8 ],
         "size": [ 19, 1 ],
@@ -252,8 +223,20 @@
         "repeat": 5
       },
 
-      "electrode":
-      {
+      "flipper": {
+        "file": "file:graphics/flipper.png",
+        "pos": [ 0, 0 ],
+        "size": [ 13, 13 ],
+        "handle": [ 6, 6 ]
+      },
+      "flipper_dither": {
+        "file": "file:graphics/flipper.png",
+        "pos": [ 14, 0 ],
+        "size": [ 13, 13 ],
+        "handle": [ 6, 6 ]
+      },
+
+      "electrode": {
         "file": "file:graphics/electrodes.png",
         "pos": [ 0, 0 ],
         "size": [ 11, 11 ],
@@ -261,8 +244,7 @@
         "offset": [ 12, 0 ],
         "repeat": 3
       },
-      "electrode_die":
-      {
+      "electrode_die": {
         "file": "file:graphics/electrodes.png",
         "pos": [ 0, 12 ],
         "size": [ 11, 11 ],
@@ -271,43 +253,37 @@
         "repeat": 3
       },
 
-      "bonus_woman":
-      {
+      "bonus_woman": {
         "file": "file:graphics/bonus.png",
         "pos": [ 0, 0 ],
         "size": [ 7, 14 ],
         "handle": [ 3, 14 ]
       },
-      "bonus_man":
-      {
+      "bonus_man": {
         "file": "file:graphics/bonus.png",
         "pos": [ 0, 18 ],
         "size": [ 7, 14 ],
         "handle": [ 3, 14 ]
       },
-      "bonus_girl":
-      {
+      "bonus_girl": {
         "file": "file:graphics/bonus.png",
         "pos": [ 0, 36 ],
         "size": [ 5, 12 ],
         "handle": [ 2, 12 ]
       },
-      "bonus_boy":
-      {
+      "bonus_boy": {
         "file": "file:graphics/bonus.png",
         "pos": [ 0, 52 ],
         "size": [ 5, 12 ],
         "handle": [ 2, 12 ]
       },
-      "bonus_dog":
-      {
+      "bonus_dog": {
         "file": "file:graphics/bonus.png",
         "pos": [ 0, 68 ],
         "size": [ 11, 8 ],
         "handle": [ 6, 8 ]
       },
-      "bonus_skull_adult":
-      {
+      "bonus_skull_adult": {
         "file": "file:graphics/bonus.png",
         "pos": [ 0, 93 ],
         "size": [ 19, 16 ],
@@ -315,8 +291,7 @@
         "offset": [ 20, 0 ],
         "repeat": 2
       },
-      "bonus_skull_child":
-      {
+      "bonus_skull_child": {
         "file": "file:graphics/bonus.png",
         "pos": [ 0, 80 ],
         "size": [ 13, 12 ],
@@ -324,8 +299,7 @@
         "offset": [ 14, 0 ],
         "repeat": 2
       },
-      "bonus_skull_pet":
-      {
+      "bonus_skull_pet": {
         "file": "file:graphics/bonus.png",
         "pos": [ 0, 110 ],
         "size": [ 16, 14 ],

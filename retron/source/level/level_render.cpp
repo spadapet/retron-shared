@@ -43,6 +43,11 @@ void retron::level_render::render(ff::dxgi::draw_base& draw)
         this->grunt_walk_anim->draw_frame(draw, ff::dxgi::pixel_transform(pos.position), 0);
     }
 
+    for (auto [entity, comp, pos] : registry.view<const retron::comp::flipper, const retron::comp::position>(entt::exclude_t<retron::comp::showing_particle_effect>()).each())
+    {
+        this->flipper_walk_anim->draw_frame(draw, ff::dxgi::pixel_transform(pos.position), 0);
+    }
+
     for (auto [entity, comp, pos] : registry.view<const retron::comp::hulk, const retron::comp::position>(entt::exclude_t<retron::comp::showing_particle_effect>()).each())
     {
         this->hulk_walk_anim->draw_frame(draw, ff::dxgi::pixel_transform(pos.position), 0);
@@ -140,4 +145,5 @@ void retron::level_render::init_resources()
 
     this->grunt_walk_anim = "sprites.grunt";
     this->hulk_walk_anim = "sprites.hulk";
+    this->flipper_walk_anim = "sprites.flipper";
 }

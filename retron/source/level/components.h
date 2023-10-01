@@ -120,6 +120,12 @@ namespace retron::comp
         bool force_turn;
     };
 
+    struct flipper
+    {
+        size_t index;
+        size_t move_frame;
+    };
+
     struct electrode
     {};
 

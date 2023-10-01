@@ -90,6 +90,14 @@ entt::entity retron::entities::create_hulk(retron::entity_type type, const ff::p
     return entity;
 }
 
+entt::entity retron::entities::create_flipper(retron::entity_type type, const ff::point_fixed& pos)
+{
+    entt::entity entity = this->create(type, pos);
+    this->registry.emplace<retron::comp::flipper>(entity, this->registry.view<retron::comp::flipper>().size(), 0);
+    this->registry.emplace<retron::comp::velocity>(entity, ff::point_fixed{});
+    return entity;
+}
+
 entt::entity retron::entities::create_bullet(entt::entity player, ff::point_fixed pos, ff::point_fixed vel)
 {
     retron::entity_type type = retron::entity_util::bullet_for_player(this->type(player));
