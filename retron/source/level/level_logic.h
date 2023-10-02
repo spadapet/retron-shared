@@ -10,6 +10,7 @@ namespace retron::comp
     struct player;
     struct grunt;
     struct hulk;
+    struct flipper;
     struct bonus;
     struct animation;
 }
@@ -29,7 +30,7 @@ namespace retron
     private:
         void advance_player(entt::entity entity, retron::comp::player& comp, const retron::comp::position& pos, const retron::comp::velocity& vel);
         void advance_grunt(entt::entity entity, retron::comp::grunt& comp, const retron::comp::position& pos);
-        void advance_flipper(entt::entity entity, retron::comp::grunt& comp, const retron::comp::position& pos, const retron::comp::velocity& vel);
+        void advance_flipper(entt::entity entity, retron::comp::flipper& comp, const retron::comp::position& pos, const retron::comp::velocity& vel);
         void advance_hulk(entt::entity entity, retron::comp::hulk& comp, const retron::comp::position& pos, const retron::comp::velocity& vel);
         void advance_bonus(entt::entity entity, retron::comp::bonus& comp, const retron::comp::position& pos, const retron::comp::velocity& vel);
         void advance_animation(entt::entity entity, retron::comp::animation& comp, const retron::comp::position& pos);

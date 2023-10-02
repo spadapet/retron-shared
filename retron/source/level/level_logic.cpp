@@ -163,7 +163,7 @@ void retron::level_logic::advance_grunt(entt::entity entity, retron::comp::grunt
     }
 }
 
-void retron::level_logic::advance_flipper(entt::entity entity, retron::comp::grunt& comp, const retron::comp::position& pos, const retron::comp::velocity& vel)
+void retron::level_logic::advance_flipper(entt::entity entity, retron::comp::flipper& comp, const retron::comp::position& pos, const retron::comp::velocity& vel)
 {
     entt::registry& registry = this->host.host_registry();
 
@@ -171,8 +171,16 @@ void retron::level_logic::advance_flipper(entt::entity entity, retron::comp::gru
     {
         entt::entity dest_entity = this->pick_grunt_player_target(comp.index);
         ff::point_fixed dest_pos = registry.get<retron::comp::position>(dest_entity).position;
+    
+        //ff::fixed_int angle = retron::helpers::dir_to_degrees(dest_pos - pos.position) + ff::math::random_range(-15_f, 15_f);
+        ff::fixed_int angle = ff::math::random_range(0_f, 360_f);
+        float speed = ff::math::random_range(0.25f, 1.0f);
+        float x_speed = std::cos(ff::math::degrees_to_radians(static_cast<float>(angle))) * speed;
+        float y_speed = std::sin(ff::math::degrees_to_radians(static_cast<float>(angle))) * -speed;
 
-        retron::helpers::dir_to_degrees(dest_pos - pos.position) + ff::math::random_range();
+        ff::point_fixed new_vel(x_speed, y_speed);
+        registry.replace<retron::comp::velocity>(entity, new_vel);
+        comp.move_frame = ff::math::random_range(static_cast<size_t>(10), static_cast<size_t>(90));
     }
     else
     {

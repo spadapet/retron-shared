@@ -190,12 +190,12 @@
                         {
                          "name":"hulk",
                          "type":"int",
-                         "value":5
+                         "value":10
                         }, 
                         {
                          "name":"flipper",
                          "type":"int",
-                         "value":10
+                         "value":20
                         }],
                  "rotation":0,
                  "type":"objects",
