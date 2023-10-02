@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E1ABBA80
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "retron_designer", "retron_designer\retron_designer.csproj", "{9D9345C4-576B-43F4-84C3-1F2FC4EB6483}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "retron.xaml", "retron.xaml\retron.xaml.csproj", "{9D9345C4-576B-43F4-84C3-1F2FC4EB6483}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vendor", "vendor", "{BE94EA9E-D7CF-46D8-9AA4-50097F83A5F0}"
 EndProject

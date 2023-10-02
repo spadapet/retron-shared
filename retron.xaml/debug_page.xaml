@@ -1,8 +1,7 @@
 ﻿<UserControl
     x:Class="retron.debug_page"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -20,11 +19,11 @@
     UseLayoutRounding="True"
     Background="#A0000000">
 
-    <i:Interaction.Triggers>
-        <ei:KeyTrigger Key="Esc">
-            <i:InvokeCommandAction Command="{Binding close_debug_command}" />
-        </ei:KeyTrigger>
-    </i:Interaction.Triggers>
+    <b:Interaction.Triggers>
+        <b:KeyTrigger Key="Esc">
+            <b:InvokeCommandAction Command="{Binding close_debug_command}" />
+        </b:KeyTrigger>
+    </b:Interaction.Triggers>
 
     <Border
         Margin="16"
@@ -47,11 +46,11 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock Margin="4,4,0,0" Text="Debug Options"  />
                 <Button Grid.Column="1" Padding="0" Command="{Binding close_debug_command}" Background="Transparent">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Loaded">
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Loaded">
                             <noesis:SetFocusAction />
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
                     <Canvas Width="7" Height="7">
                         <Line X1="0" Y1="0" X2="7" Y2="7" StrokeThickness="1" Stroke="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" />
                         <Line X1="0" Y1="7" X2="7" Y2="0" StrokeThickness="1" Stroke="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" />

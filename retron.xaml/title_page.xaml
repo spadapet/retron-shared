@@ -1,8 +1,7 @@
 <UserControl
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+    xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:ei="http://schemas.microsoft.com/expression/2010/interactions"
     xmlns:ff="clr-namespace:ff"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -21,32 +20,32 @@
     UseLayoutRounding="True"
     RenderOptions.BitmapScalingMode="NearestNeighbor">
 
-    <i:Interaction.Triggers>
-        <i:EventTrigger EventName="Loaded" SourceName="root_panel">
-            <ei:GoToStateAction TargetName="root_panel" StateName="initial_state" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Completed" SourceName="initial_state_storyboard">
+    <b:Interaction.Triggers>
+        <b:EventTrigger EventName="Loaded" SourceName="root_panel">
+            <b:GoToStateAction TargetName="root_panel" StateName="initial_state" />
+        </b:EventTrigger>
+        <b:EventTrigger EventName="Completed" SourceName="initial_state_storyboard">
             <ff:set_panel_child_focus_action TargetName="play_button" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Completed" SourceName="play_to_initial_state_storyboard">
+        </b:EventTrigger>
+        <b:EventTrigger EventName="Completed" SourceName="play_to_initial_state_storyboard">
             <ff:set_panel_child_focus_action TargetName="play_button" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Completed" SourceName="options_to_initial_state_storyboard">
+        </b:EventTrigger>
+        <b:EventTrigger EventName="Completed" SourceName="options_to_initial_state_storyboard">
             <ff:set_panel_child_focus_action TargetName="options_button" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Completed" SourceName="about_to_initial_state_storyboard">
+        </b:EventTrigger>
+        <b:EventTrigger EventName="Completed" SourceName="about_to_initial_state_storyboard">
             <ff:set_panel_child_focus_action TargetName="about_button" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Completed" SourceName="initial_to_play_state_storyboard">
+        </b:EventTrigger>
+        <b:EventTrigger EventName="Completed" SourceName="initial_to_play_state_storyboard">
             <ff:set_panel_child_focus_action TargetName="start_game_button" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Completed" SourceName="initial_to_options_state_storyboard">
+        </b:EventTrigger>
+        <b:EventTrigger EventName="Completed" SourceName="initial_to_options_state_storyboard">
             <ff:set_panel_child_focus_action TargetName="sound_button" />
-        </i:EventTrigger>
-        <i:EventTrigger EventName="Completed" SourceName="initial_to_about_state_storyboard">
+        </b:EventTrigger>
+        <b:EventTrigger EventName="Completed" SourceName="initial_to_about_state_storyboard">
             <ff:set_panel_child_focus_action TargetName="about_back_button" />
-        </i:EventTrigger>
-    </i:Interaction.Triggers>
+        </b:EventTrigger>
+    </b:Interaction.Triggers>
 
     <UserControl.Resources>
         <ControlTemplate x:Key="option_button_template" TargetType="{x:Type Button}">
@@ -71,17 +70,17 @@
             <Setter Property="noesis:StyleInteraction.Triggers">
                 <Setter.Value>
                     <noesis:StyleTriggerCollection>
-                        <i:EventTrigger EventName="MouseEnter">
+                        <b:EventTrigger EventName="MouseEnter">
                             <noesis:SetFocusAction />
-                        </i:EventTrigger>
-                        <ei:KeyTrigger Key="Left" ActiveOnFocus="True">
+                        </b:EventTrigger>
+                        <b:KeyTrigger Key="Left" ActiveOnFocus="True">
                             <!-- The Command binding will fail until this collection is cloned into a Button -->
-                            <i:InvokeCommandAction Command="{Binding Command, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" CommandParameter="{StaticResource false_boolean}" />
-                        </ei:KeyTrigger>
-                        <ei:KeyTrigger Key="Right" ActiveOnFocus="True">
+                            <b:InvokeCommandAction Command="{Binding Command, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" CommandParameter="{StaticResource false_boolean}" />
+                        </b:KeyTrigger>
+                        <b:KeyTrigger Key="Right" ActiveOnFocus="True">
                             <!-- The Command binding will fail until this collection is cloned into a Button -->
-                            <i:InvokeCommandAction Command="{Binding Command, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" CommandParameter="{StaticResource true_boolean}" />
-                        </ei:KeyTrigger>
+                            <b:InvokeCommandAction Command="{Binding Command, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}" CommandParameter="{StaticResource true_boolean}" />
+                        </b:KeyTrigger>
                     </noesis:StyleTriggerCollection>
                 </Setter.Value>
             </Setter>
@@ -93,11 +92,11 @@
         <Grid.Background>
             <ImageBrush ImageSource="title/title_bg.png"/>
         </Grid.Background>
-        <i:Interaction.Triggers>
-            <ei:KeyTrigger Key="Esc">
-                <i:InvokeCommandAction Command="{Binding state_back_command}" />
-            </ei:KeyTrigger>
-        </i:Interaction.Triggers>
+        <b:Interaction.Triggers>
+            <b:KeyTrigger Key="Esc">
+                <b:InvokeCommandAction Command="{Binding state_back_command}" />
+            </b:KeyTrigger>
+        </b:Interaction.Triggers>
 
         <Grid x:Name="initial_panel" Visibility="Collapsed">
             <Grid.RenderTransform>
@@ -175,25 +174,25 @@
             </StackPanel>
             <StackPanel x:Name="initial_button_panel" Width="80" Margin="0,135,0,0">
                 <Button x:Name="play_button" Content="Play" Style="{StaticResource option_button_style}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:GoToStateAction StateName="play_state"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:GoToStateAction StateName="play_state"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
                 </Button>
                 <Button x:Name="options_button" Content="Options" Style="{StaticResource option_button_style}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:GoToStateAction StateName="options_state"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:GoToStateAction StateName="options_state"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
                 </Button>
                 <Button x:Name="about_button" Content="About" Style="{StaticResource option_button_style}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:GoToStateAction StateName="about_state"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:GoToStateAction StateName="about_state"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
                 </Button>
             </StackPanel>
         </Grid>
@@ -212,11 +211,11 @@
                     <TextBlock Text="{Binding difficulty_text, StringFormat=Difficulty: \{0\}}" />
                 </Button>
                 <Button Content="Back" Style="{StaticResource option_button_style}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:GoToStateAction StateName="initial_state"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:GoToStateAction StateName="initial_state"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
                 </Button>
             </StackPanel>
         </Grid>
@@ -234,11 +233,11 @@
                     <TextBlock Text="{Binding full_screen_text, StringFormat=Full Screen: \{0\}}" />
                 </Button>
                 <Button Content="Back" Style="{StaticResource option_button_style}">
-                    <i:Interaction.Triggers>
-                        <i:EventTrigger EventName="Click">
-                            <ei:GoToStateAction StateName="initial_state"/>
-                        </i:EventTrigger>
-                    </i:Interaction.Triggers>
+                    <b:Interaction.Triggers>
+                        <b:EventTrigger EventName="Click">
+                            <b:GoToStateAction StateName="initial_state"/>
+                        </b:EventTrigger>
+                    </b:Interaction.Triggers>
                 </Button>
             </StackPanel>
         </Grid>
@@ -290,11 +289,11 @@
                 </StackPanel>
                 <StackPanel HorizontalAlignment="Center" Margin="0,8,0,0">
                     <Button x:Name="about_back_button" Content="Back" Style="{StaticResource option_button_style}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="Click">
-                                <ei:GoToStateAction StateName="initial_state"/>
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
+                        <b:Interaction.Triggers>
+                            <b:EventTrigger EventName="Click">
+                                <b:GoToStateAction StateName="initial_state"/>
+                            </b:EventTrigger>
+                        </b:Interaction.Triggers>
                     </Button>
                 </StackPanel>
             </StackPanel>

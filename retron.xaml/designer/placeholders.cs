@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Microsoft.Xaml.Behaviors;
+using System;
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using System.Windows.Interactivity;
 
 namespace ff
 {
