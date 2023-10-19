@@ -34,7 +34,6 @@ namespace retron::input_events
     extern const size_t ID_DEBUG_RENDER_TOGGLE;
     extern const size_t ID_DEBUG_INVINCIBLE_TOGGLE;
     extern const size_t ID_DEBUG_COMPLETE_LEVEL;
-    extern const size_t ID_SHOW_CUSTOM_DEBUG;
 }
 
 namespace retron::commands

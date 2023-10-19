@@ -5,9 +5,6 @@
 #include "source/ui/particle_lab_page.xaml.h"
 #include "source/ui/title_page.xaml.h"
 
-static const std::string_view NOESIS_NAME = "d704047b-5bd2-4757-9858-6a7d86cdd006";
-static const std::string_view NOESIS_KEY = "FxryrqhW8q66FB/sdVqNzMg1gGz5sxkcwv2RTHBdbagt4jet";
-
 namespace res
 {
     void register_bonus();
@@ -50,20 +47,11 @@ static void register_global_resources()
     Noesis::RegisterComponent(Noesis::TypeOf<retron::title_page_view_model>(), nullptr);
 }
 
-static ff::game::init_params get_game_init_params()
-{
-    ff::game::init_params params{};
-    params.create_initial_state = ::create_app_state;
-    params.noesis_application_resources_name = "application_resources.xaml";
-    params.noesis_license_key = ::NOESIS_KEY;
-    params.noesis_license_name = ::NOESIS_NAME;
-    params.register_global_resources = ::register_global_resources;
-
-    return params;
-}
-
 int WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
 {
-    ff::game::init_params init_params = ::get_game_init_params();
-    return ff::game::run(init_params);
+    ff::game::init_params_t<retron::app_state> params{};
+    params.create_initial_state = ::create_app_state;
+    params.register_global_resources = ::register_global_resources;
+
+    return ff::game::run(params);
 }
