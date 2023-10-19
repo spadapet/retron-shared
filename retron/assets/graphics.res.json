@@ -21,13 +21,13 @@
   "game_font_data":
   {
     "res:type": "font_file",
-    "file": "file:../../retron_designer/fonts/robotron_2084.ttf"
+    "file": "file:../../retron.xaml/fonts/robotron_2084.ttf"
   },
 
   "game_font_small_data":
   {
     "res:type": "font_file",
-    "file": "file:../../retron_designer/fonts/robotron_2084_small.ttf"
+    "file": "file:../../retron.xaml/fonts/robotron_2084_small.ttf"
   },
 
   "game_font":

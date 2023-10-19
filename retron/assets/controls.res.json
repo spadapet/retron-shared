@@ -479,7 +479,7 @@
     }
   },
 
-  "game_debug_controls":
+  "game.debug_input":
   {
     "res:type": "input",
     "events":
