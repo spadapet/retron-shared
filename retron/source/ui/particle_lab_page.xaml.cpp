@@ -45,7 +45,8 @@ void retron::particle_lab_page_view_model::init_particle_effects()
     this->particle_effects->Clear();
     this->name_to_effect.clear();
 
-    ff::dict level_particles_dict = ff::auto_resource_value("level_particles").value()->get<ff::dict>();
+    ff::auto_resource_value resource("level_particles");
+    ff::dict level_particles_dict = resource->value()->get<ff::dict>();
     for (std::string_view name : level_particles_dict.child_names(true))
     {
         std::string name_str = std::string(name);

@@ -111,9 +111,9 @@ retron::audio& retron::app_state::audio()
 
 const retron::particle_effect_base* retron::app_state::level_particle_effect(std::string_view name)
 {
-    if (this->level_particle_effects.empty() && this->level_particle_value.valid())
+    if (this->level_particle_effects.empty() && this->level_particle_value.resource())
     {
-        ff::dict level_particles_dict = this->level_particle_value.value()->get<ff::dict>();
+        ff::dict level_particles_dict = this->level_particle_value->value()->get<ff::dict>();
         for (std::string_view name : level_particles_dict.child_names())
         {
             this->level_particle_effects.try_emplace(name, retron::particles::effect_t(level_particles_dict.get(name)));
