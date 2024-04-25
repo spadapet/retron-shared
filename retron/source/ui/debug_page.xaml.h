@@ -2,7 +2,7 @@
 
 namespace retron
 {
-    class debug_page_view_model : public ff::ui::notify_propety_changed_base
+    class debug_page_view_model : public ff::ui::notify_property_changed_base
     {
     public:
         debug_page_view_model();
@@ -16,7 +16,7 @@ namespace retron
         Noesis::Ptr<Noesis::ICommand> particle_lab_command;
         Noesis::Ptr<Noesis::ICommand> close_debug_command;
 
-        NS_DECLARE_REFLECTION(retron::debug_page_view_model, ff::ui::notify_propety_changed_base);
+        NS_DECLARE_REFLECTION(retron::debug_page_view_model, ff::ui::notify_property_changed_base);
     };
 
     class debug_page : public Noesis::UserControl

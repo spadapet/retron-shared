@@ -4,7 +4,7 @@
 
 namespace retron
 {
-    class particle_lab_page_view_model : public ff::ui::notify_propety_changed_base
+    class particle_lab_page_view_model : public ff::ui::notify_property_changed_base
     {
     public:
         particle_lab_page_view_model();
@@ -24,7 +24,7 @@ namespace retron
         std::unordered_map<std::string_view, retron::particles::effect_t> name_to_effect;
         std::forward_list<ff::signal_connection> connections;
 
-        NS_DECLARE_REFLECTION(retron::particle_lab_page_view_model, ff::ui::notify_propety_changed_base);
+        NS_DECLARE_REFLECTION(retron::particle_lab_page_view_model, ff::ui::notify_property_changed_base);
     };
 
     class particle_lab_page : public Noesis::UserControl

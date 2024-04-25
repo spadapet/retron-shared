@@ -2,7 +2,7 @@
 
 namespace retron
 {
-    class title_page_view_model : public ff::ui::notify_propety_changed_base
+    class title_page_view_model : public ff::ui::notify_property_changed_base
     {
     public:
         title_page_view_model();
@@ -33,7 +33,7 @@ namespace retron
         Noesis::Ptr<Noesis::ICommand> full_screen_command_;
         Noesis::Ptr<Noesis::ICommand> state_back_command_;
 
-        NS_DECLARE_REFLECTION(retron::title_page_view_model, ff::ui::notify_propety_changed_base);
+        NS_DECLARE_REFLECTION(retron::title_page_view_model, ff::ui::notify_property_changed_base);
     };
 
     class title_page : public Noesis::UserControl

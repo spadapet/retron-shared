@@ -134,6 +134,9 @@
     <ProjectReference Include="..\vendor\ff_game_library\source\ff.audio\ff.audio.vcxproj">
       <Project>{7b04eb5d-8ac9-47cc-80cb-5192cb41057a}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\vendor\ff_game_library\source\ff.dx12\ff.dx12.vcxproj">
+      <Project>{8670e093-edd1-451e-868e-acffb7258759}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ItemDefinitionGroup>

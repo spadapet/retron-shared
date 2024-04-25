@@ -176,17 +176,6 @@
     <Image Include="assets\logo\Wide310x150Logo.scale-200.png" />
     <Image Include="assets\logo\Wide310x150Logo.scale-400.png" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\vendor\ff.vendor.box2d_uwp.vcxproj">
-      <Project>{254aaf2e-8ffd-43b2-b00b-8e351d2c1012}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.application\ff.application_uwp.vcxproj">
-      <Project>{513b0ebc-4a6b-455f-b190-7864f3092778}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\vendor\ff_game_library\source\ff.audio\ff.audio_uwp.vcxproj">
-      <Project>{e3bf3073-8da5-4d8a-954b-9ce0bfc04a16}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ItemDefinitionGroup>
     <ClCompile>
