@@ -5,6 +5,7 @@ namespace res
 {
     void register_particles()
     {
-        ff::global_resources::add(::assets::particles::data());
+        ff::data_reader assets_reader(::assets::particles::data());
+        ff::global_resources::add(assets_reader);
     }
 }

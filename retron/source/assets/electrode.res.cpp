@@ -5,6 +5,7 @@ namespace res
 {
     void register_electrode()
     {
-        ff::global_resources::add(::assets::electrode::data());
+        ff::data_reader assets_reader(::assets::electrode::data());
+        ff::global_resources::add(assets_reader);
     }
 }

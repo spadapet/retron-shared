@@ -8,12 +8,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{E1ABBA80-AB79-45AC-B565-C7E91FCA9339}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		vendor\ff_game_library\build\base.props = vendor\ff_game_library\build\base.props
 		vendor\ff_game_library\build\cpp.props = vendor\ff_game_library\build\cpp.props
 		vendor\ff_game_library\build\cpp.targets = vendor\ff_game_library\build\cpp.targets
 		vendor\ff_game_library\build\cpp.xml = vendor\ff_game_library\build\cpp.xml
+		vendor\ff_game_library\build\cs.props = vendor\ff_game_library\build\cs.props
 		directory.build.props = directory.build.props
 		directory.build.targets = directory.build.targets
+		vendor\ff_game_library\build\project.props = vendor\ff_game_library\build\project.props
 		README.md = README.md
+		vendor\ff_game_library\build\wap.props = vendor\ff_game_library\build\wap.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "retron.xaml", "retron.xaml\retron.xaml.csproj", "{9D9345C4-576B-43F4-84C3-1F2FC4EB6483}"

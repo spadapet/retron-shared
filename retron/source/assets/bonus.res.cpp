@@ -5,6 +5,7 @@ namespace res
 {
     void register_bonus()
     {
-        ff::global_resources::add(::assets::bonus::data());
+        ff::data_reader assets_reader(::assets::bonus::data());
+        ff::global_resources::add(assets_reader);
     }
 }

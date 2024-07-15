@@ -5,6 +5,7 @@ namespace res
 {
     void register_game_spec()
     {
-        ff::global_resources::add(::assets::game_spec::data());
+        ff::data_reader assets_reader(::assets::game_spec::data());
+        ff::global_resources::add(assets_reader);
     }
 }

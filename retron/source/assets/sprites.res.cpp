@@ -5,6 +5,7 @@ namespace res
 {
     void register_sprites()
     {
-        ff::global_resources::add(::assets::sprites::data());
+        ff::data_reader assets_reader(::assets::sprites::data());
+        ff::global_resources::add(assets_reader);
     }
 }

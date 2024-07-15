@@ -5,6 +5,7 @@ namespace res
 {
     void register_player()
     {
-        ff::global_resources::add(::assets::player::data());
+        ff::data_reader assets_reader(::assets::player::data());
+        ff::global_resources::add(assets_reader);
     }
 }

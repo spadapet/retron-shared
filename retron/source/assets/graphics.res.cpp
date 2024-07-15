@@ -5,6 +5,7 @@ namespace res
 {
     void register_graphics()
     {
-        ff::global_resources::add(::assets::graphics::data());
+        ff::data_reader assets_reader(::assets::graphics::data());
+        ff::global_resources::add(assets_reader);
     }
 }
