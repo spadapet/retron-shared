@@ -10,15 +10,6 @@
     <AdditionalResJsonInputs>$(DevRoot)retron_designer\**\*.xaml;$(DevRoot)retron_designer\**\*.ttf;$(DevRoot)retron_designer\**\*.png</AdditionalResJsonInputs>
   </PropertyGroup>
   <ItemGroup>
-    <ClCompile Include="source\assets\bonus.res.cpp" />
-    <ClCompile Include="source\assets\controls.res.cpp" />
-    <ClCompile Include="source\assets\electrode.res.cpp" />
-    <ClCompile Include="source\assets\game_spec.res.cpp" />
-    <ClCompile Include="source\assets\graphics.res.cpp" />
-    <ClCompile Include="source\assets\particles.res.cpp" />
-    <ClCompile Include="source\assets\player.res.cpp" />
-    <ClCompile Include="source\assets\sprites.res.cpp" />
-    <ClCompile Include="source\assets\xaml.res.cpp" />
     <ClCompile Include="source\core\audio.cpp" />
     <ClCompile Include="source\core\game_spec.cpp" />
     <ClCompile Include="source\core\globals.cpp" />
@@ -82,16 +73,16 @@
   </ItemGroup>
   <ItemGroup>
     <ResJson Include="assets\graphics.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
     <ResJson Include="assets\controls.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
     <ResJson Include="assets\xaml.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
     <ResJson Include="assets\game_spec.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
   </ItemGroup>
   <ItemGroup>
@@ -102,25 +93,19 @@
   </ItemGroup>
   <ItemGroup>
     <ResJson Include="assets\player.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
-  </ItemGroup>
-  <ItemGroup>
     <ResJson Include="assets\particles.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
-  </ItemGroup>
-  <ItemGroup>
     <ResJson Include="assets\sprites.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
-  </ItemGroup>
-  <ItemGroup>
     <ResJson Include="assets\electrode.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
     <ResJson Include="assets\bonus.res.json">
-      <FileType>Document</FileType>
+      <ConsumeMethod>CombinedContent</ConsumeMethod>
     </ResJson>
     <None Include="assets\levels\level_001.json" />
   </ItemGroup>
