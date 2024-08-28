@@ -2,7 +2,6 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:b="http://schemas.microsoft.com/xaml/behaviors"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:ff="clr-namespace:ff"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:noesis="clr-namespace:NoesisGUIExtensions;assembly=Noesis.GUI.Extensions"
@@ -25,25 +24,25 @@
             <b:GoToStateAction TargetName="root_panel" StateName="initial_state" />
         </b:EventTrigger>
         <b:EventTrigger EventName="Completed" SourceName="initial_state_storyboard">
-            <ff:set_panel_child_focus_action TargetName="play_button" />
+            <local:set_panel_child_focus_action TargetName="play_button" />
         </b:EventTrigger>
         <b:EventTrigger EventName="Completed" SourceName="play_to_initial_state_storyboard">
-            <ff:set_panel_child_focus_action TargetName="play_button" />
+            <local:set_panel_child_focus_action TargetName="play_button" />
         </b:EventTrigger>
         <b:EventTrigger EventName="Completed" SourceName="options_to_initial_state_storyboard">
-            <ff:set_panel_child_focus_action TargetName="options_button" />
+            <local:set_panel_child_focus_action TargetName="options_button" />
         </b:EventTrigger>
         <b:EventTrigger EventName="Completed" SourceName="about_to_initial_state_storyboard">
-            <ff:set_panel_child_focus_action TargetName="about_button" />
+            <local:set_panel_child_focus_action TargetName="about_button" />
         </b:EventTrigger>
         <b:EventTrigger EventName="Completed" SourceName="initial_to_play_state_storyboard">
-            <ff:set_panel_child_focus_action TargetName="start_game_button" />
+            <local:set_panel_child_focus_action TargetName="start_game_button" />
         </b:EventTrigger>
         <b:EventTrigger EventName="Completed" SourceName="initial_to_options_state_storyboard">
-            <ff:set_panel_child_focus_action TargetName="sound_button" />
+            <local:set_panel_child_focus_action TargetName="sound_button" />
         </b:EventTrigger>
         <b:EventTrigger EventName="Completed" SourceName="initial_to_about_state_storyboard">
-            <ff:set_panel_child_focus_action TargetName="about_back_button" />
+            <local:set_panel_child_focus_action TargetName="about_back_button" />
         </b:EventTrigger>
     </b:Interaction.Triggers>
 

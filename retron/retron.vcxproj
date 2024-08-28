@@ -35,6 +35,7 @@
     <ClCompile Include="source\states\ui_view_state.cpp" />
     <ClCompile Include="source\ui\debug_page.xaml.cpp" />
     <ClCompile Include="source\ui\particle_lab_page.xaml.cpp" />
+    <ClCompile Include="source\ui\set_panel_child_focus_action.cpp" />
     <ClCompile Include="source\ui\title_page.xaml.cpp" />
     <ClInclude Include="pch.h" />
     <ClCompile Include="pch.cpp">
@@ -69,6 +70,7 @@
     <ClInclude Include="source\states\ui_view_state.h" />
     <ClInclude Include="source\ui\debug_page.xaml.h" />
     <ClInclude Include="source\ui\particle_lab_page.xaml.h" />
+    <ClInclude Include="source\ui\set_panel_child_focus_action.h" />
     <ClInclude Include="source\ui\title_page.xaml.h" />
   </ItemGroup>
   <ItemGroup>
@@ -119,11 +121,15 @@
     <ProjectReference Include="..\vendor\ff_game_library\source\ff.dx12\ff.dx12.vcxproj">
       <Project>{8670e093-edd1-451e-868e-acffb7258759}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\vendor\ff_game_library\source\ff.ui\ff.ui.vcxproj">
+      <Project>{8147a742-08ac-49fd-8c51-3956e1a65e16}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ItemDefinitionGroup>
     <ClCompile>
       <AdditionalIncludeDirectories>$(DevRoot)vendor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(NoesisAppInteractivityRoot)Include</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
 </Project>

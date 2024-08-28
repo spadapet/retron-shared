@@ -17,7 +17,10 @@ namespace ff
         object IValueConverter.Convert(object value, Type targetType, object parameter, CultureInfo culture) => new NotImplementedException();
         object IValueConverter.ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => new NotImplementedException();
     }
+}
 
+namespace retron
+{
     public class set_panel_child_focus_action : TargetedTriggerAction<UIElement>
     {
         protected override void Invoke(object parameter)

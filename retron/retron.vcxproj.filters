@@ -83,6 +83,9 @@
     <ClCompile Include="source\level\entity_util.cpp">
       <Filter>source\level</Filter>
     </ClCompile>
+    <ClCompile Include="source\ui\set_panel_child_focus_action.cpp">
+      <Filter>source\ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -175,6 +178,9 @@
     </ClInclude>
     <ClInclude Include="source\level\entity_util.h">
       <Filter>source\level</Filter>
+    </ClInclude>
+    <ClInclude Include="source\ui\set_panel_child_focus_action.h">
+      <Filter>source\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

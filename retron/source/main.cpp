@@ -3,6 +3,7 @@
 #include "source/states/app_state.h"
 #include "source/ui/debug_page.xaml.h"
 #include "source/ui/particle_lab_page.xaml.h"
+#include "source/ui/set_panel_child_focus_action.h"
 #include "source/ui/title_page.xaml.h"
 
 static std::shared_ptr<ff::game::app_state_base> create_app_state()
@@ -24,6 +25,8 @@ static void register_global_resources()
     Noesis::RegisterComponent(Noesis::TypeOf<retron::particle_lab_page_view_model>(), nullptr);
     Noesis::RegisterComponent(Noesis::TypeOf<retron::title_page>(), nullptr);
     Noesis::RegisterComponent(Noesis::TypeOf<retron::title_page_view_model>(), nullptr);
+
+    Noesis::RegisterComponent<retron::set_panel_child_focus_action>();
 }
 
 int WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)

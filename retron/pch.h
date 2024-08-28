@@ -7,6 +7,10 @@
 #include <entt/src/entt/entity/registry.hpp>
 #include <ff.all.h>
 
+// Noesis
+#define NS_APP_INTERACTIVITY_API
+#include <NsApp/TargetedTriggerAction.h>
+
 // Local
 #include "source/core/globals.h"
 
