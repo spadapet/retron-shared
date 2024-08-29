@@ -1,15 +1,9 @@
 #include "pch.h"
-#include "source/core/options.h"
 #include "source/states/app_state.h"
 #include "source/ui/debug_page.xaml.h"
 #include "source/ui/particle_lab_page.xaml.h"
 #include "source/ui/set_panel_child_focus_action.h"
 #include "source/ui/title_page.xaml.h"
-
-static std::shared_ptr<ff::game::app_state_base> create_app_state()
-{
-    return std::make_shared<retron::app_state>();
-}
 
 static void register_global_resources()
 {
@@ -29,11 +23,7 @@ static void register_global_resources()
     Noesis::RegisterComponent<retron::set_panel_child_focus_action>();
 }
 
-int WINAPI wWinMain(HINSTANCE, HINSTANCE, LPWSTR, int)
+int WINAPI wWinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPWSTR, _In_ int)
 {
-    ff::game::init_params_t<retron::app_state> params{};
-    params.create_initial_state = ::create_app_state;
-    params.register_global_resources = ::register_global_resources;
-
-    return ff::game::run(params);
+    return ff::game::run<retron::app_state>(::register_global_resources);
 }
