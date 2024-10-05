@@ -75,16 +75,16 @@
   </ItemGroup>
   <ItemGroup>
     <ResJson Include="assets\graphics.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <ResJson Include="assets\controls.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <ResJson Include="assets\xaml.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <ResJson Include="assets\game_spec.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
   </ItemGroup>
   <ItemGroup>
@@ -95,19 +95,19 @@
   </ItemGroup>
   <ItemGroup>
     <ResJson Include="assets\player.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <ResJson Include="assets\particles.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <ResJson Include="assets\sprites.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <ResJson Include="assets\electrode.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <ResJson Include="assets\bonus.res.json">
-      <ConsumeMethod>CombinedContent</ConsumeMethod>
+      <Content>True</Content>
     </ResJson>
     <None Include="assets\levels\level_001.json" />
   </ItemGroup>
