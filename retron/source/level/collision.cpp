@@ -125,7 +125,7 @@ const std::vector<std::pair<entt::entity, entt::entity>>& retron::collision::det
     this->update_dirty_boxes(collision_type);
 
     ::b2World& world = this->worlds[static_cast<size_t>(collision_type)];
-    world.Step(ff::constants::seconds_per_advance_f, 1, 1);
+    world.Step(ff::constants::seconds_per_advance<float>(), 1, 1);
 
     for (::b2Contact* i = world.GetContactList(); i; i = i->GetNext())
     {
