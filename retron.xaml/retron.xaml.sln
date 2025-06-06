@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30301.22
+# Blend for Visual Studio Version 18
+VisualStudioVersion = 18.0.10704.117 main
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "retron_designer", "retron_designer.csproj", "{9D9345C4-576B-43F4-84C3-1F2FC4EB6483}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "retron.xaml", "retron.xaml.csproj", "{0599FE03-0AFD-4215-1ED0-C1E2E82DD7F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9D9345C4-576B-43F4-84C3-1F2FC4EB6483}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D9345C4-576B-43F4-84C3-1F2FC4EB6483}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D9345C4-576B-43F4-84C3-1F2FC4EB6483}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D9345C4-576B-43F4-84C3-1F2FC4EB6483}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0599FE03-0AFD-4215-1ED0-C1E2E82DD7F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0599FE03-0AFD-4215-1ED0-C1E2E82DD7F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0599FE03-0AFD-4215-1ED0-C1E2E82DD7F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0599FE03-0AFD-4215-1ED0-C1E2E82DD7F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
